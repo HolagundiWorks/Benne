@@ -1,0 +1,6 @@
+{
+  "name": "Sarala Kannada",
+  "description": "Learn Kannada easily with interactive lessons, Varnamale script practice, spoken audio pronunciations, everyday conversational phrases, and fun quizzes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
