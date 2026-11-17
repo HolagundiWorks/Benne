@@ -1,6 +1,7 @@
 package com.example.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
@@ -21,16 +24,11 @@ import androidx.compose.material.icons.outlined.ChatBubbleOutline
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Psychology
 import androidx.compose.material.icons.outlined.Translate
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.NavigationRailItemDefaults
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -48,7 +46,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.audio.KannadaTtsHelper
 import com.example.data.UserProgressManager
-import com.example.ui.components.SaralaTopAppBar
+import com.example.ui.components.SaralaHeader
 import com.example.ui.components.SystemConsoleSheet
 import com.example.ui.screens.AlphabetScreen
 import com.example.ui.screens.ConversationScreen
@@ -58,6 +56,9 @@ import com.example.ui.screens.QuizScreen
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterInk
 import com.example.ui.theme.PopPosterPaper
+
+/** Space reserved at the bottom of screens so the floating nav never covers content. */
+private val FloatingNavClearance = 120.dp
 
 enum class SaralaScreen(
     val titleEnglish: String,
@@ -93,71 +94,30 @@ fun MainScreen(
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
         val useNavigationRail = maxWidth >= 600.dp
 
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            containerColor = MaterialTheme.colorScheme.background,
-            topBar = {
-                SaralaTopAppBar(
-                    streakDays = streakDays,
-                    xpPoints = xpPoints,
-                    playbackSpeed = playbackSpeed,
-                    onToggleSpeed = {
-                        val nextSpeed = when {
-                            playbackSpeed < 0.8f -> 0.85f
-                            playbackSpeed < 1.0f -> 1.0f
-                            playbackSpeed < 1.15f -> 0.75f
-                            else -> 0.85f
-                        }
-                        progressManager.setPlaybackSpeed(nextSpeed)
-                    },
-                    onOpenSystemConsole = { showSystemConsole = true }
-                )
-            },
-            bottomBar = {
-                if (!useNavigationRail) {
-                    Column {
-                        HorizontalDivider(thickness = 2.dp, color = PopPosterInk)
-                        NavigationBar(containerColor = PopPosterPaper) {
-                            SaralaScreen.entries.forEach { screen ->
-                                val isSelected = currentScreen == screen
-                                NavigationBarItem(
-                                    selected = isSelected,
-                                    onClick = { currentScreen = screen },
-                                    colors = NavigationBarItemDefaults.colors(
-                                        indicatorColor = PopPosterButter,
-                                        selectedIconColor = PopPosterInk,
-                                        selectedTextColor = PopPosterInk,
-                                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
-                                    ),
-                                    icon = {
-                                        Icon(
-                                            imageVector = if (isSelected) screen.selectedIcon else screen.unselectedIcon,
-                                            contentDescription = screen.titleEnglish
-                                        )
-                                    },
-                                    label = {
-                                        Text(
-                                            text = screen.titleEnglish,
-                                            style = MaterialTheme.typography.labelSmall,
-                                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
-                                            maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis
-                                        )
-                                    },
-                                    modifier = Modifier.testTag("nav_item_${screen.name.lowercase()}")
-                                )
-                            }
-                        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            // Header is part of the page content (no app bar container)
+            SaralaHeader(
+                streakDays = streakDays,
+                xpPoints = xpPoints,
+                playbackSpeed = playbackSpeed,
+                onToggleSpeed = {
+                    val nextSpeed = when {
+                        playbackSpeed < 0.8f -> 0.85f
+                        playbackSpeed < 1.0f -> 1.0f
+                        playbackSpeed < 1.15f -> 0.75f
+                        else -> 0.85f
                     }
-                }
-            }
-        ) { innerPadding ->
-            Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-            ) {
+                    progressManager.setPlaybackSpeed(nextSpeed)
+                },
+                onOpenSystemConsole = { showSystemConsole = true },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Row(modifier = Modifier.weight(1f).fillMaxWidth()) {
                 if (useNavigationRail) {
                     NavigationRail(
                         modifier = Modifier.fillMaxHeight(),
@@ -200,12 +160,13 @@ fun MainScreen(
                 }
 
                 Box(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.weight(1f).fillMaxHeight(),
                     contentAlignment = Alignment.TopCenter
                 ) {
                     val contentModifier = Modifier
                         .fillMaxSize()
                         .widthIn(max = 760.dp)
+                        .padding(bottom = if (useNavigationRail) 0.dp else FloatingNavClearance)
 
                     when (currentScreen) {
                         SaralaScreen.HOME -> HomeScreen(
@@ -239,6 +200,19 @@ fun MainScreen(
                     }
                 }
             }
+        }
+
+        if (!useNavigationRail) {
+            FloatingBottomNav(
+                selected = currentScreen,
+                onSelect = { currentScreen = it },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .navigationBarsPadding()
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .widthIn(max = 560.dp)
+                    .fillMaxWidth()
+            )
         }
 
         if (showSystemConsole) {

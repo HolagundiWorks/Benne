@@ -63,3 +63,12 @@ existing card colour rotations keep working. No dark theme (unchanged).
 - A separate "Your Path" summary: the existing "Guided roadmap" card with progress bar already covers it, and was not renamed.
 - Per-screen layout redesign of Letters, Dialogues and Phrases. They use the new tokens and components only.
 - On-device visual check (no AVD on this machine). Lint and instrumented tests not run.
+
+## Third pass: floating nav, merged header (feature/floating-nav)
+- The Material `TopAppBar` and `Scaffold` bottom bar are removed. The header is now part of the page content (`ui/components/SaralaHeader.kt`), using the status-bar inset and no container or divider. Same controls: wordmark, Kannada pill, streak, XP, speed, settings.
+- On compact widths the bottom nav floats (`ui/FloatingBottomNav.kt`): pill, Ink border, hard offset shadow, selected tab in Butter. Same `nav_item_<screen>` test tags. It sits above the navigation-bar inset.
+- Screens reserve 120dp at the bottom (`FloatingNavClearance` in `MainScreen.kt`) so content is not hidden. On the Practice flashcards, the Prev/Flip/Next row is reached by scrolling.
+- Wide layouts (>= 600dp) keep the navigation rail.
+- Removed: `SaralaTopAppBar` from `SaralaComponents.kt`.
+- Verified on device (SM_M115F): Home, Practice (scrolled and unscrolled), nav selection. Build passes; unit tests are unchanged from baseline (1 pre-existing Robolectric failure).
+- Not checked: Letters, Dialogues and Phrases on device; tablet/rail layout; lint.
