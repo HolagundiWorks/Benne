@@ -93,7 +93,7 @@ fun MainScreen(
         }
     }
 
-    val headerInset = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 124.dp
+    val headerInset = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 84.dp
 
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
         val useNavigationRail = maxWidth >= 600.dp

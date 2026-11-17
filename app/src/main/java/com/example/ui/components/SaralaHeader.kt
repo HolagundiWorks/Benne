@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.statusBars
@@ -60,7 +61,7 @@ fun SaralaHeader(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)),
         shape = RoundedCornerShape(24.dp),
         color = PopPosterPaper,
         border = BorderStroke(2.dp, PopPosterInk)
@@ -176,12 +177,18 @@ fun SaralaHeader(
             }
         }
 
-        // Official Benne long-shadow logo at 2x, on the right edge
-        Image(
-            painter = painterResource(R.drawable.benne_logo_longshadow),
-            contentDescription = "Benne",
-            modifier = Modifier.height(88.dp)
-        )
+        // Official Benne long-shadow logo at 88 dp. The header keeps its height; the logo
+        // extends past it and is cropped by the header's border.
+        Box(
+            modifier = Modifier.height(44.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(R.drawable.benne_logo_longshadow),
+                contentDescription = "Benne",
+                modifier = Modifier.requiredHeight(88.dp)
+            )
+        }
     }
     }
 }

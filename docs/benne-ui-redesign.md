@@ -172,3 +172,8 @@ Shadow:
 - The separate Kannada pill is removed, since the logo already includes ಬೆಣ್ಣೆ.
 - Status pills and settings sit to the left of the logo. Screen top inset grows to 124 dp (status bar + header height).
 - Verified on device: Home.
+
+## Fifteenth pass: header height and logo crop (feature/pop-cards)
+- Logo stays at 88 dp. The header pill is back to its earlier height; the logo extends past it and is cropped by the header's rounded border (`clip` on the header surface, `requiredHeight` on the logo).
+- Screen top inset back to 84 dp (status bar + header height).
+- Verified on device: Home.
