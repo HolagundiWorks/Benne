@@ -121,6 +121,72 @@ fun HomeScreen(
         contentPadding = PaddingValues(start = 16.dp, top = 14.dp, end = 16.dp, bottom = 14.dp + LocalFloatingNavInset.current),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
+        // Continue Lesson: next unfinished chapter, one tap back into its study sheet
+        nextMilestone?.let { next ->
+            item {
+                PosterCard(
+                    containerColor = PopPosterCyan,
+                    contentColor = PopPosterInk,
+                    cornerRadius = 20.dp,
+                    shadowOffset = 5.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("home_continue_card")
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        PosterStampBadge(
+                            text = "CONTINUE LESSON",
+                            containerColor = PopPosterPaper,
+                            contentColor = PopPosterInk
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = next.titleEnglish,
+                            fontFamily = BricolageGrotesqueFamily,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = PopPosterInk
+                        )
+                        KannadaWithSubscript(
+                            kannadaText = next.titleKannada,
+                            transliteration = next.titleTransliteration,
+                            kannadaFontSize = 18.sp,
+                            kannadaLineHeight = 28.sp,
+                            kannadaColor = PopPosterInk,
+                            subscriptColor = PopPosterInk.copy(alpha = 0.75f),
+                            subscriptStyle = MaterialTheme.typography.labelMedium
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        val totalChapters = SaralaKannadaData.milestones.size.coerceAtLeast(1)
+                        Text(
+                            text = "Lesson ${SaralaKannadaData.milestones.indexOf(next) + 1} of $totalChapters",
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = PopPosterInk
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        LinearProgressIndicator(
+                            progress = { completedLessons.size.toFloat() / totalChapters },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(8.dp)
+                                .testTag("home_continue_progress"),
+                            color = MaterialTheme.colorScheme.primary,
+                            trackColor = PopPosterPaper,
+                            strokeCap = StrokeCap.Round
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        PopActionButton(
+                            text = "Continue",
+                            icon = Icons.Default.PlayArrow,
+                            onClick = { activeLessonForStudy = next },
+                            modifier = Modifier.testTag("home_continue_button")
+                        )
+                    }
+                }
+            }
+        }
+
         // Neo-Pop Hero Poster Card
         item {
             PosterCard(
@@ -132,7 +198,7 @@ fun HomeScreen(
                     .fillMaxWidth()
                     .testTag("home_hero_card")
             ) {
-                Column(modifier = Modifier.padding(20.dp)) {
+                Column(modifier = Modifier.padding(16.dp)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -164,8 +230,8 @@ fun HomeScreen(
                                 kannadaFontSize = 24.sp,
                                 kannadaLineHeight = 31.sp,
                                 kannadaColor = PopPosterInk,
-                                subscriptColor = MaterialTheme.colorScheme.primary,
-                                subscriptStyle = MaterialTheme.typography.titleSmall
+                                subscriptColor = PopPosterInk.copy(alpha = 0.75f),
+                                subscriptStyle = MaterialTheme.typography.labelLarge
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Surface(
@@ -198,53 +264,6 @@ fun HomeScreen(
                                 contentColor = PopPosterInk
                             )
                         }
-                    }
-                }
-            }
-        }
-
-        // Continue Lesson: next unfinished chapter, one tap back into its study sheet
-        nextMilestone?.let { next ->
-            item {
-                PosterCard(
-                    containerColor = PopPosterCyan,
-                    contentColor = PopPosterInk,
-                    cornerRadius = 20.dp,
-                    shadowOffset = 5.dp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("home_continue_card")
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        PosterStampBadge(
-                            text = "CONTINUE LESSON",
-                            containerColor = PopPosterPaper,
-                            contentColor = PopPosterInk
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = next.titleEnglish,
-                            fontFamily = BricolageGrotesqueFamily,
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = PopPosterInk
-                        )
-                        KannadaWithSubscript(
-                            kannadaText = next.titleKannada,
-                            transliteration = next.titleTransliteration,
-                            kannadaFontSize = 15.sp,
-                            kannadaLineHeight = 21.sp,
-                            kannadaColor = PopPosterInk,
-                            subscriptColor = PopPosterInk,
-                            subscriptStyle = MaterialTheme.typography.labelSmall
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
-                        PopActionButton(
-                            text = "Continue",
-                            icon = Icons.Default.PlayArrow,
-                            onClick = { activeLessonForStudy = next },
-                            modifier = Modifier.testTag("home_continue_button")
-                        )
                     }
                 }
             }

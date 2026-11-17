@@ -122,3 +122,15 @@ Decisions:
 - Quiz columns (flashcards and evaluation) end with a spacer of the dock height inside the scroll.
 - Nine-slice pieces overlap by 1 px to remove hairline seams between slices.
 - Verified on device: Home, Practice (flashcards), Letters.
+
+## Ninth pass: dashboard hierarchy (UX review, feature/pop-cards)
+Applied from the UX review:
+- Continue lesson is first on the home screen, above the daily quote.
+- Continue card shows "Lesson N of M" and a course progress bar; the Kannada title is 18 sp with a 28 sp line height.
+- Daily quote padding reduced (20 to 16 dp). Transliteration is now quieter (ink at 75%, label style), so Kannada and the English meaning lead.
+- Verified on device: Home.
+Not changed (larger decisions):
+- One Kannada family and one Latin family: the app uses Anek Kannada, Bricolage Grotesque and Space Grotesk. The brand kit specifies Baloo 2, Nunito Sans and Noto Sans Kannada, so this needs a font decision first.
+- Navigation duplication (module cards and tabs): kept for now.
+- Decorations: the teal curl is tied to cream cards and the dots to yellow cards, following the kit skins; no separate decoration rules were added.
+- Bottom nav overlap: content now runs under the dock and scrolls clear of it (eighth pass).
