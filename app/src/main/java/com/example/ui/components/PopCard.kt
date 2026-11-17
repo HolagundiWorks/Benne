@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.Dp
@@ -169,16 +170,30 @@ internal fun DrawScope.drawNineSlice(image: ImageBitmap, cornerPx: Float) {
     val trhD = (trh * k).roundToInt()
     val tlw = (dotBand * k).roundToInt()
 
-    // Each piece overlaps its neighbours by 1 px so no hairline seams show between slices
+    // Each slice keeps its exact destination rectangle (no overlap, so outlines are not doubled).
+    // The source is sampled one pixel past the slice on each side, so filtering does not
+    // fade at slice boundaries; the draw is clipped to the slice's own rectangle.
     fun piece(sx: Int, sy: Int, sw: Int, sh: Int, dx: Int, dy: Int, dw: Int, dh: Int) {
         if (sw <= 0 || sh <= 0 || dw <= 0 || dh <= 0) return
-        drawImage(
-            image = image,
-            srcOffset = IntOffset(sx, sy),
-            srcSize = IntSize(sw, sh),
-            dstOffset = IntOffset(dx - 1, dy - 1),
-            dstSize = IntSize(dw + 2, dh + 2)
-        )
+        val sx2 = maxOf(0, sx - 1)
+        val sy2 = maxOf(0, sy - 1)
+        val sx3 = minOf(image.width, sx + sw + 1)
+        val sy3 = minOf(image.height, sy + sh + 1)
+        val kx = dw.toFloat() / sw
+        val ky = dh.toFloat() / sh
+        val dOffX = (dx - (sx - sx2) * kx).roundToInt()
+        val dOffY = (dy - (sy - sy2) * ky).roundToInt()
+        val dW = ((sx3 - sx2) * kx).roundToInt()
+        val dH = ((sy3 - sy2) * ky).roundToInt()
+        clipRect(dx.toFloat(), dy.toFloat(), (dx + dw).toFloat(), (dy + dh).toFloat()) {
+            drawImage(
+                image = image,
+                srcOffset = IntOffset(sx2, sy2),
+                srcSize = IntSize(sx3 - sx2, sy3 - sy2),
+                dstOffset = IntOffset(dOffX, dOffY),
+                dstSize = IntSize(dW, dH)
+            )
+        }
     }
 
     val midX = cx + inset

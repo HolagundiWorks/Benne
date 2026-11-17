@@ -177,3 +177,8 @@ Shadow:
 - Logo stays at 88 dp. The header pill is back to its earlier height; the logo extends past it and is cropped by the header's rounded border (`clip` on the header surface, `requiredHeight` on the logo).
 - Screen top inset back to 84 dp (status bar + header height).
 - Verified on device: Home.
+
+## Sixteenth pass: even card borders (feature/pop-cards)
+- Card slices no longer overlap in destination. The overlap doubled the semi-transparent outline pixels, which made some border lines look heavier than others.
+- Each slice now samples one source pixel past its edge and is clipped to its own rectangle, so filtering does not fade at slice boundaries and seams do not return.
+- Verified on device: Home and Practice (flashcards); borders even, no seams.
