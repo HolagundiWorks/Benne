@@ -69,6 +69,7 @@ import com.example.model.LessonMilestone
 import com.example.ui.components.AudioSpeakButton
 import com.example.ui.components.ButterMascot
 import com.example.ui.components.KannadaWithSubscript
+import com.example.ui.components.PopActionButton
 import com.example.ui.components.PosterCard
 import com.example.ui.components.PosterStampBadge
 import com.example.ui.theme.BricolageGrotesqueFamily
@@ -98,6 +99,8 @@ fun HomeScreen(
 
     var activeLessonForStudy by remember { mutableStateOf<LessonMilestone?>(null) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    val nextMilestone = SaralaKannadaData.milestones.firstOrNull { it.id !in completedLessons }
 
     val chapterPosterColors = listOf(
         PopPosterPaper,
@@ -192,6 +195,53 @@ fun HomeScreen(
                                 contentColor = PopPosterInk
                             )
                         }
+                    }
+                }
+            }
+        }
+
+        // Continue Lesson: next unfinished chapter, one tap back into its study sheet
+        nextMilestone?.let { next ->
+            item {
+                PosterCard(
+                    containerColor = PopPosterCyan,
+                    contentColor = PopPosterInk,
+                    cornerRadius = 20.dp,
+                    shadowOffset = 5.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("home_continue_card")
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        PosterStampBadge(
+                            text = "CONTINUE LESSON",
+                            containerColor = PopPosterPaper,
+                            contentColor = PopPosterInk
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = next.titleEnglish,
+                            fontFamily = BricolageGrotesqueFamily,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = PopPosterInk
+                        )
+                        KannadaWithSubscript(
+                            kannadaText = next.titleKannada,
+                            transliteration = next.titleTransliteration,
+                            kannadaFontSize = 15.sp,
+                            kannadaLineHeight = 21.sp,
+                            kannadaColor = PopPosterInk,
+                            subscriptColor = PopPosterInk,
+                            subscriptStyle = MaterialTheme.typography.labelSmall
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        PopActionButton(
+                            text = "Continue",
+                            icon = Icons.Default.PlayArrow,
+                            onClick = { activeLessonForStudy = next },
+                            modifier = Modifier.testTag("home_continue_button")
+                        )
                     }
                 }
             }
@@ -797,7 +847,8 @@ private fun PopLessonStudyContent(
                 Spacer(modifier = Modifier.width(1.dp))
             }
 
-            Button(
+            PopActionButton(
+                text = if (isLastStep) "Complete (+50 XP)" else "Next Step",
                 onClick = {
                     if (isLastStep) {
                         onComplete()
@@ -805,17 +856,8 @@ private fun PopLessonStudyContent(
                         currentStepIndex++
                     }
                 },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = PopPosterInk,
-                    contentColor = PopPosterButter
-                ),
                 modifier = Modifier.testTag("step_next_button")
-            ) {
-                Text(
-                    text = if (isLastStep) "Complete (+50 XP)" else "Next Step",
-                    fontWeight = FontWeight.Bold
-                )
-            }
+            )
         }
 
         Spacer(modifier = Modifier.height(20.dp))

@@ -53,8 +53,13 @@ existing card colour rotations keep working. No dark theme (unchanged).
 - `:app:testDebugUnitTest`: same as baseline, 2 tests, 1 failed (`ExampleRobolectricTest`, pre-existing Robolectric path issue).
 - Not run: on-device/emulator visual check (no AVD configured on this machine); lint; instrumented tests.
 
-## Not yet done (from the brief)
-- Reusable pop components beyond the mascot (button, card, chip) as a shared set.
-- Navigation restyle beyond the new colours.
-- Dashboard "Continue lesson" card and Your Path summary.
-- Per-screen layout redesign of the learning screens (Letters, Dialogues, Practice, Phrases); they inherit the new tokens only.
+## Second pass
+- `ui/components/PopComponents.kt` (new): `PopActionButton`, the shared primary action (Pop Red fill, Ink text, 2dp Ink border, 52dp minimum height).
+- Used for the lesson step "Next Step" button, the Practice quiz action ("Check Answer" / "Next Question" / "See Results") and "Practice Again".
+- Home dashboard: "Continue lesson" card (`home_continue_card`) showing the first unfinished chapter, opening its study sheet via `home_continue_button`. Hidden when every chapter is complete.
+- Navigation: left unchanged. It already uses the Butter selected indicator, Ink labels and the Ink top rule from the palette pass.
+
+## Not done
+- A separate "Your Path" summary: the existing "Guided roadmap" card with progress bar already covers it, and was not renamed.
+- Per-screen layout redesign of Letters, Dialogues and Phrases. They use the new tokens and components only.
+- On-device visual check (no AVD on this machine). Lint and instrumented tests not run.
