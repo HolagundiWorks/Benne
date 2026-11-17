@@ -1,7 +1,6 @@
 package com.example.ui
 
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /** Height the floating bottom dock covers at the bottom of the screen (compact widths). */

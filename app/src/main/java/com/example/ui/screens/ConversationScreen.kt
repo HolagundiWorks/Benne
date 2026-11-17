@@ -85,6 +85,7 @@ fun ConversationScreen(
         item {
             PosterCard(
                 containerColor = PopPosterPink,
+                kit = true,
                 cornerRadius = 24.dp,
                 shadowOffset = 5.dp,
                 sticker = com.example.R.drawable.pop_landmark_vidhana,
