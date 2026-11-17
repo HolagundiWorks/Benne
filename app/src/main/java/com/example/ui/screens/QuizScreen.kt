@@ -67,6 +67,7 @@ import com.example.model.VocabularyFlashcard
 import com.example.ui.components.AudioSpeakButton
 import com.example.ui.components.InteractiveVocabularyFlashcard
 import com.example.ui.components.KannadaWithSubscript
+import com.example.ui.components.PopActionButton
 import com.example.ui.components.PosterCard
 import com.example.ui.components.PosterStampBadge
 import com.example.ui.theme.AnekKannadaFamily
@@ -701,7 +702,10 @@ fun EvaluationQuizView(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
+        PopActionButton(
+            text = if (!hasAnswered) "Check Answer"
+            else if (currentIndex < questions.lastIndex) "Next Question"
+            else "See Results",
             onClick = {
                 if (!hasAnswered) {
                     if (selectedOptionIndex != null) {
@@ -723,22 +727,10 @@ fun EvaluationQuizView(
                 }
             },
             enabled = selectedOptionIndex != null,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = PopPosterInk,
-                contentColor = PopPosterButter
-            ),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp)
                 .testTag("quiz_action_button")
-        ) {
-            Text(
-                text = if (!hasAnswered) "Check Answer"
-                else if (currentIndex < questions.lastIndex) "Next Question"
-                else "See Results",
-                fontWeight = FontWeight.Bold
-            )
-        }
+        )
     }
 }
 
@@ -839,25 +831,14 @@ private fun PopQuizResultsView(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Button(
+        PopActionButton(
+            text = "Practice Again",
+            icon = Icons.Default.Refresh,
             onClick = onRestart,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = PopPosterInk,
-                contentColor = PopPosterButter
-            ),
             modifier = Modifier
                 .fillMaxWidth(0.75f)
-                .height(48.dp)
                 .testTag("quiz_restart_button")
-        ) {
-            Icon(
-                imageVector = Icons.Default.Refresh,
-                contentDescription = "Retry",
-                modifier = Modifier.size(18.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Practice Again", fontWeight = FontWeight.Bold)
-        }
+        )
     }
 }
 
