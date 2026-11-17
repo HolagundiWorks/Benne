@@ -181,7 +181,9 @@ fun SaralaHeader(
                 .drawWithContent {
                     // Crop the logo's bottom and right at the inner edge of the 2 dp border; the top stays open
                     val inset = 2.dp.toPx()
-                    clipRect(-100000f, -100000f, size.width - inset, size.height - inset) {
+                    // Logo is 88 dp tall (about 101 dp wide) plus 4.5 dp right margin; crop 20 dp from its left
+                    val leftCrop = size.width - (101.4f - 20f + 4.5f).dp.toPx()
+                    clipRect(leftCrop, -100000f, size.width - inset, size.height - inset) {
                         this@drawWithContent.drawContent()
                     }
                 }
