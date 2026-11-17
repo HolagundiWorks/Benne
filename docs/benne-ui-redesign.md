@@ -207,3 +207,8 @@ Shadow:
 - Home: level card (`home_level_card`). Level = XP / 100 + 1, with a playful title per level (Tender Learner, Filter Coffee Fan, Auto Negotiator, Darshini Regular, Bengaluru Local) and progress to the next level. Uses the existing XP stream; no new storage.
 - Quiz results: Benne mascot pose and title by score: 80%+ success pose "Kannada superstar!", 50%+ reward pose "Nicely done!", below 50% thinking pose "Keep going!", each with a Kannada line.
 - Verified on device: Home level card. Results screen builds; not yet checked on the device.
+
+## Twenty-second pass: badges (feature/pop-cards)
+- Home badge row (`home_badges`): First Steps (1 lesson), On Fire (3-day streak), XP Hunter (300 XP), Chapter Champ (all lessons). Unlocked badges are yellow; locked ones show what unlocks them. Scrolls sideways.
+- Derived from existing progress (lessons, streak, XP); nothing new is stored.
+- Verified on device: Home.

@@ -88,6 +88,8 @@ import com.example.ui.theme.PopPosterPink
 import com.example.ui.theme.NunitoSansFamily
 import com.example.ui.LocalFloatingNavInset
 import com.example.ui.LocalFloatingHeaderInset
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -101,6 +103,7 @@ fun HomeScreen(
 ) {
     val completedLessons by progressManager.completedLessons.collectAsState()
     val xpPoints by progressManager.xp.collectAsState()
+    val streakNow by progressManager.streakDays.collectAsState()
     val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
 
@@ -126,6 +129,16 @@ fun HomeScreen(
         // Level card: XP-driven level, a playful title and progress to the next level
         item {
             LevelCard(xp = xpPoints)
+        }
+
+        // Badges: unlocked from existing progress (lessons, streak, XP)
+        item {
+            BadgeRow(
+                lessonsDone = completedLessons.size,
+                totalLessons = SaralaKannadaData.milestones.size,
+                streakDays = streakNow,
+                xp = xpPoints
+            )
         }
 
         // Continue Lesson: next unfinished chapter, one tap back into its study sheet
@@ -931,6 +944,34 @@ private fun LevelCard(xp: Int) {
                 text = "${100 - into} XP to level ${level + 1}. Keep the streak alive!",
                 style = MaterialTheme.typography.labelMedium,
                 color = PopPosterInk
+            )
+        }
+    }
+}
+
+private data class Badge(val label: String, val unlocked: Boolean, val hint: String)
+
+/** Badges derived from existing progress; a locked badge shows what unlocks it. */
+@Composable
+private fun BadgeRow(lessonsDone: Int, totalLessons: Int, streakDays: Int, xp: Int) {
+    val badges = listOf(
+        Badge("First Steps", lessonsDone >= 1, "Finish 1 lesson"),
+        Badge("On Fire", streakDays >= 3, "3-day streak"),
+        Badge("XP Hunter", xp >= 300, "Earn 300 XP"),
+        Badge("Chapter Champ", totalLessons > 0 && lessonsDone >= totalLessons, "Finish every lesson")
+    )
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
+            .testTag("home_badges"),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        badges.forEach { badge ->
+            PosterStampBadge(
+                text = if (badge.unlocked) badge.label else "Locked: ${badge.hint}",
+                containerColor = if (badge.unlocked) PopPosterButter else PopPosterPaper,
+                contentColor = if (badge.unlocked) PopPosterInk else PopPosterInk.copy(alpha = 0.55f)
             )
         }
     }
