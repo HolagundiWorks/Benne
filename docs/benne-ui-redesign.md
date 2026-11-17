@@ -155,3 +155,8 @@ Shadow:
 - App icon: `logo/app icon corrected.png` (not committed; `logo/` is untracked). Garbled Kannada replaced with the corrected text, and the white area outside the rounded corners made transparent. Not yet wired into the launcher.
 - Verified on device: quiz results with the logo placed bottom-right.
 - Open: the "Practice Again" and "Continue" labels look lighter than expected with Nunito Sans; the cause is not yet isolated.
+
+## Twelfth pass: launcher icon (feature/pop-cards)
+- Launcher now uses `logo/app icon corrected.png`: adaptive foreground (`drawable/ic_benne_launcher_fg.png`, 432 px, sized 84 dp in the adaptive layer), Butter background (`#FFCC29`), and legacy and round icons at 48/72/96/144/192 px.
+- The kit mascot foreground is replaced. The kit's app icon sources are unchanged.
+- Verified on device: launcher shows the new icon.
