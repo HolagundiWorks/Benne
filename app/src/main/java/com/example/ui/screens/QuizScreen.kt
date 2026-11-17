@@ -770,6 +770,7 @@ private fun PopQuizResultsView(
     ) {
         PosterCard(
             containerColor = PopPosterButter,
+            kit = true,
             cornerRadius = 28.dp,
             shadowOffset = 6.dp,
             sticker = com.example.R.drawable.pop_burst_red,

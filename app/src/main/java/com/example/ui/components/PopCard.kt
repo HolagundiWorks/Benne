@@ -45,7 +45,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 
 /**
- * Pop card: the Benne Pop Elements kit card (yellow, red or cream) drawn with nine-slice
+ * Pop card. Content cards use a plain fill with an ink outline (default). Hero and header
+ * cards opt in to the kit artwork (`kit = true`): yellow, red or cream, drawn with nine-slice
  * scaling. Corners keep their proportions; only the middle stretches, so the ink outline
  * and rounded corners never distort. A hard ink offset shadow sits behind the card.
  *
@@ -65,6 +66,7 @@ fun PosterCard(
     shadowOffset: Dp = 4.dp,
     borderWidth: Dp = 2.dp,
     plain: Boolean = false,
+    kit: Boolean = false,
     @DrawableRes sticker: Int? = null,
     stickerSize: Dp = 72.dp,
     stickerAlignment: Alignment = Alignment.BottomEnd,
@@ -107,7 +109,7 @@ fun PosterCard(
                     }
                 )
                 .drawBehind {
-                    if (plain) {
+                    if (plain || !kit) {
                         // Plain option: exact fill colour with an ink outline (no kit artwork)
                         val r = CornerRadius(cornerRadius.toPx())
                         drawRoundRect(color = containerColor, cornerRadius = r)

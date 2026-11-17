@@ -109,6 +109,7 @@ fun AlphabetScreen(
         item(span = { GridItemSpan(maxLineSpan) }) {
             PosterCard(
                 containerColor = PopPosterCyan,
+                kit = true,
                 cornerRadius = 24.dp,
                 shadowOffset = 5.dp,
                 modifier = Modifier.fillMaxWidth()

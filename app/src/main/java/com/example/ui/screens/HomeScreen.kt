@@ -140,6 +140,7 @@ fun HomeScreen(
             item {
                 PosterCard(
                     containerColor = PopPosterCyan,
+                    kit = true,
                     contentColor = PopPosterInk,
                     cornerRadius = 20.dp,
                     shadowOffset = 5.dp,
@@ -207,6 +208,7 @@ fun HomeScreen(
         item {
             PosterCard(
                 containerColor = PopPosterButter,
+                kit = true,
                 contentColor = PopPosterInk,
                 cornerRadius = 24.dp,
                 shadowOffset = 6.dp,
@@ -350,6 +352,7 @@ fun HomeScreen(
         item {
             PosterCard(
                 containerColor = PopPosterPeach,
+                kit = true,
                 contentColor = PopPosterInk,
                 cornerRadius = 22.dp,
                 shadowOffset = 5.dp,
