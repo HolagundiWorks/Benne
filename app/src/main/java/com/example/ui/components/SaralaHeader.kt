@@ -172,16 +172,15 @@ fun SaralaHeader(
             }
         }
 
-        // Official logo (88 dp): its bottom edge sits on the pill's bottom border, inside the
-        // border, and its right edge stays inside the border. It extends only upward.
-        Box(modifier = Modifier.matchParentSize()) {
+        // Official logo (88 dp), cropped by the pill's shape so it stays inside the border.
+        Box(modifier = Modifier.matchParentSize().clip(RoundedCornerShape(24.dp))) {
             Image(
                 painter = painterResource(R.drawable.benne_logo_longshadow),
                 contentDescription = "Benne",
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(end = 6.dp)
-                    .offset(y = (-11).dp)
+                    .offset(y = (-15).dp)
                     .requiredHeight(88.dp)
             )
         }

@@ -193,3 +193,8 @@ Shadow:
 - The logo's bottom edge sits on the pill's bottom border, and its right edge stays inside the border. It extends only upward above the pill.
 - Header top margin 34 dp; screen top inset 112 dp.
 - Verified on device: Home.
+
+## Nineteenth pass: logo stays inside the header (feature/pop-cards)
+- The logo layer is clipped to the header's rounded shape, so nothing extends past the border. Its bottom sits just above the border line.
+- At 88 dp in a ~52 dp pill, the top of the wordmark is cropped. A taller pill would show the full wordmark.
+- Verified on device: Home.
