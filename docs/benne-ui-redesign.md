@@ -82,7 +82,7 @@ Source: `benne_brand_kit/` (kept untracked; not committed).
 - Colours: kit values are identical to `ui/theme/Color.kt`; no change needed.
 
 Not used, and why:
-- `wordmark_latin` (PNG and SVG): "Benne" is clipped at the right edge in the kit assets. The SVG sets text at font-size 195 inside a 512 px viewBox, so the word overflows. The header keeps the text wordmark. The kit needs fixing before use.
+- `wordmark_latin` (PNG and SVG): the kit wordmark was clipped ("Benn") because the SVG text overflowed its 512 px viewBox. The kit SVG now uses `font-size=180` with `textLength=452`, and the 512/1024 PNGs were re-rendered with a transparent background. The app header still uses the text wordmark; the kit wordmark is available for use.
 - Fonts: the kit specifies Baloo 2, Nunito Sans and Noto Sans Kannada. The app uses Bricolage Grotesque, Space Grotesk and Anek Kannada. Not changed; font licences need checking first.
 
 Verified on device: home hero shows the kit mascot; header shows text wordmark; launcher shows the new icon. Build passes. Unit tests unchanged (1 pre-existing Robolectric failure).
