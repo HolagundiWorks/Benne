@@ -188,3 +188,8 @@ Shadow:
 - The logo (88 dp) is a separate layer centred on the pill's right edge, so it extends above and below the border. The pill keeps its height; the pills and settings are padded so they stay clear of the logo.
 - Screen top inset set to 100 dp (status bar + header).
 - Verified on device: Home.
+
+## Eighteenth pass: logo anchored to the header's bottom border (feature/pop-cards)
+- The logo's bottom edge sits on the pill's bottom border, and its right edge stays inside the border. It extends only upward above the pill.
+- Header top margin 34 dp; screen top inset 112 dp.
+- Verified on device: Home.

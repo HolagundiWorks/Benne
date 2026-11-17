@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -170,14 +172,18 @@ fun SaralaHeader(
             }
         }
 
-        // Official logo at 88 dp, centred on the right edge of the pill; it may extend past the border
-        Image(
-            painter = painterResource(R.drawable.benne_logo_longshadow),
-            contentDescription = "Benne",
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(end = 10.dp)
-                .height(88.dp)
-        )
+        // Official logo (88 dp): its bottom edge sits on the pill's bottom border, inside the
+        // border, and its right edge stays inside the border. It extends only upward.
+        Box(modifier = Modifier.matchParentSize()) {
+            Image(
+                painter = painterResource(R.drawable.benne_logo_longshadow),
+                contentDescription = "Benne",
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 6.dp)
+                    .offset(y = (-11).dp)
+                    .requiredHeight(88.dp)
+            )
+        }
     }
 }
