@@ -87,3 +87,14 @@ Not used, and why:
 
 Verified on device: home hero shows the kit mascot; header shows text wordmark; launcher shows the new icon. Build passes. Unit tests unchanged (1 pre-existing Robolectric failure).
 Open: the launcher mascot looks small inside the icon (the foreground is wrapped in a 66 dp layer). Not tuned.
+
+## Fifth pass: pop card assets (feature/pop-cards)
+Source: `Benne_Pop_Elements_Karnataka_Kit/` (kept untracked).
+- `PosterCard` (`ui/components/PopCard.kt`) now draws the kit card PNGs (`pop_card_yellow`, `pop_card_red`, `pop_card_cream`) with nine-slice scaling. Corners and outline keep their size, and the middle stretches. The kit PNG has about 48 px of transparent margin, so the slice works on the card's bounding box (x 48-464, y 65-437 of 512). The hard ink offset shadow is kept.
+- Colour to skin: Butter -> yellow, Pop Red -> red, anything else -> cream. Existing call sites keep working; chapter cards rotate cream, yellow and red.
+- Practice flashcard (`InteractiveFlashcard.kt`): front uses yellow when unmastered, cream otherwise; the skin is drawn by the card's `drawBehind`.
+- Home module tiles use kit icons (`pop_icon_book`, `pop_icon_speech`, `pop_icon_trophy`) on yellow, cream and red cards.
+- Not used: landmark illustrations, bursts, ribbons, speech bubbles, halftone. Available in the kit for later screens.
+- Verified on device: home (hero, continue card, module tiles), Practice flashcard (mastered and unmastered content visible). Build passes. Unit tests unchanged from baseline (1 pre-existing Robolectric failure).
+- Not checked on device: Letters, Dialogues, Phrases, lesson sheet, quiz cards.
+- The yellow card's red dots sit in the top band and stretch with card width.

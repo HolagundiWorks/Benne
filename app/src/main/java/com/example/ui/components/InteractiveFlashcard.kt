@@ -50,6 +50,9 @@ import com.example.ui.theme.PopPosterCyan
 import com.example.ui.theme.PopPosterInk
 import com.example.ui.theme.PopPosterMint
 import com.example.ui.theme.PopPosterPaper
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.res.imageResource
 
 /**
  * Benne Pop-Poster Interactive 3D Flashcard with hard drop shadow,
@@ -88,21 +91,24 @@ fun InteractiveVocabularyFlashcard(
                 .background(PopPosterInk)
         )
 
+        // Kit card skin: yellow for an unmastered front, cream otherwise
+        val skinColor = when {
+            rotation <= 90f && !isMastered -> PopPosterButter
+            else -> PopPosterPaper
+        }
+        val skin = ImageBitmap.imageResource(cardSkinFor(skinColor))
+
         ElevatedCard(
             onClick = onFlip,
             shape = shape,
             colors = CardDefaults.elevatedCardColors(
-                containerColor = when {
-                    rotation <= 90f && isMastered -> PopPosterMint
-                    rotation <= 90f -> PopPosterButter
-                    isMastered -> PopPosterMint
-                    else -> PopPosterPaper
-                }
+                containerColor = Color.Transparent
             ),
             elevation = CardDefaults.elevatedCardElevation(defaultElevation = 0.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(366.dp)
+                .drawBehind { drawNineSlice(skin, 24.dp.toPx()) }
                 .graphicsLayer {
                     rotationY = rotation
                     cameraDistance = 14f * density

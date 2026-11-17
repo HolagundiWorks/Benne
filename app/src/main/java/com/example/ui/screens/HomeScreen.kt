@@ -1,6 +1,8 @@
 package com.example.ui.screens
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -58,6 +60,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -72,6 +75,7 @@ import com.example.ui.components.KannadaWithSubscript
 import com.example.ui.components.PopActionButton
 import com.example.ui.components.PosterCard
 import com.example.ui.components.PosterStampBadge
+import com.example.ui.theme.BennePopRed
 import com.example.ui.theme.BricolageGrotesqueFamily
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterCyan
@@ -102,13 +106,11 @@ fun HomeScreen(
 
     val nextMilestone = SaralaKannadaData.milestones.firstOrNull { it.id !in completedLessons }
 
+    // Kit card skins: cream, yellow and red (see PosterCard)
     val chapterPosterColors = listOf(
         PopPosterPaper,
-        PopPosterCyan,
-        PopPosterMint,
         PopPosterButter,
-        PopPosterPeach,
-        PopPosterLavender
+        BennePopRed
     )
 
     LazyColumn(
@@ -274,29 +276,29 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 PopQuickModuleCard(
-                    icon = Icons.AutoMirrored.Filled.MenuBook,
+                    iconRes = com.example.R.drawable.pop_icon_book,
                     title = "Alphabet",
                     subtitle = "Letters & sounds",
                     tagKey = "script",
-                    cardColor = PopPosterCyan,
+                    cardColor = PopPosterButter,
                     onClick = onNavigateToVarnamale,
                     modifier = Modifier.weight(1f)
                 )
                 PopQuickModuleCard(
-                    icon = Icons.Default.ChatBubbleOutline,
+                    iconRes = com.example.R.drawable.pop_icon_speech,
                     title = "Dialogues",
                     subtitle = "Real-life talk",
                     tagKey = "dialogue",
-                    cardColor = PopPosterPink,
+                    cardColor = PopPosterPaper,
                     onClick = onNavigateToConversations,
                     modifier = Modifier.weight(1f)
                 )
                 PopQuickModuleCard(
-                    icon = Icons.Default.Psychology,
+                    iconRes = com.example.R.drawable.pop_icon_trophy,
                     title = "Practice",
                     subtitle = "Cards & quiz",
                     tagKey = "practice",
-                    cardColor = PopPosterMint,
+                    cardColor = BennePopRed,
                     onClick = onNavigateToPractice,
                     modifier = Modifier.weight(1f)
                 )
@@ -481,7 +483,7 @@ fun HomeScreen(
 
 @Composable
 private fun PopQuickModuleCard(
-    icon: ImageVector,
+    @DrawableRes iconRes: Int,
     title: String,
     subtitle: String,
     tagKey: String,
@@ -503,19 +505,11 @@ private fun PopQuickModuleCard(
                 .padding(12.dp),
             horizontalAlignment = Alignment.Start
         ) {
-            Surface(
-                shape = RoundedCornerShape(10.dp),
-                color = PopPosterPaper,
-                contentColor = PopPosterInk,
-                border = BorderStroke(1.5.dp, PopPosterInk),
-                modifier = Modifier.size(34.dp)
-            ) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = title,
-                    modifier = Modifier.padding(6.dp)
-                )
-            }
+            Image(
+                painter = painterResource(iconRes),
+                contentDescription = title,
+                modifier = Modifier.size(44.dp)
+            )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = title,
