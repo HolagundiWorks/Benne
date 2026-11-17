@@ -4,6 +4,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,6 +35,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
@@ -40,11 +44,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.model.VocabularyFlashcard
-import com.example.ui.theme.AnekKannadaFamily
+import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.ui.theme.PopPosterButter
+import com.example.ui.theme.PopPosterCyan
+import com.example.ui.theme.PopPosterInk
+import com.example.ui.theme.PopPosterMint
+import com.example.ui.theme.PopPosterPaper
 
 /**
- * Material 3 Interactive Flashcard with 3D Flip-to-Reveal Animation
- * and Text-to-Speech Pronunciation integration.
+ * Benne Pop-Poster Interactive 3D Flashcard with hard drop shadow,
+ * Flip-to-Reveal translation, and Text-to-Speech pronunciation.
  */
 @Composable
 fun InteractiveVocabularyFlashcard(
@@ -62,55 +71,69 @@ fun InteractiveVocabularyFlashcard(
         animationSpec = tween(durationMillis = 420, easing = FastOutSlowInEasing),
         label = "flashcard_3d_flip"
     )
+    val shape = RoundedCornerShape(24.dp)
 
-    ElevatedCard(
-        onClick = onFlip,
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.elevatedCardColors(
-            containerColor = if (rotation <= 90f) {
-                MaterialTheme.colorScheme.surfaceContainerLow
-            } else {
-                MaterialTheme.colorScheme.surfaceContainer
-            }
-        ),
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp),
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(356.dp)
-            .graphicsLayer {
-                rotationY = rotation
-                cameraDistance = 14f * density
-            }
-            .testTag("flashcard_container_${flashcard.id}")
+            .padding(end = 6.dp, bottom = 6.dp)
     ) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            shape = RoundedCornerShape(24.dp),
-            color = androidx.compose.ui.graphics.Color.Transparent,
-            border = if (isMastered) {
-                BorderStroke(2.dp, MaterialTheme.colorScheme.tertiary)
-            } else {
-                BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-            }
+        // Hard offset poster drop shadow beneath card
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(366.dp)
+                .offset(x = 6.dp, y = 6.dp)
+                .clip(shape)
+                .background(PopPosterInk)
+        )
+
+        ElevatedCard(
+            onClick = onFlip,
+            shape = shape,
+            colors = CardDefaults.elevatedCardColors(
+                containerColor = when {
+                    rotation <= 90f && isMastered -> PopPosterMint
+                    rotation <= 90f -> PopPosterButter
+                    isMastered -> PopPosterMint
+                    else -> PopPosterPaper
+                }
+            ),
+            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 0.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(366.dp)
+                .graphicsLayer {
+                    rotationY = rotation
+                    cameraDistance = 14f * density
+                }
+                .testTag("flashcard_container_${flashcard.id}")
         ) {
-            if (rotation <= 90f) {
-                FlashcardFrontFace(
-                    flashcard = flashcard,
-                    isMastered = isMastered,
-                    isCurrentlySpeaking = isCurrentlySpeaking,
-                    onSpeakWord = onSpeakWord
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .graphicsLayer { rotationY = 180f }
-                ) {
-                    FlashcardBackFace(
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                shape = shape,
+                color = Color.Transparent,
+                border = BorderStroke(2.2.dp, PopPosterInk)
+            ) {
+                if (rotation <= 90f) {
+                    FlashcardFrontFace(
                         flashcard = flashcard,
                         isMastered = isMastered,
-                        onSpeakSentence = onSpeakSentence
+                        isCurrentlySpeaking = isCurrentlySpeaking,
+                        onSpeakWord = onSpeakWord
                     )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .graphicsLayer { rotationY = 180f }
+                    ) {
+                        FlashcardBackFace(
+                            flashcard = flashcard,
+                            isMastered = isMastered,
+                            onSpeakSentence = onSpeakSentence
+                        )
+                    }
                 }
             }
         }
@@ -138,16 +161,9 @@ private fun FlashcardFrontFace(
         ) {
             Surface(
                 shape = CircleShape,
-                color = if (isMastered) {
-                    MaterialTheme.colorScheme.tertiaryContainer
-                } else {
-                    MaterialTheme.colorScheme.secondaryContainer
-                },
-                contentColor = if (isMastered) {
-                    MaterialTheme.colorScheme.onTertiaryContainer
-                } else {
-                    MaterialTheme.colorScheme.onSecondaryContainer
-                }
+                color = if (isMastered) PopPosterInk else PopPosterPaper,
+                contentColor = if (isMastered) PopPosterMint else PopPosterInk,
+                border = BorderStroke(1.5.dp, PopPosterInk)
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
@@ -160,60 +176,55 @@ private fun FlashcardFrontFace(
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = if (isMastered) "Mastered" else "Learning",
+                        text = if (isMastered) "MASTERED" else "LEARNING",
                         style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.Bold
                     )
                 }
             }
 
-            Surface(
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.surfaceContainerHighest,
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-            ) {
-                Text(
-                    text = flashcard.category,
-                    style = MaterialTheme.typography.labelSmall,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
-                )
-            }
+            PosterStampBadge(
+                text = flashcard.category.uppercase(),
+                containerColor = PopPosterCyan,
+                contentColor = PopPosterInk
+            )
         }
 
-        // Center Content: Kannada Word, Transliteration & Audio Button
+        // Center Content: Kannada Word, Subscript Pronunciation & Audio Button
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = flashcard.kannadaWord,
-                fontFamily = AnekKannadaFamily,
-                fontSize = 44.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface,
+            KannadaWithSubscript(
+                kannadaText = flashcard.kannadaWord,
+                transliteration = flashcard.transliteration,
+                kannadaFontSize = 44.sp,
+                kannadaLineHeight = 52.sp,
+                kannadaColor = PopPosterInk,
+                subscriptColor = MaterialTheme.colorScheme.primary,
+                subscriptStyle = MaterialTheme.typography.titleMedium,
+                horizontalAlignment = Alignment.CenterHorizontally,
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
-                text = flashcard.transliteration,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary,
-                textAlign = TextAlign.Center
-            )
+            Surface(
+                shape = CircleShape,
+                color = PopPosterPaper,
+                border = BorderStroke(1.2.dp, PopPosterInk)
+            ) {
+                Text(
+                    text = "Phonetics: ${flashcard.phoneticBreakdown}",
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Medium,
+                    color = PopPosterInk,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                )
+            }
 
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(
-                text = "Phonetics: ${flashcard.phoneticBreakdown}",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.height(18.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -223,23 +234,23 @@ private fun FlashcardFrontFace(
                     textToSpeak = flashcard.kannadaWord,
                     isCurrentlySpeaking = isCurrentlySpeaking,
                     onSpeak = onSpeakWord,
-                    sizeDp = 48,
-                    iconSizeDp = 22,
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    sizeDp = 50,
+                    iconSizeDp = 24,
+                    containerColor = PopPosterPaper,
+                    contentColor = PopPosterInk
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = "Tap to listen",
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = PopPosterInk
                 )
             }
         }
 
         // Bottom Flip Prompt
         Column(modifier = Modifier.fillMaxWidth()) {
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk)
             Spacer(modifier = Modifier.height(10.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -249,14 +260,14 @@ private fun FlashcardFrontFace(
                 Icon(
                     imageVector = Icons.Default.Flip,
                     contentDescription = "Flip card",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    tint = PopPosterInk,
                     modifier = Modifier.size(16.dp)
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
-                    text = "Tap card to reveal meaning",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    text = "TAP CARD TO REVEAL MEANING",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = PopPosterInk
                 )
             }
         }
@@ -281,31 +292,16 @@ private fun FlashcardBackFace(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "Translation & Context",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold
+            PosterStampBadge(
+                text = "MEANING & CONTEXT",
+                containerColor = PopPosterInk,
+                contentColor = PopPosterButter
             )
-            Surface(
-                shape = CircleShape,
-                color = if (isMastered) {
-                    MaterialTheme.colorScheme.tertiaryContainer
-                } else {
-                    MaterialTheme.colorScheme.surfaceContainerHighest
-                }
-            ) {
-                Text(
-                    text = flashcard.category,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = if (isMastered) {
-                        MaterialTheme.colorScheme.onTertiaryContainer
-                    } else {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    },
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                )
-            }
+            PosterStampBadge(
+                text = flashcard.category.uppercase(),
+                containerColor = if (isMastered) PopPosterPaper else PopPosterCyan,
+                contentColor = PopPosterInk
+            )
         }
 
         // Center Content: English meaning, example sentence & cultural note
@@ -315,19 +311,22 @@ private fun FlashcardBackFace(
         ) {
             Text(
                 text = flashcard.englishMeaning,
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface,
+                fontFamily = BricolageGrotesqueFamily,
+                fontSize = 28.sp,
+                lineHeight = 33.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = PopPosterInk,
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             // Contextual Example Sentence Card
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surfaceContainerHighest
+                color = PopPosterButter,
+                border = BorderStroke(1.8.dp, PopPosterInk)
             ) {
                 Row(
                     modifier = Modifier
@@ -338,28 +337,26 @@ private fun FlashcardBackFace(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            text = "Example in context",
+                            text = "EXAMPLE IN CONTEXT",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.primary
                         )
-                        Spacer(modifier = Modifier.height(3.dp))
-                        Text(
-                            text = flashcard.exampleSentenceKn,
-                            fontFamily = AnekKannadaFamily,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
+                        Spacer(modifier = Modifier.height(4.dp))
+                        KannadaWithSubscript(
+                            kannadaText = flashcard.exampleSentenceKn,
+                            transliteration = flashcard.exampleSentenceTranslit,
+                            kannadaFontSize = 18.sp,
+                            kannadaLineHeight = 24.sp,
+                            kannadaColor = PopPosterInk,
+                            subscriptColor = MaterialTheme.colorScheme.primary,
+                            subscriptStyle = MaterialTheme.typography.bodySmall
                         )
+                        Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = flashcard.exampleSentenceTranslit,
+                            text = "Meaning: \"${flashcard.exampleSentenceEn}\"",
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = "\"${flashcard.exampleSentenceEn}\"",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = PopPosterInk
                         )
                     }
 
@@ -369,10 +366,10 @@ private fun FlashcardBackFace(
                         textToSpeak = flashcard.exampleSentenceKn,
                         isCurrentlySpeaking = false,
                         onSpeak = onSpeakSentence,
-                        sizeDp = 40,
+                        sizeDp = 42,
                         iconSizeDp = 18,
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        containerColor = PopPosterPaper,
+                        contentColor = PopPosterInk
                     )
                 }
             }
@@ -382,7 +379,8 @@ private fun FlashcardBackFace(
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
-                    color = MaterialTheme.colorScheme.secondaryContainer
+                    color = PopPosterCyan,
+                    border = BorderStroke(1.5.dp, PopPosterInk)
                 ) {
                     Row(
                         modifier = Modifier.padding(10.dp),
@@ -391,14 +389,14 @@ private fun FlashcardBackFace(
                         Icon(
                             imageVector = Icons.Default.Lightbulb,
                             contentDescription = "Usage note",
-                            tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                            tint = PopPosterInk,
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = flashcard.culturalNote,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                            color = PopPosterInk
                         )
                     }
                 }
@@ -414,14 +412,14 @@ private fun FlashcardBackFace(
             Icon(
                 imageVector = Icons.Default.Flip,
                 contentDescription = "Flip to front",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                tint = PopPosterInk,
                 modifier = Modifier.size(16.dp)
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
-                text = "Tap card to flip back",
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = "TAP CARD TO FLIP BACK",
+                style = MaterialTheme.typography.labelSmall,
+                color = PopPosterInk
             )
         }
     }

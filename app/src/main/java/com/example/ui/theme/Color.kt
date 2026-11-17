@@ -2,77 +2,51 @@ package com.example.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Material 3 Tonal Color Palette for Sarala Kannada
-// Warm Karnataka terracotta-vermilion primary, slate-indigo secondary, and forest emerald tertiary.
+// Benne — Neo-Pop Poster Light Color Palette
+// Warm cream paper canvas, vibrant Benne butter yellow, pop vermilion-coral, electric cyan, mint soda, and crisp poster ink.
+
+val PopPosterInk = Color(0xFF16161A)
+val PopPosterPaper = Color(0xFFFFFFFF)
+val PopPosterButter = Color(0xFFFFDC4A)
+val PopPosterCyan = Color(0xFFAEEBFF)
+val PopPosterMint = Color(0xFF9DF6BE)
+val PopPosterPeach = Color(0xFFFFC9AD)
+val PopPosterLavender = Color(0xFFE0CEFF)
+val PopPosterPink = Color(0xFFFFBFE0)
 
 // Light Scheme Tokens
-val MdPrimaryLight = Color(0xFFB33B15)
+val MdPrimaryLight = Color(0xFFE64815)
 val MdOnPrimaryLight = Color(0xFFFFFFFF)
-val MdPrimaryContainerLight = Color(0xFFFFDBD0)
-val MdOnPrimaryContainerLight = Color(0xFF3B0900)
+val MdPrimaryContainerLight = PopPosterButter
+val MdOnPrimaryContainerLight = PopPosterInk
 
-val MdSecondaryLight = Color(0xFF5D5E72)
+val MdSecondaryLight = Color(0xFF2848D6)
 val MdOnSecondaryLight = Color(0xFFFFFFFF)
-val MdSecondaryContainerLight = Color(0xFFE2E0F9)
-val MdOnSecondaryContainerLight = Color(0xFF1A1B2C)
+val MdSecondaryContainerLight = PopPosterCyan
+val MdOnSecondaryContainerLight = PopPosterInk
 
-val MdTertiaryLight = Color(0xFF286B49)
+val MdTertiaryLight = Color(0xFF0E7C4E)
 val MdOnTertiaryLight = Color(0xFFFFFFFF)
-val MdTertiaryContainerLight = Color(0xFFADF2C7)
-val MdOnTertiaryContainerLight = Color(0xFF002111)
+val MdTertiaryContainerLight = PopPosterMint
+val MdOnTertiaryContainerLight = PopPosterInk
 
-val MdErrorLight = Color(0xFFBA1A1A)
+val MdErrorLight = Color(0xFFD92338)
 val MdOnErrorLight = Color(0xFFFFFFFF)
-val MdErrorContainerLight = Color(0xFFFFDAD6)
-val MdOnErrorContainerLight = Color(0xFF410002)
+val MdErrorContainerLight = Color(0xFFFFD6DB)
+val MdOnErrorContainerLight = Color(0xFF3B0009)
 
-val MdBackgroundLight = Color(0xFFFFF8F6)
-val MdOnBackgroundLight = Color(0xFF231917)
-val MdSurfaceLight = Color(0xFFFFF8F6)
-val MdOnSurfaceLight = Color(0xFF231917)
-val MdSurfaceVariantLight = Color(0xFFF5DDD6)
-val MdOnSurfaceVariantLight = Color(0xFF53433E)
-val MdOutlineLight = Color(0xFF85736E)
-val MdOutlineVariantLight = Color(0xFFD8C2BC)
+val MdBackgroundLight = Color(0xFFFFFBF0)
+val MdOnBackgroundLight = PopPosterInk
+val MdSurfaceLight = Color(0xFFFFFBF0)
+val MdOnSurfaceLight = PopPosterInk
+val MdSurfaceVariantLight = Color(0xFFFFF0C2)
+val MdOnSurfaceVariantLight = Color(0xFF3E3B34)
+val MdOutlineLight = PopPosterInk
+val MdOutlineVariantLight = Color(0xFF34343D)
 
 val MdSurfaceContainerLowestLight = Color(0xFFFFFFFF)
-val MdSurfaceContainerLowLight = Color(0xFFFFF1ED)
-val MdSurfaceContainerLight = Color(0xFFFCEAE5)
-val MdSurfaceContainerHighLight = Color(0xFFF6E4DF)
-val MdSurfaceContainerHighestLight = Color(0xFFF0DFDA)
+val MdSurfaceContainerLowLight = Color(0xFFFFFDF7)
+val MdSurfaceContainerLight = Color(0xFFFFF6DC)
+val MdSurfaceContainerHighLight = Color(0xFFFFEEC4)
+val MdSurfaceContainerHighestLight = Color(0xFFFFE7A8)
 
-// Dark Scheme Tokens
-val MdPrimaryDark = Color(0xFFFFB59E)
-val MdOnPrimaryDark = Color(0xFF5F1600)
-val MdPrimaryContainerDark = Color(0xFF872604)
-val MdOnPrimaryContainerDark = Color(0xFFFFDBD0)
-
-val MdSecondaryDark = Color(0xFFC6C4DD)
-val MdOnSecondaryDark = Color(0xFF2F3042)
-val MdSecondaryContainerDark = Color(0xFF454659)
-val MdOnSecondaryContainerDark = Color(0xFFE2E0F9)
-
-val MdTertiaryDark = Color(0xFF92D5AC)
-val MdOnTertiaryDark = Color(0xFF00391F)
-val MdTertiaryContainerDark = Color(0xFF085233)
-val MdOnTertiaryContainerDark = Color(0xFFADF2C7)
-
-val MdErrorDark = Color(0xFFFFB4AB)
-val MdOnErrorDark = Color(0xFF690005)
-val MdErrorContainerDark = Color(0xFF93000A)
-val MdOnErrorContainerDark = Color(0xFFFFDAD6)
-
-val MdBackgroundDark = Color(0xFF1A110F)
-val MdOnBackgroundDark = Color(0xFFF0DFDA)
-val MdSurfaceDark = Color(0xFF1A110F)
-val MdOnSurfaceDark = Color(0xFFF0DFDA)
-val MdSurfaceVariantDark = Color(0xFF53433E)
-val MdOnSurfaceVariantDark = Color(0xFFD8C2BC)
-val MdOutlineDark = Color(0xFFA08C87)
-val MdOutlineVariantDark = Color(0xFF53433E)
-
-val MdSurfaceContainerLowestDark = Color(0xFF140C0A)
-val MdSurfaceContainerLowDark = Color(0xFF231917)
-val MdSurfaceContainerDark = Color(0xFF271D1B)
-val MdSurfaceContainerHighDark = Color(0xFF322825)
-val MdSurfaceContainerHighestDark = Color(0xFF3D322F)

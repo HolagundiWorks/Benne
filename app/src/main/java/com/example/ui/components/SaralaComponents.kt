@@ -3,21 +3,35 @@ package com.example.ui.components
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.LocalFireDepartment
@@ -25,10 +39,8 @@ import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Stars
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -41,18 +53,169 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ui.theme.AnekKannadaFamily
+import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.ui.theme.PopPosterButter
+import com.example.ui.theme.PopPosterCyan
+import com.example.ui.theme.PopPosterInk
+import com.example.ui.theme.PopPosterMint
+import com.example.ui.theme.PopPosterPaper
+import com.example.ui.theme.SpaceGroteskFamily
 import java.util.Locale
 
 /**
- * Material 3 Audio Speak Icon Button with active playback pulse animation.
+ * Neo-Pop Poster Card with crisp ink border and solid offset drop shadow.
+ * When clickable, physically depresses toward the drop shadow on press.
+ */
+@Composable
+fun PosterCard(
+    modifier: Modifier = Modifier,
+    containerColor: Color = PopPosterPaper,
+    contentColor: Color = PopPosterInk,
+    shadowColor: Color = PopPosterInk,
+    borderColor: Color = PopPosterInk,
+    cornerRadius: Dp = 20.dp,
+    shadowOffset: Dp = 4.dp,
+    borderWidth: Dp = 2.dp,
+    onClick: (() -> Unit)? = null,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    val shape: Shape = RoundedCornerShape(cornerRadius)
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val pressOffset by animateDpAsState(
+        targetValue = if (onClick != null && isPressed) (shadowOffset * 0.65f) else 0.dp,
+        animationSpec = spring(stiffness = Spring.StiffnessHigh),
+        label = "poster_card_press"
+    )
+
+    Box(
+        modifier = modifier.padding(end = shadowOffset, bottom = shadowOffset)
+    ) {
+        // Hard offset poster drop shadow layer
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .offset(x = shadowOffset, y = shadowOffset)
+                .clip(shape)
+                .background(shadowColor)
+        )
+
+        // Foreground poster surface
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset(x = pressOffset, y = pressOffset)
+                .then(
+                    if (onClick != null) {
+                        Modifier.clickable(
+                            interactionSource = interactionSource,
+                            indication = androidx.compose.material3.ripple(),
+                            onClick = onClick
+                        )
+                    } else {
+                        Modifier
+                    }
+                ),
+            shape = shape,
+            color = containerColor,
+            contentColor = contentColor,
+            border = BorderStroke(borderWidth, borderColor)
+        ) {
+            Column(content = content)
+        }
+    }
+}
+
+/**
+ * Bold Pop-Poster Stamp / Sticker Pill.
+ */
+@Composable
+fun PosterStampBadge(
+    text: String,
+    modifier: Modifier = Modifier,
+    containerColor: Color = PopPosterInk,
+    contentColor: Color = PopPosterButter,
+    borderColor: Color = PopPosterInk
+) {
+    Surface(
+        modifier = modifier,
+        shape = CircleShape,
+        color = containerColor,
+        contentColor = contentColor,
+        border = BorderStroke(1.5.dp, borderColor)
+    ) {
+        Text(
+            text = text,
+            fontFamily = SpaceGroteskFamily,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Bold,
+            letterSpacing = 0.6.sp,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+        )
+    }
+}
+
+/**
+ * Displays Kannada text with its English-script phonetic transliteration directly underneath
+ * (not the English translation), so non-Kannada speakers can always read how a word or sentence sounds.
+ */
+@Composable
+fun KannadaWithSubscript(
+    kannadaText: String,
+    transliteration: String,
+    modifier: Modifier = Modifier,
+    kannadaFontSize: TextUnit = 19.sp,
+    kannadaLineHeight: TextUnit = 26.sp,
+    kannadaColor: Color = MaterialTheme.colorScheme.onSurface,
+    subscriptColor: Color = MaterialTheme.colorScheme.primary,
+    subscriptStyle: TextStyle = MaterialTheme.typography.bodySmall,
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
+    textAlign: TextAlign = TextAlign.Start
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = horizontalAlignment
+    ) {
+        Text(
+            text = kannadaText,
+            fontFamily = AnekKannadaFamily,
+            fontSize = kannadaFontSize,
+            lineHeight = kannadaLineHeight,
+            fontWeight = FontWeight.Bold,
+            color = kannadaColor,
+            textAlign = textAlign
+        )
+        if (transliteration.isNotBlank()) {
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = transliteration,
+                style = subscriptStyle,
+                fontWeight = FontWeight.Bold,
+                color = subscriptColor,
+                textAlign = textAlign
+            )
+        }
+    }
+}
+
+/**
+ * Neo-Pop Poster Audio Speak Button with crisp ink border, offset drop shadow, and active pulse.
  */
 @Composable
 fun AudioSpeakButton(
@@ -62,16 +225,16 @@ fun AudioSpeakButton(
     modifier: Modifier = Modifier,
     sizeDp: Int = 44,
     iconSizeDp: Int = 22,
-    containerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
-    contentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer
+    containerColor: Color = PopPosterButter,
+    contentColor: Color = PopPosterInk
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "m3_audio_pulse")
     val pulseScale by if (isCurrentlySpeaking) {
         infiniteTransition.animateFloat(
             initialValue = 1f,
-            targetValue = 1.08f,
+            targetValue = 1.09f,
             animationSpec = infiniteRepeatable(
-                animation = tween(420, easing = FastOutSlowInEasing),
+                animation = tween(380, easing = FastOutSlowInEasing),
                 repeatMode = RepeatMode.Reverse
             ),
             label = "scale"
@@ -85,33 +248,47 @@ fun AudioSpeakButton(
         label = "bgColor"
     )
     val animatedContent by animateColorAsState(
-        targetValue = if (isCurrentlySpeaking) MaterialTheme.colorScheme.onPrimary else contentColor,
+        targetValue = if (isCurrentlySpeaking) Color.White else contentColor,
         label = "fgColor"
     )
 
-    FilledTonalIconButton(
-        onClick = { onSpeak(textToSpeak) },
+    Box(
         modifier = modifier
             .minimumInteractiveComponentSize()
-            .size(sizeDp.dp)
+            .padding(end = 2.5.dp, bottom = 2.5.dp)
             .scale(pulseScale)
-            .testTag("audio_button_${textToSpeak.take(10)}"),
-        shape = CircleShape,
-        colors = IconButtonDefaults.filledTonalIconButtonColors(
-            containerColor = animatedBg,
-            contentColor = animatedContent
-        )
     ) {
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.VolumeUp,
-            contentDescription = "Audio playback for $textToSpeak",
-            modifier = Modifier.size(iconSizeDp.dp)
+        Box(
+            modifier = Modifier
+                .size(sizeDp.dp)
+                .offset(x = 2.5.dp, y = 2.5.dp)
+                .clip(CircleShape)
+                .background(PopPosterInk)
         )
+        Surface(
+            onClick = { onSpeak(textToSpeak) },
+            modifier = Modifier
+                .size(sizeDp.dp)
+                .testTag("audio_button_${textToSpeak.take(10)}"),
+            shape = CircleShape,
+            color = animatedBg,
+            contentColor = animatedContent,
+            border = BorderStroke(1.8.dp, PopPosterInk)
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.VolumeUp,
+                    contentDescription = "Audio playback for $textToSpeak",
+                    modifier = Modifier.size(iconSizeDp.dp)
+                )
+            }
+        }
     }
 }
 
 /**
- * Pure Material 3 Top App Bar with compact status pills and settings trigger.
+ * Benne Pop-Poster Top App Bar with bold Bricolage display wordmark,
+ * Kannada+transliteration pill, compact ink-bordered status pills, and settings trigger.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -123,127 +300,153 @@ fun SaralaTopAppBar(
     onOpenSystemConsole: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    TopAppBar(
-        modifier = modifier.fillMaxWidth(),
-        windowInsets = WindowInsets.statusBars,
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            titleContentColor = MaterialTheme.colorScheme.onSurface
-        ),
-        title = {
-            Column {
-                Text(
-                    text = "ಸರಳ ಕನ್ನಡ",
-                    fontFamily = AnekKannadaFamily,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Text(
-                    text = "Sarala Kannada",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-        },
-        actions = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                modifier = Modifier.padding(end = 4.dp)
-            ) {
-                // Streak Tonal Pill
-                Surface(
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.tertiaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+    Column(modifier = modifier.fillMaxWidth()) {
+        TopAppBar(
+            modifier = Modifier.fillMaxWidth(),
+            windowInsets = WindowInsets.statusBars,
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.background,
+                titleContentColor = PopPosterInk
+            ),
+            title = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.LocalFireDepartment,
-                            contentDescription = "Streak",
-                            modifier = Modifier.size(14.dp)
-                        )
-                        Spacer(modifier = Modifier.width(3.dp))
-                        Text(
-                            text = "${streakDays}d",
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-
-                // XP Tonal Pill
-                Surface(
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Stars,
-                            contentDescription = "Experience Points",
-                            modifier = Modifier.size(14.dp)
-                        )
-                        Spacer(modifier = Modifier.width(3.dp))
-                        Text(
-                            text = "$xpPoints",
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-
-                // Audio Speed Toggle Pill (48dp interactive target)
-                Surface(
-                    onClick = onToggleSpeed,
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier
-                        .minimumInteractiveComponentSize()
-                        .testTag("audio_speed_chip")
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 9.dp, vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Speed,
-                            contentDescription = "Audio playback speed",
-                            modifier = Modifier.size(14.dp)
-                        )
-                        Spacer(modifier = Modifier.width(3.dp))
-                        Text(
-                            text = String.format(Locale.US, "%.2fx", playbackSpeed),
-                            style = MaterialTheme.typography.labelSmall,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-
-                // Settings, Notifications & Legal Button
-                IconButton(
-                    onClick = onOpenSystemConsole,
-                    modifier = Modifier.testTag("system_settings_button")
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Settings,
-                        contentDescription = "Settings, Notifications, Privacy & Legal",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    Text(
+                        text = "Benne",
+                        fontFamily = BricolageGrotesqueFamily,
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        letterSpacing = (-0.5).sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        color = PopPosterInk
                     )
+                    Surface(
+                        shape = CircleShape,
+                        color = PopPosterButter,
+                        contentColor = PopPosterInk,
+                        border = BorderStroke(1.5.dp, PopPosterInk)
+                    ) {
+                        Text(
+                            text = "ಬೆಣ್ಣೆ",
+                            fontFamily = AnekKannadaFamily,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                        )
+                    }
+                }
+            },
+            actions = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.padding(end = 8.dp)
+                ) {
+                    // Streak Pop Pill
+                    Surface(
+                        shape = CircleShape,
+                        color = PopPosterMint,
+                        contentColor = PopPosterInk,
+                        border = BorderStroke(1.5.dp, PopPosterInk)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.LocalFireDepartment,
+                                contentDescription = "Streak",
+                                modifier = Modifier.size(13.dp)
+                            )
+                            Spacer(modifier = Modifier.width(2.dp))
+                            Text(
+                                text = "${streakDays}d",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+
+                    // XP Pop Pill
+                    Surface(
+                        shape = CircleShape,
+                        color = PopPosterCyan,
+                        contentColor = PopPosterInk,
+                        border = BorderStroke(1.5.dp, PopPosterInk)
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Stars,
+                                contentDescription = "Experience Points",
+                                modifier = Modifier.size(13.dp)
+                            )
+                            Spacer(modifier = Modifier.width(2.dp))
+                            Text(
+                                text = "$xpPoints",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+
+                    // Audio Speed Toggle Pill (48dp interactive target)
+                    Surface(
+                        onClick = onToggleSpeed,
+                        shape = CircleShape,
+                        color = PopPosterButter,
+                        contentColor = PopPosterInk,
+                        border = BorderStroke(1.5.dp, PopPosterInk),
+                        modifier = Modifier
+                            .minimumInteractiveComponentSize()
+                            .testTag("audio_speed_chip")
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Speed,
+                                contentDescription = "Audio playback speed",
+                                modifier = Modifier.size(13.dp)
+                            )
+                            Spacer(modifier = Modifier.width(2.dp))
+                            Text(
+                                text = String.format(Locale.US, "%.2fx", playbackSpeed),
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+
+                    // Settings Pop Icon Button
+                    Box(
+                        modifier = Modifier
+                            .minimumInteractiveComponentSize()
+                            .size(38.dp)
+                            .clip(CircleShape)
+                            .background(PopPosterPaper)
+                            .border(1.5.dp, PopPosterInk, CircleShape)
+                            .clickable(onClick = onOpenSystemConsole)
+                            .testTag("system_settings_button"),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Settings,
+                            contentDescription = "Settings, Notifications, Privacy & Legal",
+                            tint = PopPosterInk,
+                            modifier = Modifier.size(19.dp)
+                        )
+                    }
                 }
             }
-        }
-    )
+        )
+        HorizontalDivider(thickness = 2.dp, color = PopPosterInk)
+    }
 }
+

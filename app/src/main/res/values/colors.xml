@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="m3_surface_light">#FFFFF8F6</color>
+    <color name="m3_surface_light">#FFFFFBF0</color>
     <color name="rams_off_white">#FFFFF8F6</color>
     <color name="rams_black">#FF231917</color>
     <color name="braun_orange">#FFB33B15</color>

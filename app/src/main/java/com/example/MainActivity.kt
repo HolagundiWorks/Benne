@@ -12,7 +12,7 @@ import com.example.audio.KannadaTtsHelper
 import com.example.data.UserProgressManager
 import com.example.notifications.StudyReminderManager
 import com.example.ui.MainScreen
-import com.example.ui.theme.SaralaKannadaTheme
+import com.example.ui.theme.BenneTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
         StudyReminderManager.ensureNotificationChannel(this)
 
         setContent {
-            SaralaKannadaTheme {
+            BenneTheme {
                 MainScreen(
                     progressManager = progressManager,
                     ttsHelper = ttsHelper,

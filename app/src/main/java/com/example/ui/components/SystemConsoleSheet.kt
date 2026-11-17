@@ -7,6 +7,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,11 +37,9 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -50,6 +49,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -73,11 +73,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.BuildConfig
 import com.example.data.UserProgressManager
 import com.example.legal.LegalDocument
 import com.example.legal.LegalDocuments
 import com.example.notifications.StudyReminderManager
+import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.ui.theme.PopPosterButter
+import com.example.ui.theme.PopPosterCyan
+import com.example.ui.theme.PopPosterInk
+import com.example.ui.theme.PopPosterMint
+import com.example.ui.theme.PopPosterPaper
+import com.example.ui.theme.PopPosterPeach
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -125,8 +133,8 @@ fun SystemConsoleSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = sheetState,
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-        dragHandle = { BottomSheetDefaults.DragHandle() }
+        containerColor = MaterialTheme.colorScheme.background,
+        dragHandle = { BottomSheetDefaults.DragHandle(color = PopPosterInk) }
     ) {
         if (activeLegalDoc != null) {
             LegalDocumentViewer(
@@ -150,10 +158,11 @@ fun SystemConsoleSheet(
                 ) {
                     Column {
                         Text(
-                            text = "Settings & Privacy",
-                            style = MaterialTheme.typography.headlineSmall,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.onSurface
+                            text = "Benne Settings",
+                            fontFamily = BricolageGrotesqueFamily,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = PopPosterInk
                         )
                         Text(
                             text = "Local learner info, reminders & legal notices",
@@ -165,7 +174,7 @@ fun SystemConsoleSheet(
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Close",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = PopPosterInk
                         )
                     }
                 }
@@ -173,13 +182,12 @@ fun SystemConsoleSheet(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 // 1. Local-Only Learner Info (No Login)
-                SectionHeader("Local Learner Info")
+                SectionHeader("LOCAL LEARNER INFO")
                 Spacer(modifier = Modifier.height(8.dp))
-                Card(
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer
-                    ),
+                PosterCard(
+                    containerColor = PopPosterButter,
+                    cornerRadius = 20.dp,
+                    shadowOffset = 4.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
@@ -191,8 +199,9 @@ fun SystemConsoleSheet(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Surface(
                                     shape = CircleShape,
-                                    color = MaterialTheme.colorScheme.primaryContainer,
-                                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    color = PopPosterPaper,
+                                    contentColor = PopPosterInk,
+                                    border = BorderStroke(1.8.dp, PopPosterInk),
                                     modifier = Modifier.size(40.dp)
                                 ) {
                                     Box(contentAlignment = Alignment.Center) {
@@ -208,27 +217,21 @@ fun SystemConsoleSheet(
                                     Text(
                                         text = learnerName,
                                         style = MaterialTheme.typography.titleSmall,
-                                        color = MaterialTheme.colorScheme.onSurface
+                                        color = PopPosterInk
                                     )
                                     Text(
                                         text = "On-device only • No login required",
                                         style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        color = PopPosterInk.copy(alpha = 0.8f)
                                     )
                                 }
                             }
 
-                            Surface(
-                                shape = CircleShape,
-                                color = MaterialTheme.colorScheme.tertiaryContainer,
-                                contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-                            ) {
-                                Text(
-                                    text = "Offline",
-                                    style = MaterialTheme.typography.labelSmall,
-                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                                )
-                            }
+                            PosterStampBadge(
+                                text = "OFFLINE",
+                                containerColor = PopPosterMint,
+                                contentColor = PopPosterInk
+                            )
                         }
 
                         Spacer(modifier = Modifier.height(12.dp))
@@ -244,18 +247,28 @@ fun SystemConsoleSheet(
                                 label = { Text("Local display name") },
                                 singleLine = true,
                                 shape = RoundedCornerShape(14.dp),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedContainerColor = PopPosterPaper,
+                                    unfocusedContainerColor = PopPosterPaper,
+                                    focusedBorderColor = PopPosterInk,
+                                    unfocusedBorderColor = PopPosterInk
+                                ),
                                 modifier = Modifier
                                     .weight(1f)
                                     .testTag("local_learner_name_input")
                             )
-                            FilledTonalButton(
+                            Button(
                                 onClick = {
                                     progressManager.setLearnerName(nameInput)
                                     statusFeedback = "Local learner name saved on this device."
                                 },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = PopPosterInk,
+                                    contentColor = PopPosterButter
+                                ),
                                 modifier = Modifier.testTag("save_learner_name_button")
                             ) {
-                                Text("Save")
+                                Text("Save", fontWeight = FontWeight.Bold)
                             }
                         }
 
@@ -273,16 +286,15 @@ fun SystemConsoleSheet(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // 2. Notifications Section
-                SectionHeader("Daily Study Notifications")
+                SectionHeader("DAILY STUDY NOTIFICATIONS")
                 Spacer(modifier = Modifier.height(8.dp))
-                Card(
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer
-                    ),
+                PosterCard(
+                    containerColor = PopPosterPaper,
+                    cornerRadius = 20.dp,
+                    shadowOffset = 4.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
@@ -297,14 +309,15 @@ fun SystemConsoleSheet(
                             ) {
                                 Surface(
                                     shape = RoundedCornerShape(12.dp),
-                                    color = MaterialTheme.colorScheme.primaryContainer,
+                                    color = PopPosterCyan,
+                                    border = BorderStroke(1.5.dp, PopPosterInk),
                                     modifier = Modifier.size(40.dp)
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.NotificationsActive,
                                         contentDescription = "Daily Study Reminders",
-                                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                                        modifier = Modifier.padding(10.dp)
+                                        tint = PopPosterInk,
+                                        modifier = Modifier.padding(9.dp)
                                     )
                                 }
                                 Spacer(modifier = Modifier.width(12.dp))
@@ -312,7 +325,7 @@ fun SystemConsoleSheet(
                                     Text(
                                         text = "Daily Practice Reminder",
                                         style = MaterialTheme.typography.titleSmall,
-                                        color = MaterialTheme.colorScheme.onSurface
+                                        color = PopPosterInk
                                     )
                                     Text(
                                         text = if (notificationsEnabled && hasPermission) {
@@ -346,11 +359,20 @@ fun SystemConsoleSheet(
                                         statusFeedback = "Daily reminders disabled."
                                     }
                                 },
+                                colors = SwitchDefaults.colors(
+                                    checkedThumbColor = PopPosterInk,
+                                    checkedTrackColor = PopPosterButter,
+                                    checkedBorderColor = PopPosterInk,
+                                    uncheckedThumbColor = PopPosterInk,
+                                    uncheckedTrackColor = PopPosterPaper,
+                                    uncheckedBorderColor = PopPosterInk
+                                ),
                                 thumbContent = if (notificationsEnabled && hasPermission) {
                                     {
                                         Icon(
                                             imageVector = Icons.Default.Check,
                                             contentDescription = null,
+                                            tint = PopPosterButter,
                                             modifier = Modifier.size(SwitchDefaults.IconSize)
                                         )
                                     }
@@ -364,7 +386,7 @@ fun SystemConsoleSheet(
                         Text(
                             text = "Reminder Time",
                             style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = PopPosterInk
                         )
                         Spacer(modifier = Modifier.height(6.dp))
 
@@ -387,10 +409,25 @@ fun SystemConsoleSheet(
                                             statusFeedback = "Reminder updated to $label."
                                         }
                                     },
+                                    colors = FilterChipDefaults.filterChipColors(
+                                        selectedContainerColor = PopPosterButter,
+                                        selectedLabelColor = PopPosterInk,
+                                        containerColor = PopPosterPaper,
+                                        labelColor = PopPosterInk
+                                    ),
+                                    border = FilterChipDefaults.filterChipBorder(
+                                        enabled = true,
+                                        selected = selected,
+                                        borderColor = PopPosterInk,
+                                        selectedBorderColor = PopPosterInk,
+                                        borderWidth = 1.5.dp,
+                                        selectedBorderWidth = 2.dp
+                                    ),
                                     label = {
                                         Text(
                                             text = label,
-                                            style = MaterialTheme.typography.labelSmall
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = FontWeight.Bold
                                         )
                                     },
                                     modifier = Modifier.weight(1f)
@@ -404,7 +441,7 @@ fun SystemConsoleSheet(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            FilledTonalButton(
+                            OutlinedButton(
                                 onClick = {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                                         !StudyReminderManager.hasNotificationPermission(context)
@@ -419,11 +456,16 @@ fun SystemConsoleSheet(
                                         }
                                     }
                                 },
+                                border = BorderStroke(1.5.dp, PopPosterInk),
+                                colors = ButtonDefaults.outlinedButtonColors(
+                                    containerColor = PopPosterCyan,
+                                    contentColor = PopPosterInk
+                                ),
                                 modifier = Modifier
                                     .weight(1f)
                                     .testTag("test_notification_button")
                             ) {
-                                Text("Send Test Notification", style = MaterialTheme.typography.labelMedium)
+                                Text("Send Test Notification", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium)
                             }
 
                             if (permissionDeniedExplicitly || !hasPermission) {
@@ -434,9 +476,14 @@ fun SystemConsoleSheet(
                                         }
                                         context.startActivity(intent)
                                     },
+                                    border = BorderStroke(1.5.dp, PopPosterInk),
+                                    colors = ButtonDefaults.outlinedButtonColors(
+                                        containerColor = PopPosterPaper,
+                                        contentColor = PopPosterInk
+                                    ),
                                     modifier = Modifier.weight(1f)
                                 ) {
-                                    Text("App Settings", style = MaterialTheme.typography.labelMedium)
+                                    Text("App Settings", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium)
                                 }
                             }
                         }
@@ -445,13 +492,15 @@ fun SystemConsoleSheet(
                             Spacer(modifier = Modifier.height(10.dp))
                             Surface(
                                 shape = RoundedCornerShape(10.dp),
-                                color = MaterialTheme.colorScheme.tertiaryContainer,
+                                color = PopPosterMint,
+                                border = BorderStroke(1.2.dp, PopPosterInk),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
                                     text = msg,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onTertiaryContainer,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = PopPosterInk,
                                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
                                 )
                             }
@@ -459,10 +508,10 @@ fun SystemConsoleSheet(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // 3. Speech Rate Section
-                SectionHeader("Audio Playback Speed")
+                SectionHeader("AUDIO PLAYBACK SPEED")
                 Spacer(modifier = Modifier.height(8.dp))
                 val speeds = listOf(0.75f to "0.75x Slow", 0.85f to "0.85x Normal", 1.0f to "1.0x Fast")
                 SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
@@ -471,23 +520,30 @@ fun SystemConsoleSheet(
                         SegmentedButton(
                             selected = selected,
                             onClick = { progressManager.setPlaybackSpeed(rate) },
-                            shape = SegmentedButtonDefaults.itemShape(index = index, count = speeds.size)
+                            shape = SegmentedButtonDefaults.itemShape(index = index, count = speeds.size),
+                            colors = SegmentedButtonDefaults.colors(
+                                activeContainerColor = PopPosterButter,
+                                activeContentColor = PopPosterInk,
+                                inactiveContainerColor = PopPosterPaper,
+                                inactiveContentColor = PopPosterInk,
+                                activeBorderColor = PopPosterInk,
+                                inactiveBorderColor = PopPosterInk
+                            )
                         ) {
-                            Text(text = label, style = MaterialTheme.typography.labelMedium)
+                            Text(text = label, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium)
                         }
                     }
                 }
 
-                Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // 4. Privacy & Data Management
-                SectionHeader("Security & Local Privacy")
+                SectionHeader("SECURITY & LOCAL PRIVACY")
                 Spacer(modifier = Modifier.height(8.dp))
-                Card(
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer
-                    ),
+                PosterCard(
+                    containerColor = PopPosterPeach,
+                    cornerRadius = 20.dp,
+                    shadowOffset = 4.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
@@ -495,26 +551,29 @@ fun SystemConsoleSheet(
                             Icon(
                                 imageVector = Icons.Default.Shield,
                                 contentDescription = "Privacy Verified",
-                                tint = MaterialTheme.colorScheme.tertiary,
+                                tint = PopPosterInk,
                                 modifier = Modifier.size(18.dp)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
-                                text = "Zero Telemetry • Zero Logins • Local Only",
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.tertiary
+                                text = "ZERO TELEMETRY • ZERO LOGINS • LOCAL ONLY",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = PopPosterInk
                             )
                         }
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = "No sign-in or account exists. Your display name, XP, flashcards, and streaks are stored locally on your device and never transmitted.",
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = PopPosterInk
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         OutlinedButton(
                             onClick = { showResetConfirmation = true },
+                            border = BorderStroke(1.8.dp, PopPosterInk),
                             colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = PopPosterPaper,
                                 contentColor = MaterialTheme.colorScheme.error
                             ),
                             modifier = Modifier
@@ -527,21 +586,20 @@ fun SystemConsoleSheet(
                                 modifier = Modifier.size(18.dp)
                             )
                             Spacer(modifier = Modifier.width(8.dp))
-                            Text("Reset All Local Progress")
+                            Text("Reset All Local Progress", fontWeight = FontWeight.Bold)
                         }
                     }
                 }
 
-                Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // 5. Legal & Open Source Notices
-                SectionHeader("Legal & Compliance")
+                SectionHeader("LEGAL & COMPLIANCE")
                 Spacer(modifier = Modifier.height(8.dp))
-                Card(
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainer
-                    ),
+                PosterCard(
+                    containerColor = PopPosterPaper,
+                    cornerRadius = 20.dp,
+                    shadowOffset = 4.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column {
@@ -562,7 +620,8 @@ fun SystemConsoleSheet(
                                 headlineContent = {
                                     Text(
                                         text = doc.title,
-                                        style = MaterialTheme.typography.titleSmall
+                                        style = MaterialTheme.typography.titleSmall,
+                                        color = PopPosterInk
                                     )
                                 },
                                 supportingContent = {
@@ -575,14 +634,14 @@ fun SystemConsoleSheet(
                                     Icon(
                                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                                         contentDescription = "Open ${doc.title}",
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                        tint = PopPosterInk
                                     )
                                 }
                             )
                             if (index < LegalDocuments.all.lastIndex) {
                                 HorizontalDivider(
                                     modifier = Modifier.padding(horizontal = 16.dp),
-                                    color = MaterialTheme.colorScheme.outlineVariant
+                                    color = PopPosterInk.copy(alpha = 0.25f)
                                 )
                             }
                         }
@@ -590,10 +649,10 @@ fun SystemConsoleSheet(
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.3f))
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    text = "${BuildConfig.APPLICATION_ID} • v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
+                    text = "Benne (${BuildConfig.APPLICATION_ID}) • v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -610,16 +669,20 @@ fun SystemConsoleSheet(
     if (showResetConfirmation) {
         AlertDialog(
             onDismissRequest = { showResetConfirmation = false },
+            containerColor = PopPosterPaper,
             title = {
                 Text(
                     text = "Reset all local data?",
-                    style = MaterialTheme.typography.headlineSmall
+                    fontFamily = BricolageGrotesqueFamily,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = PopPosterInk
                 )
             },
             text = {
                 Text(
                     text = "This permanently clears your local learner name, XP, streak, completed lessons, mastered flashcards, and bookmarks on this device.",
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = PopPosterInk
                 )
             },
             confirmButton = {
@@ -633,15 +696,15 @@ fun SystemConsoleSheet(
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error,
-                        contentColor = MaterialTheme.colorScheme.onError
+                        contentColor = Color.White
                     )
                 ) {
-                    Text("Reset")
+                    Text("Reset", fontWeight = FontWeight.Bold)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showResetConfirmation = false }) {
-                    Text("Cancel")
+                    Text("Cancel", fontWeight = FontWeight.Bold, color = PopPosterInk)
                 }
             }
         )
@@ -657,7 +720,8 @@ private fun LocalStatChip(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surfaceContainerHighest
+        color = PopPosterPaper,
+        border = BorderStroke(1.5.dp, PopPosterInk)
     ) {
         Column(
             modifier = Modifier.padding(vertical = 8.dp, horizontal = 6.dp),
@@ -665,9 +729,10 @@ private fun LocalStatChip(
         ) {
             Text(
                 text = value,
-                style = MaterialTheme.typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                fontFamily = BricolageGrotesqueFamily,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = PopPosterInk
             )
             Text(
                 text = label,
@@ -700,14 +765,16 @@ private fun LegalDocumentViewer(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
-                        tint = MaterialTheme.colorScheme.onSurface
+                        tint = PopPosterInk
                     )
                 }
                 Column {
                     Text(
                         text = document.title,
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onSurface
+                        fontFamily = BricolageGrotesqueFamily,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = PopPosterInk
                     )
                     Text(
                         text = document.effectiveDate,
@@ -720,24 +787,25 @@ private fun LegalDocumentViewer(
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Close",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    tint = PopPosterInk
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        Surface(
+        PosterCard(
+            containerColor = PopPosterPaper,
+            cornerRadius = 16.dp,
+            shadowOffset = 4.dp,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(380.dp),
-            shape = RoundedCornerShape(16.dp),
-            color = MaterialTheme.colorScheme.surfaceContainerHighest
+                .height(380.dp)
         ) {
             Text(
                 text = document.content,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = PopPosterInk,
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
                     .padding(16.dp)
@@ -752,8 +820,11 @@ private fun LegalDocumentViewer(
 private fun SectionHeader(text: String) {
     Text(
         text = text,
-        style = MaterialTheme.typography.titleSmall,
-        color = MaterialTheme.colorScheme.primary
+        fontFamily = BricolageGrotesqueFamily,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.ExtraBold,
+        letterSpacing = 0.5.sp,
+        color = PopPosterInk
     )
 }
 

@@ -1,4 +1,4 @@
-# Google Play Store Listing & Release Checklist — Sarala Kannada
+# Google Play Store Listing & Release Checklist — Benne
 
 **Application ID:** `com.aistudio.saralakannada.kydwpx`  
 **Version:** `1.0` (`versionCode = 1`)  
@@ -9,9 +9,9 @@
 
 ## 1. Store Listing Copy (Play Policy Compliant)
 
-### App Name (Max 30 characters — 14 chars)
+### App Name (Max 30 characters — 5 chars)
 ```
-Sarala Kannada
+Benne
 ```
 *(No emojis, no ALL CAPS, no promotional buzzwords like "Free" or "Best". Matches launcher `app_name`.)*
 
@@ -22,9 +22,9 @@ Learn Kannada script, flashcards, and everyday Bengaluru spoken dialogues.
 
 ### Full Description (Max 4,000 characters)
 ```
-Learn spoken and written Kannada effortlessly with Sarala Kannada (ಸರಳ ಕನ್ನಡ) — an offline-first, distraction-free Kannada language learning companion.
+Learn spoken and written Kannada effortlessly with Benne (ಬೆಣ್ಣೆ) — an offline-first, pop-styled Kannada language learning companion.
 
-Designed with crisp industrial typography and clean layout principles, Sarala Kannada helps beginners, travelers, and Bengaluru residents master real everyday Kannada at their own pace.
+Designed with expressive display typography, high-contrast poster cards, and a clean light-only layout, Benne helps beginners, travelers, and Bengaluru residents master real everyday Kannada at their own pace.
 
 KEY FEATURES
 

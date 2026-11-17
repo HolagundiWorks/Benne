@@ -1,6 +1,6 @@
 {
-  "name": "Sarala Kannada",
-  "description": "Sarala Kannada (ಸರಳ ಕನ್ನಡ) — A Dieter Rams & Braun-inspired Kannada learning application featuring 3D flip interactive vocabulary flashcards, Varnamale script explorer, real-world Bengaluru dialogues, native spoken audio synthesis, and evaluation quizzes.",
+  "name": "Benne",
+  "description": "Benne (ಬೆಣ್ಣೆ) — A vibrant neo-pop poster-styled Kannada learning app for non-Kannada speakers featuring interactive 3D vocabulary flashcards, Varnamale letter explorer, Bengaluru street dialogues, native spoken audio, and quizzes.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

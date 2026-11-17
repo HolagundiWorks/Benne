@@ -22,6 +22,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "Sarala Kannada"
+rootProject.name = "Benne"
 
 include(":app")

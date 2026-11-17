@@ -89,92 +89,98 @@ object SaralaKannadaData {
             id = "lesson_1",
             levelNumber = 1,
             titleKannada = "ವರ್ಣಮಾಲೆ - ಸ್ವರಗಳು",
+            titleTransliteration = "Varnamale - Swaragalu",
             titleEnglish = "Kannada Vowels (Swaragalu)",
             description = "Master the 14 essential vowel sounds from ಅ to ಔ that form the soul of the language.",
             iconEmoji = "🔤",
             badgeTag = "Foundation",
             steps = listOf(
-                LessonStep("s1", "ಅ & ಆ (A & Aa)", "ಅ - ಅರಸ | ಆ - ಆನೆ", "A - Arasa | Aa - Aane", "A (King) and Aa (Elephant). Notice how 'ಆ' elongates the breath.", "Short 'a' vs elongated 'aa'"),
-                LessonStep("s2", "ಇ & ಈ (I & Ee)", "ಇ - ಇಲಿ | ಈ - ಈಜು", "I - Ili | Ee - Eeju", "I (Mouse) and Ee (Swimming).", "Top curl marks the 'ee' sound"),
-                LessonStep("s3", "ಉ & ಊ (U & Oo)", "ಉ - ಉಡುಗೊರೆ | ಊ - ಊಟ", "U - Udugore | Oo - Oota", "U (Gift) and Oo (Food/Meal). Essential for daily food conversations!", "Kombu accent indicates 'u'"),
-                LessonStep("s4", "ಎ, ಏ & ಐ (E, Ae, Ai)", "ಎ - ಎಲೆ | ಏ - ಏಣಿ | ಐ - ಐದು", "E - Ele | Ae - Eani | Ai - Aidu", "Ele (Leaf), Eani (Ladder), Aidu (Five).", "Ascending pitch in pronunciation"),
-                LessonStep("s5", "ಒ, ಓ & ಔ (O, Oo, Au)", "ಒ - ಒಂಟೆ | ಓ - ಓದು | ಔ - ಔಷಧ", "O - Onte | Oo - Oodu | Au - Aushadha", "Onte (Camel), Oodu (Study), Aushadha (Medicine).", "Round lips for warm deep sounds")
+                LessonStep("s1", "Vowels: A & Aa", "ಅ - ಅರಸ | ಆ - ಆನೆ", "A - Arasa | Aa - Aane", "A (King) and Aa (Elephant). Notice how 'ಆ' (Aa) elongates the breath.", "Short 'a' vs elongated 'aa'"),
+                LessonStep("s2", "Vowels: I & Ee", "ಇ - ಇಲಿ | ಈ - ಈಜು", "I - Ili | Ee - Eeju", "I (Mouse) and Ee (Swimming).", "Top curl marks the 'ee' sound"),
+                LessonStep("s3", "Vowels: U & Oo", "ಉ - ಉಡುಗೊರೆ | ಊ - ಊಟ", "U - Udugore | Oo - Oota", "U (Gift) and Oo (Food/Meal). Essential for daily food conversations!", "Kombu accent indicates 'u'"),
+                LessonStep("s4", "Vowels: E, Ae & Ai", "ಎ - ಎಲೆ | ಏ - ಏಣಿ | ಐ - ಐದು", "E - Ele | Ae - Eani | Ai - Aidu", "Ele (Leaf), Eani (Ladder), Aidu (Five).", "Ascending pitch in pronunciation"),
+                LessonStep("s5", "Vowels: O, Oo & Au", "ಒ - ಒಂಟೆ | ಓ - ಓದು | ಔ - ಔಷಧ", "O - Onte | Oo - Oodu | Au - Aushadha", "Onte (Camel), Oodu (Study), Aushadha (Medicine).", "Round lips for warm deep sounds")
             )
         ),
         LessonMilestone(
             id = "lesson_2",
             levelNumber = 2,
             titleKannada = "ದಿನನಿತ್ಯದ ಶುಭಾಶಯಗಳು",
+            titleTransliteration = "Dinanithyada Shubhaashayagalu",
             titleEnglish = "Daily Greetings & Courtesies",
             description = "Everyday respectful greetings to connect with locals, neighbors, and colleagues.",
             iconEmoji = "🙏",
             badgeTag = "Everyday Spoken",
             steps = listOf(
-                LessonStep("s2_1", "ನಮಸ್ಕಾರ (Hello)", "ನಮಸ್ಕಾರ!", "Namaskaara!", "Hello / Greetings. Universal polite greeting in Karnataka.", "Use with hands joined or warm smile"),
-                LessonStep("s2_2", "ಹೇಗಿದ್ದೀರಾ? (How are you?)", "ನೀವು ಹೇಗಿದ್ದೀರಾ?", "Neevu hegiddeera?", "How are you? (Respectful / Formal).", "For friends say 'Hegidya?'"),
-                LessonStep("s2_3", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ (I am fine)", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ, ಧನ್ಯವಾದ!", "Naanu chennaagiddene, dhanyavaada!", "I am fine, thank you!", "Chennaagi means good/nice"),
-                LessonStep("s2_4", "ನಿಮ್ಮ ಹೆಸರು ಏನು? (What is your name?)", "ನಿಮ್ಮ ಹೆಸರು ಏನು?", "Nimma hesaru enu?", "What is your name?", "Answer with 'Nanna hesaru...'"),
-                LessonStep("s2_5", "ಮತ್ತೆ ಸಿಗೋಣ (See you again)", "ಆಯ್ತು, ಮತ್ತೆ ಸಿಗೋಣ!", "Aaythu, matte sigona!", "Alright, see you again / Goodbye!", "Aaythu means ok/done")
+                LessonStep("s2_1", "Greeting: Hello", "ನಮಸ್ಕಾರ!", "Namaskaara!", "Hello / Greetings. Universal polite greeting in Karnataka.", "Use with hands joined or warm smile"),
+                LessonStep("s2_2", "Asking: How are you?", "ನೀವು ಹೇಗಿದ್ದೀರಾ?", "Neevu hegiddeera?", "How are you? (Respectful / Formal).", "For friends say 'Hegidya?'"),
+                LessonStep("s2_3", "Replying: I am fine", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ, ಧನ್ಯವಾದ!", "Naanu chennaagiddene, dhanyavaada!", "I am fine, thank you!", "Chennaagi means good/nice"),
+                LessonStep("s2_4", "Asking someone's name", "ನಿಮ್ಮ ಹೆಸರು ಏನು?", "Nimma hesaru enu?", "What is your name?", "Answer with 'Nanna hesaru...'"),
+                LessonStep("s2_5", "Saying goodbye", "ಆಯ್ತು, ಮತ್ತೆ ಸಿಗೋಣ!", "Aaythu, matte sigona!", "Alright, see you again / Goodbye!", "Aaythu means ok/done")
             )
         ),
         LessonMilestone(
             id = "lesson_3",
             levelNumber = 3,
-            titleKannada = "ಸಂಖ್ಯೆಗಳು & ಲೆಕ್ಕಾಚಾರ",
+            titleKannada = "ಸಂಖ್ಯೆಗಳು ಮತ್ತು ಲೆಕ್ಕಾಚಾರ",
+            titleTransliteration = "Sankhyegalu mattu Lekkaachaara",
             titleEnglish = "Numbers (1 to 20 & Tens)",
             description = "Crucial for prices, bus routes, bargaining, and telling time.",
             iconEmoji = "🔢",
             badgeTag = "Essential Utility",
             steps = listOf(
-                LessonStep("s3_1", "೧ ರಿಂದ ೫ (1 to 5)", "ಒಂದು, ಎರಡು, ಮೂರು, ನಾಲ್ಕು, ಐದು", "Ondu, Eradu, Mooru, Naalku, Aidu", "1 (Ondu), 2 (Eradu), 3 (Mooru), 4 (Naalku), 5 (Aidu).", "Counting on fingers"),
-                LessonStep("s3_2", "೬ ರಿಂದ ೧೦ (6 to 10)", "ಆರು, ಏಳು, ಎಂಟು, ಒಂಬತ್ತು, ಹತ್ತು", "Aaru, Ealu, Entu, Ombattu, Hattu", "6 (Aaru), 7 (Ealu), 8 (Entu), 9 (Ombattu), 10 (Hattu).", "Ombattu = 9, Hattu = 10"),
-                LessonStep("s3_3", "ಹತ್ತರ ಗುಣಕಗಳು (Tens)", "ಇಪ್ಪತ್ತು, ಮೂವತ್ತು, ನಲವತ್ತು, ಐವತ್ತು, ನೂರು", "Ippattu, Moovattu, Nalavattu, Aivattu, Nooru", "20 (Ippattu), 30 (Moovattu), 40 (Nalavattu), 50 (Aivattu), 100 (Nooru).", "Used everywhere in shops"),
-                LessonStep("s3_4", "ಎಷ್ಟು? (How much?)", "ಇದು ಎಷ್ಟು ರೂಪಾಯಿ?", "Idu eshtu roopaayi?", "How many rupees is this?", "Eshtu = How much / How many")
+                LessonStep("s3_1", "Numbers: 1 to 5", "ಒಂದು, ಎರಡು, ಮೂರು, ನಾಲ್ಕು, ಐದು", "Ondu, Eradu, Mooru, Naalku, Aidu", "1 (Ondu), 2 (Eradu), 3 (Mooru), 4 (Naalku), 5 (Aidu).", "Counting on fingers"),
+                LessonStep("s3_2", "Numbers: 6 to 10", "ಆರು, ಏಳು, ಎಂಟು, ಒಂಬತ್ತು, ಹತ್ತು", "Aaru, Ealu, Entu, Ombattu, Hattu", "6 (Aaru), 7 (Ealu), 8 (Entu), 9 (Ombattu), 10 (Hattu).", "Ombattu = 9, Hattu = 10"),
+                LessonStep("s3_3", "Counting in Tens", "ಇಪ್ಪತ್ತು, ಮೂವತ್ತು, ನಲವತ್ತು, ಐವತ್ತು, ನೂರು", "Ippattu, Moovattu, Nalavattu, Aivattu, Nooru", "20 (Ippattu), 30 (Moovattu), 40 (Nalavattu), 50 (Aivattu), 100 (Nooru).", "Used everywhere in shops"),
+                LessonStep("s3_4", "Asking: How much?", "ಇದು ಎಷ್ಟು ರೂಪಾಯಿ?", "Idu eshtu roopaayi?", "How many rupees is this?", "Eshtu = How much / How many")
             )
         ),
         LessonMilestone(
             id = "lesson_4",
             levelNumber = 4,
-            titleKannada = "ನಮ್ಮ ಆಟೋ & ಪ್ರಯಾಣ",
+            titleKannada = "ನಮ್ಮ ಆಟೋ ಮತ್ತು ಪ್ರಯಾಣ",
+            titleTransliteration = "Namma Auto mattu Prayaana",
             titleEnglish = "Auto Rickshaw & City Travel",
             description = "Navigate Bengaluru roads like a local! Talk to auto drivers with confidence.",
             iconEmoji = "🛺",
             badgeTag = "Bengaluru Survival",
             steps = listOf(
-                LessonStep("s4_1", "ಆಟೋ ಕರೆಯುವುದು", "ಅಣ್ಣಾ, ಮೆಜೆಸ್ಟಿಕ್‌ಗೆ ಬರ್ತೀರಾ?", "Anna, Majestic-ge bartheera?", "Brother, will you come to Majestic?", "Addressing as 'Anna' (brother) shows respect"),
-                LessonStep("s4_2", "ಮೀಟರ್ ಹಾಕಿ", "ದಯವಿಟ್ಟು ಮೀಟರ್ ಹಾಕಿ ಅಣ್ಣಾ.", "Dayavittu meter haaki anna.", "Please turn on the meter, brother.", "Meter haaki is universally understood"),
-                LessonStep("s4_3", "ದಾರಿ ಹೇಳುವುದು", "ಇಲ್ಲಿಂದ ನೇರವಾಗಿ ಹೋಗಿ, ಸಿಗ್ನಲ್‌ನಲ್ಲಿ ಬಲಕ್ಕೆ.", "Illinda neravaagi hogi, signal-nalli balakke.", "Go straight from here, turn right at the traffic signal.", "Balakke = Right, Edakke = Left"),
-                LessonStep("s4_4", "ಇಲ್ಲಿ ನಿಲ್ಲಿಸಿ", "ಇಲ್ಲಿ ಮುಂದೆ ನಿಲ್ಲಿಸಿ, ಎಷ್ಟು ಆಯ್ತು?", "Illi munde nillisi, eshtu aaythu?", "Stop here ahead, how much did it cost?", "Illi nillisi = Stop here")
+                LessonStep("s4_1", "Calling an Auto", "ಅಣ್ಣಾ, ಮೆಜೆಸ್ಟಿಕ್‌ಗೆ ಬರ್ತೀರಾ?", "Anna, Majestic-ge bartheera?", "Brother, will you come to Majestic?", "Addressing as 'Anna' (brother) shows respect"),
+                LessonStep("s4_2", "Using the Fare Meter", "ದಯವಿಟ್ಟು ಮೀಟರ್ ಹಾಕಿ ಅಣ್ಣಾ.", "Dayavittu meter haaki anna.", "Please turn on the meter, brother.", "Meter haaki is universally understood"),
+                LessonStep("s4_3", "Giving Directions", "ಇಲ್ಲಿಂದ ನೇರವಾಗಿ ಹೋಗಿ, ಸಿಗ್ನಲ್‌ನಲ್ಲಿ ಬಲಕ್ಕೆ.", "Illinda neravaagi hogi, signal-nalli balakke.", "Go straight from here, turn right at the traffic signal.", "Balakke = Right, Edakke = Left"),
+                LessonStep("s4_4", "Stopping & Paying", "ಇಲ್ಲಿ ಮುಂದೆ ನಿಲ್ಲಿಸಿ, ಎಷ್ಟು ಆಯ್ತು?", "Illi munde nillisi, eshtu aaythu?", "Stop here ahead, how much did it cost?", "Illi nillisi = Stop here")
             )
         ),
         LessonMilestone(
             id = "lesson_5",
             levelNumber = 5,
-            titleKannada = "ಕಾಫಿ, ತಿಂಡಿ & ಊಟ",
+            titleKannada = "ಕಾಫಿ, ತಿಂಡಿ ಮತ್ತು ಊಟ",
+            titleTransliteration = "Coffee, Thindi mattu Oota",
             titleEnglish = "Darshini Cafe & Food Ordering",
             description = "Order crisp masala dosa, filter coffee, and meals in Karnataka Darshinis.",
             iconEmoji = "☕",
             badgeTag = "Food Culture",
             steps = listOf(
-                LessonStep("s5_1", "ತಿಂಡಿ ಕೇಳುವುದು", "ತಿಂಡಿಗೆ ಏನಿದೆ?", "Thindige enide?", "What breakfast items are available?", "Thindi = breakfast/snacks"),
-                LessonStep("s5_2", "ದೋಸೆ ಆರ್ಡರ್", "ಒಂದು ಮಸಾಲೆ ದೋಸೆ ಕೊಡಿ.", "Ondu masaale dose kodi.", "Give one masala dosa, please.", "Kodi = Please give"),
-                LessonStep("s5_3", "ಫಿಲ್ಟರ್ ಕಾಫಿ", "ಒಂದು ಸ್ಟ್ರಾಂಗ್ ಫಿಲ್ಟರ್ ಕಾಫಿ, ಸಕ್ಕರೆ ಕಡಿಮೆ.", "Ondu strong filter coffee, sakkare kadime.", "One strong filter coffee, less sugar.", "Sakkare = Sugar, Kadime = Less"),
-                LessonStep("s5_4", "ನೀರು ಮತ್ತು ಬಿಲ್", "ಸ್ವಲ್ಪ ಕುಡಿಯುವ ನೀರು ಕೊಡಿ, ಬಿಲ್ ಎಷ್ಟು?", "Swalpa kudiyuva neeru kodi, bill eshtu?", "Please give some drinking water, how much is the bill?", "Neeru = Water, Swalpa = A little")
+                LessonStep("s5_1", "Asking for Breakfast", "ತಿಂಡಿಗೆ ಏನಿದೆ?", "Thindige enide?", "What breakfast items are available?", "Thindi = breakfast/snacks"),
+                LessonStep("s5_2", "Ordering Dosa", "ಒಂದು ಮಸಾಲೆ ದೋಸೆ ಕೊಡಿ.", "Ondu masaale dose kodi.", "Give one masala dosa, please.", "Kodi = Please give"),
+                LessonStep("s5_3", "Ordering Filter Coffee", "ಒಂದು ಸ್ಟ್ರಾಂಗ್ ಫಿಲ್ಟರ್ ಕಾಫಿ, ಸಕ್ಕರೆ ಕಡಿಮೆ.", "Ondu strong filter coffee, sakkare kadime.", "One strong filter coffee, less sugar.", "Sakkare = Sugar, Kadime = Less"),
+                LessonStep("s5_4", "Asking for Water & Bill", "ಸ್ವಲ್ಪ ಕುಡಿಯುವ ನೀರು ಕೊಡಿ, ಬಿಲ್ ಎಷ್ಟು?", "Swalpa kudiyuva neeru kodi, bill eshtu?", "Please give some drinking water, how much is the bill?", "Neeru = Water, Swalpa = A little")
             )
         ),
         LessonMilestone(
             id = "lesson_6",
             levelNumber = 6,
-            titleKannada = "ಶಾಪಿಂಗ್ & ಮಾರುಕಟ್ಟೆ",
+            titleKannada = "ಶಾಪಿಂಗ್ ಮತ್ತು ಮಾರುಕಟ್ಟೆ",
+            titleTransliteration = "Shopping mattu Maarukatte",
             titleEnglish = "Market Bargaining & Shopping",
             description = "Buy fresh vegetables, fruits, and groceries at local mandis.",
             iconEmoji = "🛍️",
             badgeTag = "Shopping",
             steps = listOf(
-                LessonStep("s6_1", "ಬೆಲೆ ವಿಚಾರಣೆ", "ಈ ಟೊಮೇಟೊ ಕೆಜಿಗೆ ಎಷ್ಟು?", "Ee tomato kg-ge eshtu?", "How much per kg for these tomatoes?", "Kg-ge eshtu = How much per kilo"),
-                LessonStep("s6_2", "ಕಡಿಮೆ ಮಾಡಿ", "ಸ್ವಲ್ಪ ಜಾಸ್ತಿ ಆಯ್ತು, ಕಡಿಮೆ ಮಾಡಿ ಅಣ್ಣಾ.", "Swalpa jaasti aaythu, kadime maadi anna.", "It's a bit high, please reduce the price, brother.", "Jaasti = More/High, Kadime = Less"),
-                LessonStep("s6_3", "ತಾಜಾ ಇದೆಯಾ?", "ಇದು ತಾಜಾ ತರಕಾರಿನಾ?", "Idu taaja tharakaarina?", "Are these vegetables fresh?", "Tharakaari = Vegetables"),
-                LessonStep("s6_4", "ಚಿಲ್ಲರೆ ಕೊಡಿ", "ಚಿಲ್ಲರೆ ಕೊಡಿ, ಗೂಗಲ್ ಪೇ ಮಾಡ್ತೀನಿ.", "Chillare kodi, Google Pay maadtini.", "Give loose change, or I will pay via Google Pay.", "Chillare = Coins / Loose change")
+                LessonStep("s6_1", "Asking the Price", "ಈ ಟೊಮೇಟೊ ಕೆಜಿಗೆ ಎಷ್ಟು?", "Ee tomato kg-ge eshtu?", "How much per kg for these tomatoes?", "Kg-ge eshtu = How much per kilo"),
+                LessonStep("s6_2", "Bargaining Politely", "ಸ್ವಲ್ಪ ಜಾಸ್ತಿ ಆಯ್ತು, ಕಡಿಮೆ ಮಾಡಿ ಅಣ್ಣಾ.", "Swalpa jaasti aaythu, kadime maadi anna.", "It's a bit high, please reduce the price, brother.", "Jaasti = More/High, Kadime = Less"),
+                LessonStep("s6_3", "Checking Freshness", "ಇದು ತಾಜಾ ತರಕಾರಿನಾ?", "Idu taaja tharakaarina?", "Are these vegetables fresh?", "Tharakaari = Vegetables"),
+                LessonStep("s6_4", "Paying & Change", "ಚಿಲ್ಲರೆ ಕೊಡಿ, ಗೂಗಲ್ ಪೇ ಮಾಡ್ತೀನಿ.", "Chillare kodi, Google Pay maadtini.", "Give loose change, or I will pay via Google Pay.", "Chillare = Coins / Loose change")
             )
         )
     )
@@ -183,6 +189,7 @@ object SaralaKannadaData {
         ConversationDialogue(
             id = "dial_auto",
             titleKannada = "ಆಟೋ ಪ್ರಯಾಣ",
+            titleTransliteration = "Auto Prayaana",
             titleEnglish = "Booking an Auto Rickshaw",
             locationTag = "Indiranagar 100ft Road",
             iconEmoji = "🛺",
@@ -202,6 +209,7 @@ object SaralaKannadaData {
         ConversationDialogue(
             id = "dial_darshini",
             titleKannada = "ಬೆಂಗಳೂರು ದರ್ಶಿನಿ ತಿಂಡಿ",
+            titleTransliteration = "Bengaluru Darshini Thindi",
             titleEnglish = "Breakfast at a Bengaluru Darshini",
             locationTag = "CTR Malleshwaram / Taaza Thindi",
             iconEmoji = "☕",
@@ -221,6 +229,7 @@ object SaralaKannadaData {
         ConversationDialogue(
             id = "dial_market",
             titleKannada = "ತರಕಾರಿ ಮಾರುಕಟ್ಟೆ",
+            titleTransliteration = "Tharakaari Maarukatte",
             titleEnglish = "Buying Fresh Veggies at KR Market",
             locationTag = "KR Market / Gandhi Bazaar",
             iconEmoji = "🥦",
@@ -237,6 +246,7 @@ object SaralaKannadaData {
         ConversationDialogue(
             id = "dial_direction",
             titleKannada = "ದಾರಿ ವಿಚಾರಣೆ",
+            titleTransliteration = "Daari Vichaarane",
             titleEnglish = "Asking for Directions",
             locationTag = "Majestic Bus Station",
             iconEmoji = "🧭",
@@ -285,12 +295,12 @@ object SaralaKannadaData {
         QuizQuestion(
             id = "q4",
             type = QuizType.IDENTIFY_LETTER,
-            prompt = "Which letter represents the elongated sound 'Ee' as in 'Eeju' (Swimming)?",
+            prompt = "Which Kannada word starts with the elongated vowel sound 'Ee' (ಈ)?",
             kannadaText = "ಈ",
-            transliteration = "Ee",
-            options = listOf("ಉ", "ಇ", "ಈ", "ಎ"),
+            transliteration = "Ee (long 'ee' sound)",
+            options = listOf("ಉಡುಗೊರೆ (Udugore)", "ಇಲಿ (Ili)", "ಈಜು (Eeju)", "ಎಲೆ (Ele)"),
             correctIndex = 2,
-            explanation = "'ಈ' has the top curved crest denoting the long 'ee' vowel sound."
+            explanation = "'ಈಜು' (Eeju — Swimming) starts with 'ಈ' (Ee), which has the long curved top crest."
         ),
         QuizQuestion(
             id = "q5",
@@ -407,7 +417,7 @@ object SaralaKannadaData {
             exampleSentenceKn = "ನಿಮ್ಮ ಊಟ ಆಯ್ತಾ?",
             exampleSentenceTranslit = "Nimma oota aaytha?",
             exampleSentenceEn = "Did you have your meal / food?",
-            culturalNote = "In Karnataka, asking 'ಊಟ ಆಯ್ತಾ?' (Did you eat?) is the warmest everyday greeting, expressing genuine care."
+            culturalNote = "In Karnataka, asking 'ಊಟ ಆಯ್ತಾ?' (Oota aaytha? — Did you eat?) is the warmest everyday greeting, expressing genuine care."
         ),
         com.example.model.VocabularyFlashcard(
             id = "fc2",
@@ -431,7 +441,7 @@ object SaralaKannadaData {
             exampleSentenceKn = "ನಿಮ್ಮ ಸಹಾಯಕ್ಕೆ ತುಂಬಾ ಧನ್ಯವಾದಗಳು.",
             exampleSentenceTranslit = "Nimma sahaayakke tumba dhanyavaadagalu.",
             exampleSentenceEn = "Thank you very much for your kind help.",
-            culturalNote = "'ಧನ್ಯವಾದಗಳು' adds the plural suffix 'ಗಳು', making it even more courteous and heartfelt."
+            culturalNote = "'ಧನ್ಯವಾದಗಳು' (Dhanyavaadagalu) adds the plural suffix 'ಗಳು' (-galu), making it even more courteous and heartfelt."
         ),
         com.example.model.VocabularyFlashcard(
             id = "fc4",
@@ -467,7 +477,7 @@ object SaralaKannadaData {
             exampleSentenceKn = "ದಯವಿಟ್ಟು ಸ್ವಲ್ಪ ಕುಡಿಯುವ ನೀರು ಕೊಡಿ.",
             exampleSentenceTranslit = "Dayavittu swalpa kudiyuva neeru kodi.",
             exampleSentenceEn = "Please give a little drinking water.",
-            culturalNote = "'ಕುಡಿಯುವ ನೀರು' means potable drinking water. 'ಬಿಸಿ ನೀರು' is warm/hot water."
+            culturalNote = "'ಕುಡಿಯುವ ನೀರು' (Kudiyuva neeru) means potable drinking water. 'ಬಿಸಿ ನೀರು' (Bisi neeru) is warm/hot water."
         ),
         com.example.model.VocabularyFlashcard(
             id = "fc7",
@@ -527,7 +537,7 @@ object SaralaKannadaData {
             exampleSentenceKn = "ಅವರು ನನ್ನ ಕಾಲೇಜು ಸ್ನೇಹಿತ.",
             exampleSentenceTranslit = "Avaru nanna college snehitha.",
             exampleSentenceEn = "He is my college friend.",
-            culturalNote = "'ಸ್ನೇಹಿತ' (male friend) and 'ಸ್ನೇಹಿತೆ' (female friend) or colloquial 'ಗೆಳೆಯ / ಗೆಳತಿ'."
+            culturalNote = "'ಸ್ನೇಹಿತ' (Snehitha — male friend) and 'ಸ್ನೇಹಿತೆ' (Snehithe — female friend), or colloquial 'ಗೆಳೆಯ / ಗೆಳತಿ' (Geleya / Gelathi)."
         ),
         com.example.model.VocabularyFlashcard(
             id = "fc12",

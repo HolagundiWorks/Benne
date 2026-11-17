@@ -3,6 +3,7 @@ package com.example.ui
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -20,14 +21,18 @@ import androidx.compose.material.icons.outlined.ChatBubbleOutline
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Psychology
 import androidx.compose.material.icons.outlined.Translate
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -39,8 +44,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.audio.KannadaTtsHelper
 import com.example.data.UserProgressManager
 import com.example.ui.components.SaralaTopAppBar
@@ -50,19 +55,21 @@ import com.example.ui.screens.ConversationScreen
 import com.example.ui.screens.DictionaryScreen
 import com.example.ui.screens.HomeScreen
 import com.example.ui.screens.QuizScreen
-import com.example.ui.theme.AnekKannadaFamily
+import com.example.ui.theme.PopPosterButter
+import com.example.ui.theme.PopPosterInk
+import com.example.ui.theme.PopPosterPaper
 
 enum class SaralaScreen(
-    val titleKannada: String,
     val titleEnglish: String,
+    val titleKannada: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector
 ) {
-    HOME("ಕಲಿಕೆ", "Home", Icons.Default.Home, Icons.Outlined.Home),
-    ALPHABET("ವರ್ಣಮಾಲೆ", "Script", Icons.AutoMirrored.Filled.MenuBook, Icons.AutoMirrored.Outlined.MenuBook),
-    CONVERSATION("ಸಂಭಾಷಣೆ", "Dialogues", Icons.Default.ChatBubble, Icons.Outlined.ChatBubbleOutline),
-    PRACTICE("ಅಭ್ಯಾಸ", "Practice", Icons.Default.Psychology, Icons.Outlined.Psychology),
-    DICTIONARY("ಪದಕೋಶ", "Lexicon", Icons.Default.Translate, Icons.Outlined.Translate)
+    HOME("Home", "ಕಲಿಕೆ", Icons.Default.Home, Icons.Outlined.Home),
+    ALPHABET("Letters", "ವರ್ಣಮಾಲೆ", Icons.AutoMirrored.Filled.MenuBook, Icons.AutoMirrored.Outlined.MenuBook),
+    CONVERSATION("Dialogues", "ಸಂಭಾಷಣೆ", Icons.Default.ChatBubble, Icons.Outlined.ChatBubbleOutline),
+    PRACTICE("Practice", "ಅಭ್ಯಾಸ", Icons.Default.Psychology, Icons.Outlined.Psychology),
+    DICTIONARY("Phrases", "ಪದಕೋಶ", Icons.Default.Translate, Icons.Outlined.Translate)
 }
 
 @Composable
@@ -108,28 +115,39 @@ fun MainScreen(
             },
             bottomBar = {
                 if (!useNavigationRail) {
-                    NavigationBar {
-                        SaralaScreen.entries.forEach { screen ->
-                            val isSelected = currentScreen == screen
-                            NavigationBarItem(
-                                selected = isSelected,
-                                onClick = { currentScreen = screen },
-                                icon = {
-                                    Icon(
-                                        imageVector = if (isSelected) screen.selectedIcon else screen.unselectedIcon,
-                                        contentDescription = screen.titleEnglish
-                                    )
-                                },
-                                label = {
-                                    Text(
-                                        text = screen.titleKannada,
-                                        fontFamily = AnekKannadaFamily,
-                                        fontSize = 11.sp,
-                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
-                                    )
-                                },
-                                modifier = Modifier.testTag("nav_item_${screen.name.lowercase()}")
-                            )
+                    Column {
+                        HorizontalDivider(thickness = 2.dp, color = PopPosterInk)
+                        NavigationBar(containerColor = PopPosterPaper) {
+                            SaralaScreen.entries.forEach { screen ->
+                                val isSelected = currentScreen == screen
+                                NavigationBarItem(
+                                    selected = isSelected,
+                                    onClick = { currentScreen = screen },
+                                    colors = NavigationBarItemDefaults.colors(
+                                        indicatorColor = PopPosterButter,
+                                        selectedIconColor = PopPosterInk,
+                                        selectedTextColor = PopPosterInk,
+                                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                    ),
+                                    icon = {
+                                        Icon(
+                                            imageVector = if (isSelected) screen.selectedIcon else screen.unselectedIcon,
+                                            contentDescription = screen.titleEnglish
+                                        )
+                                    },
+                                    label = {
+                                        Text(
+                                            text = screen.titleEnglish,
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                    },
+                                    modifier = Modifier.testTag("nav_item_${screen.name.lowercase()}")
+                                )
+                            }
                         }
                     }
                 }
@@ -143,7 +161,7 @@ fun MainScreen(
                 if (useNavigationRail) {
                     NavigationRail(
                         modifier = Modifier.fillMaxHeight(),
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                        containerColor = PopPosterPaper
                     ) {
                         Spacer(modifier = Modifier.weight(1f))
                         SaralaScreen.entries.forEach { screen ->
@@ -151,6 +169,13 @@ fun MainScreen(
                             NavigationRailItem(
                                 selected = isSelected,
                                 onClick = { currentScreen = screen },
+                                colors = NavigationRailItemDefaults.colors(
+                                    indicatorColor = PopPosterButter,
+                                    selectedIconColor = PopPosterInk,
+                                    selectedTextColor = PopPosterInk,
+                                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                ),
                                 icon = {
                                     Icon(
                                         imageVector = if (isSelected) screen.selectedIcon else screen.unselectedIcon,
@@ -159,10 +184,11 @@ fun MainScreen(
                                 },
                                 label = {
                                     Text(
-                                        text = screen.titleKannada,
-                                        fontFamily = AnekKannadaFamily,
-                                        fontSize = 11.sp,
-                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                                        text = screen.titleEnglish,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                 },
                                 modifier = Modifier.testTag("nav_item_${screen.name.lowercase()}")
@@ -170,6 +196,7 @@ fun MainScreen(
                         }
                         Spacer(modifier = Modifier.weight(1f))
                     }
+                    VerticalDivider(thickness = 2.dp, color = PopPosterInk)
                 }
 
                 Box(

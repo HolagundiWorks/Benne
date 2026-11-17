@@ -1,21 +1,18 @@
 package com.example.ui.theme
 
-import android.os.Build
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 
-// Standard Material 3 Shape Scale
-val SaralaM3Shapes = Shapes(
-    extraSmall = RoundedCornerShape(4.dp),
-    small = RoundedCornerShape(8.dp),
-    medium = RoundedCornerShape(12.dp),
-    large = RoundedCornerShape(16.dp),
+// Crisp Neo-Pop Poster Shape Scale
+val BenneShapes = Shapes(
+    extraSmall = RoundedCornerShape(6.dp),
+    small = RoundedCornerShape(10.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(20.dp),
     extraLarge = RoundedCornerShape(28.dp)
 )
 
@@ -52,25 +49,17 @@ private val LightColorScheme = lightColorScheme(
 )
 
 /**
- * Light-theme-only Material 3 theme for Sarala Kannada.
- * Uses Android 12+ Material You dynamic light colors when supported,
- * falling back to the light Karnataka terracotta & forest tonal palette.
+ * Light-theme-only Neo-Pop Poster Material 3 theme for Benne.
  */
 @Composable
-fun SaralaKannadaTheme(
-    dynamicColor: Boolean = true,
+fun BenneTheme(
     content: @Composable () -> Unit,
 ) {
-    val colorScheme = if (dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        dynamicLightColorScheme(LocalContext.current)
-    } else {
-        LightColorScheme
-    }
-
     MaterialTheme(
-        colorScheme = colorScheme,
-        typography = SaralaTypography,
-        shapes = SaralaM3Shapes,
+        colorScheme = LightColorScheme,
+        typography = BenneTypography,
+        shapes = BenneShapes,
         content = content
     )
 }
+

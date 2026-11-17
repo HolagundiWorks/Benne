@@ -13,26 +13,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.BottomSheetDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -58,7 +53,18 @@ import com.example.data.UserProgressManager
 import com.example.model.AlphabetCategory
 import com.example.model.AlphabetItem
 import com.example.ui.components.AudioSpeakButton
+import com.example.ui.components.KannadaWithSubscript
+import com.example.ui.components.PosterCard
+import com.example.ui.components.PosterStampBadge
 import com.example.ui.theme.AnekKannadaFamily
+import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.ui.theme.PopPosterButter
+import com.example.ui.theme.PopPosterCyan
+import com.example.ui.theme.PopPosterInk
+import com.example.ui.theme.PopPosterLavender
+import com.example.ui.theme.PopPosterMint
+import com.example.ui.theme.PopPosterPaper
+import com.example.ui.theme.PopPosterPeach
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -83,27 +89,27 @@ fun AlphabetScreen(
     val categories = listOf(
         AlphabetCategory.VOWELS to "Vowels (14)",
         AlphabetCategory.CONSONANTS to "Consonants (34)",
-        AlphabetCategory.KAGUNITA to "Kagunita (14)"
+        AlphabetCategory.KAGUNITA to "Combos (14)"
     )
 
+    val tileColors = listOf(PopPosterPaper, PopPosterCyan, PopPosterMint, PopPosterPeach, PopPosterLavender)
+
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 84.dp),
+        columns = GridCells.Adaptive(minSize = 94.dp),
         contentPadding = PaddingValues(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .testTag("alphabet_grid")
     ) {
-        // Material 3 Header Card
+        // Pop Poster Header Card
         item(span = { GridItemSpan(maxLineSpan) }) {
-            Card(
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                ),
+            PosterCard(
+                containerColor = PopPosterCyan,
+                cornerRadius = 24.dp,
+                shadowOffset = 5.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
@@ -112,54 +118,72 @@ fun AlphabetScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "Kannada Script • Varnamale",
-                            style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.SemiBold
+                        PosterStampBadge(
+                            text = "SCRIPT • VARNAMALE",
+                            containerColor = PopPosterInk,
+                            contentColor = PopPosterButter
                         )
-                        Surface(
-                            shape = CircleShape,
-                            color = MaterialTheme.colorScheme.surface,
-                            contentColor = MaterialTheme.colorScheme.primary
-                        ) {
-                            Text(
-                                text = "${currentList.size} letters",
-                                style = MaterialTheme.typography.labelSmall,
-                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                            )
-                        }
+                        PosterStampBadge(
+                            text = "${currentList.size} LETTERS",
+                            containerColor = PopPosterPaper,
+                            contentColor = PopPosterInk
+                        )
                     }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Text(
+                        text = "Kannada Alphabet",
+                        fontFamily = BricolageGrotesqueFamily,
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = PopPosterInk
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    KannadaWithSubscript(
+                        kannadaText = "ಕನ್ನಡ ಅಕ್ಷರಮಾಲೆ",
+                        transliteration = "Kannada aksharamale",
+                        kannadaFontSize = 17.sp,
+                        kannadaLineHeight = 22.sp,
+                        kannadaColor = PopPosterInk,
+                        subscriptColor = MaterialTheme.colorScheme.primary,
+                        subscriptStyle = MaterialTheme.typography.labelMedium
+                    )
 
                     Spacer(modifier = Modifier.height(6.dp))
 
                     Text(
-                        text = "ಕನ್ನಡ ಅಕ್ಷರಮಾಲೆ",
-                        fontFamily = AnekKannadaFamily,
-                        fontSize = 26.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Text(
                         text = "Tap any letter card to hear pronunciation, or tap info for stroke tips.",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.85f)
+                        color = PopPosterInk.copy(alpha = 0.85f)
                     )
                 }
             }
         }
 
-        // Standard Material 3 SingleChoiceSegmentedButtonRow
+        // Material 3 Pop Segmented Category Selector
         item(span = { GridItemSpan(maxLineSpan) }) {
             SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
                 categories.forEachIndexed { index, (cat, label) ->
                     SegmentedButton(
                         selected = selectedCategory == cat,
                         onClick = { selectedCategory = cat },
-                        shape = SegmentedButtonDefaults.itemShape(index = index, count = categories.size)
+                        shape = SegmentedButtonDefaults.itemShape(index = index, count = categories.size),
+                        colors = SegmentedButtonDefaults.colors(
+                            activeContainerColor = PopPosterButter,
+                            activeContentColor = PopPosterInk,
+                            inactiveContainerColor = PopPosterPaper,
+                            inactiveContentColor = PopPosterInk,
+                            activeBorderColor = PopPosterInk,
+                            inactiveBorderColor = PopPosterInk
+                        )
                     ) {
                         Text(
                             text = label,
                             style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
                             maxLines = 1
                         )
                     }
@@ -167,20 +191,16 @@ fun AlphabetScreen(
             }
         }
 
-        // Letter Tiles
-        items(currentList, key = { it.char + it.category.name }) { item ->
+        // Pop Letter Poster Tiles
+        itemsIndexed(currentList, key = { _, it -> it.char + it.category.name }) { index, item ->
             val isPlaying = speakingText == item.char || speakingText == item.sampleWordKn
-            ElevatedCard(
+            val tileBg = if (isPlaying) PopPosterButter else tileColors[index % tileColors.size]
+
+            PosterCard(
+                containerColor = tileBg,
+                cornerRadius = 16.dp,
+                shadowOffset = 3.dp,
                 onClick = { ttsHelper.speak(item.char, playbackSpeed) },
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.elevatedCardColors(
-                    containerColor = if (isPlaying) {
-                        MaterialTheme.colorScheme.primaryContainer
-                    } else {
-                        MaterialTheme.colorScheme.surfaceContainerLow
-                    }
-                ),
-                elevation = CardDefaults.elevatedCardElevation(defaultElevation = if (isPlaying) 4.dp else 1.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("letter_card_${item.char}")
@@ -193,11 +213,7 @@ fun AlphabetScreen(
                         Icon(
                             imageVector = Icons.Outlined.Info,
                             contentDescription = "Inspect ${item.char}",
-                            tint = if (isPlaying) {
-                                MaterialTheme.colorScheme.onPrimaryContainer
-                            } else {
-                                MaterialTheme.colorScheme.onSurfaceVariant
-                            },
+                            tint = PopPosterInk,
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -205,41 +221,46 @@ fun AlphabetScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = 8.dp, end = 8.dp, top = 26.dp, bottom = 12.dp),
+                            .padding(start = 8.dp, end = 8.dp, top = 28.dp, bottom = 12.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
                             text = item.char,
                             fontFamily = AnekKannadaFamily,
-                            fontSize = 32.sp,
+                            fontSize = 34.sp,
                             fontWeight = FontWeight.Bold,
-                            color = if (isPlaying) {
-                                MaterialTheme.colorScheme.onPrimaryContainer
-                            } else {
-                                MaterialTheme.colorScheme.onSurface
-                            },
+                            color = PopPosterInk,
                             textAlign = TextAlign.Center
                         )
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        Text(
-                            text = item.englishTransliteration,
-                            style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.SemiBold,
-                            color = if (isPlaying) {
-                                MaterialTheme.colorScheme.primary
-                            } else {
-                                MaterialTheme.colorScheme.primary
-                            },
-                            textAlign = TextAlign.Center
-                        )
+                        Surface(
+                            shape = CircleShape,
+                            color = PopPosterPaper,
+                            border = BorderStroke(1.2.dp, PopPosterInk)
+                        ) {
+                            Text(
+                                text = item.englishTransliteration,
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = PopPosterInk,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                            )
+                        }
 
-                        Text(
-                            text = item.sampleWordKn,
-                            fontFamily = AnekKannadaFamily,
-                            fontSize = 11.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        Spacer(modifier = Modifier.height(5.dp))
+
+                        KannadaWithSubscript(
+                            kannadaText = item.sampleWordKn,
+                            transliteration = item.sampleWordTransliteration,
+                            kannadaFontSize = 12.sp,
+                            kannadaLineHeight = 16.sp,
+                            kannadaColor = PopPosterInk,
+                            subscriptColor = MaterialTheme.colorScheme.primary,
+                            subscriptStyle = MaterialTheme.typography.labelSmall,
+                            horizontalAlignment = Alignment.CenterHorizontally,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -248,13 +269,13 @@ fun AlphabetScreen(
         }
     }
 
-    // Material 3 Glyph Inspection Bottom Sheet
+    // Pop Poster Glyph Inspection Bottom Sheet
     inspectionItem?.let { letter ->
         ModalBottomSheet(
             onDismissRequest = { inspectionItem = null },
             sheetState = sheetState,
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-            dragHandle = { BottomSheetDefaults.DragHandle() }
+            containerColor = MaterialTheme.colorScheme.background,
+            dragHandle = { BottomSheetDefaults.DragHandle(color = PopPosterInk) }
         ) {
             Column(
                 modifier = Modifier
@@ -268,33 +289,28 @@ fun AlphabetScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                    ) {
-                        Text(
-                            text = letter.category.displayName,
-                            style = MaterialTheme.typography.labelSmall,
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp)
-                        )
-                    }
+                    PosterStampBadge(
+                        text = letter.category.displayName.uppercase(),
+                        containerColor = PopPosterCyan,
+                        contentColor = PopPosterInk
+                    )
                     IconButton(onClick = { inspectionItem = null }) {
                         Icon(
                             imageVector = Icons.Default.Close,
                             contentDescription = "Close",
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = PopPosterInk
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 Surface(
                     modifier = Modifier.size(104.dp),
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = PopPosterButter,
+                    contentColor = PopPosterInk,
+                    border = BorderStroke(2.5.dp, PopPosterInk)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Text(
@@ -310,8 +326,10 @@ fun AlphabetScreen(
 
                 Text(
                     text = "Pronounced \"${letter.englishTransliteration}\"",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    fontFamily = BricolageGrotesqueFamily,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = PopPosterInk
                 )
 
                 Spacer(modifier = Modifier.height(14.dp))
@@ -326,23 +344,22 @@ fun AlphabetScreen(
                         onSpeak = { ttsHelper.speak(it, playbackSpeed) },
                         sizeDp = 46,
                         iconSizeDp = 22,
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
+                        containerColor = PopPosterButter,
+                        contentColor = PopPosterInk
                     )
                     Text(
                         text = "Listen to letter",
                         style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = PopPosterInk
                     )
                 }
 
-                Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-                Card(
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceContainerHighest
-                    ),
+                PosterCard(
+                    containerColor = PopPosterMint,
+                    cornerRadius = 18.dp,
+                    shadowOffset = 4.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
@@ -353,23 +370,27 @@ fun AlphabetScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = "Example Word",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.primary
+                            PosterStampBadge(
+                                text = "EXAMPLE WORD",
+                                containerColor = PopPosterPaper,
+                                contentColor = PopPosterInk
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                            KannadaWithSubscript(
+                                kannadaText = letter.sampleWordKn,
+                                transliteration = letter.sampleWordTransliteration,
+                                kannadaFontSize = 20.sp,
+                                kannadaLineHeight = 26.sp,
+                                kannadaColor = PopPosterInk,
+                                subscriptColor = MaterialTheme.colorScheme.primary,
+                                subscriptStyle = MaterialTheme.typography.bodyMedium
                             )
                             Spacer(modifier = Modifier.height(2.dp))
                             Text(
-                                text = "${letter.sampleWordKn} (${letter.sampleWordTransliteration})",
-                                fontFamily = AnekKannadaFamily,
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            Text(
-                                text = letter.sampleWordEn,
+                                text = "Meaning: ${letter.sampleWordEn}",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                fontWeight = FontWeight.Medium,
+                                color = PopPosterInk
                             )
                         }
 
@@ -377,44 +398,45 @@ fun AlphabetScreen(
                             textToSpeak = letter.sampleWordKn,
                             isCurrentlySpeaking = speakingText == letter.sampleWordKn,
                             onSpeak = { ttsHelper.speak(it, playbackSpeed) },
-                            sizeDp = 40,
+                            sizeDp = 42,
                             iconSizeDp = 18,
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                            containerColor = PopPosterPaper,
+                            contentColor = PopPosterInk
                         )
                     }
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                OutlinedCard(
-                    shape = RoundedCornerShape(16.dp),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                PosterCard(
+                    containerColor = PopPosterPaper,
+                    cornerRadius = 18.dp,
+                    shadowOffset = 4.dp,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(modifier = Modifier.padding(14.dp)) {
                         Text(
-                            text = "Pronunciation Guide",
+                            text = "PRONUNCIATION GUIDE",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.primary
                         )
                         Text(
                             text = letter.phoneticTip,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = PopPosterInk
                         )
 
                         Spacer(modifier = Modifier.height(10.dp))
 
                         Text(
-                            text = "Stroke Guidance",
+                            text = "STROKE GUIDANCE",
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.primary
                         )
                         Text(
                             text = letter.strokeDescription,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = PopPosterInk
                         )
                     }
                 }

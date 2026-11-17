@@ -25,7 +25,7 @@ class ExampleRobolectricTest {
     fun `read string and compliance resources from context`() {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val appName = context.getString(R.string.app_name)
-        assertEquals("Sarala Kannada", appName)
+        assertEquals("Benne", appName)
         assertTrue(appName.length <= 30)
         assertTrue(context.getString(R.string.notification_channel_name).isNotBlank())
         assertTrue(context.getString(R.string.notification_channel_desc).isNotBlank())
@@ -41,6 +41,20 @@ class ExampleRobolectricTest {
         assertTrue(SaralaKannadaData.quizzes.isNotEmpty())
         assertTrue(SaralaKannadaData.dictionary.isNotEmpty())
         assertTrue(SaralaKannadaData.flashcards.isNotEmpty())
+
+        assertTrue(SaralaKannadaData.milestones.all {
+            it.titleTransliteration.isNotBlank() && it.steps.all { step -> step.transliteration.isNotBlank() }
+        })
+        assertTrue(SaralaKannadaData.dialogues.all {
+            it.titleTransliteration.isNotBlank() && it.lines.all { line -> line.transliteration.isNotBlank() }
+        })
+        assertTrue((SaralaKannadaData.vowels + SaralaKannadaData.consonants + SaralaKannadaData.kagunitaSamples).all {
+            it.englishTransliteration.isNotBlank() && it.sampleWordTransliteration.isNotBlank()
+        })
+        assertTrue(SaralaKannadaData.dictionary.all { it.transliteration.isNotBlank() })
+        assertTrue(SaralaKannadaData.flashcards.all {
+            it.transliteration.isNotBlank() && it.exampleSentenceTranslit.isNotBlank()
+        })
     }
 
     @Test

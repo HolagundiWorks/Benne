@@ -110,9 +110,9 @@ object StudyReminderManager {
         )
 
         val prompts = listOf(
-            "ನಮಸ್ಕಾರ! Time for 3 Kannada flashcards to keep your streak alive.",
-            "ಊಟ ಆಯ್ತಾ? Practice 5 spoken Bengaluru phrases today.",
-            "ಕನ್ನಡ ಕಲಿಯಿರಿ: Review 2 Varnamale glyphs and earn +15 XP."
+            "ನಮಸ್ಕಾರ (Namaskaara)! Time for 3 Kannada flashcards to keep your streak alive.",
+            "ಊಟ ಆಯ್ತಾ (Oota aaytha)? Practice 5 spoken Bengaluru phrases today.",
+            "ಕನ್ನಡ ಕಲಿಯಿರಿ (Kannada kaliyiri): Review 2 Varnamale letters and earn +15 XP."
         )
         val bodyText = if (isTest) {
             "Daily Kannada Practice reminders are calibrated and active."
@@ -122,7 +122,7 @@ object StudyReminderManager {
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_sarala)
-            .setContentTitle(if (isTest) "Sarala Kannada // Test Signal" else "Sarala Kannada // Daily Practice")
+            .setContentTitle(if (isTest) "Benne // Test Reminder" else "Benne // Daily Practice")
             .setContentText(bodyText)
             .setStyle(NotificationCompat.BigTextStyle().bigText(bodyText))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

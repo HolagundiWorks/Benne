@@ -2,6 +2,7 @@ package com.example.ui.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,16 +32,12 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -56,6 +53,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
@@ -68,7 +66,17 @@ import com.example.data.UserProgressManager
 import com.example.model.VocabularyFlashcard
 import com.example.ui.components.AudioSpeakButton
 import com.example.ui.components.InteractiveVocabularyFlashcard
+import com.example.ui.components.KannadaWithSubscript
+import com.example.ui.components.PosterCard
+import com.example.ui.components.PosterStampBadge
 import com.example.ui.theme.AnekKannadaFamily
+import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.ui.theme.PopPosterButter
+import com.example.ui.theme.PopPosterCyan
+import com.example.ui.theme.PopPosterInk
+import com.example.ui.theme.PopPosterMint
+import com.example.ui.theme.PopPosterPaper
+import com.example.ui.theme.PopPosterPink
 
 enum class PracticeMode {
     FLASHCARDS,
@@ -89,7 +97,7 @@ fun QuizScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        // Material 3 Segmented Mode Switcher
+        // Pop Poster Segmented Mode Switcher
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -99,16 +107,32 @@ fun QuizScreen(
                 SegmentedButton(
                     selected = currentMode == PracticeMode.FLASHCARDS,
                     onClick = { currentMode = PracticeMode.FLASHCARDS },
-                    shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2)
+                    shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
+                    colors = SegmentedButtonDefaults.colors(
+                        activeContainerColor = PopPosterButter,
+                        activeContentColor = PopPosterInk,
+                        inactiveContainerColor = PopPosterPaper,
+                        inactiveContentColor = PopPosterInk,
+                        activeBorderColor = PopPosterInk,
+                        inactiveBorderColor = PopPosterInk
+                    )
                 ) {
-                    Text("Flashcards", style = MaterialTheme.typography.labelLarge)
+                    Text("Flashcards", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelLarge)
                 }
                 SegmentedButton(
                     selected = currentMode == PracticeMode.QUIZ,
                     onClick = { currentMode = PracticeMode.QUIZ },
-                    shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2)
+                    shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
+                    colors = SegmentedButtonDefaults.colors(
+                        activeContainerColor = PopPosterButter,
+                        activeContentColor = PopPosterInk,
+                        inactiveContainerColor = PopPosterPaper,
+                        inactiveContentColor = PopPosterInk,
+                        activeBorderColor = PopPosterInk,
+                        inactiveBorderColor = PopPosterInk
+                    )
                 ) {
-                    Text("Evaluation Quiz", style = MaterialTheme.typography.labelLarge)
+                    Text("Evaluation Quiz", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelLarge)
                 }
             }
         }
@@ -161,15 +185,14 @@ fun FlashcardStudioView(
             .padding(horizontal = 16.dp, vertical = 6.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Material 3 Deck Summary Card
-        Card(
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-            ),
+        // Pop Deck Summary Poster Card
+        PosterCard(
+            containerColor = PopPosterPaper,
+            cornerRadius = 20.dp,
+            shadowOffset = 4.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.padding(14.dp)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -177,21 +200,17 @@ fun FlashcardStudioView(
                 ) {
                     Text(
                         text = "Card ${safeIndex + 1} of ${activeDeck.size}",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        fontFamily = BricolageGrotesqueFamily,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = PopPosterInk
                     )
 
-                    Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.tertiaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-                    ) {
-                        Text(
-                            text = "${masteredCardIds.size}/${allFlashcards.size} Mastered",
-                            style = MaterialTheme.typography.labelSmall,
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                        )
-                    }
+                    PosterStampBadge(
+                        text = "${masteredCardIds.size}/${allFlashcards.size} MASTERED",
+                        containerColor = PopPosterMint,
+                        contentColor = PopPosterInk
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
@@ -201,22 +220,36 @@ fun FlashcardStudioView(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    LinearProgressIndicator(
-                        progress = { if (activeDeck.isNotEmpty()) (safeIndex + 1).toFloat() / activeDeck.size else 0f },
+                    Box(
                         modifier = Modifier
                             .weight(1f)
-                            .height(6.dp)
-                            .clip(CircleShape),
-                        strokeCap = StrokeCap.Round
-                    )
+                            .clip(CircleShape)
+                            .border(1.5.dp, PopPosterInk, CircleShape)
+                            .background(MaterialTheme.colorScheme.background)
+                    ) {
+                        LinearProgressIndicator(
+                            progress = { if (activeDeck.isNotEmpty()) (safeIndex + 1).toFloat() / activeDeck.size else 0f },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(10.dp),
+                            color = MaterialTheme.colorScheme.primary,
+                            trackColor = Color.Transparent,
+                            strokeCap = StrokeCap.Round
+                        )
+                    }
 
-                    FilledTonalButton(
+                    OutlinedButton(
                         onClick = {
                             if (activeDeck.isNotEmpty()) {
                                 currentCardIndex = activeDeck.indices.random()
                                 isCardFlipped = false
                             }
-                        }
+                        },
+                        border = BorderStroke(1.5.dp, PopPosterInk),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = PopPosterCyan,
+                            contentColor = PopPosterInk
+                        )
                     ) {
                         Icon(
                             imageVector = Icons.Default.Shuffle,
@@ -224,7 +257,7 @@ fun FlashcardStudioView(
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("Shuffle", style = MaterialTheme.typography.labelMedium)
+                        Text("Shuffle", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium)
                     }
                 }
             }
@@ -232,7 +265,7 @@ fun FlashcardStudioView(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Material 3 Category Filter Chips
+        // Pop Category Filter Chips
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxWidth()
@@ -246,7 +279,21 @@ fun FlashcardStudioView(
                         currentCardIndex = 0
                         isCardFlipped = false
                     },
-                    label = { Text(cat, style = MaterialTheme.typography.labelMedium) },
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = PopPosterButter,
+                        selectedLabelColor = PopPosterInk,
+                        containerColor = PopPosterPaper,
+                        labelColor = PopPosterInk
+                    ),
+                    border = FilterChipDefaults.filterChipBorder(
+                        enabled = true,
+                        selected = isSelected,
+                        borderColor = PopPosterInk,
+                        selectedBorderColor = PopPosterInk,
+                        borderWidth = 1.5.dp,
+                        selectedBorderWidth = 2.dp
+                    ),
+                    label = { Text(cat, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium) },
                     modifier = Modifier.testTag("flashcard_cat_${cat.lowercase().replace(" ", "_")}")
                 )
             }
@@ -282,6 +329,11 @@ fun FlashcardStudioView(
                         }
                     },
                     enabled = safeIndex > 0,
+                    border = BorderStroke(1.8.dp, PopPosterInk),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = PopPosterPaper,
+                        contentColor = PopPosterInk
+                    ),
                     modifier = Modifier.testTag("flashcard_prev_button")
                 ) {
                     Icon(
@@ -290,11 +342,15 @@ fun FlashcardStudioView(
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("Prev")
+                    Text("Prev", fontWeight = FontWeight.Bold)
                 }
 
                 Button(
                     onClick = { isCardFlipped = !isCardFlipped },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = PopPosterInk,
+                        contentColor = PopPosterButter
+                    ),
                     modifier = Modifier.testTag("flashcard_flip_button")
                 ) {
                     Icon(
@@ -303,7 +359,7 @@ fun FlashcardStudioView(
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text(if (isCardFlipped) "Show Front" else "Flip Card")
+                    Text(if (isCardFlipped) "Show Front" else "Flip Card", fontWeight = FontWeight.Bold)
                 }
 
                 OutlinedButton(
@@ -314,9 +370,14 @@ fun FlashcardStudioView(
                         }
                     },
                     enabled = safeIndex < activeDeck.lastIndex,
+                    border = BorderStroke(1.8.dp, PopPosterInk),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = PopPosterPaper,
+                        contentColor = PopPosterInk
+                    ),
                     modifier = Modifier.testTag("flashcard_next_button")
                 ) {
-                    Text("Next")
+                    Text("Next", fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.width(4.dp))
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowForward,
@@ -328,19 +389,12 @@ fun FlashcardStudioView(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            FilledTonalButton(
+            OutlinedButton(
                 onClick = { progressManager.toggleMasterFlashcard(currentCard.id) },
-                colors = ButtonDefaults.filledTonalButtonColors(
-                    containerColor = if (isMastered) {
-                        MaterialTheme.colorScheme.tertiaryContainer
-                    } else {
-                        MaterialTheme.colorScheme.secondaryContainer
-                    },
-                    contentColor = if (isMastered) {
-                        MaterialTheme.colorScheme.onTertiaryContainer
-                    } else {
-                        MaterialTheme.colorScheme.onSecondaryContainer
-                    }
+                border = BorderStroke(1.8.dp, PopPosterInk),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    containerColor = if (isMastered) PopPosterMint else PopPosterCyan,
+                    contentColor = PopPosterInk
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -354,7 +408,8 @@ fun FlashcardStudioView(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = if (isMastered) "Mastered • Tap to study again" else "Mark as Mastered (+15 XP)"
+                    text = if (isMastered) "Mastered • Tap to study again" else "Mark as Mastered (+15 XP)",
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
@@ -380,7 +435,7 @@ fun EvaluationQuizView(
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
 
     if (isQuizCompleted || currentQuestion == null) {
-        M3QuizResultsView(
+        PopQuizResultsView(
             score = scoreCount,
             total = questions.size,
             onRestart = {
@@ -401,12 +456,11 @@ fun EvaluationQuizView(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Quiz Progress Card
-        Card(
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-            ),
+        // Quiz Progress Poster Card
+        PosterCard(
+            containerColor = PopPosterPaper,
+            cornerRadius = 20.dp,
+            shadowOffset = 4.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
@@ -417,43 +471,47 @@ fun EvaluationQuizView(
                 ) {
                     Text(
                         text = "Question ${currentIndex + 1} of ${questions.size}",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurface
+                        fontFamily = BricolageGrotesqueFamily,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = PopPosterInk
                     )
-                    Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                    ) {
-                        Text(
-                            text = "Score: $scoreCount",
-                            style = MaterialTheme.typography.labelSmall,
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                        )
-                    }
+                    PosterStampBadge(
+                        text = "SCORE: $scoreCount",
+                        containerColor = PopPosterButter,
+                        contentColor = PopPosterInk
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                LinearProgressIndicator(
-                    progress = { (currentIndex + 1).toFloat() / questions.size },
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(6.dp)
-                        .clip(CircleShape),
-                    strokeCap = StrokeCap.Round
-                )
+                        .clip(CircleShape)
+                        .border(1.5.dp, PopPosterInk, CircleShape)
+                        .background(MaterialTheme.colorScheme.background)
+                ) {
+                    LinearProgressIndicator(
+                        progress = { (currentIndex + 1).toFloat() / questions.size },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(10.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        trackColor = Color.Transparent,
+                        strokeCap = StrokeCap.Round
+                    )
+                }
             }
         }
 
-        Spacer(modifier = Modifier.height(14.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-        // Question Card
-        ElevatedCard(
-            shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.elevatedCardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-            ),
+        // Question Poster Card
+        PosterCard(
+            containerColor = PopPosterCyan,
+            cornerRadius = 24.dp,
+            shadowOffset = 5.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
@@ -464,8 +522,10 @@ fun EvaluationQuizView(
             ) {
                 Text(
                     text = currentQuestion.prompt,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    fontFamily = BricolageGrotesqueFamily,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = PopPosterInk,
                     textAlign = TextAlign.Center
                 )
 
@@ -473,29 +533,35 @@ fun EvaluationQuizView(
                     Spacer(modifier = Modifier.height(14.dp))
                     Surface(
                         shape = RoundedCornerShape(16.dp),
-                        color = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        color = PopPosterButter,
+                        contentColor = PopPosterInk,
+                        border = BorderStroke(2.dp, PopPosterInk)
                     ) {
-                        Text(
-                            text = currentQuestion.kannadaText,
-                            fontFamily = AnekKannadaFamily,
-                            fontSize = 34.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
-                        )
+                        Column(
+                            modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = currentQuestion.kannadaText,
+                                fontFamily = AnekKannadaFamily,
+                                fontSize = 34.sp,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center
+                            )
+                            if (currentQuestion.transliteration.isNotEmpty()) {
+                                Spacer(modifier = Modifier.height(2.dp))
+                                Text(
+                                    text = currentQuestion.transliteration,
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
                     }
 
-                    if (currentQuestion.transliteration.isNotEmpty()) {
-                        Spacer(modifier = Modifier.height(6.dp))
-                        Text(
-                            text = currentQuestion.transliteration,
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
                     AudioSpeakButton(
                         textToSpeak = currentQuestion.kannadaText,
@@ -503,42 +569,35 @@ fun EvaluationQuizView(
                         onSpeak = { ttsHelper.speak(it, playbackSpeed) },
                         sizeDp = 46,
                         iconSizeDp = 22,
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                        containerColor = PopPosterPaper,
+                        contentColor = PopPosterInk
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(14.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-        // Material 3 Option Cards
+        // Pop Poster Option Cards
         currentQuestion.options.forEachIndexed { index, optionText ->
             val isSelected = selectedOptionIndex == index
             val isCorrect = index == currentQuestion.correctIndex
 
             val containerColor = when {
-                hasAnswered && isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
-                hasAnswered && isSelected && !isCorrect -> MaterialTheme.colorScheme.errorContainer
-                !hasAnswered && isSelected -> MaterialTheme.colorScheme.primaryContainer
-                else -> MaterialTheme.colorScheme.surfaceContainerLow
+                hasAnswered && isCorrect -> PopPosterMint
+                hasAnswered && isSelected && !isCorrect -> PopPosterPink
+                !hasAnswered && isSelected -> PopPosterButter
+                else -> PopPosterPaper
             }
 
-            val borderStroke = when {
-                hasAnswered && isCorrect -> BorderStroke(2.dp, MaterialTheme.colorScheme.tertiary)
-                hasAnswered && isSelected && !isCorrect -> BorderStroke(2.dp, MaterialTheme.colorScheme.error)
-                !hasAnswered && isSelected -> BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
-                else -> BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
-            }
-
-            OutlinedCard(
-                onClick = { if (!hasAnswered) selectedOptionIndex = index },
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.outlinedCardColors(containerColor = containerColor),
-                border = borderStroke,
+            PosterCard(
+                containerColor = containerColor,
+                cornerRadius = 16.dp,
+                shadowOffset = if (isSelected) 2.dp else 3.5.dp,
+                onClick = if (!hasAnswered) ({ selectedOptionIndex = index }) else null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp)
+                    .padding(vertical = 3.dp)
                     .testTag("quiz_option_$index")
             ) {
                 Row(
@@ -548,20 +607,21 @@ fun EvaluationQuizView(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Surface(
-                        modifier = Modifier.size(32.dp),
+                        modifier = Modifier.size(34.dp),
                         shape = CircleShape,
                         color = when {
-                            hasAnswered && isCorrect -> MaterialTheme.colorScheme.tertiary
+                            hasAnswered && isCorrect -> PopPosterInk
                             hasAnswered && isSelected -> MaterialTheme.colorScheme.error
-                            isSelected -> MaterialTheme.colorScheme.primary
-                            else -> MaterialTheme.colorScheme.surfaceContainerHighest
+                            isSelected -> PopPosterInk
+                            else -> PopPosterCyan
                         },
                         contentColor = when {
-                            hasAnswered && isCorrect -> MaterialTheme.colorScheme.onTertiary
-                            hasAnswered && isSelected -> MaterialTheme.colorScheme.onError
-                            isSelected -> MaterialTheme.colorScheme.onPrimary
-                            else -> MaterialTheme.colorScheme.onSurfaceVariant
-                        }
+                            hasAnswered && isCorrect -> PopPosterMint
+                            hasAnswered && isSelected -> Color.White
+                            isSelected -> PopPosterButter
+                            else -> PopPosterInk
+                        },
+                        border = BorderStroke(1.5.dp, PopPosterInk)
                     ) {
                         Box(contentAlignment = Alignment.Center) {
                             Text(
@@ -573,20 +633,34 @@ fun EvaluationQuizView(
 
                     Spacer(modifier = Modifier.width(12.dp))
 
-                    Text(
-                        text = optionText,
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.weight(1f)
-                    )
+                    val parsedKannadaOption = remember(optionText) { splitKannadaOption(optionText) }
+                    if (parsedKannadaOption != null) {
+                        KannadaWithSubscript(
+                            kannadaText = parsedKannadaOption.first,
+                            transliteration = parsedKannadaOption.second,
+                            kannadaFontSize = 17.sp,
+                            kannadaLineHeight = 22.sp,
+                            kannadaColor = PopPosterInk,
+                            subscriptColor = MaterialTheme.colorScheme.primary,
+                            subscriptStyle = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.weight(1f)
+                        )
+                    } else {
+                        Text(
+                            text = optionText,
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                            color = PopPosterInk,
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
 
                     if (hasAnswered) {
                         if (isCorrect) {
                             Icon(
                                 imageVector = Icons.Default.Check,
                                 contentDescription = "Correct",
-                                tint = MaterialTheme.colorScheme.tertiary
+                                tint = PopPosterInk
                             )
                         } else if (isSelected) {
                             Icon(
@@ -602,38 +676,30 @@ fun EvaluationQuizView(
 
         if (hasAnswered) {
             val gotRight = selectedOptionIndex == currentQuestion.correctIndex
-            Spacer(modifier = Modifier.height(12.dp))
-            Card(
-                shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = if (gotRight) {
-                        MaterialTheme.colorScheme.tertiaryContainer
-                    } else {
-                        MaterialTheme.colorScheme.errorContainer
-                    },
-                    contentColor = if (gotRight) {
-                        MaterialTheme.colorScheme.onTertiaryContainer
-                    } else {
-                        MaterialTheme.colorScheme.onErrorContainer
-                    }
-                ),
+            Spacer(modifier = Modifier.height(10.dp))
+            PosterCard(
+                containerColor = if (gotRight) PopPosterMint else PopPosterPink,
+                cornerRadius = 16.dp,
+                shadowOffset = 4.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(14.dp)) {
                     Text(
-                        text = if (gotRight) "Correct!" else "Not quite — here's why",
-                        style = MaterialTheme.typography.titleSmall
+                        text = if (gotRight) "CORRECT!" else "NOT QUITE — HERE'S WHY",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = PopPosterInk
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = currentQuestion.explanation,
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodySmall,
+                        color = PopPosterInk
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(18.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = {
@@ -657,6 +723,10 @@ fun EvaluationQuizView(
                 }
             },
             enabled = selectedOptionIndex != null,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = PopPosterInk,
+                contentColor = PopPosterButter
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
@@ -665,14 +735,15 @@ fun EvaluationQuizView(
             Text(
                 text = if (!hasAnswered) "Check Answer"
                 else if (currentIndex < questions.lastIndex) "Next Question"
-                else "See Results"
+                else "See Results",
+                fontWeight = FontWeight.Bold
             )
         }
     }
 }
 
 @Composable
-private fun M3QuizResultsView(
+private fun PopQuizResultsView(
     score: Int,
     total: Int,
     onRestart: () -> Unit
@@ -687,11 +758,10 @@ private fun M3QuizResultsView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        ElevatedCard(
-            shape = RoundedCornerShape(28.dp),
-            colors = CardDefaults.elevatedCardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-            ),
+        PosterCard(
+            containerColor = PopPosterButter,
+            cornerRadius = 28.dp,
+            shadowOffset = 6.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
@@ -701,10 +771,11 @@ private fun M3QuizResultsView(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Surface(
-                    modifier = Modifier.size(88.dp),
+                    modifier = Modifier.size(90.dp),
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = PopPosterPaper,
+                    contentColor = PopPosterInk,
+                    border = BorderStroke(2.5.dp, PopPosterInk)
                 ) {
                     Column(
                         verticalArrangement = Arrangement.Center,
@@ -717,8 +788,9 @@ private fun M3QuizResultsView(
                         )
                         Text(
                             text = "$percentage%",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
+                            fontFamily = BricolageGrotesqueFamily,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.ExtraBold
                         )
                     }
                 }
@@ -726,34 +798,42 @@ private fun M3QuizResultsView(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "ಅಭಿನಂದನೆಗಳು!",
-                    fontFamily = AnekKannadaFamily,
+                    text = "Congratulations!",
+                    fontFamily = BricolageGrotesqueFamily,
                     fontSize = 26.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    fontWeight = FontWeight.ExtraBold,
+                    color = PopPosterInk
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
+                KannadaWithSubscript(
+                    kannadaText = "ಅಭಿನಂದನೆಗಳು!",
+                    transliteration = "Abhinandanegalu!",
+                    kannadaFontSize = 18.sp,
+                    kannadaLineHeight = 24.sp,
+                    kannadaColor = PopPosterInk,
+                    subscriptColor = MaterialTheme.colorScheme.primary,
+                    subscriptStyle = MaterialTheme.typography.labelMedium,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
                 Text(
                     text = "You answered $score out of $total correctly",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = PopPosterInk
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Surface(
-                    shape = CircleShape,
-                    color = MaterialTheme.colorScheme.tertiaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-                ) {
-                    Text(
-                        text = "+${score * 20 + 50} XP earned",
-                        style = MaterialTheme.typography.labelLarge,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                    )
-                }
+                PosterStampBadge(
+                    text = "+${score * 20 + 50} XP EARNED",
+                    containerColor = PopPosterMint,
+                    contentColor = PopPosterInk
+                )
             }
         }
 
@@ -761,6 +841,10 @@ private fun M3QuizResultsView(
 
         Button(
             onClick = onRestart,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = PopPosterInk,
+                contentColor = PopPosterButter
+            ),
             modifier = Modifier
                 .fillMaxWidth(0.75f)
                 .height(48.dp)
@@ -772,7 +856,17 @@ private fun M3QuizResultsView(
                 modifier = Modifier.size(18.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text("Practice Again")
+            Text("Practice Again", fontWeight = FontWeight.Bold)
         }
     }
+}
+
+private fun splitKannadaOption(optionText: String): Pair<String, String>? {
+    val openIdx = optionText.indexOf(" (")
+    if (openIdx <= 0 || !optionText.endsWith(")")) return null
+    val prefix = optionText.substring(0, openIdx)
+    val hasKannada = prefix.any { it in '\u0C80'..'\u0CFF' }
+    if (!hasKannada) return null
+    val translit = optionText.substring(openIdx + 2, optionText.length - 1)
+    return prefix to translit
 }

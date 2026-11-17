@@ -1,8 +1,8 @@
 package com.example.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -24,10 +25,8 @@ import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.SearchOff
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -51,7 +50,17 @@ import com.example.audio.KannadaTtsHelper
 import com.example.data.SaralaKannadaData
 import com.example.data.UserProgressManager
 import com.example.ui.components.AudioSpeakButton
+import com.example.ui.components.KannadaWithSubscript
+import com.example.ui.components.PosterCard
+import com.example.ui.components.PosterStampBadge
 import com.example.ui.theme.AnekKannadaFamily
+import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.ui.theme.PopPosterButter
+import com.example.ui.theme.PopPosterCyan
+import com.example.ui.theme.PopPosterInk
+import com.example.ui.theme.PopPosterMint
+import com.example.ui.theme.PopPosterPaper
+import com.example.ui.theme.PopPosterPeach
 
 @Composable
 fun DictionaryScreen(
@@ -67,6 +76,7 @@ fun DictionaryScreen(
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
 
     val categories = listOf("All", "Saved", "Greetings", "Travel & Auto", "Food & Cafe", "Shopping & Numbers", "Common & Help")
+    val cardPalette = listOf(PopPosterPaper, PopPosterCyan, PopPosterPeach, PopPosterMint)
 
     val filteredList = SaralaKannadaData.dictionary.filter { phrase ->
         val matchesCategory = when (selectedCategory) {
@@ -88,16 +98,15 @@ fun DictionaryScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        // Material 3 Search Header Card
+        // Pop Poster Search Header Card
         item {
-            Card(
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow
-                ),
+            PosterCard(
+                containerColor = PopPosterMint,
+                cornerRadius = 24.dp,
+                shadowOffset = 5.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
@@ -106,38 +115,46 @@ fun DictionaryScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "Phrasebook & Lexicon",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.primary
+                        PosterStampBadge(
+                            text = "PHRASEBOOK & LEXICON",
+                            containerColor = PopPosterInk,
+                            contentColor = PopPosterButter
                         )
-                        Surface(
-                            shape = CircleShape,
-                            color = MaterialTheme.colorScheme.secondaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                        ) {
-                            Text(
-                                text = "${filteredList.size} phrases",
-                                style = MaterialTheme.typography.labelSmall,
-                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-                            )
-                        }
+                        PosterStampBadge(
+                            text = "${filteredList.size} PHRASES",
+                            containerColor = PopPosterPaper,
+                            contentColor = PopPosterInk
+                        )
                     }
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Text(
+                        text = "Kannada Phrasebook",
+                        fontFamily = BricolageGrotesqueFamily,
+                        fontSize = 26.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = PopPosterInk
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    KannadaWithSubscript(
+                        kannadaText = "ಕನ್ನಡ ಪದಕೋಶ",
+                        transliteration = "Kannada padakosha",
+                        kannadaFontSize = 17.sp,
+                        kannadaLineHeight = 22.sp,
+                        kannadaColor = PopPosterInk,
+                        subscriptColor = MaterialTheme.colorScheme.primary,
+                        subscriptStyle = MaterialTheme.typography.labelMedium
+                    )
 
                     Spacer(modifier = Modifier.height(6.dp))
 
                     Text(
-                        text = "ಸರಳ ಪದಕೋಶ",
-                        fontFamily = AnekKannadaFamily,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-
-                    Text(
-                        text = "Search in Kannada, transliteration, or English.",
+                        text = "Search by English meaning, pronunciation, or Kannada script.",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = PopPosterInk.copy(alpha = 0.85f)
                     )
 
                     Spacer(modifier = Modifier.height(14.dp))
@@ -147,14 +164,15 @@ fun DictionaryScreen(
                         onValueChange = { searchQuery = it },
                         placeholder = {
                             Text(
-                                text = "Search 'coffee', 'auto', 'ಬೆಲೆ'...",
+                                text = "Search 'coffee', 'auto', 'namaskaara'...",
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         },
                         leadingIcon = {
                             Icon(
                                 imageVector = Icons.Default.Search,
-                                contentDescription = "Search"
+                                contentDescription = "Search",
+                                tint = PopPosterInk
                             )
                         },
                         trailingIcon = {
@@ -162,7 +180,8 @@ fun DictionaryScreen(
                                 IconButton(onClick = { searchQuery = "" }) {
                                     Icon(
                                         imageVector = Icons.Default.Clear,
-                                        contentDescription = "Clear search"
+                                        contentDescription = "Clear search",
+                                        tint = PopPosterInk
                                     )
                                 }
                             }
@@ -170,10 +189,10 @@ fun DictionaryScreen(
                         singleLine = true,
                         shape = CircleShape,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.surface,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
+                            focusedContainerColor = PopPosterPaper,
+                            unfocusedContainerColor = PopPosterPaper,
+                            focusedBorderColor = PopPosterInk,
+                            unfocusedBorderColor = PopPosterInk
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -183,7 +202,7 @@ fun DictionaryScreen(
             }
         }
 
-        // Material 3 FilterChips
+        // Pop FilterChips
         item {
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -194,7 +213,21 @@ fun DictionaryScreen(
                     FilterChip(
                         selected = isSelected,
                         onClick = { selectedCategory = cat },
-                        label = { Text(cat, style = MaterialTheme.typography.labelMedium) },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = PopPosterButter,
+                            selectedLabelColor = PopPosterInk,
+                            containerColor = PopPosterPaper,
+                            labelColor = PopPosterInk
+                        ),
+                        border = FilterChipDefaults.filterChipBorder(
+                            enabled = true,
+                            selected = isSelected,
+                            borderColor = PopPosterInk,
+                            selectedBorderColor = PopPosterInk,
+                            borderWidth = 1.5.dp,
+                            selectedBorderWidth = 2.dp
+                        ),
+                        label = { Text(cat, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium) },
                         modifier = Modifier.testTag("dict_chip_${cat.lowercase().replace(" ", "_")}")
                     )
                 }
@@ -203,45 +236,50 @@ fun DictionaryScreen(
 
         if (filteredList.isEmpty()) {
             item {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 48.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                PosterCard(
+                    containerColor = PopPosterPaper,
+                    cornerRadius = 20.dp,
+                    shadowOffset = 4.dp,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Icon(
-                        imageVector = Icons.Outlined.SearchOff,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(40.dp)
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Text(
-                        text = "No matching phrases found",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                    Text(
-                        text = "Try clearing filters or searching another word.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 40.dp, horizontal = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.SearchOff,
+                            contentDescription = null,
+                            tint = PopPosterInk,
+                            modifier = Modifier.size(40.dp)
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(
+                            text = "No matching phrases found",
+                            fontFamily = BricolageGrotesqueFamily,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = PopPosterInk
+                        )
+                        Text(
+                            text = "Try clearing filters or searching another word.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = PopPosterInk.copy(alpha = 0.8f)
+                        )
+                    }
                 }
             }
         } else {
-            items(filteredList, key = { it.id }) { phrase ->
+            itemsIndexed(filteredList, key = { _, it -> it.id }) { index, phrase ->
                 val isFav = favorites.contains(phrase.id)
                 val isSpeaking = speakingText == phrase.kannada
+                val cardBg = if (isSpeaking) PopPosterButter else cardPalette[index % cardPalette.size]
 
-                ElevatedCard(
-                    shape = RoundedCornerShape(18.dp),
-                    colors = CardDefaults.elevatedCardColors(
-                        containerColor = if (isSpeaking) {
-                            MaterialTheme.colorScheme.primaryContainer
-                        } else {
-                            MaterialTheme.colorScheme.surfaceContainerLow
-                        }
-                    ),
+                PosterCard(
+                    containerColor = cardBg,
+                    cornerRadius = 18.dp,
+                    shadowOffset = 4.dp,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("phrase_card_${phrase.id}")
@@ -259,21 +297,15 @@ fun DictionaryScreen(
                                     fontFamily = AnekKannadaFamily,
                                     fontSize = 19.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.onSurface
+                                    color = PopPosterInk
                                 )
                                 if (phrase.isEssential) {
                                     Spacer(modifier = Modifier.width(8.dp))
-                                    Surface(
-                                        shape = CircleShape,
-                                        color = MaterialTheme.colorScheme.tertiaryContainer,
-                                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer
-                                    ) {
-                                        Text(
-                                            text = "Essential",
-                                            style = MaterialTheme.typography.labelSmall,
-                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-                                        )
-                                    }
+                                    PosterStampBadge(
+                                        text = "ESSENTIAL",
+                                        containerColor = PopPosterButter,
+                                        contentColor = PopPosterInk
+                                    )
                                 }
                             }
 
@@ -282,15 +314,24 @@ fun DictionaryScreen(
                             Text(
                                 text = phrase.transliteration,
                                 style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Medium,
+                                fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary
                             )
 
-                            Text(
-                                text = phrase.english,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                            Spacer(modifier = Modifier.height(3.dp))
+
+                            Surface(
+                                shape = RoundedCornerShape(8.dp),
+                                color = PopPosterPaper,
+                                border = BorderStroke(1.dp, PopPosterInk.copy(alpha = 0.35f))
+                            ) {
+                                Text(
+                                    text = "Meaning: ${phrase.english}",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = PopPosterInk,
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                                )
+                            }
                         }
 
                         IconButton(
@@ -299,11 +340,7 @@ fun DictionaryScreen(
                             Icon(
                                 imageVector = if (isFav) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
                                 contentDescription = if (isFav) "Remove bookmark" else "Bookmark phrase",
-                                tint = if (isFav) {
-                                    MaterialTheme.colorScheme.primary
-                                } else {
-                                    MaterialTheme.colorScheme.onSurfaceVariant
-                                }
+                                tint = if (isFav) MaterialTheme.colorScheme.primary else PopPosterInk
                             )
                         }
 
@@ -313,8 +350,8 @@ fun DictionaryScreen(
                             onSpeak = { ttsHelper.speak(it, playbackSpeed) },
                             sizeDp = 42,
                             iconSizeDp = 19,
-                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                            containerColor = PopPosterButter,
+                            contentColor = PopPosterInk
                         )
                     }
                 }

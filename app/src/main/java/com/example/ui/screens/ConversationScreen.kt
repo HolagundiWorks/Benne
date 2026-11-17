@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,9 +21,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -47,7 +47,16 @@ import com.example.data.SaralaKannadaData
 import com.example.data.UserProgressManager
 import com.example.model.DialogueLine
 import com.example.ui.components.AudioSpeakButton
-import com.example.ui.theme.AnekKannadaFamily
+import com.example.ui.components.KannadaWithSubscript
+import com.example.ui.components.PosterCard
+import com.example.ui.components.PosterStampBadge
+import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.ui.theme.PopPosterButter
+import com.example.ui.theme.PopPosterCyan
+import com.example.ui.theme.PopPosterInk
+import com.example.ui.theme.PopPosterMint
+import com.example.ui.theme.PopPosterPaper
+import com.example.ui.theme.PopPosterPink
 
 @Composable
 fun ConversationScreen(
@@ -67,17 +76,15 @@ fun ConversationScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Material 3 Scenario Header Card
+        // Pop Poster Scenario Header Card
         item {
-            Card(
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-                ),
+            PosterCard(
+                containerColor = PopPosterPink,
+                cornerRadius = 24.dp,
+                shadowOffset = 5.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
@@ -86,15 +93,16 @@ fun ConversationScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "Everyday Bengaluru Dialogues",
-                            style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.SemiBold
+                        PosterStampBadge(
+                            text = "STREET DIALOGUES",
+                            containerColor = PopPosterInk,
+                            contentColor = PopPosterButter
                         )
                         Surface(
                             shape = CircleShape,
-                            color = MaterialTheme.colorScheme.surface,
-                            contentColor = MaterialTheme.colorScheme.primary
+                            color = PopPosterPaper,
+                            contentColor = PopPosterInk,
+                            border = BorderStroke(1.5.dp, PopPosterInk)
                         ) {
                             Row(
                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
@@ -108,31 +116,45 @@ fun ConversationScreen(
                                 Spacer(modifier = Modifier.width(3.dp))
                                 Text(
                                     text = activeDialogue.locationTag,
-                                    style = MaterialTheme.typography.labelSmall
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Bold
                                 )
                             }
                         }
                     }
 
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Text(
+                        text = activeDialogue.titleEnglish,
+                        fontFamily = BricolageGrotesqueFamily,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = PopPosterInk
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    KannadaWithSubscript(
+                        kannadaText = activeDialogue.titleKannada,
+                        transliteration = activeDialogue.titleTransliteration,
+                        kannadaFontSize = 17.sp,
+                        kannadaLineHeight = 22.sp,
+                        kannadaColor = PopPosterInk,
+                        subscriptColor = MaterialTheme.colorScheme.primary,
+                        subscriptStyle = MaterialTheme.typography.labelMedium
+                    )
+
                     Spacer(modifier = Modifier.height(6.dp))
 
                     Text(
-                        text = activeDialogue.titleKannada,
-                        fontFamily = AnekKannadaFamily,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    Text(
-                        text = "${activeDialogue.titleEnglish} — ${activeDialogue.contextDescription}",
+                        text = activeDialogue.contextDescription,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.85f)
+                        color = PopPosterInk.copy(alpha = 0.85f)
                     )
 
                     Spacer(modifier = Modifier.height(12.dp))
-                    HorizontalDivider(
-                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.15f)
-                    )
+                    HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk)
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Row(
@@ -141,17 +163,27 @@ fun ConversationScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "Show English translations",
-                            style = MaterialTheme.typography.labelLarge
+                            text = "Show English meaning",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = PopPosterInk
                         )
                         Switch(
                             checked = showTranslations,
                             onCheckedChange = { showTranslations = it },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = PopPosterInk,
+                                checkedTrackColor = PopPosterButter,
+                                checkedBorderColor = PopPosterInk,
+                                uncheckedThumbColor = PopPosterInk,
+                                uncheckedTrackColor = PopPosterPaper,
+                                uncheckedBorderColor = PopPosterInk
+                            ),
                             thumbContent = if (showTranslations) {
                                 {
                                     Icon(
                                         imageVector = Icons.Default.Check,
                                         contentDescription = null,
+                                        tint = PopPosterButter,
                                         modifier = Modifier.size(SwitchDefaults.IconSize)
                                     )
                                 }
@@ -162,7 +194,7 @@ fun ConversationScreen(
             }
         }
 
-        // Material 3 FilterChip Scenario Switcher
+        // Pop FilterChip Scenario Switcher
         item {
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -173,12 +205,25 @@ fun ConversationScreen(
                     FilterChip(
                         selected = isSelected,
                         onClick = { selectedDialogueId = dialogue.id },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = PopPosterButter,
+                            selectedLabelColor = PopPosterInk,
+                            containerColor = PopPosterPaper,
+                            labelColor = PopPosterInk
+                        ),
+                        border = FilterChipDefaults.filterChipBorder(
+                            enabled = true,
+                            selected = isSelected,
+                            borderColor = PopPosterInk,
+                            selectedBorderColor = PopPosterInk,
+                            borderWidth = 1.5.dp,
+                            selectedBorderWidth = 2.dp
+                        ),
                         label = {
                             Text(
-                                text = dialogue.titleKannada,
-                                fontFamily = AnekKannadaFamily,
-                                fontSize = 14.sp,
-                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium
+                                text = dialogue.titleEnglish,
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold
                             )
                         },
                         modifier = Modifier.testTag("dialogue_chip_${dialogue.id}")
@@ -187,9 +232,9 @@ fun ConversationScreen(
             }
         }
 
-        // Material 3 Dialogue Bubbles
+        // Pop Dialogue Poster Bubbles
         items(activeDialogue.lines) { line ->
-            M3DialogueLineBubble(
+            PopDialogueLineBubble(
                 line = line,
                 showTranslations = showTranslations,
                 isSpeaking = speakingText == line.kannadaText,
@@ -204,28 +249,23 @@ fun ConversationScreen(
 }
 
 @Composable
-private fun M3DialogueLineBubble(
+private fun PopDialogueLineBubble(
     line: DialogueLine,
     showTranslations: Boolean,
     isSpeaking: Boolean,
     onSpeak: () -> Unit
 ) {
     val isUser = line.isUser
-    val bubbleShape = if (isUser) {
-        RoundedCornerShape(topStart = 20.dp, topEnd = 4.dp, bottomStart = 20.dp, bottomEnd = 20.dp)
-    } else {
-        RoundedCornerShape(topStart = 4.dp, topEnd = 20.dp, bottomStart = 20.dp, bottomEnd = 20.dp)
+    val cardBg = when {
+        isSpeaking -> PopPosterMint
+        isUser -> PopPosterButter
+        else -> PopPosterPaper
     }
 
-    Card(
-        shape = bubbleShape,
-        colors = CardDefaults.cardColors(
-            containerColor = when {
-                isSpeaking -> MaterialTheme.colorScheme.tertiaryContainer
-                isUser -> MaterialTheme.colorScheme.primaryContainer
-                else -> MaterialTheme.colorScheme.surfaceContainerLow
-            }
-        ),
+    PosterCard(
+        containerColor = cardBg,
+        cornerRadius = 20.dp,
+        shadowOffset = 4.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
@@ -236,52 +276,38 @@ private fun M3DialogueLineBubble(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Surface(
-                    shape = CircleShape,
-                    color = if (isUser) {
-                        MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
-                    } else {
-                        MaterialTheme.colorScheme.secondaryContainer
-                    }
-                ) {
-                    Text(
-                        text = if (isUser) "You" else line.speakerName,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = if (isUser) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.onSecondaryContainer
-                        },
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
-                    )
-                }
+                PosterStampBadge(
+                    text = if (isUser) "YOU" else line.speakerName.uppercase(),
+                    containerColor = if (isUser) PopPosterInk else PopPosterCyan,
+                    contentColor = if (isUser) PopPosterButter else PopPosterInk
+                )
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text(
-                    text = line.kannadaText,
-                    fontFamily = AnekKannadaFamily,
-                    fontSize = 19.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-
-                Spacer(modifier = Modifier.height(3.dp))
-
-                Text(
-                    text = line.transliteration,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                KannadaWithSubscript(
+                    kannadaText = line.kannadaText,
+                    transliteration = line.transliteration,
+                    kannadaFontSize = 19.sp,
+                    kannadaLineHeight = 25.sp,
+                    kannadaColor = PopPosterInk,
+                    subscriptColor = MaterialTheme.colorScheme.primary,
+                    subscriptStyle = MaterialTheme.typography.bodyMedium
                 )
 
                 if (showTranslations) {
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = line.englishTranslation,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.85f)
-                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = if (isUser) PopPosterPaper else MaterialTheme.colorScheme.background,
+                        border = BorderStroke(1.dp, PopPosterInk.copy(alpha = 0.35f))
+                    ) {
+                        Text(
+                            text = "Meaning: ${line.englishTranslation}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = PopPosterInk,
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+                    }
                 }
             }
 
@@ -293,16 +319,8 @@ private fun M3DialogueLineBubble(
                 onSpeak = { onSpeak() },
                 sizeDp = 44,
                 iconSizeDp = 20,
-                containerColor = if (isUser) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.secondaryContainer
-                },
-                contentColor = if (isUser) {
-                    MaterialTheme.colorScheme.onPrimary
-                } else {
-                    MaterialTheme.colorScheme.onSecondaryContainer
-                }
+                containerColor = if (isUser) PopPosterPaper else PopPosterButter,
+                contentColor = PopPosterInk
             )
         }
     }

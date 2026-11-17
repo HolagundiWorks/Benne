@@ -31,6 +31,7 @@ data class LessonMilestone(
     val id: String,
     val levelNumber: Int,
     val titleKannada: String,
+    val titleTransliteration: String,
     val titleEnglish: String,
     val description: String,
     val iconEmoji: String,
@@ -49,6 +50,7 @@ data class DialogueLine(
 data class ConversationDialogue(
     val id: String,
     val titleKannada: String,
+    val titleTransliteration: String,
     val titleEnglish: String,
     val locationTag: String,
     val iconEmoji: String,
