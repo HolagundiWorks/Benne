@@ -235,3 +235,8 @@ Rules applied across the app:
 - Sticker placement: bottom-right on the Continue card, level card and Dialogues header only; never over text or buttons.
 Verified on device: Home, Letters, Dialogues, Phrasebook, Practice flashcards.
 Not yet re-checked: quiz question and results screens, lesson sheet, settings sheet.
+Remaining-screen audit (feature/ui-cleanup), on device:
+- Lesson sheet: consistent. Step card, audio button and Next button follow the rules above.
+- Quiz (evaluation): question card is a plain teal fill (content card), options are plain outlined. Consistent.
+- Settings sheet: consistent. Title uses the app heading font; section headers come from one shared component.
+No changes needed on these screens.
