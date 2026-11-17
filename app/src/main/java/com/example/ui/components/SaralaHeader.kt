@@ -32,6 +32,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -172,15 +174,24 @@ fun SaralaHeader(
             }
         }
 
-        // Official logo (88 dp): bottom and right edges stay inside the border; the top is not cropped.
-        Box(modifier = Modifier.matchParentSize()) {
+        // Official logo (88 dp): bottom and right are cropped at the border; the top overhangs.
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .drawWithContent {
+                    // Crop the logo's bottom and right at the inner edge of the 2 dp border; the top stays open
+                    val inset = 2.dp.toPx()
+                    clipRect(-100000f, -100000f, size.width - inset, size.height - inset) {
+                        this@drawWithContent.drawContent()
+                    }
+                }
+        ) {
             Image(
                 painter = painterResource(R.drawable.benne_logo_longshadow),
                 contentDescription = "Benne",
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(end = 4.5.dp)
-                    .offset(y = (-15).dp)
+                    .offset(y = (-11).dp)
                     .requiredHeight(88.dp)
             )
         }
