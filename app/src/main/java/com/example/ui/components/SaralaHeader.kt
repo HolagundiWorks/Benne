@@ -48,8 +48,7 @@ import com.example.ui.theme.PopPosterPaper
 import java.util.Locale
 
 /**
- * In-content Benne header (no app bar container or divider).
- * Wordmark on the left, status pills and settings on the right. Respects the status bar inset.
+ * Floating Benne header pill: status pills and settings, with the official logo at the right edge.
  */
 @Composable
 fun SaralaHeader(
@@ -74,34 +73,8 @@ fun SaralaHeader(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
             modifier = Modifier.weight(1f)
-        ) {
-            // Brand kit wordmark (benne_brand_kit/png/wordmark_latin_1024.png, transparent)
-            Image(
-                painter = painterResource(R.drawable.benne_wordmark),
-                contentDescription = "Benne",
-                modifier = Modifier.height(40.dp)
-            )
-            Surface(
-                shape = CircleShape,
-                color = PopPosterButter,
-                contentColor = PopPosterInk,
-                border = BorderStroke(1.5.dp, PopPosterInk)
-            ) {
-                Text(
-                    text = "ಬೆಣ್ಣೆ",
-                    fontFamily = NotoSansKannadaFamily,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-                )
-            }
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             // Streak pill
             Surface(
@@ -202,6 +175,13 @@ fun SaralaHeader(
                 )
             }
         }
+
+        // Official Benne long-shadow logo at 2x, on the right edge
+        Image(
+            painter = painterResource(R.drawable.benne_logo_longshadow),
+            contentDescription = "Benne",
+            modifier = Modifier.height(88.dp)
+        )
     }
     }
 }

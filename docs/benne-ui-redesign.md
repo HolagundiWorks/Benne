@@ -166,3 +166,9 @@ Shadow:
 - `LocalFloatingHeaderInset` (status-bar inset + 76 dp) gives each screen the space its first item needs. Screens add it to their top padding; the quiz screen adds it once on its outer column.
 - Verified on device: Home and Practice.
 - Logo: `logo/beene logo.png` replaced with the corrected version (backup of the original kept outside the repo). The header still shows the kit wordmark; the long-shadow logo is used on the quiz results screen only.
+
+## Fourteenth pass: logo in the header (feature/pop-cards)
+- Header shows the official long-shadow logo (`drawable-nodpi/benne_logo_longshadow.png`) at 88 dp high (2x the earlier size), on the right edge. The kit wordmark resource is removed (unused).
+- The separate Kannada pill is removed, since the logo already includes ಬೆಣ್ಣೆ.
+- Status pills and settings sit to the left of the logo. Screen top inset grows to 124 dp (status bar + header height).
+- Verified on device: Home.
