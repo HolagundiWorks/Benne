@@ -195,5 +195,11 @@ fun SaralaHeader(
                     .requiredHeight(88.dp)
             )
         }
+        // Redraw the pill border above the logo, so the logo stops at the line
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .border(BorderStroke(2.dp, PopPosterInk), RoundedCornerShape(24.dp))
+        )
     }
 }
