@@ -1,7 +1,7 @@
-# Sarala Kannada (ಸರಳ ಕನ್ನಡ) // System SK-26
+# Benne (ಬೆಣ್ಣೆ) // Kannada learning app
 > **"Weniger, aber besser" (Less, but better) — An authentic, functional Kannada language learning system.**
 
-Sarala Kannada is a modern, high-fidelity Android application built with **Jetpack Compose** and inspired by **Dieter Rams' ten principles of good design** and the **Braun industrial design aesthetic**. It enables learners to easily master spoken and written Kannada through tactile, interactive components, real Bengaluru situational dialogues, 3D flip-to-reveal vocabulary flashcards, and native acoustic speech synthesis.
+Benne is a modern, high-fidelity Android application built with **Jetpack Compose** and inspired by **Dieter Rams' ten principles of good design** and the **Braun industrial design aesthetic**. It enables learners to easily master spoken and written Kannada through tactile, interactive components, real Bengaluru situational dialogues, 3D flip-to-reveal vocabulary flashcards, and native acoustic speech synthesis.
 
 ---
 
@@ -90,4 +90,4 @@ gradle :app:testDebugUnitTest
 
 ---
 
-*Sarala Kannada // System SK-26 — Designed with precision for effortless Kannada learning.*
+*Benne (ಬೆಣ್ಣೆ) — Designed with precision for effortless Kannada learning.*

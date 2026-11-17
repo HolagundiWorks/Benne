@@ -1,6 +1,6 @@
 # Google Play Store Listing & Release Checklist — Benne
 
-**Application ID:** `com.aistudio.saralakannada.kydwpx`  
+**Application ID:** `com.benne.kannada`  
 **Version:** `1.0` (`versionCode = 1`)  
 **Min SDK / Target SDK:** `24` / `36`  
 **Support Email:** `vishwabhiram@gmail.com`
@@ -71,7 +71,7 @@ KEY FEATURES
 
 ## 3. Pre-Submission Technical Audit Checklist
 
-- [x] **Unique Application ID:** `com.aistudio.saralakannada.kydwpx`
+- [x] **Unique Application ID:** `com.benne.kannada`
 - [x] **Target SDK:** `36` (exceeds Google Play Android 15/API 35 requirement)
 - [x] **R8 Code Shrinking & Resource Shrinking:** `isMinifyEnabled = true`, `isShrinkResources = true` in `release`
 - [x] **Unused SDKs Removed:** Firebase, Room, Retrofit, Moshi, OkHttp, Coil commented out to minimize AAB footprint and avoid unused transitive permissions

@@ -1,6 +1,6 @@
 # Google Play Console — App Content & Data Safety Declaration
 
-**App:** Benne (`com.aistudio.saralakannada.kydwpx`)  
+**App:** Benne (`com.benne.kannada`)  
 **Developer Contact:** `vishwabhiram@gmail.com`
 
 Use the exact answers below when completing the **App Content** section in Google Play Console.

@@ -17,7 +17,7 @@ import com.example.R
 import java.util.Calendar
 
 object StudyReminderManager {
-    const val CHANNEL_ID = "sarala_daily_reminder"
+    const val CHANNEL_ID = "benne_daily_reminder"
     private const val REMINDER_REQUEST_CODE = 2026
     private const val NOTIFICATION_ID = 1001
 

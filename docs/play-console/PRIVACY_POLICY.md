@@ -2,7 +2,7 @@
 
 **Effective Date:** November 16, 2026  
 **Application Name:** Benne  
-**Package ID:** `com.aistudio.saralakannada.kydwpx`  
+**Package ID:** `com.benne.kannada`  
 **Developer Contact:** vishwabhiram@gmail.com
 
 ---

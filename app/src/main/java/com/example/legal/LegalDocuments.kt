@@ -16,7 +16,7 @@ object LegalDocuments {
         effectiveDate = "Effective Date: November 16, 2026",
         content = """
 1. OVERVIEW
-Benne ("the App", package com.aistudio.saralakannada.kydwpx) is an offline-first educational application designed to teach the Kannada script, vocabulary, and everyday conversational phrases. We respect your privacy and adhere strictly to data minimization principles.
+Benne ("the App", package com.benne.kannada) is an offline-first educational application designed to teach the Kannada script, vocabulary, and everyday conversational phrases. We respect your privacy and adhere strictly to data minimization principles.
 
 2. ZERO PERSONAL DATA COLLECTION & NO LOGINS
 Benne requires NO account creation, NO sign-in, and NO login of any kind. The App does NOT collect, sell, rent, or transmit any personally identifiable information (PII), location data, contacts, photos, or behavioral analytics to external servers.
