@@ -115,3 +115,10 @@ Decisions:
 - Header top padding reduced (10 dp to 4 dp top, 6 dp bottom); the status-bar inset is kept.
 - Reserved space for the floating dock reduced from 120 dp to 112 dp (`FloatingNavClearance`), and the dock's bottom margin from 12 dp to 8 dp. Content now sits closer to the dock. Scrollable screens such as Practice still show all their controls by scrolling; 100 dp left the Prev/Next row touching the dock.
 - Verified on device: Home and Practice.
+
+## Eighth pass: content runs under the floating dock (feature/pop-cards)
+- The content container no longer reserves bottom space. Content runs to the bottom of the screen, under the floating dock.
+- `LocalFloatingNavInset` (`ui/FloatingNavInset.kt`) gives the dock height (112 dp) on compact widths and 0 with the navigation rail. Scrollable screens add it to their bottom padding (`LazyColumn`/`LazyVerticalGrid` `contentPadding`), so the last item scrolls clear of the dock.
+- Quiz columns (flashcards and evaluation) end with a spacer of the dock height inside the scroll.
+- Nine-slice pieces overlap by 1 px to remove hairline seams between slices.
+- Verified on device: Home, Practice (flashcards), Letters.

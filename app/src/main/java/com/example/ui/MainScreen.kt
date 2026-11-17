@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import com.example.audio.KannadaTtsHelper
 import com.example.data.UserProgressManager
 import com.example.ui.components.SaralaHeader
+import androidx.compose.runtime.CompositionLocalProvider
 import com.example.ui.components.SystemConsoleSheet
 import com.example.ui.screens.AlphabetScreen
 import com.example.ui.screens.ConversationScreen
@@ -56,9 +57,6 @@ import com.example.ui.screens.QuizScreen
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterInk
 import com.example.ui.theme.PopPosterPaper
-
-/** Space reserved at the bottom of screens so the floating nav never covers content. */
-private val FloatingNavClearance = 112.dp
 
 enum class SaralaScreen(
     val titleEnglish: String,
@@ -166,8 +164,10 @@ fun MainScreen(
                     val contentModifier = Modifier
                         .fillMaxSize()
                         .widthIn(max = 760.dp)
-                        .padding(bottom = if (useNavigationRail) 0.dp else FloatingNavClearance)
 
+                    CompositionLocalProvider(
+                        LocalFloatingNavInset provides if (useNavigationRail) 0.dp else FloatingNavClearance
+                    ) {
                     when (currentScreen) {
                         SaralaScreen.HOME -> HomeScreen(
                             progressManager = progressManager,
@@ -197,6 +197,7 @@ fun MainScreen(
                             progressManager = progressManager,
                             modifier = contentModifier
                         )
+                    }
                     }
                 }
             }

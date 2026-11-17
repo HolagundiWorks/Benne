@@ -169,14 +169,15 @@ internal fun DrawScope.drawNineSlice(image: ImageBitmap, cornerPx: Float) {
     val trhD = (trh * k).roundToInt()
     val tlw = (dotBand * k).roundToInt()
 
+    // Each piece overlaps its neighbours by 1 px so no hairline seams show between slices
     fun piece(sx: Int, sy: Int, sw: Int, sh: Int, dx: Int, dy: Int, dw: Int, dh: Int) {
         if (sw <= 0 || sh <= 0 || dw <= 0 || dh <= 0) return
         drawImage(
             image = image,
             srcOffset = IntOffset(sx, sy),
             srcSize = IntSize(sw, sh),
-            dstOffset = IntOffset(dx, dy),
-            dstSize = IntSize(dw, dh)
+            dstOffset = IntOffset(dx - 1, dy - 1),
+            dstSize = IntSize(dw + 2, dh + 2)
         )
     }
 

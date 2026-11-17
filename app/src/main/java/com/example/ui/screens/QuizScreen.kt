@@ -78,6 +78,7 @@ import com.example.ui.theme.PopPosterInk
 import com.example.ui.theme.PopPosterMint
 import com.example.ui.theme.PopPosterPaper
 import com.example.ui.theme.PopPosterPink
+import com.example.ui.LocalFloatingNavInset
 
 enum class PracticeMode {
     FLASHCARDS,
@@ -416,6 +417,7 @@ fun FlashcardStudioView(
         }
 
         Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(LocalFloatingNavInset.current))
     }
 }
 
@@ -732,6 +734,7 @@ fun EvaluationQuizView(
                 .fillMaxWidth()
                 .testTag("quiz_action_button")
         )
+        Spacer(modifier = Modifier.height(LocalFloatingNavInset.current))
     }
 }
 
