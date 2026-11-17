@@ -183,7 +183,7 @@ fun HomeScreen(
                         Spacer(modifier = Modifier.width(12.dp))
 
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            ButterMascot(size = 76.dp)
+                            ButterMascot(size = 76.dp, pose = com.example.R.drawable.benne_mascot_hello)
                             Spacer(modifier = Modifier.height(6.dp))
                             AudioSpeakButton(
                                 textToSpeak = "ಕನ್ನಡ ಎನೆ ಕುಣಿದಾಡುವುದೆನ್ನೆದೆ, ಕನ್ನಡ ಎನೆ ಕಿವಿ ನಿಮಿರುವುದು!",

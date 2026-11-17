@@ -72,3 +72,18 @@ existing card colour rotations keep working. No dark theme (unchanged).
 - Removed: `SaralaTopAppBar` from `SaralaComponents.kt`.
 - Verified on device (SM_M115F): Home, Practice (scrolled and unscrolled), nav selection. Build passes; unit tests are unchanged from baseline (1 pre-existing Robolectric failure).
 - Not checked: Letters, Dialogues and Phrases on device; tablet/rail layout; lint.
+
+## Fourth pass: brand kit assets (feature/brand-kit)
+Source: `benne_brand_kit/` (kept untracked; not committed).
+- Launcher: adaptive foreground is now the kit PNG (`drawable/ic_benne_launcher_fg.png`, 432 px, transparent), replacing the JPEG (which had no transparency). Adaptive background is the kit Butter `#FFCC29` (was `#FCD228`).
+- Legacy and round launcher icons: kit `app_icon_primary` at 48/72/96/144/192 px for mdpi to xxxhdpi.
+- Mascot: `ButterMascot` now renders the kit transparent PNG (`drawable-nodpi/benne_mascot_compact.png`, pose selectable). The hero card uses `benne_mascot_hello.png`. The Canvas-drawn mascot is removed.
+- `benne_mascot_learning.png` is added but not used yet.
+- Colours: kit values are identical to `ui/theme/Color.kt`; no change needed.
+
+Not used, and why:
+- `wordmark_latin` (PNG and SVG): "Benne" is clipped at the right edge in the kit assets. The SVG sets text at font-size 195 inside a 512 px viewBox, so the word overflows. The header keeps the text wordmark. The kit needs fixing before use.
+- Fonts: the kit specifies Baloo 2, Nunito Sans and Noto Sans Kannada. The app uses Bricolage Grotesque, Space Grotesk and Anek Kannada. Not changed; font licences need checking first.
+
+Verified on device: home hero shows the kit mascot; header shows text wordmark; launcher shows the new icon. Build passes. Unit tests unchanged (1 pre-existing Robolectric failure).
+Open: the launcher mascot looks small inside the icon (the foreground is wrapped in a 66 dp layer). Not tuned.
