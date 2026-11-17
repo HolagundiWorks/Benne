@@ -1,8 +1,7 @@
 package com.example.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,21 +13,38 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.Flip
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,7 +56,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -49,27 +65,308 @@ import androidx.compose.ui.unit.sp
 import com.example.audio.KannadaTtsHelper
 import com.example.data.SaralaKannadaData
 import com.example.data.UserProgressManager
+import com.example.model.VocabularyFlashcard
 import com.example.ui.components.AudioSpeakButton
-import com.example.ui.components.BraunSpeakerGrille
+import com.example.ui.components.InteractiveVocabularyFlashcard
 import com.example.ui.theme.AnekKannadaFamily
-import com.example.ui.theme.BraunGreen
-import com.example.ui.theme.BraunOrange
-import com.example.ui.theme.PlusJakartaSansFamily
-import com.example.ui.theme.RamsBlack
-import com.example.ui.theme.RamsBorder
-import com.example.ui.theme.RamsDarkCharcoal
-import com.example.ui.theme.RamsDivider
-import com.example.ui.theme.RamsMutedGray
-import com.example.ui.theme.RamsOffWhite
-import com.example.ui.theme.RamsSlateGray
-import com.example.ui.theme.RamsSurface
-import com.example.ui.theme.RamsSurfaceSubtle
+
+enum class PracticeMode {
+    FLASHCARDS,
+    QUIZ
+}
 
 @Composable
 fun QuizScreen(
     ttsHelper: KannadaTtsHelper,
     progressManager: UserProgressManager,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    initialMode: PracticeMode = PracticeMode.FLASHCARDS
+) {
+    var currentMode by remember { mutableStateOf(initialMode) }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        // Material 3 Segmented Mode Switcher
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 10.dp)
+        ) {
+            SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+                SegmentedButton(
+                    selected = currentMode == PracticeMode.FLASHCARDS,
+                    onClick = { currentMode = PracticeMode.FLASHCARDS },
+                    shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2)
+                ) {
+                    Text("Flashcards", style = MaterialTheme.typography.labelLarge)
+                }
+                SegmentedButton(
+                    selected = currentMode == PracticeMode.QUIZ,
+                    onClick = { currentMode = PracticeMode.QUIZ },
+                    shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2)
+                ) {
+                    Text("Evaluation Quiz", style = MaterialTheme.typography.labelLarge)
+                }
+            }
+        }
+
+        when (currentMode) {
+            PracticeMode.FLASHCARDS -> {
+                FlashcardStudioView(
+                    ttsHelper = ttsHelper,
+                    progressManager = progressManager
+                )
+            }
+            PracticeMode.QUIZ -> {
+                EvaluationQuizView(
+                    ttsHelper = ttsHelper,
+                    progressManager = progressManager
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun FlashcardStudioView(
+    ttsHelper: KannadaTtsHelper,
+    progressManager: UserProgressManager
+) {
+    val allFlashcards = SaralaKannadaData.flashcards
+    val masteredCardIds by progressManager.masteredFlashcardIds.collectAsState()
+    val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
+    val playbackSpeed by progressManager.playbackSpeed.collectAsState()
+
+    var selectedCategory by remember { mutableStateOf("All") }
+    var currentCardIndex by remember { mutableIntStateOf(0) }
+    var isCardFlipped by remember { mutableStateOf(false) }
+
+    val categories = listOf("All", "Essentials", "Food & Dining", "Travel & Auto", "Commerce & Market", "People & Life")
+
+    val activeDeck = remember(selectedCategory) {
+        if (selectedCategory == "All") allFlashcards
+        else allFlashcards.filter { it.category == selectedCategory }
+    }
+
+    val safeIndex = currentCardIndex.coerceIn(0, (activeDeck.size - 1).coerceAtLeast(0))
+    val currentCard: VocabularyFlashcard? = activeDeck.getOrNull(safeIndex)
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 16.dp, vertical = 6.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        // Material 3 Deck Summary Card
+        Card(
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            ),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Card ${safeIndex + 1} of ${activeDeck.size}",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+
+                    Surface(
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.tertiaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                    ) {
+                        Text(
+                            text = "${masteredCardIds.size}/${allFlashcards.size} Mastered",
+                            style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    LinearProgressIndicator(
+                        progress = { if (activeDeck.isNotEmpty()) (safeIndex + 1).toFloat() / activeDeck.size else 0f },
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(6.dp)
+                            .clip(CircleShape),
+                        strokeCap = StrokeCap.Round
+                    )
+
+                    FilledTonalButton(
+                        onClick = {
+                            if (activeDeck.isNotEmpty()) {
+                                currentCardIndex = activeDeck.indices.random()
+                                isCardFlipped = false
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Shuffle,
+                            contentDescription = "Shuffle deck",
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("Shuffle", style = MaterialTheme.typography.labelMedium)
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        // Material 3 Category Filter Chips
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            items(categories) { cat ->
+                val isSelected = cat == selectedCategory
+                FilterChip(
+                    selected = isSelected,
+                    onClick = {
+                        selectedCategory = cat
+                        currentCardIndex = 0
+                        isCardFlipped = false
+                    },
+                    label = { Text(cat, style = MaterialTheme.typography.labelMedium) },
+                    modifier = Modifier.testTag("flashcard_cat_${cat.lowercase().replace(" ", "_")}")
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        if (currentCard != null) {
+            val isMastered = masteredCardIds.contains(currentCard.id)
+            InteractiveVocabularyFlashcard(
+                flashcard = currentCard,
+                isFlipped = isCardFlipped,
+                isMastered = isMastered,
+                isCurrentlySpeaking = speakingText == currentCard.kannadaWord,
+                onFlip = { isCardFlipped = !isCardFlipped },
+                onSpeakWord = { word -> ttsHelper.speak(word, playbackSpeed) },
+                onSpeakSentence = { sentence -> ttsHelper.speak(sentence, playbackSpeed) }
+            )
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            // Prev / Flip / Next Row
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                OutlinedButton(
+                    onClick = {
+                        if (safeIndex > 0) {
+                            currentCardIndex--
+                            isCardFlipped = false
+                        }
+                    },
+                    enabled = safeIndex > 0,
+                    modifier = Modifier.testTag("flashcard_prev_button")
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Previous",
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text("Prev")
+                }
+
+                Button(
+                    onClick = { isCardFlipped = !isCardFlipped },
+                    modifier = Modifier.testTag("flashcard_flip_button")
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Flip,
+                        contentDescription = "Flip",
+                        modifier = Modifier.size(16.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(if (isCardFlipped) "Show Front" else "Flip Card")
+                }
+
+                OutlinedButton(
+                    onClick = {
+                        if (safeIndex < activeDeck.lastIndex) {
+                            currentCardIndex++
+                            isCardFlipped = false
+                        }
+                    },
+                    enabled = safeIndex < activeDeck.lastIndex,
+                    modifier = Modifier.testTag("flashcard_next_button")
+                ) {
+                    Text("Next")
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                        contentDescription = "Next",
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            FilledTonalButton(
+                onClick = { progressManager.toggleMasterFlashcard(currentCard.id) },
+                colors = ButtonDefaults.filledTonalButtonColors(
+                    containerColor = if (isMastered) {
+                        MaterialTheme.colorScheme.tertiaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.secondaryContainer
+                    },
+                    contentColor = if (isMastered) {
+                        MaterialTheme.colorScheme.onTertiaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.onSecondaryContainer
+                    }
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+                    .testTag("flashcard_mastery_button")
+            ) {
+                Icon(
+                    imageVector = if (isMastered) Icons.Default.CheckCircle else Icons.Default.Check,
+                    contentDescription = "Mastery",
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = if (isMastered) "Mastered • Tap to study again" else "Mark as Mastered (+15 XP)"
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+    }
+}
+
+@Composable
+fun EvaluationQuizView(
+    ttsHelper: KannadaTtsHelper,
+    progressManager: UserProgressManager
 ) {
     val questions = SaralaKannadaData.quizzes
     var currentIndex by remember { mutableIntStateOf(0) }
@@ -83,7 +380,7 @@ fun QuizScreen(
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
 
     if (isQuizCompleted || currentQuestion == null) {
-        RamsQuizResultsView(
+        M3QuizResultsView(
             score = scoreCount,
             total = questions.size,
             onRestart = {
@@ -98,21 +395,19 @@ fun QuizScreen(
     }
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
-            .background(RamsOffWhite)
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Instrument Console Header
+        // Quiz Progress Card
         Card(
-            shape = RoundedCornerShape(8.dp),
-            colors = CardDefaults.cardColors(containerColor = RamsSurface),
-            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(1.dp, RamsBorder, RoundedCornerShape(8.dp))
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            ),
+            modifier = Modifier.fillMaxWidth()
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Row(
@@ -121,47 +416,45 @@ fun QuizScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "TEST CYCLE // ${currentIndex + 1} OF ${questions.size}",
-                        fontFamily = PlusJakartaSansFamily,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.4.sp,
-                        color = RamsSlateGray
+                        text = "Question ${currentIndex + 1} of ${questions.size}",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
-                    Text(
-                        text = "SCORE: $scoreCount // ${(currentIndex)} ATTEMPTED",
-                        fontFamily = PlusJakartaSansFamily,
-                        fontSize = 9.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp,
-                        color = BraunOrange
-                    )
+                    Surface(
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ) {
+                        Text(
+                            text = "Score: $scoreCount",
+                            style = MaterialTheme.typography.labelSmall,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // High precision step gauge
                 LinearProgressIndicator(
                     progress = { (currentIndex + 1).toFloat() / questions.size },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(3.dp),
-                    color = BraunOrange,
-                    trackColor = RamsDivider
+                        .height(6.dp)
+                        .clip(CircleShape),
+                    strokeCap = StrokeCap.Round
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(14.dp))
 
-        // Question Instrument Housing
-        Card(
-            shape = RoundedCornerShape(6.dp),
-            colors = CardDefaults.cardColors(containerColor = RamsSurface),
-            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(1.dp, RamsBorder, RoundedCornerShape(6.dp))
+        // Question Card
+        ElevatedCard(
+            shape = RoundedCornerShape(24.dp),
+            colors = CardDefaults.elevatedCardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            ),
+            modifier = Modifier.fillMaxWidth()
         ) {
             Column(
                 modifier = Modifier
@@ -170,43 +463,35 @@ fun QuizScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "PROMPT: ${currentQuestion.prompt.uppercase()}",
-                    fontFamily = PlusJakartaSansFamily,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.2.sp,
-                    color = RamsSlateGray,
+                    text = currentQuestion.prompt,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center
                 )
 
                 if (currentQuestion.kannadaText.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(14.dp))
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(RamsSurfaceSubtle)
-                            .border(1.dp, RamsBorder, RoundedCornerShape(4.dp))
-                            .padding(horizontal = 24.dp, vertical = 12.dp),
-                        contentAlignment = Alignment.Center
+                    Surface(
+                        shape = RoundedCornerShape(16.dp),
+                        color = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                     ) {
                         Text(
                             text = currentQuestion.kannadaText,
                             fontFamily = AnekKannadaFamily,
                             fontSize = 34.sp,
                             fontWeight = FontWeight.Bold,
-                            color = RamsBlack
+                            modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
                         )
                     }
 
                     if (currentQuestion.transliteration.isNotEmpty()) {
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(6.dp))
                         Text(
-                            text = "[ ${currentQuestion.transliteration.uppercase()} ]",
-                            fontFamily = PlusJakartaSansFamily,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            letterSpacing = 1.sp,
-                            color = RamsSlateGray
+                            text = currentQuestion.transliteration,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
@@ -216,10 +501,10 @@ fun QuizScreen(
                         textToSpeak = currentQuestion.kannadaText,
                         isCurrentlySpeaking = speakingText == currentQuestion.kannadaText,
                         onSpeak = { ttsHelper.speak(it, playbackSpeed) },
-                        sizeDp = 44,
-                        iconSizeDp = 20,
-                        containerColor = RamsBlack,
-                        contentColor = Color.White
+                        sizeDp = 46,
+                        iconSizeDp = 22,
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                     )
                 }
             }
@@ -227,40 +512,33 @@ fun QuizScreen(
 
         Spacer(modifier = Modifier.height(14.dp))
 
-        // Mechanical Option Keys
+        // Material 3 Option Cards
         currentQuestion.options.forEachIndexed { index, optionText ->
             val isSelected = selectedOptionIndex == index
             val isCorrect = index == currentQuestion.correctIndex
 
-            val optionBg = when {
-                !hasAnswered && isSelected -> RamsSurfaceSubtle
-                hasAnswered && isCorrect -> BraunGreen.copy(alpha = 0.08f)
-                hasAnswered && isSelected && !isCorrect -> BraunOrange.copy(alpha = 0.08f)
-                else -> RamsSurface
+            val containerColor = when {
+                hasAnswered && isCorrect -> MaterialTheme.colorScheme.tertiaryContainer
+                hasAnswered && isSelected && !isCorrect -> MaterialTheme.colorScheme.errorContainer
+                !hasAnswered && isSelected -> MaterialTheme.colorScheme.primaryContainer
+                else -> MaterialTheme.colorScheme.surfaceContainerLow
             }
 
-            val optionBorder = when {
-                !hasAnswered && isSelected -> RamsBlack
-                hasAnswered && isCorrect -> BraunGreen
-                hasAnswered && isSelected && !isCorrect -> BraunOrange
-                else -> RamsBorder
+            val borderStroke = when {
+                hasAnswered && isCorrect -> BorderStroke(2.dp, MaterialTheme.colorScheme.tertiary)
+                hasAnswered && isSelected && !isCorrect -> BorderStroke(2.dp, MaterialTheme.colorScheme.error)
+                !hasAnswered && isSelected -> BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
+                else -> BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
             }
 
-            Card(
-                shape = RoundedCornerShape(4.dp),
-                colors = CardDefaults.cardColors(containerColor = optionBg),
-                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+            OutlinedCard(
+                onClick = { if (!hasAnswered) selectedOptionIndex = index },
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.outlinedCardColors(containerColor = containerColor),
+                border = borderStroke,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
-                    .border(
-                        width = if (isSelected || (hasAnswered && isCorrect)) 1.5.dp else 1.dp,
-                        color = optionBorder,
-                        shape = RoundedCornerShape(4.dp)
-                    )
-                    .clickable(enabled = !hasAnswered) {
-                        selectedOptionIndex = index
-                    }
                     .testTag("quiz_option_$index")
             ) {
                 Row(
@@ -269,39 +547,37 @@ fun QuizScreen(
                         .padding(14.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Tactile Key Label
-                    Box(
-                        modifier = Modifier
-                            .size(28.dp)
-                            .clip(RoundedCornerShape(3.dp))
-                            .background(
-                                when {
-                                    hasAnswered && isCorrect -> BraunGreen
-                                    hasAnswered && isSelected -> BraunOrange
-                                    isSelected -> RamsBlack
-                                    else -> RamsSurfaceSubtle
-                                }
-                            )
-                            .border(1.dp, RamsBorder, RoundedCornerShape(3.dp)),
-                        contentAlignment = Alignment.Center
+                    Surface(
+                        modifier = Modifier.size(32.dp),
+                        shape = CircleShape,
+                        color = when {
+                            hasAnswered && isCorrect -> MaterialTheme.colorScheme.tertiary
+                            hasAnswered && isSelected -> MaterialTheme.colorScheme.error
+                            isSelected -> MaterialTheme.colorScheme.primary
+                            else -> MaterialTheme.colorScheme.surfaceContainerHighest
+                        },
+                        contentColor = when {
+                            hasAnswered && isCorrect -> MaterialTheme.colorScheme.onTertiary
+                            hasAnswered && isSelected -> MaterialTheme.colorScheme.onError
+                            isSelected -> MaterialTheme.colorScheme.onPrimary
+                            else -> MaterialTheme.colorScheme.onSurfaceVariant
+                        }
                     ) {
-                        Text(
-                            text = ('A' + index).toString(),
-                            fontFamily = PlusJakartaSansFamily,
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = if (isSelected || (hasAnswered && isCorrect)) Color.White else RamsDarkCharcoal
-                        )
+                        Box(contentAlignment = Alignment.Center) {
+                            Text(
+                                text = ('A' + index).toString(),
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.width(12.dp))
 
                     Text(
                         text = optionText,
-                        fontFamily = PlusJakartaSansFamily,
-                        fontSize = 13.sp,
-                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                        color = RamsBlack,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.weight(1f)
                     )
 
@@ -310,15 +586,13 @@ fun QuizScreen(
                             Icon(
                                 imageVector = Icons.Default.Check,
                                 contentDescription = "Correct",
-                                tint = BraunGreen,
-                                modifier = Modifier.size(18.dp)
+                                tint = MaterialTheme.colorScheme.tertiary
                             )
                         } else if (isSelected) {
                             Icon(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = "Incorrect",
-                                tint = BraunOrange,
-                                modifier = Modifier.size(18.dp)
+                                tint = MaterialTheme.colorScheme.error
                             )
                         }
                     }
@@ -326,43 +600,41 @@ fun QuizScreen(
             }
         }
 
-        // Functional Feedback Readout
         if (hasAnswered) {
+            val gotRight = selectedOptionIndex == currentQuestion.correctIndex
             Spacer(modifier = Modifier.height(12.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        1.dp,
-                        if (selectedOptionIndex == currentQuestion.correctIndex) BraunGreen else BraunOrange,
-                        RoundedCornerShape(4.dp)
-                    )
-                    .background(RamsSurface)
-                    .padding(14.dp)
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (gotRight) {
+                        MaterialTheme.colorScheme.tertiaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.errorContainer
+                    },
+                    contentColor = if (gotRight) {
+                        MaterialTheme.colorScheme.onTertiaryContainer
+                    } else {
+                        MaterialTheme.colorScheme.onErrorContainer
+                    }
+                ),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Column {
+                Column(modifier = Modifier.padding(14.dp)) {
                     Text(
-                        text = if (selectedOptionIndex == currentQuestion.correctIndex) "SIGNAL VERIFIED // CORRECT RESPONSE" else "CALIBRATION ERROR // INCORRECT",
-                        fontFamily = PlusJakartaSansFamily,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.2.sp,
-                        color = if (selectedOptionIndex == currentQuestion.correctIndex) BraunGreen else BraunOrange
+                        text = if (gotRight) "Correct!" else "Not quite — here's why",
+                        style = MaterialTheme.typography.titleSmall
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = currentQuestion.explanation,
-                        fontFamily = PlusJakartaSansFamily,
-                        fontSize = 12.sp,
-                        color = RamsBlack
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(18.dp))
 
-        // Industrial Actuation Button
         Button(
             onClick = {
                 if (!hasAnswered) {
@@ -385,29 +657,22 @@ fun QuizScreen(
                 }
             },
             enabled = selectedOptionIndex != null,
-            shape = RoundedCornerShape(4.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = if (!hasAnswered) RamsBlack else BraunOrange
-            ),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(46.dp)
+                .height(48.dp)
                 .testTag("quiz_action_button")
         ) {
             Text(
-                text = if (!hasAnswered) "CONFIRM SELECTION" else if (currentIndex < questions.lastIndex) "NEXT TEST UNIT" else "VIEW EVALUATION REPORT",
-                fontFamily = PlusJakartaSansFamily,
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.4.sp,
-                color = Color.White
+                text = if (!hasAnswered) "Check Answer"
+                else if (currentIndex < questions.lastIndex) "Next Question"
+                else "See Results"
             )
         }
     }
 }
 
 @Composable
-fun RamsQuizResultsView(
+private fun M3QuizResultsView(
     score: Int,
     total: Int,
     onRestart: () -> Unit
@@ -417,99 +682,78 @@ fun RamsQuizResultsView(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(RamsOffWhite)
+            .background(MaterialTheme.colorScheme.background)
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Braun Certificate Panel
-        Card(
-            shape = RoundedCornerShape(8.dp),
-            colors = CardDefaults.cardColors(containerColor = RamsSurface),
-            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .border(1.dp, RamsBorder, RoundedCornerShape(8.dp))
+        ElevatedCard(
+            shape = RoundedCornerShape(28.dp),
+            colors = CardDefaults.elevatedCardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            ),
+            modifier = Modifier.fillMaxWidth()
         ) {
             Column(
-                modifier = Modifier.padding(24.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = "EXAMINATION REPORT // SK-26",
-                    fontFamily = PlusJakartaSansFamily,
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.5.sp,
-                    color = RamsSlateGray
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Box(
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape)
-                        .background(RamsSurfaceSubtle)
-                        .border(1.dp, BraunOrange, CircleShape),
-                    contentAlignment = Alignment.Center
+                Surface(
+                    modifier = Modifier.size(88.dp),
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 ) {
-                    Text(
-                        text = "$percentage%",
-                        fontFamily = PlusJakartaSansFamily,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = RamsBlack
-                    )
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.EmojiEvents,
+                            contentDescription = "Score",
+                            modifier = Modifier.size(28.dp)
+                        )
+                        Text(
+                            text = "$percentage%",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "ಅಭಿನಂದನೆಗಳು",
+                    text = "ಅಭಿನಂದನೆಗಳು!",
                     fontFamily = AnekKannadaFamily,
-                    fontSize = 24.sp,
+                    fontSize = 26.sp,
                     fontWeight = FontWeight.Bold,
-                    color = RamsBlack
+                    color = MaterialTheme.colorScheme.onSurface
                 )
+
+                Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "SCORE: $score / $total COMPLETED ACCURATELY",
-                    fontFamily = PlusJakartaSansFamily,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.sp,
-                    color = RamsSlateGray
+                    text = "You answered $score out of $total correctly",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-                Box(
-                    modifier = Modifier
-                        .border(1.dp, RamsBorder, RoundedCornerShape(4.dp))
-                        .background(RamsSurfaceSubtle)
-                        .padding(horizontal = 14.dp, vertical = 8.dp)
+                Surface(
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.tertiaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onTertiaryContainer
                 ) {
                     Text(
-                        text = "METRIC: +${score * 20 + 50} XP ALLOCATED TO PROFILE",
-                        fontFamily = PlusJakartaSansFamily,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp,
-                        color = BraunGreen
+                        text = "+${score * 20 + 50} XP earned",
+                        style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     )
                 }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
-                BraunSpeakerGrille(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(20.dp),
-                    dotColor = RamsDivider,
-                    dotRadius = 1.5f,
-                    spacing = 10f
-                )
             }
         }
 
@@ -517,23 +761,18 @@ fun RamsQuizResultsView(
 
         Button(
             onClick = onRestart,
-            shape = RoundedCornerShape(4.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = RamsBlack),
             modifier = Modifier
-                .fillMaxWidth(0.8f)
-                .height(46.dp)
+                .fillMaxWidth(0.75f)
+                .height(48.dp)
                 .testTag("quiz_restart_button")
         ) {
-            Icon(imageVector = Icons.Default.Refresh, contentDescription = "Retry", tint = Color.White, modifier = Modifier.size(16.dp))
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = "RECALIBRATE TEST",
-                fontFamily = PlusJakartaSansFamily,
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.4.sp,
-                color = Color.White
+            Icon(
+                imageVector = Icons.Default.Refresh,
+                contentDescription = "Retry",
+                modifier = Modifier.size(18.dp)
             )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Practice Again")
         }
     }
 }

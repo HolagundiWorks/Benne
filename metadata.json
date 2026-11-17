@@ -1,6 +1,6 @@
 {
   "name": "Sarala Kannada",
-  "description": "Learn Kannada easily with interactive lessons, Varnamale script practice, spoken audio pronunciations, everyday conversational phrases, and fun quizzes.",
+  "description": "Sarala Kannada (ಸರಳ ಕನ್ನಡ) — A Dieter Rams & Braun-inspired Kannada learning application featuring 3D flip interactive vocabulary flashcards, Varnamale script explorer, real-world Bengaluru dialogues, native spoken audio synthesis, and evaluation quizzes.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

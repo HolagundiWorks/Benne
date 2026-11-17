@@ -2,61 +2,77 @@ package com.example.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Dieter Rams & Braun Industrial Minimalist Color System
-// "Weniger, aber besser" — Less, but better.
+// Material 3 Tonal Color Palette for Sarala Kannada
+// Warm Karnataka terracotta-vermilion primary, slate-indigo secondary, and forest emerald tertiary.
 
-// Foundations (Matte Anodized Enclosures)
-val RamsOffWhite = Color(0xFFF4F4F1)
-val RamsSurface = Color(0xFFFFFFFF)
-val RamsSurfaceSubtle = Color(0xFFEBEBE7)
-val RamsSurfaceRecessed = Color(0xFFDFDFDA)
-val RamsBorder = Color(0xFFD2D2CC)
-val RamsBorderFocused = Color(0xFF191919)
+// Light Scheme Tokens
+val MdPrimaryLight = Color(0xFFB33B15)
+val MdOnPrimaryLight = Color(0xFFFFFFFF)
+val MdPrimaryContainerLight = Color(0xFFFFDBD0)
+val MdOnPrimaryContainerLight = Color(0xFF3B0900)
 
-// Typography & Mechanical Inks
-val RamsBlack = Color(0xFF161616)
-val RamsDarkCharcoal = Color(0xFF2E2E2E)
-val RamsSlateGray = Color(0xFF6B6B66)
-val RamsMutedGray = Color(0xFF9E9E98)
-val RamsDivider = Color(0xFFE0E0DB)
+val MdSecondaryLight = Color(0xFF5D5E72)
+val MdOnSecondaryLight = Color(0xFFFFFFFF)
+val MdSecondaryContainerLight = Color(0xFFE2E0F9)
+val MdOnSecondaryContainerLight = Color(0xFF1A1B2C)
 
-// Iconic Braun Mechanical Accents (Precision Instruments)
-val BraunOrange = Color(0xFFFF5200)       // Iconic Braun ET66 / T3 power & primary action
-val BraunOrangeLight = Color(0xFFFFECE0)  // Subtle orange button backer
-val BraunGreen = Color(0xFF1E824C)        // Signal green (power / success)
-val BraunGreenLight = Color(0xFFE8F5EE)
-val BraunAmber = Color(0xFFE69500)        // Dial indicator amber
-val BraunAmberLight = Color(0xFFFFF6E6)
+val MdTertiaryLight = Color(0xFF286B49)
+val MdOnTertiaryLight = Color(0xFFFFFFFF)
+val MdTertiaryContainerLight = Color(0xFFADF2C7)
+val MdOnTertiaryContainerLight = Color(0xFF002111)
 
-// Dark Braun Chassis
-val DarkRamsChassis = Color(0xFF151515)
-val DarkRamsSurface = Color(0xFF212121)
-val DarkRamsSurfaceSubtle = Color(0xFF2C2C2C)
-val DarkRamsBorder = Color(0xFF383838)
-val DarkRamsTextPrimary = Color(0xFFEDEDEA)
-val DarkRamsTextSecondary = Color(0xFFA8A8A2)
+val MdErrorLight = Color(0xFFBA1A1A)
+val MdOnErrorLight = Color(0xFFFFFFFF)
+val MdErrorContainerLight = Color(0xFFFFDAD6)
+val MdOnErrorContainerLight = Color(0xFF410002)
 
-// Legacy alias mappings for seamless compatibility
-val KannadaRed = BraunOrange
-val KannadaRedDark = Color(0xFFD04400)
-val KannadaRedLight = Color(0xFFFF702E)
-val KannadaYellow = BraunAmber
-val KannadaYellowLight = BraunAmberLight
-val KannadaGold = BraunAmber
-val MysoreTeal = RamsDarkCharcoal
-val MysoreTealLight = RamsSlateGray
-val ForestGreen = BraunGreen
-val WarmSand = RamsOffWhite
-val CreamBackground = RamsOffWhite
-val SurfaceCard = RamsSurface
-val SurfaceVariantLight = RamsSurfaceSubtle
-val TextPrimary = RamsBlack
-val TextSecondary = RamsSlateGray
-val TextTertiary = RamsMutedGray
-val DarkBackground = DarkRamsChassis
-val DarkSurface = DarkRamsSurface
-val DarkSurfaceVariant = DarkRamsSurfaceSubtle
-val DarkTextPrimary = DarkRamsTextPrimary
-val DarkTextSecondary = DarkRamsTextSecondary
-val DarkKannadaRed = BraunOrange
-val DarkKannadaYellow = BraunAmber
+val MdBackgroundLight = Color(0xFFFFF8F6)
+val MdOnBackgroundLight = Color(0xFF231917)
+val MdSurfaceLight = Color(0xFFFFF8F6)
+val MdOnSurfaceLight = Color(0xFF231917)
+val MdSurfaceVariantLight = Color(0xFFF5DDD6)
+val MdOnSurfaceVariantLight = Color(0xFF53433E)
+val MdOutlineLight = Color(0xFF85736E)
+val MdOutlineVariantLight = Color(0xFFD8C2BC)
+
+val MdSurfaceContainerLowestLight = Color(0xFFFFFFFF)
+val MdSurfaceContainerLowLight = Color(0xFFFFF1ED)
+val MdSurfaceContainerLight = Color(0xFFFCEAE5)
+val MdSurfaceContainerHighLight = Color(0xFFF6E4DF)
+val MdSurfaceContainerHighestLight = Color(0xFFF0DFDA)
+
+// Dark Scheme Tokens
+val MdPrimaryDark = Color(0xFFFFB59E)
+val MdOnPrimaryDark = Color(0xFF5F1600)
+val MdPrimaryContainerDark = Color(0xFF872604)
+val MdOnPrimaryContainerDark = Color(0xFFFFDBD0)
+
+val MdSecondaryDark = Color(0xFFC6C4DD)
+val MdOnSecondaryDark = Color(0xFF2F3042)
+val MdSecondaryContainerDark = Color(0xFF454659)
+val MdOnSecondaryContainerDark = Color(0xFFE2E0F9)
+
+val MdTertiaryDark = Color(0xFF92D5AC)
+val MdOnTertiaryDark = Color(0xFF00391F)
+val MdTertiaryContainerDark = Color(0xFF085233)
+val MdOnTertiaryContainerDark = Color(0xFFADF2C7)
+
+val MdErrorDark = Color(0xFFFFB4AB)
+val MdOnErrorDark = Color(0xFF690005)
+val MdErrorContainerDark = Color(0xFF93000A)
+val MdOnErrorContainerDark = Color(0xFFFFDAD6)
+
+val MdBackgroundDark = Color(0xFF1A110F)
+val MdOnBackgroundDark = Color(0xFFF0DFDA)
+val MdSurfaceDark = Color(0xFF1A110F)
+val MdOnSurfaceDark = Color(0xFFF0DFDA)
+val MdSurfaceVariantDark = Color(0xFF53433E)
+val MdOnSurfaceVariantDark = Color(0xFFD8C2BC)
+val MdOutlineDark = Color(0xFFA08C87)
+val MdOutlineVariantDark = Color(0xFF53433E)
+
+val MdSurfaceContainerLowestDark = Color(0xFF140C0A)
+val MdSurfaceContainerLowDark = Color(0xFF231917)
+val MdSurfaceContainerDark = Color(0xFF271D1B)
+val MdSurfaceContainerHighDark = Color(0xFF322825)
+val MdSurfaceContainerHighestDark = Color(0xFF3D322F)

@@ -82,3 +82,16 @@ data class DictionaryPhrase(
     val english: String,
     val isEssential: Boolean = false
 )
+
+data class VocabularyFlashcard(
+    val id: String,
+    val kannadaWord: String,
+    val transliteration: String,
+    val englishMeaning: String,
+    val category: String,
+    val phoneticBreakdown: String,
+    val exampleSentenceKn: String,
+    val exampleSentenceTranslit: String,
+    val exampleSentenceEn: String,
+    val culturalNote: String = ""
+)

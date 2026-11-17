@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Sarala Kannada</string>
     <string name="tagline">ಕನ್ನಡ ಕಲಿಯಿರಿ ಸರಳವಾಗಿ • Learn Kannada Easily</string>
+    <string name="notification_channel_name">Daily Kannada Practice</string>
+    <string name="notification_channel_desc">Gentle daily reminders to review Kannada vocabulary flashcards and keep your streak active.</string>
+    <string name="developer_email">vishwabhiram@gmail.com</string>
 </resources>

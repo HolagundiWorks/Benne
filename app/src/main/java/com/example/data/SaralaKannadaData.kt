@@ -395,4 +395,224 @@ object SaralaKannadaData {
         DictionaryPhrase("d49", "Common & Help", "ಆಸ್ಪತ್ರೆ ಎಲ್ಲಿದೆ?", "Aaspatre ellide?", "Where is the hospital?", true),
         DictionaryPhrase("d50", "Common & Help", "ಆಯ್ತು", "Aaythu", "Okay / Done / Understood", true)
     )
+
+    val flashcards: List<com.example.model.VocabularyFlashcard> = listOf(
+        com.example.model.VocabularyFlashcard(
+            id = "fc1",
+            kannadaWord = "ಊಟ",
+            transliteration = "Oota",
+            englishMeaning = "Meal / Food",
+            category = "Food & Dining",
+            phoneticBreakdown = "Oo-ta (elongated 'oo' as in 'moon')",
+            exampleSentenceKn = "ನಿಮ್ಮ ಊಟ ಆಯ್ತಾ?",
+            exampleSentenceTranslit = "Nimma oota aaytha?",
+            exampleSentenceEn = "Did you have your meal / food?",
+            culturalNote = "In Karnataka, asking 'ಊಟ ಆಯ್ತಾ?' (Did you eat?) is the warmest everyday greeting, expressing genuine care."
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc2",
+            kannadaWord = "ನಮಸ್ಕಾರ",
+            transliteration = "Namaskaara",
+            englishMeaning = "Hello / Greetings",
+            category = "Essentials",
+            phoneticBreakdown = "Na-mas-kaa-ra",
+            exampleSentenceKn = "ಎಲ್ಲರಿಗೂ ನಮಸ್ಕಾರ, ಹೇಗಿದ್ದೀರಾ?",
+            exampleSentenceTranslit = "Ellarigoo namaskaara, hegiddeera?",
+            exampleSentenceEn = "Hello everyone, how are you all?",
+            culturalNote = "Universal polite greeting used with joined hands or a warm smile throughout Karnataka."
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc3",
+            kannadaWord = "ಧನ್ಯವಾದ",
+            transliteration = "Dhanyavaada",
+            englishMeaning = "Thank you",
+            category = "Essentials",
+            phoneticBreakdown = "Dhan-ya-vaa-da",
+            exampleSentenceKn = "ನಿಮ್ಮ ಸಹಾಯಕ್ಕೆ ತುಂಬಾ ಧನ್ಯವಾದಗಳು.",
+            exampleSentenceTranslit = "Nimma sahaayakke tumba dhanyavaadagalu.",
+            exampleSentenceEn = "Thank you very much for your kind help.",
+            culturalNote = "'ಧನ್ಯವಾದಗಳು' adds the plural suffix 'ಗಳು', making it even more courteous and heartfelt."
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc4",
+            kannadaWord = "ತಿಂಡಿ",
+            transliteration = "Thindi",
+            englishMeaning = "Breakfast / Snacks",
+            category = "Food & Dining",
+            phoneticBreakdown = "Thin-di (soft dental 'th')",
+            exampleSentenceKn = "ಬೆಳಗಿನ ತಿಂಡಿಗೆ ಬಿಸಿ ಮಸಾಲೆ ದೋಸೆ ರೆಡಿ.",
+            exampleSentenceTranslit = "Belagina thindige bisi masaale dose ready.",
+            exampleSentenceEn = "Hot masala dosa is ready for morning breakfast.",
+            culturalNote = "Bengaluru Darshinis are world-famous for rapid self-service hot morning 'Thindi'."
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc5",
+            kannadaWord = "ಮೀಟರ್ ಹಾಕಿ",
+            transliteration = "Meter Haaki",
+            englishMeaning = "Turn on the meter",
+            category = "Travel & Auto",
+            phoneticBreakdown = "Mee-ter Haa-ki",
+            exampleSentenceKn = "ದಯವಿಟ್ಟು ಮೀಟರ್ ಹಾಕಿ ಅಣ್ಣಾ.",
+            exampleSentenceTranslit = "Dayavittu meter haaki anna.",
+            exampleSentenceEn = "Please turn on the fare meter, brother.",
+            culturalNote = "Essential phrase when hiring an auto rickshaw in Bengaluru and Mysuru."
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc6",
+            kannadaWord = "ನೀರು",
+            transliteration = "Neeru",
+            englishMeaning = "Water",
+            category = "Food & Dining",
+            phoneticBreakdown = "Nee-ru",
+            exampleSentenceKn = "ದಯವಿಟ್ಟು ಸ್ವಲ್ಪ ಕುಡಿಯುವ ನೀರು ಕೊಡಿ.",
+            exampleSentenceTranslit = "Dayavittu swalpa kudiyuva neeru kodi.",
+            exampleSentenceEn = "Please give a little drinking water.",
+            culturalNote = "'ಕುಡಿಯುವ ನೀರು' means potable drinking water. 'ಬಿಸಿ ನೀರು' is warm/hot water."
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc7",
+            kannadaWord = "ಕಾಫಿ",
+            transliteration = "Coffee",
+            englishMeaning = "Filter Coffee",
+            category = "Food & Dining",
+            phoneticBreakdown = "Kaa-fi",
+            exampleSentenceKn = "ಒಂದು ಸ್ಟ್ರಾಂಗ್ ಫಿಲ್ಟರ್ ಕಾಫಿ ಕೊಡಿ, ಸಕ್ಕರೆ ಕಡಿಮೆ.",
+            exampleSentenceTranslit = "Ondu strong filter coffee kodi, sakkare kadime.",
+            exampleSentenceEn = "Give one strong filter coffee with less sugar.",
+            culturalNote = "South Indian filter coffee served in stainless steel dabara-tumbler sets is a cultural staple."
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc8",
+            kannadaWord = "ಬೆಲೆ ಎಷ್ಟು?",
+            transliteration = "Bele Eshtu?",
+            englishMeaning = "How much is the price?",
+            category = "Commerce & Market",
+            phoneticBreakdown = "Be-le Esh-tu?",
+            exampleSentenceKn = "ಈ ಪುಸ್ತಕದ ಬೆಲೆ ಎಷ್ಟು ರೂಪಾಯಿ?",
+            exampleSentenceTranslit = "Ee pustakada bele eshtu roopaayi?",
+            exampleSentenceEn = "How many rupees is the price of this book?",
+            culturalNote = "'Bele' means price, 'Eshtu' means how much. You can also simply ask 'Eshtu aaythu?'"
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc9",
+            kannadaWord = "ಕಡಿಮೆ ಮಾಡಿ",
+            transliteration = "Kadime Maadi",
+            englishMeaning = "Reduce the price",
+            category = "Commerce & Market",
+            phoneticBreakdown = "Ka-di-me Maa-di",
+            exampleSentenceKn = "ಸ್ವಲ್ಪ ಜಾಸ್ತಿ ಆಯ್ತು, ಸ್ವಲ್ಪ ಕಡಿಮೆ ಮಾಡಿ ಅಣ್ಣಾ.",
+            exampleSentenceTranslit = "Swalpa jaasti aaythu, swalpa kadime maadi anna.",
+            exampleSentenceEn = "It's a bit high, please reduce it a little brother.",
+            culturalNote = "'Kadime' means less, 'Jaasti' means more. 'Maadi' is the respectful imperative for 'do / make'."
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc10",
+            kannadaWord = "ಇಲ್ಲಿ ನಿಲ್ಲಿಸಿ",
+            transliteration = "Illi Nillisi",
+            englishMeaning = "Stop here",
+            category = "Travel & Auto",
+            phoneticBreakdown = "Il-li Nil-li-si",
+            exampleSentenceKn = "ಆ ಮೆಟ್ರೋ ಗೇಟ್ ಹತ್ತಿರ ಇಲ್ಲಿ ನಿಲ್ಲಿಸಿ.",
+            exampleSentenceTranslit = "Aa Metro gate hathira illi nillisi.",
+            exampleSentenceEn = "Stop here near that Metro gate.",
+            culturalNote = "Use 'Illi nillisi' (Stop here) or 'Munde nillisi' (Stop a bit ahead)."
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc11",
+            kannadaWord = "ಸ್ನೇಹಿತ",
+            transliteration = "Snehitha",
+            englishMeaning = "Friend",
+            category = "People & Life",
+            phoneticBreakdown = "Sne-hi-tha",
+            exampleSentenceKn = "ಅವರು ನನ್ನ ಕಾಲೇಜು ಸ್ನೇಹಿತ.",
+            exampleSentenceTranslit = "Avaru nanna college snehitha.",
+            exampleSentenceEn = "He is my college friend.",
+            culturalNote = "'ಸ್ನೇಹಿತ' (male friend) and 'ಸ್ನೇಹಿತೆ' (female friend) or colloquial 'ಗೆಳೆಯ / ಗೆಳತಿ'."
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc12",
+            kannadaWord = "ಮನೆ",
+            transliteration = "Mane",
+            englishMeaning = "Home / House",
+            category = "People & Life",
+            phoneticBreakdown = "Ma-ne",
+            exampleSentenceKn = "ನನ್ನ ಮನೆ ಜಯನಗರದಲ್ಲಿದೆ.",
+            exampleSentenceTranslit = "Nanna mane Jayanagar-dallide.",
+            exampleSentenceEn = "My home is in Jayanagar.",
+            culturalNote = "'Mane' also carries the warm connotation of household and family."
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc13",
+            kannadaWord = "ಆಯ್ತು",
+            transliteration = "Aaythu",
+            englishMeaning = "Okay / Done / Understood",
+            category = "Essentials",
+            phoneticBreakdown = "Aay-thu",
+            exampleSentenceKn = "ಸರಿ ಅಣ್ಣಾ, ನಿಮ್ಮ ಕೆಲಸ ಆಯ್ತು.",
+            exampleSentenceTranslit = "Sari anna, nimma kelasa aaythu.",
+            exampleSentenceEn = "Alright brother, your work is done.",
+            culturalNote = "The most versatile word in Kannada! Means 'OK', 'It happened', 'Agreed', and 'Completed'."
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc14",
+            kannadaWord = "ದಯವಿಟ್ಟು",
+            transliteration = "Dayavittu",
+            englishMeaning = "Please",
+            category = "Essentials",
+            phoneticBreakdown = "Da-ya-vit-tu",
+            exampleSentenceKn = "ದಯವಿಟ್ಟು ಒಳಗೆ ಬನ್ನಿ.",
+            exampleSentenceTranslit = "Dayavittu olage banni.",
+            exampleSentenceEn = "Please come inside.",
+            culturalNote = "Derived from 'Daya' (kindness/grace) + 'Ittu' (having placed) = 'Please with kindness'."
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc15",
+            kannadaWord = "ಚಿಲ್ಲರೆ",
+            transliteration = "Chillare",
+            englishMeaning = "Coins / Loose Change",
+            category = "Commerce & Market",
+            phoneticBreakdown = "Chil-la-re",
+            exampleSentenceKn = "ಐನೂರು ರೂಪಾಯಿಗೆ ಚಿಲ್ಲರೆ ಇದೆಯಾ?",
+            exampleSentenceTranslit = "Ainooru roopaayige chillare ideya?",
+            exampleSentenceEn = "Do you have loose change for five hundred rupees?",
+            culturalNote = "Frequently asked in BMTC buses, auto rickshaws, and corner tea stalls."
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc16",
+            kannadaWord = "ನೇರವಾಗಿ",
+            transliteration = "Neravaagi",
+            englishMeaning = "Straight ahead",
+            category = "Travel & Auto",
+            phoneticBreakdown = "Ne-ra-vaa-gi",
+            exampleSentenceKn = "ಇಲ್ಲಿಂದ ನೇರವಾಗಿ ಮುಂದೆ ಹೋಗಿ.",
+            exampleSentenceTranslit = "Illinda neravaagi munde hogi.",
+            exampleSentenceEn = "Go straight ahead from here.",
+            culturalNote = "Direction triad: 'Neravaagi' (straight), 'Balakke' (right), 'Edakke' (left)."
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc17",
+            kannadaWord = "ಸಮಯ",
+            transliteration = "Samaya",
+            englishMeaning = "Time",
+            category = "People & Life",
+            phoneticBreakdown = "Sa-ma-ya",
+            exampleSentenceKn = "ಈಗ ಸಮಯ ಎಷ್ಟು ಗಂಟೆ?",
+            exampleSentenceTranslit = "Eega samaya eshtu gante?",
+            exampleSentenceEn = "What time is it right now?",
+            culturalNote = "'Gante' means hour/bell/clock. 'Eshtu gante?' literally means 'How many chimes?'"
+        ),
+        com.example.model.VocabularyFlashcard(
+            id = "fc18",
+            kannadaWord = "ರುಚಿ",
+            transliteration = "Ruchi",
+            englishMeaning = "Taste / Delicious",
+            category = "Food & Dining",
+            phoneticBreakdown = "Ru-chi",
+            exampleSentenceKn = "ಈ ಸಾಂಬಾರ್ ತುಂಬಾ ರುಚಿಯಾಗಿದೆ!",
+            exampleSentenceTranslit = "Ee saambaar tumba ruchiyaagide!",
+            exampleSentenceEn = "This sambar is very delicious!",
+            culturalNote = "'Tumba ruchi' (Very tasty) is the highest compliment you can give to a South Indian cook."
+        )
+    )
 }
+

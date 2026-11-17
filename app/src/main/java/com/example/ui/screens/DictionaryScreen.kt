@@ -1,11 +1,10 @@
 package com.example.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,12 +23,17 @@ import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.SearchOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -39,8 +43,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -48,20 +50,8 @@ import androidx.compose.ui.unit.sp
 import com.example.audio.KannadaTtsHelper
 import com.example.data.SaralaKannadaData
 import com.example.data.UserProgressManager
-import com.example.model.DictionaryPhrase
 import com.example.ui.components.AudioSpeakButton
 import com.example.ui.theme.AnekKannadaFamily
-import com.example.ui.theme.BraunAmber
-import com.example.ui.theme.BraunOrange
-import com.example.ui.theme.PlusJakartaSansFamily
-import com.example.ui.theme.RamsBlack
-import com.example.ui.theme.RamsBorder
-import com.example.ui.theme.RamsDarkCharcoal
-import com.example.ui.theme.RamsMutedGray
-import com.example.ui.theme.RamsOffWhite
-import com.example.ui.theme.RamsSlateGray
-import com.example.ui.theme.RamsSurface
-import com.example.ui.theme.RamsSurfaceSubtle
 
 @Composable
 fun DictionaryScreen(
@@ -87,8 +77,8 @@ fun DictionaryScreen(
 
         val matchesSearch = if (searchQuery.isBlank()) true else {
             phrase.kannada.contains(searchQuery, ignoreCase = true) ||
-                    phrase.transliteration.contains(searchQuery, ignoreCase = true) ||
-                    phrase.english.contains(searchQuery, ignoreCase = true)
+                phrase.transliteration.contains(searchQuery, ignoreCase = true) ||
+                phrase.english.contains(searchQuery, ignoreCase = true)
         }
 
         matchesCategory && matchesSearch
@@ -97,43 +87,41 @@ fun DictionaryScreen(
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
-            .background(RamsOffWhite)
-            .padding(horizontal = 16.dp),
+            .background(MaterialTheme.colorScheme.background),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        // Technical Header & Search Box
+        // Material 3 Search Header Card
         item {
-            Spacer(modifier = Modifier.height(4.dp))
             Card(
-                shape = RoundedCornerShape(8.dp),
-                colors = CardDefaults.cardColors(containerColor = RamsSurface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(1.dp, RamsBorder, RoundedCornerShape(8.dp))
+                shape = RoundedCornerShape(24.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+                ),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column(modifier = Modifier.padding(18.dp)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "SYSTEM 05 // LEXICON ARCHIVE",
-                            fontFamily = PlusJakartaSansFamily,
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.4.sp,
-                            color = RamsSlateGray
+                            text = "Phrasebook & Lexicon",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary
                         )
-                        Text(
-                            text = "${filteredList.size} RECORDS",
-                            fontFamily = PlusJakartaSansFamily,
-                            fontSize = 9.sp,
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.sp,
-                            color = BraunOrange
-                        )
+                        Surface(
+                            shape = CircleShape,
+                            color = MaterialTheme.colorScheme.secondaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                        ) {
+                            Text(
+                                text = "${filteredList.size} phrases",
+                                style = MaterialTheme.typography.labelSmall,
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(6.dp))
@@ -143,50 +131,49 @@ fun DictionaryScreen(
                         fontFamily = AnekKannadaFamily,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
-                        color = RamsBlack
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Text(
-                        text = "Real-time acoustic lookup in Kannada, Latin script, or English definitions.",
-                        fontFamily = PlusJakartaSansFamily,
-                        fontSize = 11.sp,
-                        color = RamsSlateGray
+                        text = "Search in Kannada, transliteration, or English.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     Spacer(modifier = Modifier.height(14.dp))
 
-                    // Minimalist Precision Search Field
                     OutlinedTextField(
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
                         placeholder = {
                             Text(
-                                "QUERY: 'COFFEE', 'AUTO', 'ಬೆಲೆ'...",
-                                fontFamily = PlusJakartaSansFamily,
-                                fontSize = 12.sp,
-                                letterSpacing = 0.5.sp,
-                                color = RamsMutedGray
+                                text = "Search 'coffee', 'auto', 'ಬೆಲೆ'...",
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         },
                         leadingIcon = {
-                            Icon(imageVector = Icons.Default.Search, contentDescription = "Search", tint = RamsBlack, modifier = Modifier.size(18.dp))
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Search"
+                            )
                         },
                         trailingIcon = {
                             if (searchQuery.isNotEmpty()) {
                                 IconButton(onClick = { searchQuery = "" }) {
-                                    Icon(imageVector = Icons.Default.Clear, contentDescription = "Clear", tint = RamsBlack, modifier = Modifier.size(16.dp))
+                                    Icon(
+                                        imageVector = Icons.Default.Clear,
+                                        contentDescription = "Clear search"
+                                    )
                                 }
                             }
                         },
                         singleLine = true,
-                        shape = RoundedCornerShape(4.dp),
+                        shape = CircleShape,
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = RamsBlack,
-                            unfocusedBorderColor = RamsBorder,
-                            focusedContainerColor = RamsSurfaceSubtle,
-                            unfocusedContainerColor = RamsSurfaceSubtle,
-                            focusedTextColor = RamsBlack,
-                            unfocusedTextColor = RamsBlack
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
@@ -196,51 +183,48 @@ fun DictionaryScreen(
             }
         }
 
-        // Mechanical Category Switcher
+        // Material 3 FilterChips
         item {
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(categories) { cat ->
                     val isSelected = cat == selectedCategory
-                    Box(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(3.dp))
-                            .background(if (isSelected) RamsBlack else RamsSurface)
-                            .border(1.dp, if (isSelected) RamsBlack else RamsBorder, RoundedCornerShape(3.dp))
-                            .clickable { selectedCategory = cat }
-                            .padding(horizontal = 10.dp, vertical = 6.dp)
-                            .testTag("dict_chip_${cat.lowercase().replace(" ", "_")}")
-                    ) {
-                        Text(
-                            text = cat.uppercase(),
-                            fontFamily = PlusJakartaSansFamily,
-                            fontSize = 9.sp,
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.sp,
-                            color = if (isSelected) Color.White else RamsSlateGray
-                        )
-                    }
+                    FilterChip(
+                        selected = isSelected,
+                        onClick = { selectedCategory = cat },
+                        label = { Text(cat, style = MaterialTheme.typography.labelMedium) },
+                        modifier = Modifier.testTag("dict_chip_${cat.lowercase().replace(" ", "_")}")
+                    )
                 }
             }
         }
 
         if (filteredList.isEmpty()) {
             item {
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 40.dp),
-                    contentAlignment = Alignment.Center
+                        .padding(vertical = 48.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Icon(
+                        imageVector = Icons.Outlined.SearchOff,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(40.dp)
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
                     Text(
-                        text = "NULL QUERY // NO MATCHING RECORDS LOCATED",
-                        fontFamily = PlusJakartaSansFamily,
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.4.sp,
-                        color = RamsSlateGray
+                        text = "No matching phrases found",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        text = "Try clearing filters or searching another word.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -249,25 +233,23 @@ fun DictionaryScreen(
                 val isFav = favorites.contains(phrase.id)
                 val isSpeaking = speakingText == phrase.kannada
 
-                Card(
-                    shape = RoundedCornerShape(4.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = if (isSpeaking) BraunOrange.copy(alpha = 0.08f) else RamsSurface
+                ElevatedCard(
+                    shape = RoundedCornerShape(18.dp),
+                    colors = CardDefaults.elevatedCardColors(
+                        containerColor = if (isSpeaking) {
+                            MaterialTheme.colorScheme.primaryContainer
+                        } else {
+                            MaterialTheme.colorScheme.surfaceContainerLow
+                        }
                     ),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .border(
-                            width = 1.dp,
-                            color = if (isSpeaking) BraunOrange else RamsBorder,
-                            shape = RoundedCornerShape(4.dp)
-                        )
                         .testTag("phrase_card_${phrase.id}")
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(12.dp),
+                            .padding(horizontal = 16.dp, vertical = 14.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
@@ -277,73 +259,62 @@ fun DictionaryScreen(
                                     fontFamily = AnekKannadaFamily,
                                     fontSize = 19.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = RamsBlack
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                                 if (phrase.isEssential) {
                                     Spacer(modifier = Modifier.width(8.dp))
-                                    Box(
-                                        modifier = Modifier
-                                            .clip(RoundedCornerShape(2.dp))
-                                            .background(BraunOrange)
-                                            .padding(horizontal = 4.dp, vertical = 2.dp)
+                                    Surface(
+                                        shape = CircleShape,
+                                        color = MaterialTheme.colorScheme.tertiaryContainer,
+                                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer
                                     ) {
                                         Text(
-                                            text = "ESSENTIAL",
-                                            fontFamily = PlusJakartaSansFamily,
-                                            fontSize = 8.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            letterSpacing = 1.sp,
-                                            color = Color.White
+                                            text = "Essential",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                                         )
                                     }
                                 }
                             }
 
-                            Spacer(modifier = Modifier.height(2.dp))
+                            Spacer(modifier = Modifier.height(3.dp))
 
                             Text(
-                                text = phrase.transliteration.uppercase(),
-                                fontFamily = PlusJakartaSansFamily,
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                letterSpacing = 1.sp,
-                                color = RamsDarkCharcoal
+                                text = phrase.transliteration,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.primary
                             )
-
-                            Spacer(modifier = Modifier.height(2.dp))
 
                             Text(
                                 text = phrase.english,
-                                fontFamily = PlusJakartaSansFamily,
-                                fontSize = 12.sp,
-                                color = RamsSlateGray
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
 
-                        // Bookmark Switch
                         IconButton(
-                            onClick = { progressManager.toggleFavoritePhrase(phrase.id) },
-                            modifier = Modifier.size(32.dp)
+                            onClick = { progressManager.toggleFavoritePhrase(phrase.id) }
                         ) {
                             Icon(
                                 imageVector = if (isFav) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
-                                contentDescription = "Favorite",
-                                tint = if (isFav) BraunOrange else RamsMutedGray,
-                                modifier = Modifier.size(18.dp)
+                                contentDescription = if (isFav) "Remove bookmark" else "Bookmark phrase",
+                                tint = if (isFav) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                }
                             )
                         }
 
-                        Spacer(modifier = Modifier.width(4.dp))
-
-                        // Audio button
                         AudioSpeakButton(
                             textToSpeak = phrase.kannada,
                             isCurrentlySpeaking = isSpeaking,
                             onSpeak = { ttsHelper.speak(it, playbackSpeed) },
-                            sizeDp = 36,
-                            iconSizeDp = 18,
-                            containerColor = RamsSurfaceSubtle,
-                            contentColor = RamsBlack
+                            sizeDp = 42,
+                            iconSizeDp = 19,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
                         )
                     }
                 }
@@ -351,7 +322,7 @@ fun DictionaryScreen(
         }
 
         item {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
