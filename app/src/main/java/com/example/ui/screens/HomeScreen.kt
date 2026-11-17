@@ -67,6 +67,7 @@ import com.example.data.SaralaKannadaData
 import com.example.data.UserProgressManager
 import com.example.model.LessonMilestone
 import com.example.ui.components.AudioSpeakButton
+import com.example.ui.components.ButterMascot
 import com.example.ui.components.KannadaWithSubscript
 import com.example.ui.components.PosterCard
 import com.example.ui.components.PosterStampBadge
@@ -178,15 +179,19 @@ fun HomeScreen(
 
                         Spacer(modifier = Modifier.width(12.dp))
 
-                        AudioSpeakButton(
-                            textToSpeak = "ಕನ್ನಡ ಎನೆ ಕುಣಿದಾಡುವುದೆನ್ನೆದೆ, ಕನ್ನಡ ಎನೆ ಕಿವಿ ನಿಮಿರುವುದು!",
-                            isCurrentlySpeaking = speakingText == "ಕನ್ನಡ ಎನೆ ಕುಣಿದಾಡುವುದೆನ್ನೆದೆ, ಕನ್ನಡ ಎನೆ ಕಿವಿ ನಿಮಿರುವುದು!",
-                            onSpeak = { ttsHelper.speak(it, playbackSpeed) },
-                            sizeDp = 52,
-                            iconSizeDp = 24,
-                            containerColor = PopPosterPaper,
-                            contentColor = PopPosterInk
-                        )
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            ButterMascot(size = 76.dp)
+                            Spacer(modifier = Modifier.height(6.dp))
+                            AudioSpeakButton(
+                                textToSpeak = "ಕನ್ನಡ ಎನೆ ಕುಣಿದಾಡುವುದೆನ್ನೆದೆ, ಕನ್ನಡ ಎನೆ ಕಿವಿ ನಿಮಿರುವುದು!",
+                                isCurrentlySpeaking = speakingText == "ಕನ್ನಡ ಎನೆ ಕುಣಿದಾಡುವುದೆನ್ನೆದೆ, ಕನ್ನಡ ಎನೆ ಕಿವಿ ನಿಮಿರುವುದು!",
+                                onSpeak = { ttsHelper.speak(it, playbackSpeed) },
+                                sizeDp = 52,
+                                iconSizeDp = 24,
+                                containerColor = PopPosterPaper,
+                                contentColor = PopPosterInk
+                            )
+                        }
                     }
                 }
             }
