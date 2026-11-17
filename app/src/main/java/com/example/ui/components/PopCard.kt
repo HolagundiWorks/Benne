@@ -24,7 +24,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -43,8 +45,9 @@ import kotlin.math.roundToInt
  * and rounded corners never distort. A hard ink offset shadow sits behind the card.
  *
  * Colour to skin: Butter -> yellow, Pop Red -> red, anything else -> cream.
- * `borderColor`, `borderWidth` and `cornerRadius` are kept for call-site compatibility;
- * the kit artwork carries its own outline.
+ * `plain = true` draws an exact-colour rounded card with an ink outline instead (for small
+ * option buttons, where the kit artwork would be too heavy).
+ * `borderColor` and `borderWidth` apply to plain cards; kit cards carry their own outline.
  */
 @Composable
 fun PosterCard(
@@ -56,6 +59,7 @@ fun PosterCard(
     cornerRadius: Dp = 20.dp,
     shadowOffset: Dp = 4.dp,
     borderWidth: Dp = 2.dp,
+    plain: Boolean = false,
     onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
@@ -67,7 +71,7 @@ fun PosterCard(
         animationSpec = spring(stiffness = Spring.StiffnessHigh),
         label = "pop_card_press"
     )
-    val cornerDp = 24.dp
+    val cornerDp = 16.dp
 
     Box(modifier = modifier.padding(end = shadowOffset, bottom = shadowOffset)) {
         // Hard ink offset shadow (the kit card has no shadow of its own)
@@ -95,7 +99,18 @@ fun PosterCard(
                     }
                 )
                 .drawBehind {
-                    drawNineSlice(image, cornerDp.toPx())
+                    if (plain) {
+                        // Plain option: exact fill colour with an ink outline (no kit artwork)
+                        val r = CornerRadius(cornerRadius.toPx())
+                        drawRoundRect(color = containerColor, cornerRadius = r)
+                        drawRoundRect(
+                            color = borderColor,
+                            cornerRadius = r,
+                            style = Stroke(width = borderWidth.toPx())
+                        )
+                    } else {
+                        drawNineSlice(image, cornerDp.toPx())
+                    }
                 }
         ) {
             Column(modifier = Modifier.fillMaxWidth(), content = content)
@@ -112,32 +127,47 @@ internal fun cardSkinFor(containerColor: Color): Int = when (containerColor) {
 }
 
 /**
- * Nine-slice draw of a kit card PNG (512 px canvas). The card itself sits at
- * x 48..464, y 65..437 of the canvas; the rest is transparent margin, so the slice works on that
- * crop. Corners (outline and rounding, about 48 px) keep their size; the middle stretches.
- * Corner size on screen is [cornerPx].
+ * Nine-slice draw of a kit card PNG (512 px canvas). The card sits at x 48..464, y 65..437 of
+ * the canvas; the rest is transparent margin, so the slice works on that crop.
+ *
+ * Decorations stay fixed in size so they never stretch: the yellow card's red dots (top-left,
+ * 200 px band) and the cream card's corner curl (top-right, 160 x 150 px block). Plain edges and
+ * the centre stretch. The outline corner band (48 px) maps to [cornerPx]. On cards too small for
+ * the decorations, they fall back to the plain corner band.
  */
 internal fun DrawScope.drawNineSlice(image: ImageBitmap, cornerPx: Float) {
     val scale = image.width / 512f
-    val cx = (48 * scale).roundToInt()
-    val cy = (65 * scale).roundToInt()
-    val cw = (416 * scale).roundToInt()
-    val ch = (372 * scale).roundToInt()
-    val inset = (48 * scale).roundToInt()
+    fun px(v: Int): Int = (v * scale).roundToInt()
 
-    val dl = cornerPx.roundToInt()
-    val dr = dl
-    val dt = dl
-    val db = dl
+    val cx = px(48)
+    val cy = px(65)
+    val right = px(464)
+    val bottom = px(437)
+    val inset = px(48)                  // outline corner band (source px)
+    val k = cornerPx / inset.toFloat()  // screen px per source px in corners
 
     val w = size.width.roundToInt()
     val h = size.height.roundToInt()
+    val dl = cornerPx.roundToInt()
+    val dt = dl
+    val dr = dl
+    val db = dl
     if (w <= dl + dr || h <= dt + db) return
 
-    val midSrcW = cw - 2 * inset
-    val midSrcH = ch - 2 * inset
-    val midDstW = w - dl - dr
-    val midDstH = h - dt - db
+    // Decoration sizes: fixed corner blocks when they fit, plain corner band otherwise
+    val wantDots = px(200)
+    val wantTrw = px(160)
+    val wantTrh = px(150)
+    val trwD0 = (wantTrw * k).roundToInt()
+    val trhD0 = (wantTrh * k).roundToInt()
+    val fits = w >= (wantDots * k).roundToInt() + trwD0 + 8 && h >= trhD0 + dt + db + 8
+    val dotBand = if (fits) wantDots else inset
+    val trw = if (fits) wantTrw else inset
+    val trh = if (fits) wantTrh else inset
+
+    val trwD = (trw * k).roundToInt()
+    val trhD = (trh * k).roundToInt()
+    val tlw = (dotBand * k).roundToInt()
 
     fun piece(sx: Int, sy: Int, sw: Int, sh: Int, dx: Int, dy: Int, dw: Int, dh: Int) {
         if (sw <= 0 || sh <= 0 || dw <= 0 || dh <= 0) return
@@ -150,21 +180,22 @@ internal fun DrawScope.drawNineSlice(image: ImageBitmap, cornerPx: Float) {
         )
     }
 
-    val right = cx + cw - inset
-    val bottom = cy + ch - inset
     val midX = cx + inset
     val midY = cy + inset
+    val bandBottom = bottom - inset
+    val trLeft = right - trw
 
-    // Corners
-    piece(cx, cy, inset, inset, 0, 0, dl, dt)
-    piece(right, cy, inset, inset, w - dr, 0, dr, dt)
-    piece(cx, bottom, inset, inset, 0, h - db, dl, db)
-    piece(right, bottom, inset, inset, w - dr, h - db, dr, db)
-    // Edges
-    piece(midX, cy, midSrcW, inset, dl, 0, midDstW, dt)
-    piece(midX, bottom, midSrcW, inset, dl, h - db, midDstW, db)
-    piece(cx, midY, inset, midSrcH, 0, dt, dl, midDstH)
-    piece(right, midY, inset, midSrcH, w - dr, dt, dr, midDstH)
-    // Centre
-    piece(midX, midY, midSrcW, midSrcH, dl, dt, midDstW, midDstH)
+    // Top row
+    piece(cx, cy, dotBand, inset, 0, 0, tlw, dt)                              // top-left (dots)
+    piece(cx + dotBand, cy, trLeft - (cx + dotBand), inset, tlw, 0, w - trwD - tlw, dt) // top edge
+    piece(trLeft, cy, trw, trh, w - trwD, 0, trwD, trhD)                      // top-right (curl)
+    // Middle row
+    piece(cx, midY, inset, bandBottom - midY, 0, dt, dl, h - dt - db)          // left edge
+    piece(midX, midY, trLeft - midX, trh - inset, dl, dt, w - trwD - dl, trhD - dt) // centre, left of curl
+    piece(midX, cy + trh, right - inset - midX, bandBottom - (cy + trh), dl, trhD, w - dl - dr, h - trhD - db) // centre, below curl
+    piece(right - inset, cy + trh, inset, bandBottom - (cy + trh), w - dr, trhD, dr, h - trhD - db) // right edge
+    // Bottom row
+    piece(cx, bottom - inset, inset, inset, 0, h - db, dl, db)                // bottom-left
+    piece(midX, bottom - inset, right - inset - midX, inset, dl, h - db, w - dl - dr, db) // bottom edge
+    piece(right - inset, bottom - inset, inset, inset, w - dr, h - db, dr, db) // bottom-right
 }

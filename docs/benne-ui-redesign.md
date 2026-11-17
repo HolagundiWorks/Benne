@@ -99,3 +99,14 @@ Source: `Benne_Pop_Elements_Karnataka_Kit/` (now tracked in git).
 - Verified on device: home (hero, continue card, module tiles), Practice flashcard (mastered and unmastered content visible). Build passes. Unit tests unchanged from baseline (1 pre-existing Robolectric failure).
 - Not checked on device: Letters, Dialogues, Phrases, lesson sheet, quiz cards.
 - The yellow card's red dots sit in the top band and stretch with card width.
+
+## Sixth pass: on-device verification and card fixes (feature/pop-cards)
+Verified on device (SM_M115F): Home, Letters, Dialogues, Phrases, Practice (flashcards and quiz), lesson sheet (opened and Next Step).
+Fixes:
+- Yellow card red dots: the top-left corner is a fixed block (200 px band), so the dots keep their shape and do not stretch.
+- Cream card corner curl: a fixed top-right block (160 x 150 px). Previously the curl stretched across the top edge of short cards.
+- Corner band now 16 dp (was 24 dp) so the fixed decorations fit small cards.
+- Quiz option buttons use `PosterCard(plain = true)`: exact fill colour and ink outline, no kit artwork, so answer colours stay exact.
+Decisions:
+- The cream curl stays on letter tiles and list cards; the info icon remains readable on it.
+- Landmarks, bursts, ribbons and halftone remain unused.

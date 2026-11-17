@@ -108,7 +108,7 @@ fun InteractiveVocabularyFlashcard(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(366.dp)
-                .drawBehind { drawNineSlice(skin, 24.dp.toPx()) }
+                .drawBehind { drawNineSlice(skin, 16.dp.toPx()) }
                 .graphicsLayer {
                     rotationY = rotation
                     cameraDistance = 14f * density

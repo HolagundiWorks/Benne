@@ -594,6 +594,7 @@ fun EvaluationQuizView(
             PosterCard(
                 containerColor = containerColor,
                 cornerRadius = 16.dp,
+                plain = true,
                 shadowOffset = if (isSelected) 2.dp else 3.5.dp,
                 onClick = if (!hasAnswered) ({ selectedOptionIndex = index }) else null,
                 modifier = Modifier
