@@ -134,3 +134,16 @@ Not changed (larger decisions):
 - Navigation duplication (module cards and tabs): kept for now.
 - Decorations: the teal curl is tied to cream cards and the dots to yellow cards, following the kit skins; no separate decoration rules were added.
 - Bottom nav overlap: content now runs under the dock and scrolls clear of it (eighth pass).
+
+## Tenth pass: brand kit fonts and comic shadow modifier (feature/pop-cards)
+Fonts (brand kit, Google Fonts, SIL Open Font License; variable TTFs from google/fonts main):
+- Latin display and headings: Baloo 2 (`BalooFamily`, `res/font/baloo2_variable.ttf`).
+- Latin body and labels: Nunito Sans (`NunitoSansFamily`, `res/font/nunito_sans_variable.ttf`).
+- Kannada: Noto Sans Kannada (`NotoSansKannadaFamily`, `res/font/noto_sans_kannada_variable.ttf`).
+- Weights use `FontVariation` (400-800). On Android 7 (minSdk 24) the variable weights are not applied and the default weight shows.
+- Removed: Anek Kannada, Bricolage Grotesque, Space Grotesk, Plus Jakarta Sans (unused).
+- Verified on device: Home renders with the new fonts. The "Continue" button label looks lighter than expected; not yet investigated.
+
+Shadow:
+- `Modifier.BennePopShadow(offsetDp, borderDp, shadowColor, backgroundColor, cornerRadius)` in `ui/components/PopShadow.kt`. Draws a hard, unblurred ink offset down and right, a background fill and an ink border inside the edge. Reserves `offsetDp` on the right and bottom.
+- Not applied to any screen yet.

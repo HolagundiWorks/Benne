@@ -50,7 +50,7 @@ import com.example.ui.components.AudioSpeakButton
 import com.example.ui.components.KannadaWithSubscript
 import com.example.ui.components.PosterCard
 import com.example.ui.components.PosterStampBadge
-import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.ui.theme.BalooFamily
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterCyan
 import com.example.ui.theme.PopPosterInk
@@ -128,7 +128,7 @@ fun ConversationScreen(
 
                     Text(
                         text = activeDialogue.titleEnglish,
-                        fontFamily = BricolageGrotesqueFamily,
+                        fontFamily = BalooFamily,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = PopPosterInk

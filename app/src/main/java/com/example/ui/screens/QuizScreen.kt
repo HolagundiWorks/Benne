@@ -70,8 +70,8 @@ import com.example.ui.components.KannadaWithSubscript
 import com.example.ui.components.PopActionButton
 import com.example.ui.components.PosterCard
 import com.example.ui.components.PosterStampBadge
-import com.example.ui.theme.AnekKannadaFamily
-import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.ui.theme.NotoSansKannadaFamily
+import com.example.ui.theme.BalooFamily
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterCyan
 import com.example.ui.theme.PopPosterInk
@@ -202,7 +202,7 @@ fun FlashcardStudioView(
                 ) {
                     Text(
                         text = "Card ${safeIndex + 1} of ${activeDeck.size}",
-                        fontFamily = BricolageGrotesqueFamily,
+                        fontFamily = BalooFamily,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = PopPosterInk
@@ -474,7 +474,7 @@ fun EvaluationQuizView(
                 ) {
                     Text(
                         text = "Question ${currentIndex + 1} of ${questions.size}",
-                        fontFamily = BricolageGrotesqueFamily,
+                        fontFamily = BalooFamily,
                         fontSize = 17.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = PopPosterInk
@@ -525,7 +525,7 @@ fun EvaluationQuizView(
             ) {
                 Text(
                     text = currentQuestion.prompt,
-                    fontFamily = BricolageGrotesqueFamily,
+                    fontFamily = BalooFamily,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk,
@@ -546,7 +546,7 @@ fun EvaluationQuizView(
                         ) {
                             Text(
                                 text = currentQuestion.kannadaText,
-                                fontFamily = AnekKannadaFamily,
+                                fontFamily = NotoSansKannadaFamily,
                                 fontSize = 34.sp,
                                 fontWeight = FontWeight.Bold,
                                 textAlign = TextAlign.Center
@@ -784,7 +784,7 @@ private fun PopQuizResultsView(
                         )
                         Text(
                             text = "$percentage%",
-                            fontFamily = BricolageGrotesqueFamily,
+                            fontFamily = BalooFamily,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.ExtraBold
                         )
@@ -795,7 +795,7 @@ private fun PopQuizResultsView(
 
                 Text(
                     text = "Congratulations!",
-                    fontFamily = BricolageGrotesqueFamily,
+                    fontFamily = BalooFamily,
                     fontSize = 26.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk

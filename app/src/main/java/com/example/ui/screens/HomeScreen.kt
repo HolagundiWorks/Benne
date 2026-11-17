@@ -76,7 +76,7 @@ import com.example.ui.components.PopActionButton
 import com.example.ui.components.PosterCard
 import com.example.ui.components.PosterStampBadge
 import com.example.ui.theme.BennePopRed
-import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.ui.theme.BalooFamily
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterCyan
 import com.example.ui.theme.PopPosterInk
@@ -85,7 +85,7 @@ import com.example.ui.theme.PopPosterMint
 import com.example.ui.theme.PopPosterPaper
 import com.example.ui.theme.PopPosterPeach
 import com.example.ui.theme.PopPosterPink
-import com.example.ui.theme.SpaceGroteskFamily
+import com.example.ui.theme.NunitoSansFamily
 import com.example.ui.LocalFloatingNavInset
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -142,7 +142,7 @@ fun HomeScreen(
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = next.titleEnglish,
-                            fontFamily = BricolageGrotesqueFamily,
+                            fontFamily = BalooFamily,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
@@ -278,7 +278,7 @@ fun HomeScreen(
             ) {
                 Text(
                     text = "EXPLORE MODULES",
-                    fontFamily = BricolageGrotesqueFamily,
+                    fontFamily = BalooFamily,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.ExtraBold,
                     letterSpacing = 0.4.sp,
@@ -368,7 +368,7 @@ fun HomeScreen(
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = "Vocabulary Flashcards",
-                            fontFamily = BricolageGrotesqueFamily,
+                            fontFamily = BalooFamily,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
@@ -430,7 +430,7 @@ fun HomeScreen(
                     ) {
                         Text(
                             text = "GUIDED ROADMAP",
-                            fontFamily = BricolageGrotesqueFamily,
+                            fontFamily = BalooFamily,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
@@ -533,7 +533,7 @@ private fun PopQuickModuleCard(
             Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = title,
-                fontFamily = BricolageGrotesqueFamily,
+                fontFamily = BalooFamily,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = PopPosterInk,
@@ -598,7 +598,7 @@ private fun PopMilestoneCard(
                         } else {
                             Text(
                                 text = "0${milestone.levelNumber}",
-                                fontFamily = BricolageGrotesqueFamily,
+                                fontFamily = BalooFamily,
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.ExtraBold
                             )
@@ -623,7 +623,7 @@ private fun PopMilestoneCard(
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
                     text = milestone.titleEnglish,
-                    fontFamily = BricolageGrotesqueFamily,
+                    fontFamily = BalooFamily,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
@@ -692,7 +692,7 @@ private fun PopLessonStudyContent(
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
                     text = milestone.titleEnglish,
-                    fontFamily = BricolageGrotesqueFamily,
+                    fontFamily = BalooFamily,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
@@ -801,7 +801,7 @@ private fun PopLessonStudyContent(
                     Spacer(modifier = Modifier.width(12.dp))
                     Text(
                         text = "Listen to pronunciation",
-                        fontFamily = SpaceGroteskFamily,
+                        fontFamily = NunitoSansFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
                         color = PopPosterInk

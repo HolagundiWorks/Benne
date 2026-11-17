@@ -56,8 +56,8 @@ import com.example.ui.components.AudioSpeakButton
 import com.example.ui.components.KannadaWithSubscript
 import com.example.ui.components.PosterCard
 import com.example.ui.components.PosterStampBadge
-import com.example.ui.theme.AnekKannadaFamily
-import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.ui.theme.NotoSansKannadaFamily
+import com.example.ui.theme.BalooFamily
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterCyan
 import com.example.ui.theme.PopPosterInk
@@ -135,7 +135,7 @@ fun AlphabetScreen(
 
                     Text(
                         text = "Kannada Alphabet",
-                        fontFamily = BricolageGrotesqueFamily,
+                        fontFamily = BalooFamily,
                         fontSize = 26.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = PopPosterInk
@@ -227,7 +227,7 @@ fun AlphabetScreen(
                     ) {
                         Text(
                             text = item.char,
-                            fontFamily = AnekKannadaFamily,
+                            fontFamily = NotoSansKannadaFamily,
                             fontSize = 34.sp,
                             fontWeight = FontWeight.Bold,
                             color = PopPosterInk,
@@ -316,7 +316,7 @@ fun AlphabetScreen(
                     Box(contentAlignment = Alignment.Center) {
                         Text(
                             text = letter.char,
-                            fontFamily = AnekKannadaFamily,
+                            fontFamily = NotoSansKannadaFamily,
                             fontSize = 54.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -327,7 +327,7 @@ fun AlphabetScreen(
 
                 Text(
                     text = "Pronounced \"${letter.englishTransliteration}\"",
-                    fontFamily = BricolageGrotesqueFamily,
+                    fontFamily = BalooFamily,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk

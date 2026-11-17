@@ -44,7 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.model.VocabularyFlashcard
-import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.ui.theme.BalooFamily
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterCyan
 import com.example.ui.theme.PopPosterInk
@@ -317,7 +317,7 @@ private fun FlashcardBackFace(
         ) {
             Text(
                 text = flashcard.englishMeaning,
-                fontFamily = BricolageGrotesqueFamily,
+                fontFamily = BalooFamily,
                 fontSize = 28.sp,
                 lineHeight = 33.sp,
                 fontWeight = FontWeight.ExtraBold,

@@ -53,8 +53,8 @@ import com.example.ui.components.AudioSpeakButton
 import com.example.ui.components.KannadaWithSubscript
 import com.example.ui.components.PosterCard
 import com.example.ui.components.PosterStampBadge
-import com.example.ui.theme.AnekKannadaFamily
-import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.ui.theme.NotoSansKannadaFamily
+import com.example.ui.theme.BalooFamily
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterCyan
 import com.example.ui.theme.PopPosterInk
@@ -132,7 +132,7 @@ fun DictionaryScreen(
 
                     Text(
                         text = "Kannada Phrasebook",
-                        fontFamily = BricolageGrotesqueFamily,
+                        fontFamily = BalooFamily,
                         fontSize = 26.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = PopPosterInk
@@ -258,7 +258,7 @@ fun DictionaryScreen(
                         Spacer(modifier = Modifier.height(10.dp))
                         Text(
                             text = "No matching phrases found",
-                            fontFamily = BricolageGrotesqueFamily,
+                            fontFamily = BalooFamily,
                             fontSize = 18.sp,
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
@@ -295,7 +295,7 @@ fun DictionaryScreen(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
                                     text = phrase.kannada,
-                                    fontFamily = AnekKannadaFamily,
+                                    fontFamily = NotoSansKannadaFamily,
                                     fontSize = 19.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = PopPosterInk

@@ -37,7 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.ui.theme.AnekKannadaFamily
+import com.example.ui.theme.NotoSansKannadaFamily
 import com.example.R
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterCyan
@@ -85,7 +85,7 @@ fun SaralaHeader(
             ) {
                 Text(
                     text = "ಬೆಣ್ಣೆ",
-                    fontFamily = AnekKannadaFamily,
+                    fontFamily = NotoSansKannadaFamily,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)

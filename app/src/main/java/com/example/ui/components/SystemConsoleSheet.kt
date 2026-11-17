@@ -79,7 +79,7 @@ import com.example.data.UserProgressManager
 import com.example.legal.LegalDocument
 import com.example.legal.LegalDocuments
 import com.example.notifications.StudyReminderManager
-import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.ui.theme.BalooFamily
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterCyan
 import com.example.ui.theme.PopPosterInk
@@ -159,7 +159,7 @@ fun SystemConsoleSheet(
                     Column {
                         Text(
                             text = "Benne Settings",
-                            fontFamily = BricolageGrotesqueFamily,
+                            fontFamily = BalooFamily,
                             fontSize = 24.sp,
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
@@ -673,7 +673,7 @@ fun SystemConsoleSheet(
             title = {
                 Text(
                     text = "Reset all local data?",
-                    fontFamily = BricolageGrotesqueFamily,
+                    fontFamily = BalooFamily,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
                 )
@@ -729,7 +729,7 @@ private fun LocalStatChip(
         ) {
             Text(
                 text = value,
-                fontFamily = BricolageGrotesqueFamily,
+                fontFamily = BalooFamily,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = PopPosterInk
@@ -771,7 +771,7 @@ private fun LegalDocumentViewer(
                 Column {
                     Text(
                         text = document.title,
-                        fontFamily = BricolageGrotesqueFamily,
+                        fontFamily = BalooFamily,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = PopPosterInk
@@ -820,7 +820,7 @@ private fun LegalDocumentViewer(
 private fun SectionHeader(text: String) {
     Text(
         text = text,
-        fontFamily = BricolageGrotesqueFamily,
+        fontFamily = BalooFamily,
         fontSize = 14.sp,
         fontWeight = FontWeight.ExtraBold,
         letterSpacing = 0.5.sp,

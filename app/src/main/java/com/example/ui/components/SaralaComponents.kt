@@ -66,14 +66,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.ui.theme.AnekKannadaFamily
-import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.ui.theme.NotoSansKannadaFamily
+import com.example.ui.theme.BalooFamily
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterCyan
 import com.example.ui.theme.PopPosterInk
 import com.example.ui.theme.PopPosterMint
 import com.example.ui.theme.PopPosterPaper
-import com.example.ui.theme.SpaceGroteskFamily
+import com.example.ui.theme.NunitoSansFamily
 import java.util.Locale
 
 /**
@@ -96,7 +96,7 @@ fun PosterStampBadge(
     ) {
         Text(
             text = text,
-            fontFamily = SpaceGroteskFamily,
+            fontFamily = NunitoSansFamily,
             fontSize = 11.sp,
             fontWeight = FontWeight.Bold,
             letterSpacing = 0.6.sp,
@@ -130,7 +130,7 @@ fun KannadaWithSubscript(
     ) {
         Text(
             text = kannadaText,
-            fontFamily = AnekKannadaFamily,
+            fontFamily = NotoSansKannadaFamily,
             fontSize = kannadaFontSize,
             lineHeight = kannadaLineHeight,
             fontWeight = FontWeight.Bold,
