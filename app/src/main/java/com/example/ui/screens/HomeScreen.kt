@@ -912,6 +912,8 @@ private fun LevelCard(xp: Int) {
         contentColor = PopPosterInk,
         cornerRadius = 16.dp,
         shadowOffset = 3.dp,
+        sticker = com.example.R.drawable.pop_sticker_auto_rickshaw,
+        stickerSize = 56.dp,
         modifier = Modifier.fillMaxWidth().testTag("home_level_card")
     ) {
         Column(modifier = Modifier.padding(14.dp)) {

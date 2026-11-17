@@ -218,3 +218,8 @@ Shadow:
 - Dialogues header: Vidhana Soudha landmark (`pop_landmark_vidhana`) at bottom-right.
 - Continue lesson card: kit star reward (`pop_star_reward`) at bottom-right.
 - Verified on device: Home and Dialogues.
+
+## Twenty-fourth pass: Karnataka sticker pack (feature/pop-cards)
+- Source: `Benne_Karnataka_Stickers_PNG/` (15 transparent 512 px stickers). Only the auto rickshaw is placed so far (`pop_sticker_auto_rickshaw`, level card, bottom-right, 56 dp).
+- The other 14 are not in the app yet; most cards have no corner free of text or buttons. They need a placement decision.
+- Verified on device: Home.
