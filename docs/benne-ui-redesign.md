@@ -74,7 +74,7 @@ existing card colour rotations keep working. No dark theme (unchanged).
 - Not checked: Letters, Dialogues and Phrases on device; tablet/rail layout; lint.
 
 ## Fourth pass: brand kit assets (feature/brand-kit)
-Source: `benne_brand_kit/` (kept untracked; not committed).
+Source: `benne_brand_kit/` (now tracked in git).
 - Launcher: adaptive foreground is now the kit PNG (`drawable/ic_benne_launcher_fg.png`, 432 px, transparent), replacing the JPEG (which had no transparency). Adaptive background is the kit Butter `#FFCC29` (was `#FCD228`).
 - Legacy and round launcher icons: kit `app_icon_primary` at 48/72/96/144/192 px for mdpi to xxxhdpi.
 - Mascot: `ButterMascot` now renders the kit transparent PNG (`drawable-nodpi/benne_mascot_compact.png`, pose selectable). The hero card uses `benne_mascot_hello.png`. The Canvas-drawn mascot is removed.
@@ -82,18 +82,19 @@ Source: `benne_brand_kit/` (kept untracked; not committed).
 - Colours: kit values are identical to `ui/theme/Color.kt`; no change needed.
 
 Not used, and why:
-- `wordmark_latin` (PNG and SVG): the kit wordmark was clipped ("Benn") because the SVG text overflowed its 512 px viewBox. The kit SVG now uses `font-size=180` with `textLength=452`, and the 512/1024 PNGs were re-rendered with a transparent background. The app header still uses the text wordmark; the kit wordmark is available for use.
+- `wordmark_latin` (PNG and SVG): the kit wordmark was clipped ("Benn") because the SVG text overflowed its 512 px viewBox. The kit SVG now uses `font-size=180` with `textLength=452`, and the 512/1024 PNGs were re-rendered with a transparent background. The app header now uses this fixed wordmark (`drawable-nodpi/benne_wordmark.png`, from `wordmark_latin_1024.png`, 40 dp high).
 - Fonts: the kit specifies Baloo 2, Nunito Sans and Noto Sans Kannada. The app uses Bricolage Grotesque, Space Grotesk and Anek Kannada. Not changed; font licences need checking first.
 
 Verified on device: home hero shows the kit mascot; header shows text wordmark; launcher shows the new icon. Build passes. Unit tests unchanged (1 pre-existing Robolectric failure).
 Open: the launcher mascot looks small inside the icon (the foreground is wrapped in a 66 dp layer). Not tuned.
 
 ## Fifth pass: pop card assets (feature/pop-cards)
-Source: `Benne_Pop_Elements_Karnataka_Kit/` (kept untracked).
+Source: `Benne_Pop_Elements_Karnataka_Kit/` (now tracked in git).
 - `PosterCard` (`ui/components/PopCard.kt`) now draws the kit card PNGs (`pop_card_yellow`, `pop_card_red`, `pop_card_cream`) with nine-slice scaling. Corners and outline keep their size, and the middle stretches. The kit PNG has about 48 px of transparent margin, so the slice works on the card's bounding box (x 48-464, y 65-437 of 512). The hard ink offset shadow is kept.
 - Colour to skin: Butter -> yellow, Pop Red -> red, anything else -> cream. Existing call sites keep working; chapter cards rotate cream, yellow and red.
 - Practice flashcard (`InteractiveFlashcard.kt`): front uses yellow when unmastered, cream otherwise; the skin is drawn by the card's `drawBehind`.
 - Home module tiles use kit icons (`pop_icon_book`, `pop_icon_speech`, `pop_icon_trophy`) on yellow, cream and red cards.
+- Header: the wordmark is the kit's fixed `wordmark_latin` image (verified on device).
 - Not used: landmark illustrations, bursts, ribbons, speech bubbles, halftone. Available in the kit for later screens.
 - Verified on device: home (hero, continue card, module tiles), Practice flashcard (mastered and unmastered content visible). Build passes. Unit tests unchanged from baseline (1 pre-existing Robolectric failure).
 - Not checked on device: Letters, Dialogues, Phrases, lesson sheet, quiz cards.

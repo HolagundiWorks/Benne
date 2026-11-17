@@ -1,6 +1,7 @@
 package com.example.ui.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -31,12 +33,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ui.theme.AnekKannadaFamily
-import com.example.ui.theme.BricolageGrotesqueFamily
+import com.example.R
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterCyan
 import com.example.ui.theme.PopPosterInk
@@ -69,15 +71,11 @@ fun SaralaHeader(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.weight(1f)
         ) {
-            Text(
-                text = "Benne",
-                fontFamily = BricolageGrotesqueFamily,
-                fontSize = 26.sp,
-                fontWeight = FontWeight.ExtraBold,
-                letterSpacing = (-0.5).sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                color = PopPosterInk
+            // Brand kit wordmark (benne_brand_kit/png/wordmark_latin_1024.png, transparent)
+            Image(
+                painter = painterResource(R.drawable.benne_wordmark),
+                contentDescription = "Benne",
+                modifier = Modifier.height(40.dp)
             )
             Surface(
                 shape = CircleShape,

@@ -1,0 +1,25 @@
+{
+  "brand": "Benne",
+  "version": "1.0",
+  "palette": {
+    "butter": "#FFCC29",
+    "popRed": "#FF3655",
+    "cream": "#FFF7E2",
+    "teal": "#00B8B0",
+    "ink": "#17172D"
+  },
+  "svg_assets": [
+    "android_adaptive_foreground.svg",
+    "app_icon_alternate.svg",
+    "app_icon_primary.svg",
+    "logo_primary.svg",
+    "mascot_compact.svg",
+    "mascot_hello.svg",
+    "mascot_learning.svg",
+    "mascot_listening.svg",
+    "mascot_reward.svg",
+    "mascot_success.svg",
+    "mascot_thinking.svg",
+    "wordmark_latin.svg"
+  ]
+}
