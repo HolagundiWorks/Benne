@@ -750,6 +750,12 @@ private fun PopQuizResultsView(
     onRestart: () -> Unit
 ) {
     val percentage = (score.toFloat() / total * 100).toInt()
+    // Playful result by score band: mascot pose, title and Kannada line
+    val (poseRes, headline, kannadaLine, translit) = when {
+        percentage >= 80 -> listOf(R.drawable.benne_pose_success, "Kannada superstar!", "ಅದ್ಭುತ!", "Adbhuta!")
+        percentage >= 50 -> listOf(R.drawable.benne_pose_reward, "Nicely done!", "ಚೆನ್ನಾಗಿದೆ!", "Chennaagide!")
+        else -> listOf(R.drawable.benne_pose_thinking, "Keep going!", "ಮುಂದುವರಿಸಿ!", "Munduvarisi!")
+    }.let { Quad(it[0] as Int, it[1] as String, it[2] as String, it[3] as String) }
 
     Box(
         modifier = Modifier
@@ -786,10 +792,10 @@ private fun PopQuizResultsView(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.EmojiEvents,
-                            contentDescription = "Score",
-                            modifier = Modifier.size(28.dp)
+                        Image(
+                            painter = painterResource(poseRes),
+                            contentDescription = "Benne mascot",
+                            modifier = Modifier.size(44.dp)
                         )
                         Text(
                             text = "$percentage%",
@@ -803,7 +809,7 @@ private fun PopQuizResultsView(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Congratulations!",
+                    text = headline,
                     fontFamily = BalooFamily,
                     fontSize = 26.sp,
                     fontWeight = FontWeight.ExtraBold,
@@ -813,8 +819,8 @@ private fun PopQuizResultsView(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 KannadaWithSubscript(
-                    kannadaText = "ಅಭಿನಂದನೆಗಳು!",
-                    transliteration = "Abhinandanegalu!",
+                    kannadaText = kannadaLine,
+                    transliteration = translit,
                     kannadaFontSize = 18.sp,
                     kannadaLineHeight = 24.sp,
                     kannadaColor = PopPosterInk,
@@ -874,3 +880,5 @@ private fun splitKannadaOption(optionText: String): Pair<String, String>? {
     val translit = optionText.substring(openIdx + 2, optionText.length - 1)
     return prefix to translit
 }
+
+private data class Quad<A, B, C, D>(val first: A, val second: B, val third: C, val fourth: D)

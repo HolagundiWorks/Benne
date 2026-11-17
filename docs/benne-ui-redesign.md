@@ -202,3 +202,8 @@ Shadow:
 ## Twentieth pass: logo top not cropped (feature/pop-cards)
 - The logo's top is no longer cropped; it overhangs the header upward. Its bottom and right edges stay inside the border.
 - Verified on device: Home.
+
+## Twenty-first pass: playful, gamified touches (feature/pop-cards)
+- Home: level card (`home_level_card`). Level = XP / 100 + 1, with a playful title per level (Tender Learner, Filter Coffee Fan, Auto Negotiator, Darshini Regular, Bengaluru Local) and progress to the next level. Uses the existing XP stream; no new storage.
+- Quiz results: Benne mascot pose and title by score: 80%+ success pose "Kannada superstar!", 50%+ reward pose "Nicely done!", below 50% thinking pose "Keep going!", each with a Kannada line.
+- Verified on device: Home level card. Results screen builds; not yet checked on the device.

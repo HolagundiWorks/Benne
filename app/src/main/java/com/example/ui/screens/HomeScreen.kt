@@ -100,6 +100,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val completedLessons by progressManager.completedLessons.collectAsState()
+    val xpPoints by progressManager.xp.collectAsState()
     val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
 
@@ -122,6 +123,11 @@ fun HomeScreen(
         contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 14.dp + LocalFloatingNavInset.current),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
+        // Level card: XP-driven level, a playful title and progress to the next level
+        item {
+            LevelCard(xp = xpPoints)
+        }
+
         // Continue Lesson: next unfinished chapter, one tap back into its study sheet
         nextMilestone?.let { next ->
             item {
@@ -876,5 +882,56 @@ private fun PopLessonStudyContent(
         }
 
         Spacer(modifier = Modifier.height(20.dp))
+    }
+}
+
+/** Level from XP (100 XP per level) with a playful title. */
+@Composable
+private fun LevelCard(xp: Int) {
+    val level = xp / 100 + 1
+    val titles = listOf("Tender Learner", "Filter Coffee Fan", "Auto Negotiator", "Darshini Regular", "Bengaluru Local")
+    val title = titles[minOf(level - 1, titles.lastIndex)]
+    val into = xp % 100
+    PosterCard(
+        containerColor = PopPosterPaper,
+        contentColor = PopPosterInk,
+        cornerRadius = 16.dp,
+        shadowOffset = 3.dp,
+        modifier = Modifier.fillMaxWidth().testTag("home_level_card")
+    ) {
+        Column(modifier = Modifier.padding(14.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                PosterStampBadge(
+                    text = "LEVEL $level",
+                    containerColor = PopPosterButter,
+                    contentColor = PopPosterInk
+                )
+                Text(
+                    text = title,
+                    fontFamily = BalooFamily,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 16.sp,
+                    color = PopPosterInk
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            LinearProgressIndicator(
+                progress = { into / 100f },
+                modifier = Modifier.fillMaxWidth().height(8.dp),
+                color = MaterialTheme.colorScheme.primary,
+                trackColor = PopPosterCyan,
+                strokeCap = StrokeCap.Round
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = "${100 - into} XP to level ${level + 1}. Keep the streak alive!",
+                style = MaterialTheme.typography.labelMedium,
+                color = PopPosterInk
+            )
+        }
     }
 }
