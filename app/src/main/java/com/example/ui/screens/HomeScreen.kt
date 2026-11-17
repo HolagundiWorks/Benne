@@ -90,6 +90,7 @@ import com.example.ui.LocalFloatingNavInset
 import com.example.ui.LocalFloatingHeaderInset
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyRow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -345,6 +346,11 @@ fun HomeScreen(
                     modifier = Modifier.weight(1f)
                 )
             }
+        }
+
+        // Explore Karnataka: the Benne sticker pack in a sideways strip
+        item {
+            KarnatakaStickerStrip()
         }
 
         // Flashcard Deck Poster Spotlight Card
@@ -977,6 +983,56 @@ private fun BadgeRow(lessonsDone: Int, totalLessons: Int, streakDays: Int, xp: I
                 containerColor = if (badge.unlocked) PopPosterButter else PopPosterPaper,
                 contentColor = if (badge.unlocked) PopPosterInk else PopPosterInk.copy(alpha = 0.55f)
             )
+        }
+    }
+}
+
+private val KarnatakaStickers = listOf(
+    "Coconut trees" to com.example.R.drawable.pop_sticker_coconut_trees,
+    "Elephant" to com.example.R.drawable.pop_sticker_elephant,
+    "Gol Gumbaz" to com.example.R.drawable.pop_sticker_gol_gumbaz,
+    "Hampi boulders" to com.example.R.drawable.pop_sticker_hampi_boulders,
+    "Hampi stone chariot" to com.example.R.drawable.pop_sticker_hampi_stone_chariot,
+    "Hill fort" to com.example.R.drawable.pop_sticker_hill_fort,
+    "Jog Falls" to com.example.R.drawable.pop_sticker_jog_falls,
+    "Lotus pond" to com.example.R.drawable.pop_sticker_lotus_pond,
+    "Mysore Palace" to com.example.R.drawable.pop_sticker_mysore_palace,
+    "Nandi" to com.example.R.drawable.pop_sticker_nandi,
+    "River" to com.example.R.drawable.pop_sticker_river,
+    "Shesha cobra" to com.example.R.drawable.pop_sticker_shesha_cobra,
+    "Stone mandapa" to com.example.R.drawable.pop_sticker_stone_mandapa,
+    "Yana rocks" to com.example.R.drawable.pop_sticker_yana_rocks
+)
+
+/** Sideways strip of Karnataka stickers (decorative; each has a name for screen readers). */
+@Composable
+private fun KarnatakaStickerStrip() {
+    PosterCard(
+        containerColor = PopPosterPaper,
+        contentColor = PopPosterInk,
+        cornerRadius = 20.dp,
+        shadowOffset = 4.dp,
+        modifier = Modifier.fillMaxWidth().testTag("home_karnataka_strip")
+    ) {
+        Column(modifier = Modifier.padding(14.dp)) {
+            Text(
+                text = "EXPLORE KARNATAKA",
+                fontFamily = BalooFamily,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = PopPosterInk
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                items(count = KarnatakaStickers.size) { index ->
+                    val (name, res) = KarnatakaStickers[index]
+                    Image(
+                        painter = painterResource(res),
+                        contentDescription = name,
+                        modifier = Modifier.size(72.dp)
+                    )
+                }
+            }
         }
     }
 }

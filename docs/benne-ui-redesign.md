@@ -223,3 +223,5 @@ Shadow:
 - Source: `Benne_Karnataka_Stickers_PNG/` (15 transparent 512 px stickers). Only the auto rickshaw is placed so far (`pop_sticker_auto_rickshaw`, level card, bottom-right, 56 dp).
 - The other 14 are not in the app yet; most cards have no corner free of text or buttons. They need a placement decision.
 - Verified on device: Home.
+- Explore Karnataka strip (`home_karnataka_strip`) on Home: the other 14 stickers in a sideways row, 72 dp each, with accessible names. Placed after the module tiles.
+- Adds 14 sticker PNGs (`res/drawable-nodpi/pop_sticker_*`). These add to APK size; compress if needed.
