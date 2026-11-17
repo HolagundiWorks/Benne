@@ -773,6 +773,9 @@ private fun PopQuizResultsView(
             containerColor = PopPosterButter,
             cornerRadius = 28.dp,
             shadowOffset = 6.dp,
+            sticker = com.example.R.drawable.pop_burst_red,
+            stickerSize = 64.dp,
+            stickerAlignment = Alignment.TopStart,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
