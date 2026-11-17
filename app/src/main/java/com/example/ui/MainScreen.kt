@@ -58,7 +58,7 @@ import com.example.ui.theme.PopPosterInk
 import com.example.ui.theme.PopPosterPaper
 
 /** Space reserved at the bottom of screens so the floating nav never covers content. */
-private val FloatingNavClearance = 120.dp
+private val FloatingNavClearance = 112.dp
 
 enum class SaralaScreen(
     val titleEnglish: String,
@@ -209,7 +209,7 @@ fun MainScreen(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .navigationBarsPadding()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
                     .widthIn(max = 560.dp)
                     .fillMaxWidth()
             )

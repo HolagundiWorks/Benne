@@ -110,3 +110,8 @@ Fixes:
 Decisions:
 - The cream curl stays on letter tiles and list cards; the info icon remains readable on it.
 - Landmarks, bursts, ribbons and halftone remain unused.
+
+## Seventh pass: tighter header and dock spacing (feature/pop-cards)
+- Header top padding reduced (10 dp to 4 dp top, 6 dp bottom); the status-bar inset is kept.
+- Reserved space for the floating dock reduced from 120 dp to 112 dp (`FloatingNavClearance`), and the dock's bottom margin from 12 dp to 8 dp. Content now sits closer to the dock. Scrollable screens such as Practice still show all their controls by scrolling; 100 dp left the Prev/Next row touching the dock.
+- Verified on device: Home and Practice.
