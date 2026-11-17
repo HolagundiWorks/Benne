@@ -149,6 +149,8 @@ fun HomeScreen(
                     contentColor = PopPosterInk,
                     cornerRadius = 20.dp,
                     shadowOffset = 5.dp,
+                    sticker = com.example.R.drawable.pop_star_reward,
+                    stickerSize = 60.dp,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("home_continue_card")

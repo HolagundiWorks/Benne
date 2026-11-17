@@ -87,6 +87,8 @@ fun ConversationScreen(
                 containerColor = PopPosterPink,
                 cornerRadius = 24.dp,
                 shadowOffset = 5.dp,
+                sticker = com.example.R.drawable.pop_landmark_vidhana,
+                stickerSize = 84.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {

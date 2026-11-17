@@ -212,3 +212,9 @@ Shadow:
 - Home badge row (`home_badges`): First Steps (1 lesson), On Fire (3-day streak), XP Hunter (300 XP), Chapter Champ (all lessons). Unlocked badges are yellow; locked ones show what unlocks them. Scrolls sideways.
 - Derived from existing progress (lessons, streak, XP); nothing new is stored.
 - Verified on device: Home.
+
+## Twenty-third pass: kit stickers on cards (feature/pop-cards)
+- `PosterCard` takes an optional `sticker` (kit PNG), `stickerSize` and `stickerAlignment`. It is drawn above the card surface and does not take taps.
+- Dialogues header: Vidhana Soudha landmark (`pop_landmark_vidhana`) at bottom-right.
+- Continue lesson card: kit star reward (`pop_star_reward`) at bottom-right.
+- Verified on device: Home and Dialogues.

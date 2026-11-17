@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -39,6 +40,9 @@ import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterInk
 import com.example.ui.theme.PopPosterPaper
 import kotlin.math.roundToInt
+import androidx.compose.foundation.Image
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.painterResource
 
 /**
  * Pop card: the Benne Pop Elements kit card (yellow, red or cream) drawn with nine-slice
@@ -61,6 +65,9 @@ fun PosterCard(
     shadowOffset: Dp = 4.dp,
     borderWidth: Dp = 2.dp,
     plain: Boolean = false,
+    @DrawableRes sticker: Int? = null,
+    stickerSize: Dp = 72.dp,
+    stickerAlignment: Alignment = Alignment.BottomEnd,
     onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
@@ -115,6 +122,16 @@ fun PosterCard(
                 }
         ) {
             Column(modifier = Modifier.fillMaxWidth(), content = content)
+        }
+        // Optional kit sticker (landmark, star, burst...) drawn above the card surface
+        sticker?.let { res ->
+            Box(modifier = Modifier.matchParentSize()) {
+                Image(
+                    painter = painterResource(res),
+                    contentDescription = null,
+                    modifier = Modifier.align(stickerAlignment).size(stickerSize)
+                )
+            }
         }
     }
 }
