@@ -87,6 +87,7 @@ import com.example.ui.theme.PopPosterPeach
 import com.example.ui.theme.PopPosterPink
 import com.example.ui.theme.NunitoSansFamily
 import com.example.ui.LocalFloatingNavInset
+import com.example.ui.LocalFloatingHeaderInset
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -118,7 +119,7 @@ fun HomeScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
-        contentPadding = PaddingValues(start = 16.dp, top = 14.dp, end = 16.dp, bottom = 14.dp + LocalFloatingNavInset.current),
+        contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 14.dp + LocalFloatingNavInset.current),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         // Continue Lesson: next unfinished chapter, one tap back into its study sheet

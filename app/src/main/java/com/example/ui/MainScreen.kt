@@ -13,6 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.automirrored.outlined.MenuBook
@@ -89,36 +93,20 @@ fun MainScreen(
         }
     }
 
+    val headerInset = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 76.dp
+
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
         val useNavigationRail = maxWidth >= 600.dp
 
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
         ) {
-            // Header is part of the page content (no app bar container)
-            SaralaHeader(
-                streakDays = streakDays,
-                xpPoints = xpPoints,
-                playbackSpeed = playbackSpeed,
-                onToggleSpeed = {
-                    val nextSpeed = when {
-                        playbackSpeed < 0.8f -> 0.85f
-                        playbackSpeed < 1.0f -> 1.0f
-                        playbackSpeed < 1.15f -> 0.75f
-                        else -> 0.85f
-                    }
-                    progressManager.setPlaybackSpeed(nextSpeed)
-                },
-                onOpenSystemConsole = { showSystemConsole = true },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Row(modifier = Modifier.weight(1f).fillMaxWidth()) {
+            Row(modifier = Modifier.fillMaxSize()) {
                 if (useNavigationRail) {
                     NavigationRail(
-                        modifier = Modifier.fillMaxHeight(),
+                        modifier = Modifier.fillMaxHeight().padding(top = headerInset),
                         containerColor = PopPosterPaper
                     ) {
                         Spacer(modifier = Modifier.weight(1f))
@@ -166,7 +154,8 @@ fun MainScreen(
                         .widthIn(max = 760.dp)
 
                     CompositionLocalProvider(
-                        LocalFloatingNavInset provides if (useNavigationRail) 0.dp else FloatingNavClearance
+                        LocalFloatingNavInset provides if (useNavigationRail) 0.dp else FloatingNavClearance,
+                        LocalFloatingHeaderInset provides headerInset
                     ) {
                     when (currentScreen) {
                         SaralaScreen.HOME -> HomeScreen(
@@ -201,6 +190,26 @@ fun MainScreen(
                     }
                 }
             }
+            // Floating header over the content; screens scroll up under it
+            SaralaHeader(
+                streakDays = streakDays,
+                xpPoints = xpPoints,
+                playbackSpeed = playbackSpeed,
+                onToggleSpeed = {
+                    val nextSpeed = when {
+                        playbackSpeed < 0.8f -> 0.85f
+                        playbackSpeed < 1.0f -> 1.0f
+                        playbackSpeed < 1.15f -> 0.75f
+                        else -> 0.85f
+                    }
+                    progressManager.setPlaybackSpeed(nextSpeed)
+                },
+                onOpenSystemConsole = { showSystemConsole = true },
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .windowInsetsPadding(WindowInsets.statusBars)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            )
         }
 
         if (!useNavigationRail) {

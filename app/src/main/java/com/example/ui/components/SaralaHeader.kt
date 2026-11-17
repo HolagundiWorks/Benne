@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.Speed
@@ -59,11 +60,16 @@ fun SaralaHeader(
     onOpenSystemConsole: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    Surface(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        color = PopPosterPaper,
+        border = BorderStroke(2.dp, PopPosterInk)
+    ) {
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .windowInsetsPadding(WindowInsets.statusBars)
-            .padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 6.dp),
+            .padding(horizontal = 12.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
@@ -196,5 +202,6 @@ fun SaralaHeader(
                 )
             }
         }
+    }
     }
 }

@@ -160,3 +160,9 @@ Shadow:
 - Launcher now uses `logo/app icon corrected.png`: adaptive foreground (`drawable/ic_benne_launcher_fg.png`, 432 px, sized 84 dp in the adaptive layer), Butter background (`#FFCC29`), and legacy and round icons at 48/72/96/144/192 px.
 - The kit mascot foreground is replaced. The kit's app icon sources are unchanged.
 - Verified on device: launcher shows the new icon.
+
+## Thirteenth pass: floating top bar (feature/pop-cards)
+- The header is a floating pill at the top (`SaralaHeader`), drawn above the content, with the status-bar inset. Content runs up under it and scrolls beneath, like the bottom dock.
+- `LocalFloatingHeaderInset` (status-bar inset + 76 dp) gives each screen the space its first item needs. Screens add it to their top padding; the quiz screen adds it once on its outer column.
+- Verified on device: Home and Practice.
+- Logo: `logo/beene logo.png` replaced with the corrected version (backup of the original kept outside the repo). The header still shows the kit wordmark; the long-shadow logo is used on the quiz results screen only.

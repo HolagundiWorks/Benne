@@ -62,6 +62,7 @@ import com.example.ui.theme.PopPosterMint
 import com.example.ui.theme.PopPosterPaper
 import com.example.ui.theme.PopPosterPeach
 import com.example.ui.LocalFloatingNavInset
+import com.example.ui.LocalFloatingHeaderInset
 
 @Composable
 fun DictionaryScreen(
@@ -99,7 +100,7 @@ fun DictionaryScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
-        contentPadding = PaddingValues(start = 16.dp, top = 14.dp, end = 16.dp, bottom = 14.dp + LocalFloatingNavInset.current),
+        contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 14.dp + LocalFloatingNavInset.current),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         // Pop Poster Search Header Card

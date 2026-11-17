@@ -82,6 +82,7 @@ import com.example.ui.LocalFloatingNavInset
 import androidx.compose.foundation.Image
 import androidx.compose.ui.res.painterResource
 import com.example.R
+import com.example.ui.LocalFloatingHeaderInset
 
 enum class PracticeMode {
     FLASHCARDS,
@@ -101,6 +102,7 @@ fun QuizScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .padding(top = LocalFloatingHeaderInset.current)
     ) {
         // Pop Poster Segmented Mode Switcher
         Box(
@@ -187,7 +189,7 @@ fun FlashcardStudioView(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp, vertical = 6.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 6.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Pop Deck Summary Poster Card
@@ -459,7 +461,7 @@ fun EvaluationQuizView(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp),
+            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Quiz Progress Poster Card

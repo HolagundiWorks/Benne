@@ -12,3 +12,9 @@ internal val FloatingNavClearance = 112.dp
  * clear of the floating dock. 0 when there is no dock (wide layouts with the navigation rail).
  */
 val LocalFloatingNavInset = compositionLocalOf { 0.dp }
+
+/**
+ * Top space that screens add so their first item starts below the floating header and can
+ * scroll up under it. Set by the main screen from the status-bar inset plus the header height.
+ */
+val LocalFloatingHeaderInset = compositionLocalOf { 0.dp }
