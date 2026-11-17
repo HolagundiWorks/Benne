@@ -79,6 +79,9 @@ import com.example.ui.theme.PopPosterMint
 import com.example.ui.theme.PopPosterPaper
 import com.example.ui.theme.PopPosterPink
 import com.example.ui.LocalFloatingNavInset
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
+import com.example.R
 
 enum class PracticeMode {
     FLASHCARDS,
@@ -746,10 +749,14 @@ private fun PopQuizResultsView(
 ) {
     val percentage = (score.toFloat() / total * 100).toInt()
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+    ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -840,9 +847,19 @@ private fun PopQuizResultsView(
             icon = Icons.Default.Refresh,
             onClick = onRestart,
             modifier = Modifier
-                .fillMaxWidth(0.75f)
+                .fillMaxWidth(0.6f)
                 .testTag("quiz_restart_button")
         )
+    }
+    // Benne logo: bottom-right on the celebration screen only (16dp margin, ~20% width)
+    Image(
+        painter = painterResource(R.drawable.benne_logo_longshadow),
+        contentDescription = "Benne logo",
+        modifier = Modifier
+            .align(Alignment.BottomEnd)
+            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp + LocalFloatingNavInset.current)
+            .fillMaxWidth(0.15f)
+    )
     }
 }
 
