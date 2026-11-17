@@ -174,14 +174,13 @@ fun SaralaHeader(
             }
         }
 
-        // Official logo (88 dp): bottom and right are cropped at the border; the top overhangs.
+        // Official logo (88 dp), drawn above the pill border: bottom and right cropped at the pill edge, top overhangs.
         Box(
             modifier = Modifier
                 .matchParentSize()
                 .drawWithContent {
-                    // Crop the logo's bottom and right at the inner edge of the 2 dp border; the top stays open
-                    val inset = 2.dp.toPx()
-                                        clipRect(-100000f, -100000f, size.width - inset, size.height - inset) {
+                    // Crop the logo's bottom and right at the pill's outer edge; the top stays open
+                                        clipRect(-100000f, -100000f, size.width, size.height) {
                         this@drawWithContent.drawContent()
                     }
                 }
@@ -195,11 +194,5 @@ fun SaralaHeader(
                     .requiredHeight(88.dp)
             )
         }
-        // Redraw the pill border above the logo, so the logo stops at the line
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .border(BorderStroke(2.dp, PopPosterInk), RoundedCornerShape(24.dp))
-        )
     }
 }
