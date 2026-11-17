@@ -198,3 +198,7 @@ Shadow:
 - The logo layer is clipped to the header's rounded shape, so nothing extends past the border. Its bottom sits just above the border line.
 - At 88 dp in a ~52 dp pill, the top of the wordmark is cropped. A taller pill would show the full wordmark.
 - Verified on device: Home.
+
+## Twentieth pass: logo top not cropped (feature/pop-cards)
+- The logo's top is no longer cropped; it overhangs the header upward. Its bottom and right edges stay inside the border.
+- Verified on device: Home.

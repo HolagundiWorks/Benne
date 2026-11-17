@@ -172,8 +172,8 @@ fun SaralaHeader(
             }
         }
 
-        // Official logo (88 dp), cropped by the pill's shape so it stays inside the border.
-        Box(modifier = Modifier.matchParentSize().clip(RoundedCornerShape(24.dp))) {
+        // Official logo (88 dp): bottom and right edges stay inside the border; the top is not cropped.
+        Box(modifier = Modifier.matchParentSize()) {
             Image(
                 painter = painterResource(R.drawable.benne_logo_longshadow),
                 contentDescription = "Benne",
