@@ -152,6 +152,6 @@ Shadow:
 - Logo: `logo/beene logo.png` had garbled Kannada. The corrected SVG (`benne_kannada_corrected.svg`, Noto Sans Kannada text) was rendered with the bundled font and composited over the lettering band of the long-shadow logo. The result is `logo/beene logo corrected.png` (not committed: the `logo/` folder is untracked).
 - App asset: `res/drawable-nodpi/benne_logo_longshadow.png` (560 px wide, transparent).
 - Placement: bottom-right on the quiz results screen only, 16dp margin plus the floating-dock inset, 15% of width. The "Practice Again" button is 60% wide to keep clear space.
-- Not done: the app icon in `logo/app icon.png` still has garbled Kannada and an opaque white background outside its rounded corners.
+- App icon: `logo/app icon corrected.png` (not committed; `logo/` is untracked). Garbled Kannada replaced with the corrected text, and the white area outside the rounded corners made transparent. Not yet wired into the launcher.
 - Verified on device: quiz results with the logo placed bottom-right.
 - Open: the "Practice Again" and "Continue" labels look lighter than expected with Nunito Sans; the cause is not yet isolated.
