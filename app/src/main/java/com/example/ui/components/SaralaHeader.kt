@@ -9,15 +9,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -38,8 +34,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.ui.theme.NotoSansKannadaFamily
 import com.example.R
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterCyan
@@ -49,7 +43,8 @@ import com.example.ui.theme.PopPosterPaper
 import java.util.Locale
 
 /**
- * Floating Benne header pill: status pills and settings, with the official logo at the right edge.
+ * Floating Benne header: a pill with status pills and settings, and the official long-shadow logo
+ * (88 dp) on the right edge. The logo is centred on the pill and may extend past its border.
  */
 @Composable
 fun SaralaHeader(
@@ -60,135 +55,129 @@ fun SaralaHeader(
     onOpenSystemConsole: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Surface(
-        modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)),
-        shape = RoundedCornerShape(24.dp),
-        color = PopPosterPaper,
-        border = BorderStroke(2.dp, PopPosterInk)
-    ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp),
-            modifier = Modifier.weight(1f)
+    Box(modifier = modifier.fillMaxWidth()) {
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(24.dp),
+            color = PopPosterPaper,
+            border = BorderStroke(2.dp, PopPosterInk)
         ) {
-            // Streak pill
-            Surface(
-                shape = CircleShape,
-                color = PopPosterMint,
-                contentColor = PopPosterInk,
-                border = BorderStroke(1.5.dp, PopPosterInk)
-            ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.LocalFireDepartment,
-                        contentDescription = "Streak",
-                        modifier = Modifier.size(13.dp)
-                    )
-                    Spacer(modifier = Modifier.width(2.dp))
-                    Text(
-                        text = "${streakDays}d",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
-
-            // XP pill
-            Surface(
-                shape = CircleShape,
-                color = PopPosterCyan,
-                contentColor = PopPosterInk,
-                border = BorderStroke(1.5.dp, PopPosterInk)
-            ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Stars,
-                        contentDescription = "Experience Points",
-                        modifier = Modifier.size(13.dp)
-                    )
-                    Spacer(modifier = Modifier.width(2.dp))
-                    Text(
-                        text = "$xpPoints",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
-
-            // Audio speed pill (48dp interactive target)
-            Surface(
-                onClick = onToggleSpeed,
-                shape = CircleShape,
-                color = PopPosterButter,
-                contentColor = PopPosterInk,
-                border = BorderStroke(1.5.dp, PopPosterInk),
+            Row(
                 modifier = Modifier
-                    .minimumInteractiveComponentSize()
-                    .testTag("audio_speed_chip")
+                    .fillMaxWidth()
+                    .padding(start = 12.dp, end = 116.dp, top = 8.dp, bottom = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                // Streak pill
+                Surface(
+                    shape = CircleShape,
+                    color = PopPosterMint,
+                    contentColor = PopPosterInk,
+                    border = BorderStroke(1.5.dp, PopPosterInk)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.LocalFireDepartment,
+                            contentDescription = "Streak",
+                            modifier = Modifier.size(13.dp)
+                        )
+                        Spacer(modifier = Modifier.width(2.dp))
+                        Text(
+                            text = "${streakDays}d",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                // XP pill
+                Surface(
+                    shape = CircleShape,
+                    color = PopPosterCyan,
+                    contentColor = PopPosterInk,
+                    border = BorderStroke(1.5.dp, PopPosterInk)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Stars,
+                            contentDescription = "Experience Points",
+                            modifier = Modifier.size(13.dp)
+                        )
+                        Spacer(modifier = Modifier.width(2.dp))
+                        Text(
+                            text = "$xpPoints",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                // Audio speed pill (48dp interactive target)
+                Surface(
+                    onClick = onToggleSpeed,
+                    shape = CircleShape,
+                    color = PopPosterButter,
+                    contentColor = PopPosterInk,
+                    border = BorderStroke(1.5.dp, PopPosterInk),
+                    modifier = Modifier
+                        .minimumInteractiveComponentSize()
+                        .testTag("audio_speed_chip")
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Speed,
+                            contentDescription = "Audio playback speed",
+                            modifier = Modifier.size(13.dp)
+                        )
+                        Spacer(modifier = Modifier.width(2.dp))
+                        Text(
+                            text = String.format(Locale.US, "%.2fx", playbackSpeed),
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+
+                // Settings button
+                Box(
+                    modifier = Modifier
+                        .minimumInteractiveComponentSize()
+                        .size(38.dp)
+                        .clip(CircleShape)
+                        .background(PopPosterPaper)
+                        .border(1.5.dp, PopPosterInk, CircleShape)
+                        .clickable(onClick = onOpenSystemConsole)
+                        .testTag("system_settings_button"),
+                    contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Speed,
-                        contentDescription = "Audio playback speed",
-                        modifier = Modifier.size(13.dp)
-                    )
-                    Spacer(modifier = Modifier.width(2.dp))
-                    Text(
-                        text = String.format(Locale.US, "%.2fx", playbackSpeed),
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold
+                        imageVector = Icons.Outlined.Settings,
+                        contentDescription = "Settings, Notifications, Privacy & Legal",
+                        tint = PopPosterInk,
+                        modifier = Modifier.size(19.dp)
                     )
                 }
-            }
-
-            // Settings button
-            Box(
-                modifier = Modifier
-                    .minimumInteractiveComponentSize()
-                    .size(38.dp)
-                    .clip(CircleShape)
-                    .background(PopPosterPaper)
-                    .border(1.5.dp, PopPosterInk, CircleShape)
-                    .clickable(onClick = onOpenSystemConsole)
-                    .testTag("system_settings_button"),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Settings,
-                    contentDescription = "Settings, Notifications, Privacy & Legal",
-                    tint = PopPosterInk,
-                    modifier = Modifier.size(19.dp)
-                )
             }
         }
 
-        // Official Benne long-shadow logo at 88 dp. The header keeps its height; the logo
-        // extends past it and is cropped by the header's border.
-        Box(
-            modifier = Modifier.height(44.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(R.drawable.benne_logo_longshadow),
-                contentDescription = "Benne",
-                modifier = Modifier.requiredHeight(88.dp)
-            )
-        }
-    }
+        // Official logo at 88 dp, centred on the right edge of the pill; it may extend past the border
+        Image(
+            painter = painterResource(R.drawable.benne_logo_longshadow),
+            contentDescription = "Benne",
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(end = 10.dp)
+                .height(88.dp)
+        )
     }
 }

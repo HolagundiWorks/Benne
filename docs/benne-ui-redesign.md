@@ -182,3 +182,9 @@ Shadow:
 - Card slices no longer overlap in destination. The overlap doubled the semi-transparent outline pixels, which made some border lines look heavier than others.
 - Each slice now samples one source pixel past its edge and is clipped to its own rectangle, so filtering does not fade at slice boundaries and seams do not return.
 - Verified on device: Home and Practice (flashcards); borders even, no seams.
+
+## Seventeenth pass: header position and logo overhang (feature/pop-cards)
+- Header pill moved down (top margin 22 dp).
+- The logo (88 dp) is a separate layer centred on the pill's right edge, so it extends above and below the border. The pill keeps its height; the pills and settings are padded so they stay clear of the logo.
+- Screen top inset set to 100 dp (status bar + header).
+- Verified on device: Home.
