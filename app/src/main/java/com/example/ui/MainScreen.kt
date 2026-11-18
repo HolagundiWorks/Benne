@@ -56,8 +56,7 @@ import com.example.ui.components.SaralaHeader
 import androidx.compose.runtime.CompositionLocalProvider
 import com.example.ui.components.SystemConsoleSheet
 import com.example.ui.screens.AlphabetScreen
-import com.example.ui.screens.ConversationScreen
-import com.example.ui.screens.DictionaryScreen
+import com.example.ui.screens.TalkScreen
 import com.example.ui.screens.HomeScreen
 import com.example.ui.screens.PracticeMode
 import com.example.ui.screens.ProfileScreen
@@ -74,9 +73,8 @@ enum class SaralaScreen(
 ) {
     HOME("Home", "ಕಲಿಕೆ", Icons.Default.Home, Icons.Outlined.Home),
     ALPHABET("Letters", "ವರ್ಣಮಾಲೆ", Icons.AutoMirrored.Filled.MenuBook, Icons.AutoMirrored.Outlined.MenuBook),
-    CONVERSATION("Dialogues", "ಸಂಭಾಷಣೆ", Icons.Default.ChatBubble, Icons.Outlined.ChatBubbleOutline),
+    CONVERSATION("Talk", "ಸಂಭಾಷಣೆ", Icons.Default.ChatBubble, Icons.Outlined.ChatBubbleOutline),
     PRACTICE("Practice", "ಅಭ್ಯಾಸ", Icons.Default.Psychology, Icons.Outlined.Psychology),
-    DICTIONARY("Phrases", "ಪದಕೋಶ", Icons.Default.Translate, Icons.Outlined.Translate),
     PROFILE("Profile", "ಪ್ರೊಫೈಲ್", Icons.Default.Person, Icons.Outlined.Person)
 }
 
@@ -186,7 +184,7 @@ fun MainScreen(
                             progressManager = progressManager,
                             modifier = contentModifier
                         )
-                        SaralaScreen.CONVERSATION -> ConversationScreen(
+                        SaralaScreen.CONVERSATION -> TalkScreen(
                             ttsHelper = ttsHelper,
                             progressManager = progressManager,
                             modifier = contentModifier
@@ -196,11 +194,6 @@ fun MainScreen(
                             progressManager = progressManager,
                             initialMode = practiceMode,
                             onModeChanged = { practiceMode = it },
-                            modifier = contentModifier
-                        )
-                        SaralaScreen.DICTIONARY -> DictionaryScreen(
-                            ttsHelper = ttsHelper,
-                            progressManager = progressManager,
                             modifier = contentModifier
                         )
                         SaralaScreen.PROFILE -> ProfileScreen(
