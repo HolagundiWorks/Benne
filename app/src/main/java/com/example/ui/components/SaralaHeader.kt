@@ -47,7 +47,6 @@ import com.example.ui.theme.PopPosterInk
 import com.example.ui.theme.PopPosterMint
 import com.example.ui.theme.PopPosterPaper
 import java.util.Locale
-import androidx.compose.ui.draw.alpha
 
 /**
  * Floating Benne header: a pill with streak, XP and speed badges and the settings button.
@@ -165,6 +164,5 @@ private fun BadgeImage(res: Int, unlocked: Boolean, description: String) {
         contentDescription = if (unlocked) description else "$description, locked",
         modifier = Modifier
             .height(44.dp)
-            .alpha(if (unlocked) 1f else 0.35f)
     )
 }
