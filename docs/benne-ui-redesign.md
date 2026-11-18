@@ -280,3 +280,14 @@ Found, not fixed (decisions needed):
 - Hindi lines: every flashcard and lesson step shows a Hindi-script line. Reviewed text is used where it exists; otherwise the app's converter (`KannadaToHindiPhonetic`) builds it, and its long vowels are shown in red. Automatic lines are unreviewed and go to native testing.
 - Missing-voice notice: Home shows a card when the speech engine is ready and Kannada voice data is missing, with a button to open the phone's text-to-speech settings.
 - Home order: Continue lesson first, then level and badges, quick module tiles, flashcard spotlight, daily quote, Explore Karnataka, poetry, and the chapter list.
+
+## Standard Benne typography hierarchy (feature/learning-format)
+Components in `ui/components/BenneTypography.kt`:
+- `BenneH1`: English meaning or title. Nunito Sans Medium, 24sp.
+- `BenneH2Latin`: Kannada pronunciation in Latin letters. Nunito Sans Regular, 18sp.
+- `BenneH2Devanagari`: the same pronunciation in Devanagari. Noto Sans Devanagari Regular, 18sp. Long vowels in Pop Red.
+- `BenneH3`: original Kannada script. Noto Sans Kannada Bold, 22sp.
+- `BenneLearningBlock` stacks them in that order; H2 Devanagari is hidden when the learner turns hints off.
+- Used by flashcards (front), lesson cards and the lesson sheet.
+- Not yet applied: dialogues, phrases, poems, food, heritage, quizzes. Their content fields are not split into the four stored fields (`english`, `kannadaRomanized`, `kannadaDevanagari`, `kannadaScript`) yet.
+- Verified on device: flashcard front, lesson sheet.

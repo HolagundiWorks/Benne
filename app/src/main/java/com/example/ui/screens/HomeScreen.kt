@@ -979,51 +979,23 @@ private fun PopLessonStudyContent(
 
                 Spacer(modifier = Modifier.height(14.dp))
 
-                // Learning-card order: English meaning, English-letter phonetic (bold),
-                // Hindi-script phonetic with red sounds (bold), then the Kannada script.
-                Text(
-                    text = step.englishText,
-                    fontFamily = BalooFamily,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 22.sp,
-                    color = PopPosterInk,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = step.transliteration,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                if (step.hindiPhonetic.isNotBlank()) {
-                    BenneLearningText(
-                        hindiPronunciation = step.hindiPhonetic,
-                        highlight = step.hindiHighlight,
-                        note = "",
-                        showHints = true
-                    )
-                } else {
-                    BenneLearningText(
-                        segments = com.example.phonetics.KannadaToHindiPhonetic.convertToSegments(step.kannadaText),
-                        note = "",
-                        showHints = true
-                    )
+                // Standard hierarchy: H1 English, H2 Latin + Devanagari pronunciation, H3 Kannada script
+                val lessonSegments = remember(step.kannadaText, step.hindiPhonetic, step.hindiHighlight) {
+                    if (step.hindiPhonetic.isNotBlank()) {
+                        com.example.ui.components.segmentsFromReviewed(step.hindiPhonetic, step.hindiHighlight)
+                    } else {
+                        com.example.phonetics.KannadaToHindiPhonetic.convertToSegments(step.kannadaText)
+                    }
                 }
+                com.example.ui.components.BenneLearningBlock(
+                    english = step.englishText,
+                    kannadaRomanized = step.transliteration,
+                    kannadaDevanagari = lessonSegments,
+                    kannadaScript = step.kannadaText,
+                    showDevanagari = true
+                )
                 Spacer(modifier = Modifier.height(10.dp))
                 HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.2f))
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    text = step.kannadaText,
-                    fontFamily = NotoSansKannadaFamily,
-                    fontSize = 34.sp,
-                    lineHeight = 42.sp,
-                    color = PopPosterInk,
-                    textAlign = TextAlign.Center
-                )
-
                 Spacer(modifier = Modifier.height(18.dp))
 
                 Row(

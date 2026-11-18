@@ -210,45 +210,33 @@ private fun FlashcardFrontFace(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Learning-card order: English meaning, English-letter phonetic (bold red),
-            // Hindi-script phonetic with red sounds (when reviewed), then the Kannada script.
-            Text(
-                text = flashcard.englishMeaning,
-                fontFamily = BalooFamily,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 22.sp,
-                color = PopPosterInk,
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = flashcard.transliteration,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.ExtraBold,
-                color = com.example.ui.theme.BennePopRed,
-                textAlign = TextAlign.Center
-            )
-            val hindiSegments = remember(flashcard.kannadaWord) {
-                com.example.phonetics.KannadaToHindiPhonetic.convertToSegments(flashcard.kannadaWord)
+            // Standard hierarchy: H1 English, H2 Latin + Devanagari pronunciation, H3 Kannada script
+            val hindiSegs = remember(flashcard.kannadaWord, flashcard.hindiPronunciation, flashcard.pronunciationHighlight) {
+                if (flashcard.hindiPronunciation.isNotBlank()) {
+                    segmentsFromReviewed(flashcard.hindiPronunciation, flashcard.pronunciationHighlight)
+                } else {
+                    com.example.phonetics.KannadaToHindiPhonetic.convertToSegments(flashcard.kannadaWord)
+                }
             }
-            if (flashcard.hindiPronunciation.isNotBlank()) {
+            BenneLearningBlock(
+                english = flashcard.englishMeaning,
+                kannadaRomanized = flashcard.transliteration,
+                kannadaDevanagari = hindiSegs,
+                kannadaScript = flashcard.kannadaWord,
+                showDevanagari = showHints
+            )
+            if (showHints && flashcard.pronunciationNote.isNotBlank() && flashcard.hindiPronunciation.isNotBlank()) {
                 Spacer(modifier = Modifier.height(4.dp))
-                BenneLearningText(
-                    hindiPronunciation = flashcard.hindiPronunciation,
-                    highlight = flashcard.pronunciationHighlight,
-                    note = if (showHints) flashcard.pronunciationNote else "",
-                    showHints = showHints
-                )
-            } else {
-                Spacer(modifier = Modifier.height(4.dp))
-                BenneLearningText(
-                    segments = hindiSegments,
-                    note = "",
-                    showHints = showHints
+                Text(
+                    text = flashcard.pronunciationNote,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = PopPosterInk.copy(alpha = 0.8f),
+                    textAlign = TextAlign.Center
                 )
             }
-            if (hindiSegments.isNotEmpty() || flashcard.hindiPronunciation.isNotBlank()) {
+            if (hindiSegs.isNotEmpty()) {
                 onToggleHints?.let { toggle ->
+                    Spacer(modifier = Modifier.height(6.dp))
                     Surface(
                         onClick = toggle,
                         shape = CircleShape,
@@ -266,18 +254,6 @@ private fun FlashcardFrontFace(
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(10.dp))
-            HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.2f))
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = flashcard.kannadaWord,
-                fontFamily = NotoSansKannadaFamily,
-                fontSize = 40.sp,
-                lineHeight = 48.sp,
-                color = PopPosterInk,
-                textAlign = TextAlign.Center
-            )
-
             Spacer(modifier = Modifier.height(16.dp))
 
             Row(
