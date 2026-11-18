@@ -58,6 +58,7 @@ import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterInk
 import com.example.ui.theme.PopPosterPaper
 import androidx.compose.foundation.clickable
+import androidx.compose.ui.draw.drawWithCache
 
 // ---------- Shared geometry helpers ----------
 
@@ -134,7 +135,7 @@ fun KarnatakaMapArtwork(
     labelOnly: Boolean = false
 ) {
     val shapes = karnatakaShapes
-    Canvas(
+    Box(
         modifier = modifier
             .aspectRatio(1f / MAP_ASPECT_H)
             .then(
@@ -146,22 +147,29 @@ fun KarnatakaMapArtwork(
                     }
                 } else Modifier
             )
-            .semantics { contentDescription = "Map of Karnataka with 30 districts" }
-    ) {
-        val s = size.width // normalised x spans 0..1 across the full width
-        for (district in shapes) {
-            val path = Path()
-            for (ring in district.rings) {
-                if (ring.isEmpty()) continue
-                path.moveTo(ring[0].x * s, ring[0].y * s)
-                for (i in 1 until ring.size) path.lineTo(ring[i].x * s, ring[i].y * s)
-                path.close()
+            // Paths are built once per size (not on every draw); only the fill colour changes on selection
+            .drawWithCache {
+                val s = size.width
+                val paths = shapes.map { district ->
+                    val path = Path()
+                    for (ring in district.rings) {
+                        if (ring.isEmpty()) continue
+                        path.moveTo(ring[0].x * s, ring[0].y * s)
+                        for (i in 1 until ring.size) path.lineTo(ring[i].x * s, ring[i].y * s)
+                        path.close()
+                    }
+                    district.name to path
+                }
+                onDrawBehind {
+                    for ((name, path) in paths) {
+                        val isSel = name == selected
+                        drawPath(path, color = if (isSel) BennePopRed else PopPosterButter)
+                        drawPath(path, color = PopPosterInk, style = Stroke(width = if (isSel) 2.5f else 1.2f))
+                    }
+                }
             }
-            val isSel = district.name == selected
-            drawPath(path, color = if (isSel) BennePopRed else PopPosterButter)
-            drawPath(path, color = PopPosterInk, style = Stroke(width = if (isSel) 2.5f else 1.2f))
-        }
-    }
+            .semantics { contentDescription = "Map of Karnataka with 30 districts" }
+    )
 }
 
 // ---------- Discovery card ----------
