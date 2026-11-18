@@ -1,93 +1,59 @@
-# Benne (ಬೆಣ್ಣೆ) // Kannada learning app
-> **"Weniger, aber besser" (Less, but better) — An authentic, functional Kannada language learning system.**
+# Benne (ಬೆಣ್ಣೆ) — Learn Kannada
 
-Benne is a modern, high-fidelity Android application built with **Jetpack Compose** and inspired by **Dieter Rams' ten principles of good design** and the **Braun industrial design aesthetic**. It enables learners to easily master spoken and written Kannada through tactile, interactive components, real Bengaluru situational dialogues, 3D flip-to-reveal vocabulary flashcards, and native acoustic speech synthesis.
+An offline Android app that teaches Kannada to Hindi-speaking learners. Built with Kotlin, Jetpack Compose and Material 3, in a Benne pop-art style with a butter-cube mascot.
 
----
+**Package:** `com.benne.kannada` · **Min SDK** 24 · **Target SDK** 36
 
-## 📻 Key Features
+## Learning sections
 
-### 1. Interactive 3D Flip Vocabulary Flashcards
-- **Flip-to-Reveal Mechanism**: Smooth 180-degree 3D rotational perspective card flip (`graphicsLayer`).
-- **Front Face**: High-contrast Kannada glyph in authentic **Anek Kannada** typography (`44sp`), phonetic pronunciation breakdown, and a tactile push-key TTS audio button.
-- **Back Face**: English translation, real-world example sentences with secondary native audio pronunciation, and cultural memory notes (e.g. why *"ಊಟ ಆಯ್ತಾ?"* is the quintessential greeting in Karnataka).
-- **Mastery Engine**: Mark cards as *Mastered* to earn +15 XP and persistently track learning progress.
-- **Category Filter & Shuffle**: Study cards across *Essentials*, *Food & Dining*, *Travel & Auto*, *Commerce & Market*, and *People & Life*.
+| Section | What it covers |
+|---|---|
+| **Home** | Continue lesson, level and badges, daily quote, Karnataka flag and map cards, Food and Heritage, Poetry Play, the chapter list |
+| **Letters** | Kannada vowels and consonants, with pronunciation and stroke tips |
+| **Talk** | Dialogues (street scenarios) and the Phrasebook |
+| **Practice** | Flashcards, a multiple-choice quiz, and Poetry Play (poem games) |
+| **Profile** | Achievements, stickers, favourites, Settings |
 
-### 2. Varnamale Script Matrix (`SYSTEM 02 // SCRIPT MATRIX`)
-- **Complete Alphabet Exploration**:
-  - **14 Swaragalu (Vowels)**: Foundational sounds from `ಅ` to `ಔ` + `ಅಂ`, `ಅಃ`.
-  - **34 Vyanjanagalu (Consonants)**: Gutturals to retroflexes (`ಕ` through `ಳ`).
-  - **Kagunita**: Consonant-vowel compound combinations.
-- **Laboratory Inspection Console**: Detailed modal sheet for each glyph with acoustic audio, manual stroke guidance, and illustrated example words.
+Karnataka explorers: **Karnataka Flag** (quiz and audio), **Karnataka Map** (30 districts, tap for heritage and foods), **Food** (62 dishes, pending review), **Heritage** (35 places, pending review).
 
-### 3. Real-World Bengaluru Spoken Dialogues (`SYSTEM 03 // DIALOGUES`)
-- **Authentic Scenarios**:
-  - `PRG.01`: **Auto Rickshaw Ride** (indiranagar, MG road meter negotiation, turn-by-turn directions).
-  - `PRG.02`: **Bengaluru Darshini** (Ordering benne masala dosa, idli vada, and filter coffee with less sugar).
-  - `PRG.03`: **KR Market Mandi** (Asking potato/onion rates, bargaining, getting loose change).
-  - `PRG.04`: **City Directions** (Locating the nearest Namma Metro station).
-- **Dual-Channel Audio**: Line-by-line native speech synthesis with transliteration and a toggleable subtitle switch.
+## Text hierarchy
 
-### 4. Evaluation Quiz & Testing Console (`SYSTEM 04 // EVALUATION`)
-- Multiple-choice questions assessing letter identification, spoken reply accuracy, and listening comprehension.
-- Instant feedback with technical explanations and celebratory scoring reports (+50 XP per session).
+Learning content uses three levels, in this order:
 
-### 5. Lexicon Archive (`SYSTEM 05 // LEXICON`)
-- Instant real-time search across Kannada script, English definitions, and Roman transliterations.
-- Quick bookmarking for rapid offline retrieval on the street.
+- **H1**: English meaning
+- **H2**: Kannada pronunciation in Latin letters and in Devanagari (long vowels in Pop Red)
+- **H3**: Kannada script, bold
 
----
+Components: `ui/components/BenneTypography.kt`. Devanagari comes from reviewed text where it exists, otherwise from `phonetics/KannadaToHindiPhonetic`.
 
-## 📐 Dieter Rams Design System
+## Audio
 
-The application strictly adheres to functional minimalism and precision industrial product design:
+Kannada speech uses the phone's built-in `TextToSpeech` engine (`audio/KannadaTtsHelper.kt`). The app picks the best Kannada voice the phone offers. If none is installed, speech is skipped and Home shows a card that opens the phone's text-to-speech settings. No audio files or network calls are used.
 
-- **Palette**: Anodized matte off-white (`#F4F4F1`), stark chassis surfaces (`#FFFFFF`), precision border hairlines (`#D2D2CC`), and high-contrast charcoal typography (`#161616`).
-- **Iconic Braun Accents**: Functional Braun Orange (`#FF5200`), Signal Green (`#1E824C`), and Instrument Amber (`#E69500`).
-- **Acoustic Perforated Grille**: Custom canvas dot matrix inspired by the classic Braun T3 transistor radio and SK4 phonograph.
-- **Tactile Keys**: Circular convex push buttons reminiscent of the Braun ET66 calculator keys.
-- **Typography Pairing**:
-  - **Anek Kannada** (`res/font/anek_kannada.ttf`) for authentic, bold regional glyphs.
-  - **Plus Jakarta Sans** (`res/font/plus_jakarta_sans.ttf`) for tracked uppercase technical labeling.
+## Build and test
 
----
-
-## 🛠️ Architecture & Tech Stack
-
-- **UI Framework**: Android Jetpack Compose (Material 3).
-- **Speech Engine**: Built-in Android `TextToSpeech` with `Locale("kn", "IN")` support and phonetic acoustic fallback.
-- **State Management**: Android `ViewModel`, Kotlin Coroutines `StateFlow`, and reactive Compose state.
-- **Persistence**: `UserProgressManager` backed by Android `SharedPreferences` for streak tracking, XP points, completed units, and mastered flashcards.
-- **Testing**: Robolectric local JVM testing (`RobolectricTestRunner`) with offline Android 16 SDK instrumentation.
-
----
-
-## 🚀 Building & Testing
-
-### Compile the APK
 ```bash
-gradle assembleDebug
+./gradlew :app:assembleDebug
+./gradlew :app:bundleRelease   # needs the upload keystore, see docs/play-console/UPLOAD_CHECKLIST.md
+./gradlew :app:testDebugUnitTest
 ```
 
-### Run Local Unit & Robolectric Tests
-```bash
-gradle :app:testDebugUnitTest
-```
+The debug build needs a local `debug.keystore` in the repo root (git-ignored). The unit tests currently fail for an environment reason: `app/build.gradle.kts` points Robolectric at a Linux-only offline path. This needs fixing before release.
 
----
+## Documentation
 
-## 🛡️ Play Console Compliance, Security & Legal Docs
+- `docs/benne-ui-redesign.md`: design decisions and the record of each pass
+- `docs/ux-audit.md`: UX laws and app-structure audit
+- `docs/play-console/`: Play Store listing, data safety, privacy policy, upload checklist and store assets
+- Privacy policy (published): https://holagundiworks.github.io/Benne/privacy-policy.html
 
-- **Notifications**: Optional daily practice reminders (`POST_NOTIFICATIONS` runtime opt-in on Android 13+) scheduled via `AlarmManager.setInexactRepeating` with `PendingIntent.FLAG_IMMUTABLE`.
-- **Security & Privacy**: Zero ads, zero analytics SDKs, `network_security_config.xml` (`cleartextTrafficPermitted="false"`), scoped Auto Backup rules, R8 minification & resource shrinking, and in-app local progress reset.
-- **Play Console Documentation & Assets**:
-  - [Privacy Policy](docs/play-console/PRIVACY_POLICY.md)
-  - [Terms of Service](docs/play-console/TERMS_OF_SERVICE.md)
-  - [Data Safety & App Content Declaration](docs/play-console/DATA_SAFETY_DECLARATION.md)
-  - [Play Store Listing & Release Checklist](docs/play-console/PLAY_STORE_LISTING.md)
-  - Store Graphics: `docs/play-console/assets/play_store_icon_512.png` (512×512) & `docs/play-console/assets/feature_graphic_1024x500.png` (1024×500)
+## Brand assets
 
----
+- `benne_brand_kit/`: palette, logos, mascot, app icon sources
+- `Benne_Pop_Elements_Karnataka_Kit/`: cards, bursts, ribbons, landmarks
+- `Benne_Karnataka_Stickers_PNG/`: Karnataka sticker pack
+- `Benne_Badges_Production_Kit/`: achievement badges (SVG and transparent PNG)
 
-*Benne (ಬೆಣ್ಣೆ) — Designed with precision for effortless Kannada learning.*
+## Palette
+
+Butter Yellow `#FFCC29` · Pop Red `#FF3655` · Cream `#FFF7E2` · Teal `#00B8B0` · Ink `#17172D`
