@@ -35,6 +35,14 @@ class UserProgressManager(context: Context) {
     )
     val masteredFlashcardIds: StateFlow<Set<String>> = _masteredFlashcardIds.asStateFlow()
 
+    private val _showPronunciationHints = MutableStateFlow(prefs.getBoolean("show_pronunciation_hints", true))
+    val showPronunciationHints: StateFlow<Boolean> = _showPronunciationHints.asStateFlow()
+
+    fun setShowPronunciationHints(show: Boolean) {
+        _showPronunciationHints.value = show
+        prefs.edit().putBoolean("show_pronunciation_hints", show).apply()
+    }
+
     private val _playbackSpeed = MutableStateFlow(prefs.getFloat("audio_playback_speed", 0.85f))
     val playbackSpeed: StateFlow<Float> = _playbackSpeed.asStateFlow()
 

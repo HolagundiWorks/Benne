@@ -426,6 +426,10 @@ object SaralaKannadaData {
             englishMeaning = "Hello / Greetings",
             category = "Essentials",
             phoneticBreakdown = "Na-mas-kaa-ra",
+            // NEEDS NATIVE REVIEW: Devanagari pronunciation and the highlight
+            hindiPronunciation = "नमस्कार",
+            pronunciationHighlight = "र",
+            pronunciationNote = "In Kannada the final र keeps its short sound. Do not lengthen it to आ.",
             exampleSentenceKn = "ಎಲ್ಲರಿಗೂ ನಮಸ್ಕಾರ, ಹೇಗಿದ್ದೀರಾ?",
             exampleSentenceTranslit = "Ellarigoo namaskaara, hegiddeera?",
             exampleSentenceEn = "Hello everyone, how are you all?",

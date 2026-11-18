@@ -66,6 +66,8 @@ fun InteractiveVocabularyFlashcard(
     onFlip: () -> Unit,
     onSpeakWord: (String) -> Unit,
     onSpeakSentence: (String) -> Unit,
+    showHints: Boolean = true,
+    onToggleHints: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val rotation by animateFloatAsState(
@@ -124,7 +126,9 @@ fun InteractiveVocabularyFlashcard(
                         flashcard = flashcard,
                         isMastered = isMastered,
                         isCurrentlySpeaking = isCurrentlySpeaking,
-                        onSpeakWord = onSpeakWord
+                        onSpeakWord = onSpeakWord,
+                        showHints = showHints,
+                        onToggleHints = onToggleHints
                     )
                 } else {
                     Box(
@@ -150,7 +154,9 @@ private fun FlashcardFrontFace(
     flashcard: VocabularyFlashcard,
     isMastered: Boolean,
     isCurrentlySpeaking: Boolean,
-    onSpeakWord: (String) -> Unit
+    onSpeakWord: (String) -> Unit,
+    showHints: Boolean,
+    onToggleHints: (() -> Unit)?
 ) {
     Column(
         modifier = Modifier
@@ -204,6 +210,7 @@ private fun FlashcardFrontFace(
             KannadaWithSubscript(
                 kannadaText = flashcard.kannadaWord,
                 transliteration = flashcard.transliteration,
+                autoHindiPhonetics = flashcard.hindiPronunciation.isBlank(),
                 kannadaFontSize = 44.sp,
                 kannadaLineHeight = 52.sp,
                 kannadaColor = PopPosterInk,
@@ -215,7 +222,32 @@ private fun FlashcardFrontFace(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Surface(
+            if (flashcard.hindiPronunciation.isNotBlank()) {
+                // Hindi-script pronunciation with the verified red highlight, plus a hint toggle
+                BenneLearningText(
+                    hindiPronunciation = flashcard.hindiPronunciation,
+                    highlight = flashcard.pronunciationHighlight,
+                    note = if (showHints) flashcard.pronunciationNote else "",
+                    showHints = showHints
+                )
+                onToggleHints?.let { toggle ->
+                    Surface(
+                        onClick = toggle,
+                        shape = CircleShape,
+                        color = PopPosterPaper,
+                        border = BorderStroke(1.2.dp, PopPosterInk),
+                        modifier = Modifier.testTag("flashcard_hints_toggle")
+                    ) {
+                        Text(
+                            text = if (showHints) "Hide pronunciation hints" else "Show pronunciation hints",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = PopPosterInk,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                        )
+                    }
+                }
+            } else Surface(
                 shape = CircleShape,
                 color = PopPosterPaper,
                 border = BorderStroke(1.2.dp, PopPosterInk)

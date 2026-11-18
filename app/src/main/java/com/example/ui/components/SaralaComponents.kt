@@ -124,9 +124,11 @@ fun KannadaWithSubscript(
     subscriptColor: Color = MaterialTheme.colorScheme.primary,
     subscriptStyle: TextStyle = MaterialTheme.typography.bodySmall,
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
-    textAlign: TextAlign = TextAlign.Start
+    textAlign: TextAlign = TextAlign.Start,
+    // False when a reviewed Hindi-script pronunciation is shown instead of the automatic one
+    autoHindiPhonetics: Boolean = true
 ) {
-    val showHindi = LocalShowHindiPhonetics.current
+    val showHindi = LocalShowHindiPhonetics.current && autoHindiPhonetics
     val hasKannadaScript = remember(kannadaText) {
         kannadaText.any { it in '\u0C80'..'\u0CFF' }
     }

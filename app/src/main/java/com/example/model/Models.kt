@@ -95,5 +95,10 @@ data class VocabularyFlashcard(
     val exampleSentenceKn: String,
     val exampleSentenceTranslit: String,
     val exampleSentenceEn: String,
-    val culturalNote: String = ""
+    val culturalNote: String = "",
+    // Hindi-script pronunciation (Devanagari). Empty = not yet reviewed, hidden in the app.
+    val hindiPronunciation: String = "",
+    // Exact substring of hindiPronunciation to show in Pop Red (verified by a reviewer only)
+    val pronunciationHighlight: String = "",
+    val pronunciationNote: String = ""
 )

@@ -223,6 +223,7 @@ fun FlashcardStudioView(
 ) {
     val allFlashcards = SaralaKannadaData.flashcards
     val masteredCardIds by progressManager.masteredFlashcardIds.collectAsState()
+    val showPronunciationHints by progressManager.showPronunciationHints.collectAsState()
     val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
 
@@ -372,7 +373,9 @@ fun FlashcardStudioView(
                 isCurrentlySpeaking = speakingText == currentCard.kannadaWord,
                 onFlip = { isCardFlipped = !isCardFlipped },
                 onSpeakWord = { word -> ttsHelper.speak(word, playbackSpeed) },
-                onSpeakSentence = { sentence -> ttsHelper.speak(sentence, playbackSpeed) }
+                onSpeakSentence = { sentence -> ttsHelper.speak(sentence, playbackSpeed) },
+                showHints = showPronunciationHints,
+                onToggleHints = { progressManager.setShowPronunciationHints(!showPronunciationHints) }
             )
 
             Spacer(modifier = Modifier.height(14.dp))

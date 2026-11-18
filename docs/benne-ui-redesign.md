@@ -225,3 +225,12 @@ Shadow:
 - Verified on device: Home.
 - Explore Karnataka strip (`home_karnataka_strip`) on Home: the other 14 stickers in a sideways row, 72 dp each, with accessible names. Placed after the module tiles.
 - Adds 14 sticker PNGs (`res/drawable-nodpi/pop_sticker_*`). These add to APK size; compress if needed.
+
+## Hindi-speaker learning text (feature/learning-text)
+- `VocabularyFlashcard` has `hindiPronunciation`, `pronunciationHighlight` and `pronunciationNote`. Empty means "not reviewed": the app keeps the automatic phonetic line for that card.
+- `BenneLearningText` (`ui/components/BenneLearningText.kt`) renders reviewed Devanagari pronunciation. Only the exact `pronunciationHighlight` substring is coloured Pop Red. Highlights are never computed automatically.
+- Reviewed cards hide the automatic `HindiPhoneticText` line (`KannadaWithSubscript(autoHindiPhonetics = false)`).
+- Hint toggle: "Hide/Show pronunciation hints", saved in SharedPreferences (`show_pronunciation_hints`, default on).
+- Reviewed so far: ನಮಸ್ಕಾರ (Namaskaara), highlight "र". NEEDS NATIVE REVIEW before publishing.
+- Not done: English-first card order (English → Hindi → Kannada) for lesson cards; flashcards keep Kannada on the front, so meaning stays hidden until flip. Other words have no reviewed pronunciation yet.
+- Verified on device: Essentials flashcard shows the reviewed line, highlight and note; the toggle hides them.
