@@ -223,17 +223,6 @@ fun MainScreen(
             SaralaHeader(
                 streakDays = streakDays,
                 xpPoints = xpPoints,
-                playbackSpeed = playbackSpeed,
-                onToggleSpeed = {
-                    val nextSpeed = when {
-                        playbackSpeed < 0.8f -> 0.85f
-                        playbackSpeed < 1.0f -> 1.0f
-                        playbackSpeed < 1.15f -> 0.75f
-                        else -> 0.85f
-                    }
-                    progressManager.setPlaybackSpeed(nextSpeed)
-                },
-                onOpenSystemConsole = { showSystemConsole = true },
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .windowInsetsPadding(WindowInsets.statusBars)
@@ -245,6 +234,7 @@ fun MainScreen(
             FloatingBottomNav(
                 selected = currentScreen,
                 onSelect = { currentScreen = it },
+                onOpenSettings = { showSystemConsole = true },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .navigationBarsPadding()

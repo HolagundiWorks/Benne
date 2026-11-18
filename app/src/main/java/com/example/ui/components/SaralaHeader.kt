@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
@@ -46,6 +47,7 @@ import com.example.ui.theme.PopPosterInk
 import com.example.ui.theme.PopPosterMint
 import com.example.ui.theme.PopPosterPaper
 import java.util.Locale
+import androidx.compose.ui.draw.alpha
 
 /**
  * Floating Benne header: a pill with streak, XP and speed badges and the settings button.
@@ -56,11 +58,10 @@ import java.util.Locale
 fun SaralaHeader(
     streakDays: Int,
     xpPoints: Int,
-    playbackSpeed: Float,
-    onToggleSpeed: () -> Unit,
-    onOpenSystemConsole: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val streak = streakBadge(streakDays)
+    val points = pointsBadge(xpPoints)
     Box(modifier = modifier.fillMaxWidth()) {
         Surface(
             modifier = Modifier.fillMaxWidth(),
@@ -73,51 +74,12 @@ fun SaralaHeader(
                     .fillMaxWidth()
                     .padding(start = 12.dp, end = 116.dp, top = 8.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                HeaderBadge(
-                    icon = Icons.Default.LocalFireDepartment,
-                    text = "${streakDays}d",
-                    color = PopPosterMint,
-                    description = "Streak"
-                )
-                HeaderBadge(
-                    icon = Icons.Default.Stars,
-                    text = "$xpPoints",
-                    color = PopPosterCyan,
-                    description = "Experience Points"
-                )
-                // The speed badge still cycles the playback speed when tapped
-                HeaderBadge(
-                    icon = Icons.Default.Speed,
-                    text = String.format(Locale.US, "%.2fx", playbackSpeed),
-                    color = PopPosterButter,
-                    description = "Audio playback speed",
-                    onClick = onToggleSpeed,
-                    modifier = Modifier.testTag("audio_speed_chip")
-                )
-
-                Spacer(modifier = Modifier.width(2.dp))
-
-                // Settings button
-                Box(
-                    modifier = Modifier
-                        .minimumInteractiveComponentSize()
-                        .size(38.dp)
-                        .clip(CircleShape)
-                        .background(PopPosterPaper)
-                        .border(1.5.dp, PopPosterInk, CircleShape)
-                        .clickable(onClick = onOpenSystemConsole)
-                        .testTag("system_settings_button"),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Settings,
-                        contentDescription = "Settings, Notifications, Privacy & Legal",
-                        tint = PopPosterInk,
-                        modifier = Modifier.size(19.dp)
-                    )
-                }
+                BadgeImage(res = streak.first, unlocked = streak.second, description = "Streak badge")
+                BadgeImage(res = points.first, unlocked = points.second, description = "Points badge")
+                // Speed badge: response times are not recorded yet, so it stays locked
+                BadgeImage(res = R.drawable.speed_steady, unlocked = false, description = "Speed badge, locked")
             }
         }
 
@@ -179,4 +141,30 @@ private fun HeaderBadge(
             )
         }
     }
+}
+
+/** Highest unlocked streak badge (or the first tier, locked). Returns drawable and unlocked state. */
+private fun streakBadge(days: Int): Pair<Int, Boolean> {
+    val tiers = listOf(3 to R.drawable.streak_3_days, 7 to R.drawable.streak_7_days, 25 to R.drawable.streak_25_days, 50 to R.drawable.streak_50_days, 100 to R.drawable.streak_100_days)
+    val reached = tiers.lastOrNull { days >= it.first }
+    return if (reached != null) reached.second to true else R.drawable.streak_3_days to false
+}
+
+/** Highest unlocked points badge (or the first tier, locked). */
+private fun pointsBadge(xp: Int): Pair<Int, Boolean> {
+    val tiers = listOf(100 to R.drawable.points_100, 500 to R.drawable.points_500, 1000 to R.drawable.points_1000, 5000 to R.drawable.points_5000, 10000 to R.drawable.points_10000)
+    val reached = tiers.lastOrNull { xp >= it.first }
+    return if (reached != null) reached.second to true else R.drawable.points_100 to false
+}
+
+/** Kit badge artwork. Locked badges are dimmed and labelled for screen readers. */
+@Composable
+private fun BadgeImage(res: Int, unlocked: Boolean, description: String) {
+    Image(
+        painter = painterResource(res),
+        contentDescription = if (unlocked) description else "$description, locked",
+        modifier = Modifier
+            .height(44.dp)
+            .alpha(if (unlocked) 1f else 0.35f)
+    )
 }

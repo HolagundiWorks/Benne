@@ -253,3 +253,10 @@ Source: `Benne_Badges_Asset_Kit/` (from `Benne_Badges_Asset_Kit.zip`, tracked he
 - UI: `ui/components/AchievementBadge.kt`, shown as an "ACHIEVEMENTS" grid on the Profile screen. Each medallion states Unlocked or Locked in text and as a screen-reader label, and locked ones show the unlock rule.
 - Art not used. The kit's PNGs are 260×284 with opaque sheet backgrounds, and its own guide says not to ship them in UI until accepted. The kit license is "review before distribution". The medallions are text until redrawn, approved vector masters exist.
 - Verified on device: Profile achievements grid (all locked, correct rules).
+
+## Header badges and Settings in the dock (feature/achievements)
+- Header: the streak, XP and speed pills are replaced with the kit badges. Streak and points show the highest unlocked tier; locked tiers are dimmed (alpha 0.35). Speed shows `speed_steady` locked, since response times aren't recorded.
+- Playback speed moved out of the header; it stays in the Settings sheet (Audio playback speed).
+- Settings is a dock item (`nav_item_settings`) that opens the settings sheet, not a screen.
+- The kit PNGs have opaque sheet backgrounds (see Benne_Badges_Asset_Kit/IMPLEMENTATION.md). Shown in the app as requested for now; approved transparent art is still needed before release.
+- Verified on device: header badges, dock Settings, settings sheet.
