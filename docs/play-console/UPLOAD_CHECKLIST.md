@@ -59,22 +59,38 @@ Status key: **Done** = verified here · **Ready** = prepared, needs your action 
 
 | Check | Status | Notes |
 |---|---|---|
-| Unit tests | Partly passing | 1 of 2 pass. `ExampleRobolectricTest` fails because `build.gradle.kts` points Robolectric at a Linux-only offline path. Pre-existing. Fix before release. |
+| Unit tests | Done | `ExampleUnitTest` and `ExampleRobolectricTest` pass via `gradle :app:testDebugUnitTest`. |
 | Crash-free run on device | Done (debug) | Launched and navigated on a Samsung SM-M115F. |
 | Accessibility | Partly checked | Icons and key images have content descriptions. Check with TalkBack before release. |
 | Kannada text rendering | Done | Noto Sans Kannada is bundled. |
 | Permission prompt | Ready | The notification permission is requested at runtime on Android 13+. |
 
-## 6. Steps to submit (you)
+## 6. Generate upload key & deploy Beta (Open Testing)
 
-1. Create the upload keystore and keep it safe (back it up; losing it blocks updates). Put it at `my-upload-key.jks` in the repo root (git-ignored) or set `KEYSTORE_PATH`, and set `STORE_PASSWORD` and `KEY_PASSWORD`.
-2. Build the release bundle: `./gradlew :app:bundleRelease`. Output: `app/build/outputs/bundle/release/app-release.aab`.
-3. Publish the privacy policy at a public HTTPS URL.
-4. In Play Console: create the app "Benne", upload the AAB to an internal testing track first, fill in the store listing, data safety, content rating, target audience, ads and app access.
-5. Test on the internal track, then promote to production.
+1. **Generate your upload keystore locally** (back up the `.jks` file and passwords safely; `*.jks` is git-ignored):
+   ```bash
+   keytool -genkeypair -v \
+     -keystore my-upload-key.jks \
+     -alias upload \
+     -keyalg RSA -keysize 2048 -validity 10000
+   ```
+   *(The alias **must** be `upload` to match `signingConfigs.release` in `app/build.gradle.kts`.)*
+2. **Build the signed release Android App Bundle (`.aab`)**:
+   ```bash
+   export KEYSTORE_PATH="$(pwd)/my-upload-key.jks"
+   export STORE_PASSWORD="<your-store-password>"
+   export KEY_PASSWORD="<your-key-password>"
+   gradle :app:bundleRelease
+   ```
+   Output: `app/build/outputs/bundle/release/app-release.aab` *(or export directly via AI Studio's **Generate APK/AAB** menu).*
+3. **Publish your Privacy Policy over HTTPS**:
+   Push to GitHub and enable **Settings → Pages → Deploy from a branch (`main` / `/docs`)** to serve `docs/privacy-policy.html`.
+4. **Deploy to Beta (Open Testing) in Google Play Console**:
+   - Create the app **Benne** (`com.benne.kannada`) and enroll in **Play App Signing** when prompted.
+   - Complete **App content** (Privacy Policy URL, Data Safety from `DATA_SAFETY_DECLARATION.md`, Content Rating, Ads = No, App Access = No restrictions, Target Audience) and **Store listing** (`PLAY_STORE_LISTING.md`, `assets/`, `screenshots/`).
+   - Open **Testing → Open testing** (or **Closed testing** first if required for a new personal developer account), upload `app-release.aab`, select countries/regions, and submit for review. Once approved, share the Play Console **opt-in URL** for public beta testers.
 
-## 7. Known gaps
+## 7. Known gaps (environment / account actions required)
 
-- The release keystore and passwords are not in the repo. I cannot build a signed release without them.
-- The privacy policy is not hosted yet.
-- The Robolectric unit test fails on this machine (pre-existing; see section 5).
+- **Upload keystore & passwords:** Private signing keys cannot be generated or stored on your behalf in the shared cloud workspace; generate `my-upload-key.jks` locally (or export via AI Studio's APK/AAB generator).
+- **Privacy policy hosting & Play Console upload:** Requires your GitHub Pages toggle and Google Play Developer Console account to upload `app-release.aab` and publish the Beta track.

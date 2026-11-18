@@ -64,6 +64,9 @@ class ExampleRobolectricTest {
         assertTrue(LegalDocuments.privacyPolicy.content.contains("vishwabhiram@gmail.com"))
         assertTrue(LegalDocuments.termsOfService.content.contains("ACCEPTANCE OF TERMS"))
         assertTrue(LegalDocuments.openSourceNotices.content.contains("SIL OFL 1.1"))
+        assertTrue(LegalDocuments.openSourceNotices.content.contains("Baloo 2"))
+        assertTrue(LegalDocuments.openSourceNotices.content.contains("Nunito Sans"))
+        assertTrue(LegalDocuments.openSourceNotices.content.contains("Noto Sans Kannada"))
     }
 
     @Test

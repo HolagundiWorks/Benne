@@ -53,8 +53,6 @@ import com.example.ui.theme.PopPosterPaper
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.graphics.drawscope.Stroke
 
 /**
  * Benne Pop-Poster Interactive 3D Flashcard with hard drop shadow,
@@ -98,6 +96,7 @@ fun InteractiveVocabularyFlashcard(
             rotation <= 90f && !isMastered -> PopPosterButter
             else -> PopPosterPaper
         }
+        val skin = ImageBitmap.imageResource(cardSkinFor(skinColor))
 
         ElevatedCard(
             onClick = onFlip,
@@ -109,12 +108,7 @@ fun InteractiveVocabularyFlashcard(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(366.dp)
-                .drawBehind {
-                    // Plain card: exact fill with an ink outline (content card rule)
-                    val radius = CornerRadius(20.dp.toPx())
-                    drawRoundRect(color = skinColor, cornerRadius = radius)
-                    drawRoundRect(color = PopPosterInk, cornerRadius = radius, style = Stroke(width = 2.dp.toPx()))
-                }
+                .drawBehind { drawNineSlice(skin, 16.dp.toPx()) }
                 .graphicsLayer {
                     rotationY = rotation
                     cameraDistance = 14f * density

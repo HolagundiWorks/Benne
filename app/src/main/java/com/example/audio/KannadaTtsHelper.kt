@@ -26,7 +26,7 @@ class KannadaTtsHelper(context: Context) {
     init {
         tts = TextToSpeech(context.applicationContext) { status ->
             if (status == TextToSpeech.SUCCESS) {
-                val knLocale = Locale("kn", "IN")
+                val knLocale = Locale.Builder().setLanguage("kn").setRegion("IN").build()
                 val langResult = tts?.isLanguageAvailable(knLocale)
                 if (langResult == TextToSpeech.LANG_AVAILABLE ||
                     langResult == TextToSpeech.LANG_COUNTRY_AVAILABLE ||

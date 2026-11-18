@@ -78,6 +78,7 @@ fun DictionaryScreen(
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
 
     val categories = listOf("All", "Saved", "Greetings", "Travel & Auto", "Food & Cafe", "Shopping & Numbers", "Common & Help")
+    val cardPalette = listOf(PopPosterPaper, PopPosterCyan, PopPosterPeach, PopPosterMint)
 
     val filteredList = SaralaKannadaData.dictionary.filter { phrase ->
         val matchesCategory = when (selectedCategory) {
@@ -106,7 +107,6 @@ fun DictionaryScreen(
         item {
             PosterCard(
                 containerColor = PopPosterMint,
-                kit = true,
                 cornerRadius = 24.dp,
                 shadowOffset = 5.dp,
                 modifier = Modifier.fillMaxWidth()
@@ -276,9 +276,10 @@ fun DictionaryScreen(
             itemsIndexed(filteredList, key = { _, it -> it.id }) { index, phrase ->
                 val isFav = favorites.contains(phrase.id)
                 val isSpeaking = speakingText == phrase.kannada
+                val cardBg = if (isSpeaking) PopPosterButter else cardPalette[index % cardPalette.size]
 
                 PosterCard(
-                    containerColor = if (isSpeaking) PopPosterButter else PopPosterPaper,
+                    containerColor = cardBg,
                     cornerRadius = 18.dp,
                     shadowOffset = 4.dp,
                     modifier = Modifier

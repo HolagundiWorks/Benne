@@ -1,4 +1,4 @@
-# Production R8 / ProGuard rules for Sarala Kannada
+# Production R8 / ProGuard rules for Benne
 -keepattributes SourceFile,LineNumberTable
 -renamesourcefileattribute SourceFile
 

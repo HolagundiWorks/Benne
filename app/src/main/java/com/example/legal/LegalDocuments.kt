@@ -79,10 +79,9 @@ These terms may be updated in future application releases. Contact: vishwabhiram
         effectiveDate = "Updated: November 16, 2026",
         content = """
 TYPOGRAPHY ASSETS (SIL Open Font License 1.1)
-• Bricolage Grotesque — Atelier Anchor / Google Fonts (SIL OFL 1.1)
-• Space Grotesk — Florian Karsten / Google Fonts (SIL OFL 1.1)
-• Anek Kannada — EkType / Google Fonts (SIL OFL 1.1)
-• Plus Jakarta Sans — Tokotype / Google Fonts (SIL OFL 1.1)
+• Baloo 2 — EkType / Google Fonts (SIL OFL 1.1)
+• Nunito Sans — Vernon Adams & Contributors / Google Fonts (SIL OFL 1.1)
+• Noto Sans Kannada — Google / Google Fonts (SIL OFL 1.1)
 
 ANDROID & JETPACK LIBRARIES (Apache License 2.0)
 • AndroidX Core KTX, Activity Compose, Lifecycle Runtime & ViewModel

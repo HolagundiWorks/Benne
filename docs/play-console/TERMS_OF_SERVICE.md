@@ -16,7 +16,7 @@ We grant you a personal, non-exclusive, non-transferable, revocable license to u
 ## 3. Intellectual Property
 All original application design, Material Design 3 UI architecture, curated dialogue scenarios, flashcard decks, and source materials are the intellectual property of the Benne developer unless otherwise noted in the Open Source & Font Licenses notices inside the App.
 
-Bundled fonts (**Bricolage Grotesque**, **Space Grotesk**, **Anek Kannada**, and **Plus Jakarta Sans**) are distributed under the **SIL Open Font License 1.1**.
+Bundled fonts (**Baloo 2**, **Nunito Sans**, and **Noto Sans Kannada**) are distributed under the **SIL Open Font License 1.1**.
 
 ## 4. Educational Content Disclaimer
 Kannada spellings, Romanized transliterations, phonetic guides, and conversational examples reflect common spoken and formal usage across Karnataka (including Bengaluru). Regional dialects vary; educational content is provided **"AS IS"** without warranty of uninterrupted availability or complete linguistic coverage.

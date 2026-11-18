@@ -65,7 +65,7 @@ KEY FEATURES
 | **App Icon** | 512 x 512 px, PNG, <= 1 MB | `docs/play-console/assets/play_store_icon_512.png` | Ready |
 | **Feature Graphic** | 1024 x 500 px, PNG/JPG, <= 15 MB | `docs/play-console/assets/feature_graphic_1024x500.png` | Ready |
 | **Adaptive Launcher Icon** | Foreground + background in APK | `app/src/main/res/mipmap-*` & `res/drawable/ic_launcher_*` | Ready |
-| **Phone Screenshots** | 2–8 screenshots (16:9 or 9:16, min 320px, max 3840px) | Capture from emulator/device (Home, Script Matrix, 3D Flashcards, Dialogues, Lexicon) | Capture before submit |
+| **Phone Screenshots** | 2–8 screenshots (16:9 or 9:16, min 320px, max 3840px) | `docs/play-console/screenshots/01_home.png` through `04_letters.png` | Ready |
 
 ---
 
@@ -80,6 +80,6 @@ KEY FEATURES
 - [x] **Notifications (Android 13+):** `POST_NOTIFICATIONS` requested at runtime only when user enables Daily Practice Reminders; uses `AlarmManager.setInexactRepeating` (no restricted exact-alarm permission) and `PendingIntent.FLAG_IMMUTABLE`
 - [x] **Edge-to-Edge & Accessibility:** `enableEdgeToEdge()`, `statusBarsPadding()` on top bar, 48dp minimum touch targets on primary controls, `contentDescription` on icons
 - [x] **In-App Legal Access & Data Reset:** Privacy Policy, Terms of Service, Open Source Notices, and local progress reset available inside System Console
-- [ ] **Host Privacy Policy URL:** Publish `docs/play-console/PRIVACY_POLICY.md` to an HTTPS URL and enter in Play Console
+- [ ] **Host Privacy Policy URL:** Enable GitHub Pages (`main` branch, `/docs` folder) to serve `docs/privacy-policy.html` at HTTPS and enter the URL in Play Console
 - [ ] **Build Signed Android App Bundle (`.aab`):** Export or build with your Play upload keystore (`gradle :app:bundleRelease` with `KEYSTORE_PATH`, `STORE_PASSWORD`, `KEY_PASSWORD` environment variables)
-- [ ] **Upload Screenshots & Closed Testing:** Upload screenshots + `play_store_icon_512.png` + `feature_graphic_1024x500.png` and complete Closed Testing (if required for personal developer accounts) before Production rollout
+- [ ] **Upload Store Listing & Complete Testing:** Upload `play_store_icon_512.png`, `feature_graphic_1024x500.png`, and `docs/play-console/screenshots/*.png`, then complete Internal/Closed Testing before Production rollout
