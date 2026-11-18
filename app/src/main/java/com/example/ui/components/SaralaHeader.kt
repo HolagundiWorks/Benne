@@ -137,8 +137,7 @@ fun SaralaHeader(
                 contentDescription = "Benne",
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(end = 4.5.dp)
-                    .offset(x = (-3).dp, y = (-8).dp)
+                    .offset(y = (-1).dp)
                     .requiredHeight(88.dp)
             )
         }
