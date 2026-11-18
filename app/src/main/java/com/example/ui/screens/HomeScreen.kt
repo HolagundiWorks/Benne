@@ -72,6 +72,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.audio.KannadaTtsHelper
 import com.example.data.LevelProgress
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Place
+import com.example.data.Achievements
+import com.example.data.AchievementInputs
+import com.example.ui.components.CardGrid
+import com.example.ui.theme.NotoSansKannadaFamily
 import com.example.data.SaralaKannadaData
 import com.example.data.UserProgressManager
 import com.example.model.LessonMilestone
@@ -105,21 +111,16 @@ import androidx.compose.foundation.lazy.LazyRow
 fun HomeScreen(
     progressManager: UserProgressManager,
     ttsHelper: KannadaTtsHelper,
-    onNavigateToVarnamale: () -> Unit,
-    onNavigateToConversations: () -> Unit,
-    onNavigateToPractice: () -> Unit,
-    onNavigateToPoetryPlay: () -> Unit = {},
-    onNavigateToFood: () -> Unit = {},
-    onNavigateToFlag: () -> Unit = {},
-    onNavigateToMap: () -> Unit = {},
-    onNavigateToHeritage: () -> Unit = {},
+    onOpenProfile: () -> Unit,
+    onOpenCurriculum: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val completedLessons by progressManager.completedLessons.collectAsState()
     val unlockedStickers by progressManager.unlockedStickers.collectAsState()
     val completedPoemChallenges by progressManager.completedPoemChallenges.collectAsState()
+    val masteredFlashcards by progressManager.masteredFlashcardIds.collectAsState()
+    val learnerName by progressManager.learnerName.collectAsState()
     val xpPoints by progressManager.xp.collectAsState()
-    val currentLevel = LevelProgress.levelFor(xpPoints)
     val streakNow by progressManager.streakDays.collectAsState()
     val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
     val kannadaVoiceReady by ttsHelper.kannadaVoiceAvailable.collectAsState()
@@ -130,12 +131,20 @@ fun HomeScreen(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val nextMilestone = SaralaKannadaData.milestones.firstOrNull { it.id !in completedLessons }
-
-    // Clean light-tint rotation so dark ink & red highlights always read crisply
-    val chapterPosterColors = listOf(
-        PopPosterPaper,
-        PopPosterButter,
-        PopPosterCyan
+    val totalChapters = SaralaKannadaData.milestones.size.coerceAtLeast(1)
+    val word = wordOfTheDay()
+    val masteredCount = SaralaKannadaData.flashcards.count { it.id in masteredFlashcards }
+    val flashcardTotal = SaralaKannadaData.flashcards.size.coerceAtLeast(1)
+    val badgesUnlocked = Achievements.all.count {
+        Achievements.isUnlocked(it, AchievementInputs(streakDays = streakNow, xp = xpPoints))
+    }
+    val scores = listOf(
+        ScoreItem("$xpPoints", "Total XP", PopPosterButter, "xp"),
+        ScoreItem("$badgesUnlocked/${Achievements.all.size}", "Badges", PopPosterCyan, "badges"),
+        ScoreItem("$streakNow", "Day streak", PopPosterMint, "streak"),
+        ScoreItem("$masteredCount/$flashcardTotal", "Cards mastered", PopPosterPaper, "cards"),
+        ScoreItem("${completedPoemChallenges.size}", "Poem wins", PopPosterPeach, "poems"),
+        ScoreItem("${unlockedStickers.size}/10", "Stickers", PopPosterButter, "stickers")
     )
 
     LazyColumn(
@@ -145,6 +154,9 @@ fun HomeScreen(
         contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 14.dp + LocalFloatingNavInset.current),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
+        // User details: name, level, progress to the next level. Tap opens Profile.
+        item { LevelCard(name = learnerName, xp = xpPoints, onClick = onOpenProfile) }
+
         // Continue Lesson: next unfinished chapter, one tap back into its study sheet
         nextMilestone?.let { next ->
             item {
@@ -251,396 +263,31 @@ fun HomeScreen(
             }
         }
 
+        item { WordOfTheDayCard(word = word, speakingText = speakingText, onSpeak = { ttsHelper.speak(it, playbackSpeed) }) }
+
         item { HomeSectionHeader("YOUR PROGRESS") }
-        // Level card: XP-driven level, a playful title and progress to the next level
         item {
-            LevelCard(xp = xpPoints)
+            ProgressCard(
+                lessonsDone = completedLessons.size,
+                totalLessons = totalChapters,
+                cardsMastered = masteredCount,
+                cardsTotal = flashcardTotal,
+                onOpenCurriculum = onOpenCurriculum
+            )
         }
 
-        // Badges: unlocked from existing progress (lessons, streak, XP)
+        item { HomeSectionHeader("SCORES") }
+        item {
+            CardGrid(items = scores, columns = 3) { score -> ScoreTile(score) }
+        }
+
+        item { HomeSectionHeader("BADGES") }
         item {
             BadgeRow(
                 lessonsDone = completedLessons.size,
                 totalLessons = SaralaKannadaData.milestones.size,
                 streakDays = streakNow,
                 xp = xpPoints
-            )
-        }
-
-        item { HomeSectionHeader("LEARN") }
-        // Quick Learning Poster Tiles
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "EXPLORE MODULES",
-                    fontFamily = BalooFamily,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = 0.4.sp,
-                    color = PopPosterInk
-                )
-                PosterStampBadge(
-                    text = "3 CORE TRACKS",
-                    containerColor = PopPosterPaper,
-                    contentColor = PopPosterInk
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Max),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                PopQuickModuleCard(
-                    iconRes = com.example.R.drawable.pop_icon_book,
-                    title = "Alphabet",
-                    subtitle = "Letters & sounds",
-                    tagKey = "script",
-                    cardColor = PopPosterButter,
-                    onClick = onNavigateToVarnamale,
-                    modifier = Modifier.weight(1f).fillMaxHeight()
-                )
-                PopQuickModuleCard(
-                    iconRes = com.example.R.drawable.pop_icon_speech,
-                    title = "Dialogues",
-                    subtitle = "Real-life talk",
-                    tagKey = "dialogue",
-                    cardColor = PopPosterCyan,
-                    onClick = onNavigateToConversations,
-                    modifier = Modifier.weight(1f).fillMaxHeight()
-                )
-                PopQuickModuleCard(
-                    iconRes = com.example.R.drawable.pop_icon_trophy,
-                    title = "Practice",
-                    subtitle = "Cards & quiz",
-                    tagKey = "practice",
-                    cardColor = PopPosterMint,
-                    onClick = onNavigateToPractice,
-                    modifier = Modifier.weight(1f).fillMaxHeight()
-                )
-            }
-        }
-
-        // Neo-Pop Hero Poster Card
-        item {
-            PosterCard(
-                containerColor = PopPosterButter,
-                contentColor = PopPosterInk,
-                cornerRadius = 24.dp,
-                shadowOffset = 6.dp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("home_hero_card")
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        PosterStampBadge(
-                            text = "DAILY KANNADA QUOTE",
-                            containerColor = PopPosterInk,
-                            contentColor = PopPosterButter
-                        )
-                        PosterStampBadge(
-                            text = "BENNE EDITION",
-                            containerColor = PopPosterPaper,
-                            contentColor = PopPosterInk
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(14.dp))
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            KannadaWithSubscript(
-                                kannadaText = "ಕನ್ನಡ ಎನೆ ಕುಣಿದಾಡುವುದೆನ್ನೆದೆ",
-                                transliteration = "Kannada ene kunidaaduvudennede",
-                                kannadaFontSize = 24.sp,
-                                kannadaLineHeight = 31.sp,
-                                kannadaColor = PopPosterInk,
-                                subscriptColor = PopPosterInk.copy(alpha = 0.75f),
-                                subscriptStyle = MaterialTheme.typography.labelLarge
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Surface(
-                                shape = RoundedCornerShape(10.dp),
-                                color = PopPosterPaper,
-                                border = BorderStroke(1.5.dp, PopPosterInk)
-                            ) {
-                                Text(
-                                    text = "Meaning: \"Speaking Kannada fills the heart with joy\"",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = PopPosterInk,
-                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.width(12.dp))
-
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            ButterMascot(size = 76.dp, pose = com.example.R.drawable.benne_mascot_hello)
-                            Spacer(modifier = Modifier.height(6.dp))
-                            AudioSpeakButton(
-                                textToSpeak = "ಕನ್ನಡ ಎನೆ ಕುಣಿದಾಡುವುದೆನ್ನೆದೆ, ಕನ್ನಡ ಎನೆ ಕಿವಿ ನಿಮಿರುವುದು!",
-                                isCurrentlySpeaking = speakingText == "ಕನ್ನಡ ಎನೆ ಕುಣಿದಾಡುವುದೆನ್ನೆದೆ, ಕನ್ನಡ ಎನೆ ಕಿವಿ ನಿಮಿರುವುದು!",
-                                onSpeak = { ttsHelper.speak(it, playbackSpeed) },
-                                sizeDp = 52,
-                                iconSizeDp = 24,
-                                containerColor = PopPosterPaper,
-                                contentColor = PopPosterInk
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-        item { HomeSectionHeader("EXPLORE") }
-        // Explore Karnataka: crisp vector-outlined landmark strip with Kannada audio
-        item {
-            KarnatakaLandmarkStrip(
-                onSpeakLandmark = { ttsHelper.speak(it, playbackSpeed) }
-            )
-        }
-
-        // Karnataka identity cards: flag and map (discovery cards; open learning screens)
-        item {
-            if (currentLevel < KARNATAKA_CARDS_LEVEL) {
-                LockedHomeCard(title = "Karnataka Flag and Map", requiredLevel = KARNATAKA_CARDS_LEVEL, testTag = "home_identity_locked")
-            } else Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth().height(androidx.compose.foundation.layout.IntrinsicSize.Max).testTag("home_identity_cards")) {
-                com.example.ui.screens.BenneDiscoveryCard(
-                    artwork = { com.example.ui.screens.KarnatakaFlagArtwork(modifier = Modifier.fillMaxWidth()) },
-                    english = "Karnataka Flag",
-                    latin = "Karnatakada Dhwaja",
-                    devanagari = "कर्नाटकद ध्वज",
-                    kannada = "ಕರ್ನಾಟಕದ ಧ್ವಜ",
-                    onClick = onNavigateToFlag,
-                    modifier = Modifier.weight(1f).fillMaxHeight().testTag("home_flag_card")
-                )
-                com.example.ui.screens.BenneDiscoveryCard(
-                    artwork = { com.example.ui.screens.KarnatakaMapArtwork(selected = null, onSelect = null, modifier = Modifier.fillMaxWidth(0.9f)) },
-                    english = "Karnataka Map",
-                    latin = "Karnatakada Nakshe",
-                    devanagari = "कर्नाटकद नक्शे",
-                    kannada = "ಕರ್ನಾಟಕದ ನಕ್ಷೆ",
-                    onClick = onNavigateToMap,
-                    modifier = Modifier.weight(1f).fillMaxHeight().testTag("home_map_card")
-                )
-            }
-        }
-
-        // Karnataka modules: food and heritage (content pending verification)
-        item {
-            if (currentLevel < KARNATAKA_MODULES_LEVEL) {
-                LockedHomeCard(title = "Food and Heritage", requiredLevel = KARNATAKA_MODULES_LEVEL, testTag = "home_karnataka_locked")
-            } else PosterCard(
-                containerColor = PopPosterPeach,
-                contentColor = PopPosterInk,
-                cornerRadius = 18.dp,
-                shadowOffset = 4.dp,
-                modifier = Modifier.fillMaxWidth().testTag("home_karnataka_modules")
-            ) {
-                Column(modifier = Modifier.padding(14.dp)) {
-                    Text(
-                        text = "KARNATAKA",
-                        fontFamily = BalooFamily,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 16.sp,
-                        color = PopPosterInk
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        Surface(
-                            onClick = onNavigateToFood,
-                            shape = RoundedCornerShape(14.dp),
-                            color = PopPosterPaper,
-                            contentColor = PopPosterInk,
-                            border = BorderStroke(1.5.dp, PopPosterInk),
-                            modifier = Modifier.weight(1f).testTag("home_food_button")
-                        ) {
-                            Text("Food", fontWeight = FontWeight.ExtraBold, modifier = Modifier.padding(14.dp))
-                        }
-                        Surface(
-                            onClick = onNavigateToHeritage,
-                            shape = RoundedCornerShape(14.dp),
-                            color = PopPosterPaper,
-                            contentColor = PopPosterInk,
-                            border = BorderStroke(1.5.dp, PopPosterInk),
-                            modifier = Modifier.weight(1f).testTag("home_heritage_button")
-                        ) {
-                            Text("Heritage", fontWeight = FontWeight.ExtraBold, modifier = Modifier.padding(14.dp))
-                        }
-                    }
-                }
-            }
-        }
-
-        // ಪದ್ಯ ಆಟ (Padya Aata) Poetry Play Spotlight Card
-        item {
-            if (currentLevel < POETRY_LEVEL) {
-                LockedHomeCard(title = "Poetry Play", requiredLevel = POETRY_LEVEL, testTag = "home_poetry_locked")
-            } else PosterCard(
-                containerColor = PopPosterCyan,
-                contentColor = PopPosterInk,
-                cornerRadius = 22.dp,
-                shadowOffset = 5.dp,
-                onClick = onNavigateToPoetryPlay,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("home_poetry_play_spotlight")
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Surface(
-                        shape = RoundedCornerShape(14.dp),
-                        border = BorderStroke(1.8.dp, PopPosterInk),
-                        color = PopPosterButter,
-                        modifier = Modifier.size(64.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(com.example.R.drawable.img_poem_rain),
-                            contentDescription = "Padya Aata illustration",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(14.dp))
-
-                    Column(modifier = Modifier.weight(1f)) {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(6.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            PosterStampBadge(
-                                text = "8 POEM GAMES",
-                                containerColor = PopPosterInk,
-                                contentColor = PopPosterButter
-                            )
-                            PosterStampBadge(
-                                text = "${unlockedStickers.size}/10 STICKERS",
-                                containerColor = PopPosterMint,
-                                contentColor = PopPosterInk
-                            )
-                        }
-                        Spacer(modifier = Modifier.height(6.dp))
-                        KannadaWithSubscript(
-                            kannadaText = "ಪದ್ಯ ಆಟ • Poetry Play",
-                            transliteration = "Padya Aata (${completedPoemChallenges.size} solved)",
-                            kannadaFontSize = 18.sp,
-                            kannadaLineHeight = 23.sp,
-                            kannadaColor = PopPosterInk,
-                            subscriptColor = MaterialTheme.colorScheme.primary,
-                            subscriptStyle = MaterialTheme.typography.labelSmall
-                        )
-                        Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            text = "Rhymes, rhythm taps, word hunts & poetry remixes",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = PopPosterInk.copy(alpha = 0.85f)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    Surface(
-                        shape = CircleShape,
-                        color = PopPosterButter,
-                        border = BorderStroke(1.8.dp, PopPosterInk),
-                        modifier = Modifier.size(38.dp)
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                contentDescription = "Open Poetry Play",
-                                tint = PopPosterInk,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
-        item { HomeSectionHeader("CURRICULUM") }
-        // Curriculum Header + Overall Progress
-        item {
-            val totalUnits = SaralaKannadaData.milestones.size.coerceAtLeast(1)
-            val progressFraction = completedLessons.size.toFloat() / totalUnits
-
-            PosterCard(
-                containerColor = PopPosterPaper,
-                cornerRadius = 18.dp,
-                shadowOffset = 4.dp,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "GUIDED ROADMAP",
-                            fontFamily = BalooFamily,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = PopPosterInk
-                        )
-                        PosterStampBadge(
-                            text = "${completedLessons.size} / ${SaralaKannadaData.milestones.size} DONE",
-                            containerColor = PopPosterMint,
-                            contentColor = PopPosterInk
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(CircleShape)
-                            .border(1.5.dp, PopPosterInk, CircleShape)
-                            .background(MaterialTheme.colorScheme.background)
-                    ) {
-                        LinearProgressIndicator(
-                            progress = { progressFraction },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(10.dp),
-                            color = MaterialTheme.colorScheme.primary,
-                            trackColor = Color.Transparent,
-                            strokeCap = StrokeCap.Round
-                        )
-                    }
-                }
-            }
-        }
-
-        itemsIndexed(SaralaKannadaData.milestones, key = { _, it -> it.id }) { index, milestone ->
-            val isCompleted = completedLessons.contains(milestone.id)
-            val cardBg = chapterPosterColors[index % chapterPosterColors.size]
-            PopMilestoneCard(
-                milestone = milestone,
-                cardColor = cardBg,
-                isCompleted = isCompleted,
-                onStartLesson = { activeLessonForStudy = milestone }
             )
         }
 
@@ -671,382 +318,217 @@ fun HomeScreen(
     }
 }
 
-@Composable
-private fun PopQuickModuleCard(
-    @DrawableRes iconRes: Int,
-    title: String,
-    subtitle: String,
-    tagKey: String,
-    cardColor: Color,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    PosterCard(
-        containerColor = cardColor,
-        contentColor = PopPosterInk,
-        cornerRadius = 18.dp,
-        shadowOffset = 4.dp,
-        onClick = onClick,
-        modifier = modifier.testTag("function_tile_$tagKey")
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Image(
-                painter = painterResource(iconRes),
-                contentDescription = title,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.size(40.dp)
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = title,
-                fontFamily = BalooFamily,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = PopPosterInk,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = subtitle,
-                style = MaterialTheme.typography.labelSmall,
-                color = PopPosterInk.copy(alpha = 0.8f),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
+/** Today's Kannada word. The day picks the word, so it changes once a day and needs no network. */
+private fun wordOfTheDay(): com.example.model.VocabularyFlashcard {
+    val now = System.currentTimeMillis()
+    val dayNumber = (now + java.util.TimeZone.getDefault().getOffset(now)) / 86_400_000L
+    val cards = SaralaKannadaData.flashcards
+    return cards[(dayNumber % cards.size).toInt()]
 }
 
 @Composable
-private fun PopMilestoneCard(
-    milestone: LessonMilestone,
-    cardColor: Color,
-    isCompleted: Boolean,
-    onStartLesson: () -> Unit
-) {
-    PosterCard(
-        containerColor = if (isCompleted) PopPosterMint else cardColor,
-        contentColor = PopPosterInk,
-        cornerRadius = 20.dp,
-        shadowOffset = 4.dp,
-        onClick = onStartLesson,
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag("milestone_card_${milestone.id}")
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Chapter Poster Number Stamp with mini shadow
-            Box(modifier = Modifier.padding(end = 2.dp, bottom = 2.dp)) {
-                Box(
-                    modifier = Modifier
-                        .size(46.dp)
-                        .offset(x = 2.dp, y = 2.dp)
-                        .clip(CircleShape)
-                        .background(PopPosterInk)
-                )
-                Surface(
-                    modifier = Modifier.size(46.dp),
-                    shape = CircleShape,
-                    color = if (isCompleted) PopPosterInk else PopPosterPaper,
-                    contentColor = if (isCompleted) PopPosterMint else PopPosterInk,
-                    border = BorderStroke(2.dp, PopPosterInk)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        if (isCompleted) {
-                            Icon(
-                                imageVector = Icons.Default.Check,
-                                contentDescription = "Completed",
-                                modifier = Modifier.size(22.dp)
-                            )
-                        } else {
-                            Text(
-                                text = milestone.levelNumber.toString().padStart(2, '0'),
-                                fontFamily = BalooFamily,
-                                fontSize = 18.sp,
-                                fontWeight = FontWeight.ExtraBold
-                            )
-                        }
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.width(14.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    PosterStampBadge(
-                        text = "CH ${milestone.levelNumber} • ${milestone.badgeTag.uppercase()}",
-                        containerColor = PopPosterPaper,
-                        contentColor = PopPosterInk
-                    )
-                }
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    text = milestone.titleEnglish,
-                    fontFamily = BalooFamily,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = PopPosterInk
-                )
-                Spacer(modifier = Modifier.height(3.dp))
-                KannadaWithSubscript(
-                    kannadaText = milestone.titleKannada,
-                    transliteration = milestone.titleTransliteration,
-                    kannadaFontSize = 15.sp,
-                    kannadaLineHeight = 20.sp,
-                    kannadaColor = PopPosterInk,
-                    subscriptColor = MaterialTheme.colorScheme.primary,
-                    subscriptStyle = MaterialTheme.typography.labelSmall
-                )
-            }
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Surface(
-                shape = CircleShape,
-                color = PopPosterInk,
-                contentColor = PopPosterButter,
-                modifier = Modifier.size(42.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(
-                        imageVector = Icons.Default.PlayArrow,
-                        contentDescription = "Start ${milestone.titleEnglish}"
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun PopLessonStudyContent(
-    milestone: LessonMilestone,
-    ttsHelper: KannadaTtsHelper,
-    playbackSpeed: Float,
+private fun WordOfTheDayCard(
+    word: com.example.model.VocabularyFlashcard,
     speakingText: String?,
-    onComplete: () -> Unit,
-    onClose: () -> Unit
+    onSpeak: (String) -> Unit
 ) {
-    var currentStepIndex by remember { mutableIntStateOf(0) }
-    val step = milestone.steps[currentStepIndex]
-    val isLastStep = currentStepIndex == milestone.steps.lastIndex
-
-    Column(
+    PosterCard(
+        containerColor = PopPosterButter,
+        contentColor = PopPosterInk,
+        cornerRadius = 24.dp,
+        shadowOffset = 6.dp,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 10.dp)
-            .testTag("lesson_study_sheet")
+            .testTag("home_word_of_day")
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Top
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                PosterStampBadge(
-                    text = "CHAPTER ${milestone.levelNumber} • STEP ${currentStepIndex + 1} / ${milestone.steps.size}",
-                    containerColor = PopPosterButter,
-                    contentColor = PopPosterInk
-                )
-                Spacer(modifier = Modifier.height(6.dp))
-                Text(
-                    text = milestone.titleEnglish,
-                    fontFamily = BalooFamily,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = PopPosterInk
-                )
-                Spacer(modifier = Modifier.height(2.dp))
-                KannadaWithSubscript(
-                    kannadaText = milestone.titleKannada,
-                    transliteration = milestone.titleTransliteration,
-                    kannadaFontSize = 15.sp,
-                    kannadaLineHeight = 20.sp,
-                    kannadaColor = PopPosterInk,
-                    subscriptColor = MaterialTheme.colorScheme.primary,
-                    subscriptStyle = MaterialTheme.typography.labelSmall
-                )
-            }
-            IconButton(onClick = onClose) {
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = "Close",
-                    tint = PopPosterInk
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(CircleShape)
-                .border(1.5.dp, PopPosterInk, CircleShape)
-                .background(PopPosterPaper)
-        ) {
-            LinearProgressIndicator(
-                progress = { (currentStepIndex + 1).toFloat() / milestone.steps.size },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(10.dp),
-                color = MaterialTheme.colorScheme.primary,
-                trackColor = Color.Transparent,
-                strokeCap = StrokeCap.Round
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        PosterCard(
-            containerColor = PopPosterPaper,
-            cornerRadius = 24.dp,
-            shadowOffset = 5.dp,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(22.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 PosterStampBadge(
-                    text = step.title.uppercase(),
-                    containerColor = PopPosterCyan,
+                    text = "WORD OF THE DAY",
+                    containerColor = PopPosterInk,
+                    contentColor = PopPosterButter
+                )
+                PosterStampBadge(
+                    text = word.category.uppercase(),
+                    containerColor = PopPosterPaper,
                     contentColor = PopPosterInk
                 )
+            }
 
-                Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(14.dp))
 
-                // Standard hierarchy: H1 English, H2 Latin + Devanagari pronunciation, H3 Kannada script
-                val lessonSegments = remember(step.kannadaText, step.hindiPhonetic, step.hindiHighlight) {
-                    if (step.hindiPhonetic.isNotBlank()) {
-                        com.example.ui.components.segmentsFromReviewed(step.hindiPhonetic, step.hindiHighlight)
-                    } else {
-                        com.example.phonetics.KannadaToHindiPhonetic.convertToSegments(step.kannadaText)
-                    }
-                }
-                com.example.ui.components.BenneLearningBlock(
-                    english = step.englishText,
-                    kannadaRomanized = step.transliteration,
-                    kannadaDevanagari = lessonSegments,
-                    kannadaScript = step.kannadaText,
-                    showDevanagari = true
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.2f))
-                Spacer(modifier = Modifier.height(18.dp))
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    AudioSpeakButton(
-                        textToSpeak = step.kannadaText,
-                        isCurrentlySpeaking = speakingText == step.kannadaText,
-                        onSpeak = { ttsHelper.speak(it, playbackSpeed) },
-                        sizeDp = 50,
-                        iconSizeDp = 24,
-                        containerColor = PopPosterButter,
-                        contentColor = PopPosterInk
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    KannadaWithSubscript(
+                        kannadaText = word.kannadaWord,
+                        transliteration = word.transliteration,
+                        kannadaFontSize = 26.sp,
+                        kannadaLineHeight = 34.sp,
+                        kannadaColor = PopPosterInk,
+                        subscriptColor = PopPosterInk.copy(alpha = 0.75f),
+                        subscriptStyle = MaterialTheme.typography.labelLarge
                     )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = "Listen to pronunciation",
-                        fontFamily = NunitoSansFamily,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp,
-                        color = PopPosterInk
-                    )
-                }
-
-                if (step.tip.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(14.dp),
-                        color = PopPosterMint,
+                        shape = RoundedCornerShape(10.dp),
+                        color = PopPosterPaper,
                         border = BorderStroke(1.5.dp, PopPosterInk)
                     ) {
-                        Row(
-                            modifier = Modifier.padding(12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Lightbulb,
-                                contentDescription = "Study Tip",
-                                tint = PopPosterInk,
-                                modifier = Modifier.size(17.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = step.tip,
-                                style = MaterialTheme.typography.bodySmall,
-                                fontWeight = FontWeight.SemiBold,
-                                color = PopPosterInk
-                            )
-                        }
+                        Text(
+                            text = "Meaning: \"${word.englishMeaning}\"",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.SemiBold,
+                            color = PopPosterInk,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                        )
                     }
                 }
-            }
-        }
 
-        Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = Modifier.width(12.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            if (currentStepIndex > 0) {
-                OutlinedButton(
-                    onClick = { currentStepIndex-- },
-                    border = BorderStroke(1.8.dp, PopPosterInk),
-                    colors = ButtonDefaults.outlinedButtonColors(
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    ButterMascot(size = 76.dp, pose = com.example.R.drawable.benne_mascot_hello)
+                    Spacer(modifier = Modifier.height(6.dp))
+                    AudioSpeakButton(
+                        textToSpeak = word.kannadaWord,
+                        isCurrentlySpeaking = speakingText == word.kannadaWord,
+                        onSpeak = onSpeak,
+                        sizeDp = 52,
+                        iconSizeDp = 24,
                         containerColor = PopPosterPaper,
                         contentColor = PopPosterInk
-                    ),
-                    modifier = Modifier.testTag("step_prev_button")
-                ) {
-                    Text("Previous", fontWeight = FontWeight.Bold)
+                    )
                 }
-            } else {
-                Spacer(modifier = Modifier.width(1.dp))
             }
+        }
+    }
+}
 
-            PopActionButton(
-                text = if (isLastStep) "Complete (+50 XP)" else "Next Step",
-                onClick = {
-                    if (isLastStep) {
-                        onComplete()
-                    } else {
-                        currentStepIndex++
-                    }
-                },
-                modifier = Modifier.testTag("step_next_button")
+private data class ScoreItem(val value: String, val label: String, val color: Color, val tag: String)
+
+@Composable
+private fun ScoreTile(score: ScoreItem) {
+    PosterCard(
+        containerColor = score.color,
+        contentColor = PopPosterInk,
+        cornerRadius = 16.dp,
+        shadowOffset = 4.dp,
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag("home_score_${score.tag}")
+    ) {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text(
+                text = score.value,
+                fontFamily = BalooFamily,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 22.sp,
+                color = PopPosterInk,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = score.label,
+                style = MaterialTheme.typography.labelSmall,
+                color = PopPosterInk,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
+    }
+}
 
-        Spacer(modifier = Modifier.height(20.dp))
+@Composable
+private fun ProgressCard(
+    lessonsDone: Int,
+    totalLessons: Int,
+    cardsMastered: Int,
+    cardsTotal: Int,
+    onOpenCurriculum: () -> Unit
+) {
+    PosterCard(
+        containerColor = PopPosterPaper,
+        cornerRadius = 18.dp,
+        shadowOffset = 4.dp,
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag("home_progress_card")
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            ProgressLine(
+                label = "Curriculum",
+                value = "$lessonsDone of $totalLessons chapters",
+                fraction = lessonsDone.toFloat() / totalLessons
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            ProgressLine(
+                label = "Flashcards",
+                value = "$cardsMastered of $cardsTotal mastered",
+                fraction = cardsMastered.toFloat() / cardsTotal
+            )
+            Spacer(modifier = Modifier.height(14.dp))
+            PopActionButton(
+                text = "Open curriculum",
+                onClick = onOpenCurriculum,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+    }
+}
+
+@Composable
+private fun ProgressLine(label: String, value: String, fraction: Float) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = label,
+            fontFamily = BalooFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 16.sp,
+            color = PopPosterInk
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold,
+            color = PopPosterInk
+        )
+    }
+    Spacer(modifier = Modifier.height(6.dp))
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(CircleShape)
+            .border(1.5.dp, PopPosterInk, CircleShape)
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        LinearProgressIndicator(
+            progress = { fraction.coerceIn(0f, 1f) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(10.dp),
+            color = MaterialTheme.colorScheme.primary,
+            trackColor = Color.Transparent,
+            strokeCap = StrokeCap.Round
+        )
     }
 }
 
 /** Level from XP (100 XP per level) with a playful title and clean non-overlapping mascot badge. */
 @Composable
-private fun LevelCard(xp: Int) {
+private fun LevelCard(name: String, xp: Int, onClick: () -> Unit) {
     val level = xp / 100 + 1
     val titles = listOf("Tender Learner", "Filter Coffee Fan", "Auto Negotiator", "Darshini Regular", "Bengaluru Local")
     val title = titles[minOf(level - 1, titles.lastIndex)]
@@ -1056,9 +538,18 @@ private fun LevelCard(xp: Int) {
         contentColor = PopPosterInk,
         cornerRadius = 18.dp,
         shadowOffset = 4.dp,
+        onClick = onClick,
         modifier = Modifier.fillMaxWidth().testTag("home_level_card")
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
+            Text(
+                text = name,
+                fontFamily = BalooFamily,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 20.sp,
+                color = PopPosterInk
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -1161,93 +652,6 @@ private fun BadgeRow(lessonsDone: Int, totalLessons: Int, streakDays: Int, xp: I
     }
 }
 
-private data class KarnatakaLandmark(
-    val nameEn: String,
-    val nameKn: String,
-    @DrawableRes val iconRes: Int
-)
-
-private val KarnatakaLandmarks = listOf(
-    KarnatakaLandmark("Mysore Palace", "ಮೈಸೂರು ಅರಮನೆ", com.example.R.drawable.pop_landmark_mysore_palace),
-    KarnatakaLandmark("Hampi Chariot", "ಹಂಪಿ ರಥ", com.example.R.drawable.pop_landmark_hampi_chariot),
-    KarnatakaLandmark("Vidhana Soudha", "ವಿಧಾನ ಸೌಧ", com.example.R.drawable.pop_landmark_vidhana),
-    KarnatakaLandmark("Gol Gumbaz", "ಗೋಲ್ ಗುಂಬಜ್", com.example.R.drawable.pop_landmark_gol_gumbaz),
-    KarnatakaLandmark("Jog Falls", "ಜೋಗ ಜಲಪಾತ", com.example.R.drawable.pop_landmark_jog_falls),
-    KarnatakaLandmark("Badami Caves", "ಬಾದಾಮಿ ಗುಹೆಗಳು", com.example.R.drawable.pop_landmark_badami_caves),
-    KarnatakaLandmark("Belur Temple", "ಬೇಲೂರು ದೇಗುಲ", com.example.R.drawable.pop_landmark_belur_temple),
-    KarnatakaLandmark("Murudeshwara", "ಮುರುಡೇಶ್ವರ", com.example.R.drawable.pop_landmark_murudeshwara)
-)
-
-/** Clean vector-outlined Karnataka landmarks with tap-to-hear Kannada pronunciation. */
-@Composable
-private fun KarnatakaLandmarkStrip(
-    onSpeakLandmark: (String) -> Unit
-) {
-    PosterCard(
-        containerColor = PopPosterPaper,
-        contentColor = PopPosterInk,
-        cornerRadius = 20.dp,
-        shadowOffset = 4.dp,
-        modifier = Modifier.fillMaxWidth().testTag("home_karnataka_strip")
-    ) {
-        Column(modifier = Modifier.padding(14.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "EXPLORE KARNATAKA",
-                    fontFamily = BalooFamily,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = PopPosterInk
-                )
-                PosterStampBadge(
-                    text = "TAP TO LISTEN",
-                    containerColor = PopPosterMint,
-                    contentColor = PopPosterInk
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                items(count = KarnatakaLandmarks.size) { index ->
-                    val item = KarnatakaLandmarks[index]
-                    Surface(
-                        onClick = { onSpeakLandmark(item.nameKn) },
-                        shape = RoundedCornerShape(16.dp),
-                        color = PopPosterButter.copy(alpha = 0.35f),
-                        border = BorderStroke(1.5.dp, PopPosterInk),
-                        modifier = Modifier.width(104.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 10.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Image(
-                                painter = painterResource(item.iconRes),
-                                contentDescription = item.nameEn,
-                                contentScale = ContentScale.Fit,
-                                modifier = Modifier.size(54.dp)
-                            )
-                            Spacer(modifier = Modifier.height(6.dp))
-                            Text(
-                                text = item.nameEn,
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = PopPosterInk,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
 /** Opens the phone's text-to-speech settings so the Kannada voice can be installed. */
 private fun openTtsSettings(context: android.content.Context) {
     val intent = android.content.Intent("com.android.settings.TTS_SETTINGS")
@@ -1258,52 +662,9 @@ private fun openTtsSettings(context: android.content.Context) {
     }
 }
 
-/** Level needed to open each locked Home card. */
-private const val KARNATAKA_CARDS_LEVEL = 2
-private const val KARNATAKA_MODULES_LEVEL = 3
-private const val POETRY_LEVEL = 4
-
-/** Placeholder shown in place of a Home card until the learner reaches [requiredLevel]. */
-@Composable
-private fun LockedHomeCard(title: String, requiredLevel: Int, testTag: String) {
-    PosterCard(
-        containerColor = PopPosterPaper,
-        cornerRadius = 18.dp,
-        shadowOffset = 4.dp,
-        modifier = Modifier.fillMaxWidth().testTag(testTag)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Lock,
-                contentDescription = null,
-                tint = PopPosterInk,
-                modifier = Modifier.size(22.dp)
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = title,
-                    fontFamily = BalooFamily,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 16.sp,
-                    color = PopPosterInk
-                )
-                Text(
-                    text = "Unlocks at Level $requiredLevel",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = PopPosterInk
-                )
-            }
-        }
-    }
-}
-
 /** Section label used to group Home into Progress, Learn, Explore and Curriculum. */
 @Composable
-private fun HomeSectionHeader(title: String) {
+internal fun HomeSectionHeader(title: String) {
     Text(
         text = title,
         fontFamily = BalooFamily,

@@ -7,6 +7,15 @@ package com.example.data
 object LevelProgress {
     const val XP_PER_LEVEL = 100
 
+    /** Level needed for the Karnataka flag and map cards. */
+    const val FLAG_AND_MAP_LEVEL = 2
+
+    /** Level needed for Food and Heritage. */
+    const val FOOD_AND_HERITAGE_LEVEL = 3
+
+    /** Level needed for Poetry Play. */
+    const val POETRY_PLAY_LEVEL = 4
+
     /** Current level for a total XP value (never below level 1). */
     fun levelFor(xp: Int): Int = xp.coerceAtLeast(0) / XP_PER_LEVEL + 1
 

@@ -329,3 +329,13 @@ Limits (not met yet):
 - **Home locks:** Karnataka flag and map cards unlock at Level 2, Food and Heritage at Level 3, and Poetry Play at Level 4. A locked slot shows its title and "Unlocks at Level N", with no tap action.
 - **Rules:** `data/LevelProgress.kt` (100 XP per level, starting at Level 1). Unit tests in `LevelProgressTest.kt`.
 - **Verified:** debug build and all 21 unit tests pass. On SM-M115F at 0 XP (Level 1), the header bar and badge "2" render, and the three locked cards show. Not yet checked on the phone at Level 2 or above, where the cards should open.
+
+## Pass: five-tab navigation, dashboard and flexible card grid
+
+- **Bottom bar:** Home, Alphabets, Dialogues, Curriculum, Geography. Practice opens from Curriculum; Profile opens from the learner card on Home (Settings stays in Profile).
+- **Home (dashboard):** learner card (name, level, XP to next level; tap for Profile), Continue lesson, voice notice, word of the day (one flashcard word per day), your progress (curriculum and flashcard bars), scores (XP, badges, day streak, cards mastered, poem wins, stickers, 3 per row), and badges.
+- **Curriculum:** Practice tiles (Flashcards, Quiz, Poetry), the roadmap progress and the chapter list with the lesson sheet.
+- **Geography:** the Karnataka landmark strip and the flag, map, food and heritage cards in a 3-per-row grid. Locked cards show their unlock level.
+- **Grid:** `ui/components/CardGrid.kt` lays out items in rows of 1, 2, 3 or 5.
+- **Unlock levels:** flag and map at Level 2, food and heritage at Level 3, poetry at Level 4 (`data/LevelProgress.kt`).
+- **Verified:** debug build and all 21 unit tests pass. On SM-M115F at Level 1, the five dock items, the dashboard sections, the Curriculum practice tiles and the Geography grid render. Not checked: opening the cards at Level 2 or above, and the Profile screen from the learner card.

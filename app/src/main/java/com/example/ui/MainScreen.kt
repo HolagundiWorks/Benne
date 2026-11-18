@@ -32,6 +32,8 @@ import androidx.compose.material.icons.outlined.Psychology
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material3.Icon
@@ -60,6 +62,8 @@ import com.example.ui.components.SaralaHeader
 import androidx.compose.runtime.CompositionLocalProvider
 import com.example.ui.components.SystemConsoleSheet
 import com.example.ui.screens.AlphabetScreen
+import com.example.ui.screens.CurriculumScreen
+import com.example.ui.screens.GeographyScreen
 import com.example.ui.screens.FoodExplorerScreen
 import com.example.ui.screens.KarnatakaFlagScreen
 import com.example.ui.screens.KarnatakaMapScreen
@@ -82,10 +86,14 @@ enum class SaralaScreen(
     val inNav: Boolean = true
 ) {
     HOME("Home", "ಕಲಿಕೆ", Icons.Default.Home, Icons.Outlined.Home),
-    ALPHABET("Letters", "ವರ್ಣಮಾಲೆ", Icons.AutoMirrored.Filled.MenuBook, Icons.AutoMirrored.Outlined.MenuBook),
-    CONVERSATION("Talk", "ಸಂಭಾಷಣೆ", Icons.Default.ChatBubble, Icons.Outlined.ChatBubbleOutline),
-    PRACTICE("Practice", "ಅಭ್ಯಾಸ", Icons.Default.Psychology, Icons.Outlined.Psychology),
-    PROFILE("Profile", "ಪ್ರೊಫೈಲ್", Icons.Default.Person, Icons.Outlined.Person),
+    ALPHABET("Alphabets", "ವರ್ಣಮಾಲೆ", Icons.AutoMirrored.Filled.MenuBook, Icons.AutoMirrored.Outlined.MenuBook),
+    CONVERSATION("Dialogues", "ಸಂಭಾಷಣೆ", Icons.Default.ChatBubble, Icons.Outlined.ChatBubbleOutline),
+    CURRICULUM("Curriculum", "ಪಠ್ಯಕ್ರಮ", Icons.Filled.Star, Icons.Outlined.Star),
+    GEOGRAPHY("Geography", "ಭೂಗೋಳ", Icons.Default.Place, Icons.Outlined.Place),
+    /** Opened from Curriculum; not in the bottom bar. */
+    PRACTICE("Practice", "ಅಭ್ಯಾಸ", Icons.Default.Psychology, Icons.Outlined.Psychology, inNav = false),
+    /** Opened from the learner card on Home; not in the bottom bar. */
+    PROFILE("Profile", "ಪ್ರೊಫೈಲ್", Icons.Default.Person, Icons.Outlined.Person, inNav = false),
     FOOD("Food", "ಆಹಾರ", Icons.Default.Favorite, Icons.Outlined.Favorite, inNav = false),
     FLAG("Flag", "ಧ್ವಜ", Icons.Default.Favorite, Icons.Outlined.Favorite, inNav = false),
     MAP("Map", "ನಕ್ಷೆ", Icons.Default.Place, Icons.Outlined.Place, inNav = false),
@@ -181,20 +189,26 @@ fun MainScreen(
                         SaralaScreen.HOME -> HomeScreen(
                             progressManager = progressManager,
                             ttsHelper = ttsHelper,
-                            onNavigateToVarnamale = { currentScreen = SaralaScreen.ALPHABET },
-                            onNavigateToConversations = { currentScreen = SaralaScreen.CONVERSATION },
-                            onNavigateToPractice = {
-                                practiceMode = PracticeMode.FLASHCARDS
+                            onOpenProfile = { currentScreen = SaralaScreen.PROFILE },
+                            onOpenCurriculum = { currentScreen = SaralaScreen.CURRICULUM },
+                            modifier = contentModifier
+                        )
+                        SaralaScreen.CURRICULUM -> CurriculumScreen(
+                            progressManager = progressManager,
+                            ttsHelper = ttsHelper,
+                            onOpenPractice = { mode ->
+                                practiceMode = mode
                                 currentScreen = SaralaScreen.PRACTICE
                             },
-                            onNavigateToFood = { currentScreen = SaralaScreen.FOOD },
-                            onNavigateToFlag = { currentScreen = SaralaScreen.FLAG },
-                            onNavigateToMap = { currentScreen = SaralaScreen.MAP },
-                            onNavigateToHeritage = { currentScreen = SaralaScreen.HERITAGE },
-                            onNavigateToPoetryPlay = {
-                                practiceMode = PracticeMode.POETRY_PLAY
-                                currentScreen = SaralaScreen.PRACTICE
-                            },
+                            modifier = contentModifier
+                        )
+                        SaralaScreen.GEOGRAPHY -> GeographyScreen(
+                            progressManager = progressManager,
+                            ttsHelper = ttsHelper,
+                            onOpenFlag = { currentScreen = SaralaScreen.FLAG },
+                            onOpenMap = { currentScreen = SaralaScreen.MAP },
+                            onOpenFood = { currentScreen = SaralaScreen.FOOD },
+                            onOpenHeritage = { currentScreen = SaralaScreen.HERITAGE },
                             modifier = contentModifier
                         )
                         SaralaScreen.ALPHABET -> AlphabetScreen(
