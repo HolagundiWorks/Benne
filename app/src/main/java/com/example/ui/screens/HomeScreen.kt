@@ -31,6 +31,7 @@ import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Psychology
 import androidx.compose.material.icons.filled.Style
@@ -70,6 +71,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.audio.KannadaTtsHelper
+import com.example.data.LevelProgress
 import com.example.data.SaralaKannadaData
 import com.example.data.UserProgressManager
 import com.example.model.LessonMilestone
@@ -117,6 +119,7 @@ fun HomeScreen(
     val unlockedStickers by progressManager.unlockedStickers.collectAsState()
     val completedPoemChallenges by progressManager.completedPoemChallenges.collectAsState()
     val xpPoints by progressManager.xp.collectAsState()
+    val currentLevel = LevelProgress.levelFor(xpPoints)
     val streakNow by progressManager.streakDays.collectAsState()
     val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
     val kannadaVoiceReady by ttsHelper.kannadaVoiceAvailable.collectAsState()
@@ -142,34 +145,6 @@ fun HomeScreen(
         contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 14.dp + LocalFloatingNavInset.current),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        // Voice notice: only when the speech engine is ready and Kannada voice data is missing
-        item {
-            val engineReady by ttsHelper.isReady.collectAsState()
-            if (engineReady && !kannadaVoiceReady) {
-                PosterCard(
-                    containerColor = PopPosterPink,
-                    contentColor = PopPosterInk,
-                    cornerRadius = 16.dp,
-                    shadowOffset = 3.dp,
-                    modifier = Modifier.fillMaxWidth().testTag("home_voice_notice")
-                ) {
-                    Column(modifier = Modifier.padding(14.dp)) {
-                        Text(
-                            text = "Kannada voice is not installed on this phone, so pronunciation audio is off.",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = PopPosterInk
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        PopActionButton(
-                            text = "Open voice settings",
-                            onClick = { openTtsSettings(context) },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                }
-            }
-        }
-
         // Continue Lesson: next unfinished chapter, one tap back into its study sheet
         nextMilestone?.let { next ->
             item {
@@ -248,6 +223,35 @@ fun HomeScreen(
             }
         }
 
+        // Voice notice: only when the speech engine is ready and Kannada voice data is missing
+        item {
+            val engineReady by ttsHelper.isReady.collectAsState()
+            if (engineReady && !kannadaVoiceReady) {
+                PosterCard(
+                    containerColor = PopPosterPink,
+                    contentColor = PopPosterInk,
+                    cornerRadius = 16.dp,
+                    shadowOffset = 3.dp,
+                    modifier = Modifier.fillMaxWidth().testTag("home_voice_notice")
+                ) {
+                    Column(modifier = Modifier.padding(14.dp)) {
+                        Text(
+                            text = "Kannada voice is not installed on this phone, so pronunciation audio is off.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = PopPosterInk
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        PopActionButton(
+                            text = "Open voice settings",
+                            onClick = { openTtsSettings(context) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+            }
+        }
+
+        item { HomeSectionHeader("YOUR PROGRESS") }
         // Level card: XP-driven level, a playful title and progress to the next level
         item {
             LevelCard(xp = xpPoints)
@@ -263,6 +267,7 @@ fun HomeScreen(
             )
         }
 
+        item { HomeSectionHeader("LEARN") }
         // Quick Learning Poster Tiles
         item {
             Row(
@@ -318,92 +323,6 @@ fun HomeScreen(
                     onClick = onNavigateToPractice,
                     modifier = Modifier.weight(1f).fillMaxHeight()
                 )
-            }
-        }
-
-        // Flashcard Deck Poster Spotlight Card
-        item {
-            PosterCard(
-                containerColor = PopPosterPeach,
-                contentColor = PopPosterInk,
-                cornerRadius = 22.dp,
-                shadowOffset = 5.dp,
-                onClick = onNavigateToPractice,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("home_flashcards_spotlight")
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Surface(
-                        shape = RoundedCornerShape(14.dp),
-                        color = PopPosterInk,
-                        contentColor = PopPosterButter,
-                        modifier = Modifier.size(48.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Style,
-                            contentDescription = null,
-                            modifier = Modifier.padding(11.dp)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(14.dp))
-
-                    Column(modifier = Modifier.weight(1f)) {
-                        PosterStampBadge(
-                            text = "INTERACTIVE DECK",
-                            containerColor = PopPosterPaper,
-                            contentColor = PopPosterInk
-                        )
-                        Spacer(modifier = Modifier.height(6.dp))
-                        Text(
-                            text = "Vocabulary Flashcards",
-                            fontFamily = BalooFamily,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = PopPosterInk
-                        )
-                        KannadaWithSubscript(
-                            kannadaText = "ಪದಕೋಶ ಫ್ಲ್ಯಾಶ್‌ಕಾರ್ಡ್‌ಗಳು",
-                            transliteration = "Padakosha flashcards",
-                            kannadaFontSize = 14.sp,
-                            kannadaLineHeight = 19.sp,
-                            kannadaColor = PopPosterInk,
-                            subscriptColor = MaterialTheme.colorScheme.primary,
-                            subscriptStyle = MaterialTheme.typography.labelSmall
-                        )
-                        Spacer(modifier = Modifier.height(3.dp))
-                        Text(
-                            text = "Flip to reveal meanings with native spoken audio",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = PopPosterInk.copy(alpha = 0.85f)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    Surface(
-                        shape = CircleShape,
-                        color = PopPosterPaper,
-                        border = BorderStroke(1.8.dp, PopPosterInk),
-                        modifier = Modifier.size(38.dp)
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                contentDescription = "Open Flashcards",
-                                tint = PopPosterInk,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                    }
-                }
             }
         }
 
@@ -489,6 +408,7 @@ fun HomeScreen(
             }
         }
 
+        item { HomeSectionHeader("EXPLORE") }
         // Explore Karnataka: crisp vector-outlined landmark strip with Kannada audio
         item {
             KarnatakaLandmarkStrip(
@@ -498,7 +418,9 @@ fun HomeScreen(
 
         // Karnataka identity cards: flag and map (discovery cards; open learning screens)
         item {
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth().height(androidx.compose.foundation.layout.IntrinsicSize.Max).testTag("home_identity_cards")) {
+            if (currentLevel < KARNATAKA_CARDS_LEVEL) {
+                LockedHomeCard(title = "Karnataka Flag and Map", requiredLevel = KARNATAKA_CARDS_LEVEL, testTag = "home_identity_locked")
+            } else Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth().height(androidx.compose.foundation.layout.IntrinsicSize.Max).testTag("home_identity_cards")) {
                 com.example.ui.screens.BenneDiscoveryCard(
                     artwork = { com.example.ui.screens.KarnatakaFlagArtwork(modifier = Modifier.fillMaxWidth()) },
                     english = "Karnataka Flag",
@@ -522,7 +444,9 @@ fun HomeScreen(
 
         // Karnataka modules: food and heritage (content pending verification)
         item {
-            PosterCard(
+            if (currentLevel < KARNATAKA_MODULES_LEVEL) {
+                LockedHomeCard(title = "Food and Heritage", requiredLevel = KARNATAKA_MODULES_LEVEL, testTag = "home_karnataka_locked")
+            } else PosterCard(
                 containerColor = PopPosterPeach,
                 contentColor = PopPosterInk,
                 cornerRadius = 18.dp,
@@ -566,7 +490,9 @@ fun HomeScreen(
 
         // ಪದ್ಯ ಆಟ (Padya Aata) Poetry Play Spotlight Card
         item {
-            PosterCard(
+            if (currentLevel < POETRY_LEVEL) {
+                LockedHomeCard(title = "Poetry Play", requiredLevel = POETRY_LEVEL, testTag = "home_poetry_locked")
+            } else PosterCard(
                 containerColor = PopPosterCyan,
                 contentColor = PopPosterInk,
                 cornerRadius = 22.dp,
@@ -654,6 +580,7 @@ fun HomeScreen(
             }
         }
 
+        item { HomeSectionHeader("CURRICULUM") }
         // Curriculum Header + Overall Progress
         item {
             val totalUnits = SaralaKannadaData.milestones.size.coerceAtLeast(1)
@@ -1329,4 +1256,61 @@ private fun openTtsSettings(context: android.content.Context) {
     } catch (e: android.content.ActivityNotFoundException) {
         context.startActivity(android.content.Intent(android.provider.Settings.ACTION_SETTINGS))
     }
+}
+
+/** Level needed to open each locked Home card. */
+private const val KARNATAKA_CARDS_LEVEL = 2
+private const val KARNATAKA_MODULES_LEVEL = 3
+private const val POETRY_LEVEL = 4
+
+/** Placeholder shown in place of a Home card until the learner reaches [requiredLevel]. */
+@Composable
+private fun LockedHomeCard(title: String, requiredLevel: Int, testTag: String) {
+    PosterCard(
+        containerColor = PopPosterPaper,
+        cornerRadius = 18.dp,
+        shadowOffset = 4.dp,
+        modifier = Modifier.fillMaxWidth().testTag(testTag)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Lock,
+                contentDescription = null,
+                tint = PopPosterInk,
+                modifier = Modifier.size(22.dp)
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = title,
+                    fontFamily = BalooFamily,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 16.sp,
+                    color = PopPosterInk
+                )
+                Text(
+                    text = "Unlocks at Level $requiredLevel",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = PopPosterInk
+                )
+            }
+        }
+    }
+}
+
+/** Section label used to group Home into Progress, Learn, Explore and Curriculum. */
+@Composable
+private fun HomeSectionHeader(title: String) {
+    Text(
+        text = title,
+        fontFamily = BalooFamily,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 14.sp,
+        letterSpacing = 1.sp,
+        color = PopPosterInk,
+        modifier = Modifier.padding(top = 8.dp, bottom = 2.dp).testTag("home_section_$title")
+    )
 }

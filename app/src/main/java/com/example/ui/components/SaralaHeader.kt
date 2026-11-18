@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -38,10 +39,14 @@ import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.R
+import com.example.data.LevelProgress
 import com.example.ui.theme.PopPosterButter
+import com.example.ui.theme.BenneCream
 import com.example.ui.theme.PopPosterCyan
 import com.example.ui.theme.PopPosterInk
 import com.example.ui.theme.PopPosterMint
@@ -78,13 +83,7 @@ fun SaralaHeader(
                 // Show only earned badges, so new learners don't see badges they haven't unlocked
                 if (streak.second) BadgeImage(res = streak.first, unlocked = true, description = "Streak badge")
                 if (points.second) BadgeImage(res = points.first, unlocked = true, description = "Points badge")
-                if (!streak.second && !points.second) {
-                    Text(
-                        text = "Earn badges by learning",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = PopPosterInk
-                    )
-                }
+                LevelMeter(xp = xpPoints, modifier = Modifier.weight(1f))
             }
         }
 
@@ -106,6 +105,57 @@ fun SaralaHeader(
                     .align(Alignment.BottomEnd)
                     .offset(y = (-1).dp)
                     .requiredHeight(88.dp)
+            )
+        }
+    }
+}
+
+/**
+ * Level progress beside the logo: a bar for XP inside the current level, and a badge with the
+ * level the learner is working towards.
+ */
+@Composable
+private fun LevelMeter(xp: Int, modifier: Modifier = Modifier) {
+    val level = LevelProgress.levelFor(xp)
+    val fraction = LevelProgress.fractionIntoLevel(xp)
+    val barShape = RoundedCornerShape(50)
+    Row(
+        modifier = modifier
+            .testTag("header_level_meter")
+            .semantics {
+                contentDescription = "Level $level, ${LevelProgress.xpIntoLevel(xp)} of ${LevelProgress.XP_PER_LEVEL} XP to level ${level + 1}"
+            },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .height(12.dp)
+                .clip(barShape)
+                .border(1.5.dp, PopPosterInk, barShape)
+                .background(BenneCream)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(fraction)
+                    .fillMaxHeight()
+                    .background(PopPosterButter)
+            )
+        }
+        Box(
+            modifier = Modifier
+                .size(26.dp)
+                .clip(CircleShape)
+                .background(PopPosterButter)
+                .border(1.5.dp, PopPosterInk, CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = (level + 1).toString(),
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.ExtraBold,
+                color = PopPosterInk
             )
         }
     }

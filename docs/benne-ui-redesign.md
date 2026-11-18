@@ -322,3 +322,10 @@ Limits (not met yet):
 - `data/KarnatakaDistrictFacts.kt`: heritage places and foods mapped to map districts, using only the project's catalogues. Heritage districts map to the boundary file's names (Bagalkot to Bagalkote, Bengaluru Urban to Bengaluru). Hampi is under Ballari because Vijayanagara district (2021) is not in the 2011 boundary file. Foods appear only where the catalogue states a region.
 - Tapping a district opens `DistrictDetailSheet`: district name, Kannada name marked pending, heritage and food lists, and links to Heritage and Food. Important cities are not included; they need editorial review.
 - Verified on device: Kalaburagi sheet (empty lists, correct).
+
+## Pass: level progress and level-locked Home cards
+
+- **Header:** beside the logo, a level bar shows XP inside the current level, with a badge for the next level. The "Earn badges by learning" text is removed; the bar takes that space.
+- **Home locks:** Karnataka flag and map cards unlock at Level 2, Food and Heritage at Level 3, and Poetry Play at Level 4. A locked slot shows its title and "Unlocks at Level N", with no tap action.
+- **Rules:** `data/LevelProgress.kt` (100 XP per level, starting at Level 1). Unit tests in `LevelProgressTest.kt`.
+- **Verified:** debug build and all 21 unit tests pass. On SM-M115F at 0 XP (Level 1), the header bar and badge "2" render, and the three locked cards show. Not yet checked on the phone at Level 2 or above, where the cards should open.
