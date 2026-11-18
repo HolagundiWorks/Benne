@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -53,6 +54,7 @@ import com.example.data.UserProgressManager
 import com.example.model.AlphabetCategory
 import com.example.model.AlphabetItem
 import com.example.ui.components.AudioSpeakButton
+import com.example.ui.components.HindiPhoneticText
 import com.example.ui.components.KannadaWithSubscript
 import com.example.ui.components.PosterCard
 import com.example.ui.components.PosterStampBadge
@@ -67,6 +69,7 @@ import com.example.ui.theme.PopPosterPaper
 import com.example.ui.theme.PopPosterPeach
 import com.example.ui.LocalFloatingNavInset
 import com.example.ui.LocalFloatingHeaderInset
+import com.example.ui.LocalShowHindiPhonetics
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,6 +82,7 @@ fun AlphabetScreen(
     var inspectionItem by remember { mutableStateOf<AlphabetItem?>(null) }
     val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
+    val showHindiPhonetics = LocalShowHindiPhonetics.current
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val currentList = when (selectedCategory) {
@@ -223,6 +227,7 @@ fun AlphabetScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .defaultMinSize(minHeight = 148.dp)
                             .padding(start = 8.dp, end = 8.dp, top = 28.dp, bottom = 12.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -242,14 +247,27 @@ fun AlphabetScreen(
                             color = PopPosterPaper,
                             border = BorderStroke(1.2.dp, PopPosterInk)
                         ) {
-                            Text(
-                                text = item.englishTransliteration,
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = PopPosterInk,
-                                textAlign = TextAlign.Center,
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
                                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-                            )
+                            ) {
+                                Text(
+                                    text = item.englishTransliteration,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = PopPosterInk,
+                                    textAlign = TextAlign.Center
+                                )
+                                if (showHindiPhonetics) {
+                                    HindiPhoneticText(
+                                        kannadaText = item.char,
+                                        baseFontSize = 12.sp,
+                                        textColor = PopPosterInk,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+                            }
                         }
 
                         Spacer(modifier = Modifier.height(5.dp))
@@ -333,6 +351,34 @@ fun AlphabetScreen(
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
                 )
+
+                if (showHindiPhonetics) {
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Surface(
+                        shape = RoundedCornerShape(12.dp),
+                        color = PopPosterPaper,
+                        border = BorderStroke(1.5.dp, PopPosterInk)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                        ) {
+                            Text(
+                                text = "Hindi:",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = PopPosterInk
+                            )
+                            HindiPhoneticText(
+                                kannadaText = letter.char,
+                                baseFontSize = 18.sp,
+                                textColor = PopPosterInk,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(14.dp))
 

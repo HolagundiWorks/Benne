@@ -50,6 +50,7 @@ import com.example.audio.KannadaTtsHelper
 import com.example.data.SaralaKannadaData
 import com.example.data.UserProgressManager
 import com.example.ui.components.AudioSpeakButton
+import com.example.ui.components.HindiPhoneticText
 import com.example.ui.components.KannadaWithSubscript
 import com.example.ui.components.PosterCard
 import com.example.ui.components.PosterStampBadge
@@ -63,6 +64,7 @@ import com.example.ui.theme.PopPosterPaper
 import com.example.ui.theme.PopPosterPeach
 import com.example.ui.LocalFloatingNavInset
 import com.example.ui.LocalFloatingHeaderInset
+import com.example.ui.LocalShowHindiPhonetics
 
 @Composable
 fun DictionaryScreen(
@@ -76,6 +78,7 @@ fun DictionaryScreen(
     val favorites by progressManager.favoritePhraseIds.collectAsState()
     val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
+    val showHindiPhonetics = LocalShowHindiPhonetics.current
 
     val categories = listOf("All", "Saved", "Greetings", "Travel & Auto", "Food & Cafe", "Shopping & Numbers", "Common & Help")
     val cardPalette = listOf(PopPosterPaper, PopPosterCyan, PopPosterPeach, PopPosterMint)
@@ -320,7 +323,16 @@ fun DictionaryScreen(
                                 color = MaterialTheme.colorScheme.primary
                             )
 
-                            Spacer(modifier = Modifier.height(3.dp))
+                            if (showHindiPhonetics) {
+                                Spacer(modifier = Modifier.height(2.dp))
+                                HindiPhoneticText(
+                                    kannadaText = phrase.kannada,
+                                    baseFontSize = 14.sp,
+                                    textColor = PopPosterInk
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(4.dp))
 
                             Surface(
                                 shape = RoundedCornerShape(8.dp),

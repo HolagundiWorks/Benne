@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -13,9 +14,8 @@ import androidx.compose.ui.unit.dp
 import com.example.R
 
 /**
- * Benne butter-cube mascot from the brand kit (benne_brand_kit/png, transparent PNG).
- * Pick a pose with [pose]; the default is the compact UI character.
- * Decorative unless [contentDescription] is provided.
+ * Benne butter-cube mascot from the brand kit (transparent PNG).
+ * Pick a pose with [pose]; uses [ContentScale.Fit] so proportions are never stretched.
  */
 @Composable
 fun ButterMascot(
@@ -27,6 +27,7 @@ fun ButterMascot(
     Image(
         painter = painterResource(pose),
         contentDescription = contentDescription,
+        contentScale = ContentScale.Fit,
         modifier = modifier
             .size(size)
             .semantics { if (contentDescription != null) this.contentDescription = contentDescription }

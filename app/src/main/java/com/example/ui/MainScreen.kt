@@ -22,10 +22,12 @@ import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.automirrored.outlined.MenuBook
 import androidx.compose.material.icons.filled.ChatBubble
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Psychology
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Psychology
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.Icon
@@ -57,6 +59,7 @@ import com.example.ui.screens.AlphabetScreen
 import com.example.ui.screens.ConversationScreen
 import com.example.ui.screens.DictionaryScreen
 import com.example.ui.screens.HomeScreen
+import com.example.ui.screens.ProfileScreen
 import com.example.ui.screens.QuizScreen
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterInk
@@ -72,7 +75,8 @@ enum class SaralaScreen(
     ALPHABET("Letters", "ವರ್ಣಮಾಲೆ", Icons.AutoMirrored.Filled.MenuBook, Icons.AutoMirrored.Outlined.MenuBook),
     CONVERSATION("Dialogues", "ಸಂಭಾಷಣೆ", Icons.Default.ChatBubble, Icons.Outlined.ChatBubbleOutline),
     PRACTICE("Practice", "ಅಭ್ಯಾಸ", Icons.Default.Psychology, Icons.Outlined.Psychology),
-    DICTIONARY("Phrases", "ಪದಕೋಶ", Icons.Default.Translate, Icons.Outlined.Translate)
+    DICTIONARY("Phrases", "ಪದಕೋಶ", Icons.Default.Translate, Icons.Outlined.Translate),
+    PROFILE("Profile", "ಪ್ರೊಫೈಲ್", Icons.Default.Person, Icons.Outlined.Person)
 }
 
 @Composable
@@ -86,6 +90,7 @@ fun MainScreen(
     val streakDays by progressManager.streakDays.collectAsState()
     val xpPoints by progressManager.xp.collectAsState()
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
+    val showHindiPhonetics by progressManager.showHindiPhonetics.collectAsState()
 
     if (currentScreen != SaralaScreen.HOME) {
         BackHandler {
@@ -155,7 +160,8 @@ fun MainScreen(
 
                     CompositionLocalProvider(
                         LocalFloatingNavInset provides if (useNavigationRail) 0.dp else FloatingNavClearance,
-                        LocalFloatingHeaderInset provides headerInset
+                        LocalFloatingHeaderInset provides headerInset,
+                        LocalShowHindiPhonetics provides showHindiPhonetics
                     ) {
                     when (currentScreen) {
                         SaralaScreen.HOME -> HomeScreen(
@@ -184,6 +190,11 @@ fun MainScreen(
                         SaralaScreen.DICTIONARY -> DictionaryScreen(
                             ttsHelper = ttsHelper,
                             progressManager = progressManager,
+                            modifier = contentModifier
+                        )
+                        SaralaScreen.PROFILE -> ProfileScreen(
+                            progressManager = progressManager,
+                            ttsHelper = ttsHelper,
                             modifier = contentModifier
                         )
                     }
@@ -219,8 +230,8 @@ fun MainScreen(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .navigationBarsPadding()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .widthIn(max = 560.dp)
+                    .padding(horizontal = 10.dp, vertical = 8.dp)
+                    .widthIn(max = 600.dp)
                     .fillMaxWidth()
             )
         }

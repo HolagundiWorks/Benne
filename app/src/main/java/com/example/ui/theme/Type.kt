@@ -32,6 +32,15 @@ val BalooFamily = variableFamily(R.font.baloo2_variable)
 /** Latin body and labels (Nunito Sans). */
 val NunitoSansFamily = variableFamily(R.font.nunito_sans_variable)
 
+/** Hindi / Devanagari phonetic script (Noto Sans Devanagari). */
+val NotoSansDevanagariFamily = FontFamily(
+    Font(R.font.noto_sans_devanagari, FontWeight.Normal),
+    Font(R.font.noto_sans_devanagari, FontWeight.Medium),
+    Font(R.font.noto_sans_devanagari, FontWeight.SemiBold),
+    Font(R.font.noto_sans_devanagari, FontWeight.Bold),
+    Font(R.font.noto_sans_devanagari, FontWeight.ExtraBold)
+)
+
 // Benne — Bold Pop Poster Typography Scale
 val BenneTypography = Typography(
     displayLarge = TextStyle(

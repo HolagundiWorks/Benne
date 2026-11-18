@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -65,6 +66,7 @@ import com.example.data.SaralaKannadaData
 import com.example.data.UserProgressManager
 import com.example.model.VocabularyFlashcard
 import com.example.ui.components.AudioSpeakButton
+import com.example.ui.components.HindiPhoneticText
 import com.example.ui.components.InteractiveVocabularyFlashcard
 import com.example.ui.components.KannadaWithSubscript
 import com.example.ui.components.PopActionButton
@@ -80,9 +82,11 @@ import com.example.ui.theme.PopPosterPaper
 import com.example.ui.theme.PopPosterPink
 import com.example.ui.LocalFloatingNavInset
 import androidx.compose.foundation.Image
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import com.example.R
 import com.example.ui.LocalFloatingHeaderInset
+import com.example.ui.LocalShowHindiPhonetics
 
 enum class PracticeMode {
     FLASHCARDS,
@@ -441,6 +445,7 @@ fun EvaluationQuizView(
     val currentQuestion = questions.getOrNull(currentIndex)
     val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
+    val showHindiPhonetics = LocalShowHindiPhonetics.current
 
     if (isQuizCompleted || currentQuestion == null) {
         PopQuizResultsView(
@@ -563,6 +568,15 @@ fun EvaluationQuizView(
                                     style = MaterialTheme.typography.titleSmall,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.primary,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                            if (showHindiPhonetics && currentQuestion.kannadaText.any { it in '\u0C80'..'\u0CFF' }) {
+                                Spacer(modifier = Modifier.height(4.dp))
+                                HindiPhoneticText(
+                                    kannadaText = currentQuestion.kannadaText,
+                                    baseFontSize = 16.sp,
+                                    textColor = PopPosterInk,
                                     textAlign = TextAlign.Center
                                 )
                             }
@@ -757,15 +771,16 @@ private fun PopQuizResultsView(
         else -> listOf(R.drawable.benne_pose_thinking, "Keep going!", "ಮುಂದುವರಿಸಿ!", "Munduvarisi!")
     }.let { Quad(it[0] as Int, it[1] as String, it[2] as String, it[3] as String) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-    ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
+            .background(MaterialTheme.colorScheme.background)
+            .padding(
+                start = 24.dp,
+                top = 24.dp,
+                end = 24.dp,
+                bottom = 24.dp + LocalFloatingNavInset.current
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -773,9 +788,6 @@ private fun PopQuizResultsView(
             containerColor = PopPosterButter,
             cornerRadius = 28.dp,
             shadowOffset = 6.dp,
-            sticker = com.example.R.drawable.pop_burst_red,
-            stickerSize = 64.dp,
-            stickerAlignment = Alignment.TopStart,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
@@ -784,8 +796,16 @@ private fun PopQuizResultsView(
                     .padding(28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                PosterStampBadge(
+                    text = "QUIZ COMPLETE",
+                    containerColor = PopPosterPaper,
+                    contentColor = PopPosterInk
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Surface(
-                    modifier = Modifier.size(90.dp),
+                    modifier = Modifier.size(104.dp),
                     shape = CircleShape,
                     color = PopPosterPaper,
                     contentColor = PopPosterInk,
@@ -798,7 +818,8 @@ private fun PopQuizResultsView(
                         Image(
                             painter = painterResource(poseRes),
                             contentDescription = "Benne mascot",
-                            modifier = Modifier.size(44.dp)
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.size(48.dp)
                         )
                         Text(
                             text = "$percentage%",
@@ -816,7 +837,8 @@ private fun PopQuizResultsView(
                     fontFamily = BalooFamily,
                     fontSize = 26.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    color = PopPosterInk
+                    color = PopPosterInk,
+                    textAlign = TextAlign.Center
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
@@ -838,7 +860,8 @@ private fun PopQuizResultsView(
                 Text(
                     text = "You answered $score out of $total correctly",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = PopPosterInk
+                    color = PopPosterInk,
+                    textAlign = TextAlign.Center
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -858,19 +881,9 @@ private fun PopQuizResultsView(
             icon = Icons.Default.Refresh,
             onClick = onRestart,
             modifier = Modifier
-                .fillMaxWidth(0.6f)
+                .widthIn(min = 220.dp)
                 .testTag("quiz_restart_button")
         )
-    }
-    // Benne logo: bottom-right on the celebration screen only (16dp margin, ~20% width)
-    Image(
-        painter = painterResource(R.drawable.benne_logo_longshadow),
-        contentDescription = "Benne logo",
-        modifier = Modifier
-            .align(Alignment.BottomEnd)
-            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp + LocalFloatingNavInset.current)
-            .fillMaxWidth(0.15f)
-    )
     }
 }
 

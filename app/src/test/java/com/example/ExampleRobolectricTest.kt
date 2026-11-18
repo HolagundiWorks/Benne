@@ -8,6 +8,8 @@ import com.example.data.SaralaKannadaData
 import com.example.data.UserProgressManager
 import com.example.legal.LegalDocuments
 import com.example.notifications.StudyReminderManager
+import com.example.phonetics.KannadaToHindiPhonetic
+import com.example.phonetics.NameTransliterator
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -67,6 +69,7 @@ class ExampleRobolectricTest {
         assertTrue(LegalDocuments.openSourceNotices.content.contains("Baloo 2"))
         assertTrue(LegalDocuments.openSourceNotices.content.contains("Nunito Sans"))
         assertTrue(LegalDocuments.openSourceNotices.content.contains("Noto Sans Kannada"))
+        assertTrue(LegalDocuments.openSourceNotices.content.contains("Noto Sans Devanagari"))
     }
 
     @Test
@@ -102,5 +105,67 @@ class ExampleRobolectricTest {
         assertTrue(manager.completedLessons.value.isEmpty())
         assertTrue(manager.masteredFlashcardIds.value.isEmpty())
         assertTrue(manager.favoritePhraseIds.value.isEmpty())
+        assertEquals(0, manager.streakDays.value)
+    }
+
+    @Test
+    fun `fresh install starts at zero and xp updates streak in real time`() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        context.getSharedPreferences("sarala_kannada_prefs", Context.MODE_PRIVATE)
+            .edit().clear().commit()
+
+        val manager = UserProgressManager(context)
+        assertEquals(0, manager.xp.value)
+        assertEquals(0, manager.streakDays.value)
+        assertTrue(manager.completedLessons.value.isEmpty())
+        assertTrue(manager.masteredFlashcardIds.value.isEmpty())
+        assertTrue(manager.favoritePhraseIds.value.isEmpty())
+        assertTrue(manager.showHindiPhonetics.value)
+
+        manager.addXp(20)
+        assertEquals(20, manager.xp.value)
+        assertEquals(1, manager.streakDays.value)
+
+        manager.completeLesson("lesson_1")
+        assertEquals(70, manager.xp.value)
+        assertTrue(manager.completedLessons.value.contains("lesson_1"))
+
+        manager.setShowHindiPhonetics(false)
+        assertFalse(manager.showHindiPhonetics.value)
+    }
+
+    @Test
+    fun `transliterate english names into kannada script`() {
+        assertEquals("ಕನ್ನಡ", NameTransliterator.toKannada("Kannada"))
+        assertEquals("ವಿಶ್ವ", NameTransliterator.toKannada("Vishwa"))
+        assertEquals("ಅಭಿರಾಮ್", NameTransliterator.toKannada("Abhiram"))
+        assertEquals("ಪ್ರಿಯ", NameTransliterator.toKannada("Priya"))
+        assertEquals("ನೇಹ", NameTransliterator.toKannada("Neha"))
+        assertEquals("ರೋಹನ್", NameTransliterator.toKannada("Rohan"))
+    }
+
+    @Test
+    fun `convert kannada to hindi phonetic segments with dheergha flags`() {
+        val kannadaSegs = KannadaToHindiPhonetic.convertToSegments("ಕನ್ನಡ")
+        assertEquals("कन्नड", kannadaSegs.joinToString("") { it.text })
+        assertTrue(kannadaSegs.none { it.isDheergha })
+
+        val kannadaLongSegs = KannadaToHindiPhonetic.convertToSegments("ಕನ್ನಡಾ")
+        assertEquals("कन्नडा", kannadaLongSegs.joinToString("") { it.text })
+        assertTrue(kannadaLongSegs.last().isDheergha)
+        assertEquals("डा", kannadaLongSegs.last().text)
+
+        val namaskaraSegs = KannadaToHindiPhonetic.convertToSegments("ನಮಸ್ಕಾರ")
+        assertEquals("नमस्कार", namaskaraSegs.joinToString("") { it.text })
+        assertTrue(namaskaraSegs.any { it.text == "स्का" && it.isDheergha })
+
+        val houdaSegs = KannadaToHindiPhonetic.convertToSegments("ಹೌದಾ")
+        assertEquals("हौदा", houdaSegs.joinToString("") { it.text })
+        assertTrue(houdaSegs.all { it.isDheergha })
+
+        val doseSegs = KannadaToHindiPhonetic.convertToSegments("ದೋಸೆ")
+        assertEquals("दोसॆ", doseSegs.joinToString("") { it.text })
+        assertTrue(doseSegs[0].isDheergha)
+        assertFalse(doseSegs[1].isDheergha)
     }
 }

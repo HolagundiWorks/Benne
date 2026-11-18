@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -50,12 +52,9 @@ import com.example.ui.theme.PopPosterCyan
 import com.example.ui.theme.PopPosterInk
 import com.example.ui.theme.PopPosterMint
 import com.example.ui.theme.PopPosterPaper
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.res.imageResource
 
 /**
- * Benne Pop-Poster Interactive 3D Flashcard with hard drop shadow,
+ * Benne Interactive 3D Flashcard with uniform vector ink border, matched hard drop shadow,
  * Flip-to-Reveal translation, and Text-to-Speech pronunciation.
  */
 @Composable
@@ -75,40 +74,37 @@ fun InteractiveVocabularyFlashcard(
         label = "flashcard_3d_flip"
     )
     val shape = RoundedCornerShape(24.dp)
+    val surfaceColor = when {
+        rotation <= 90f && !isMastered -> PopPosterButter
+        rotation <= 90f && isMastered -> PopPosterMint
+        else -> PopPosterPaper
+    }
 
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .height(IntrinsicSize.Min)
             .padding(end = 6.dp, bottom = 6.dp)
     ) {
-        // Hard offset poster drop shadow beneath card
+        // Hard offset poster drop shadow matching exact card bounds
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(366.dp)
+                .matchParentSize()
                 .offset(x = 6.dp, y = 6.dp)
                 .clip(shape)
                 .background(PopPosterInk)
         )
 
-        // Kit card skin: yellow for an unmastered front, cream otherwise
-        val skinColor = when {
-            rotation <= 90f && !isMastered -> PopPosterButter
-            else -> PopPosterPaper
-        }
-        val skin = ImageBitmap.imageResource(cardSkinFor(skinColor))
-
         ElevatedCard(
             onClick = onFlip,
             shape = shape,
             colors = CardDefaults.elevatedCardColors(
-                containerColor = Color.Transparent
+                containerColor = surfaceColor
             ),
             elevation = CardDefaults.elevatedCardElevation(defaultElevation = 0.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(366.dp)
-                .drawBehind { drawNineSlice(skin, 16.dp.toPx()) }
+                .defaultMinSize(minHeight = 336.dp)
                 .graphicsLayer {
                     rotationY = rotation
                     cameraDistance = 14f * density
@@ -116,10 +112,12 @@ fun InteractiveVocabularyFlashcard(
                 .testTag("flashcard_container_${flashcard.id}")
         ) {
             Surface(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .defaultMinSize(minHeight = 336.dp),
                 shape = shape,
-                color = Color.Transparent,
-                border = BorderStroke(2.2.dp, PopPosterInk)
+                color = surfaceColor,
+                border = BorderStroke(2.dp, PopPosterInk)
             ) {
                 if (rotation <= 90f) {
                     FlashcardFrontFace(
@@ -131,7 +129,8 @@ fun InteractiveVocabularyFlashcard(
                 } else {
                     Box(
                         modifier = Modifier
-                            .fillMaxSize()
+                            .fillMaxWidth()
+                            .defaultMinSize(minHeight = 336.dp)
                             .graphicsLayer { rotationY = 180f }
                     ) {
                         FlashcardBackFace(
@@ -155,7 +154,8 @@ private fun FlashcardFrontFace(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 336.dp)
             .padding(20.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -288,7 +288,8 @@ private fun FlashcardBackFace(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 336.dp)
             .padding(20.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {

@@ -27,6 +27,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.selection.selectable
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterInk
@@ -63,7 +64,7 @@ fun FloatingBottomNav(
             border = BorderStroke(2.dp, PopPosterInk),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Row(modifier = Modifier.padding(6.dp)) {
+            Row(modifier = Modifier.padding(4.dp)) {
                 SaralaScreen.entries.forEach { screen ->
                     val isSelected = selected == screen
                     Column(
@@ -71,7 +72,7 @@ fun FloatingBottomNav(
                         verticalArrangement = Arrangement.Center,
                         modifier = Modifier
                             .weight(1f)
-                            .height(56.dp)
+                            .height(54.dp)
                             .clip(RoundedCornerShape(22.dp))
                             .background(if (isSelected) PopPosterButter else PopPosterPaper)
                             .selectable(
@@ -79,19 +80,23 @@ fun FloatingBottomNav(
                                 role = Role.Tab,
                                 onClick = { onSelect(screen) }
                             )
+                            .padding(horizontal = 2.dp)
                             .testTag("nav_item_${screen.name.lowercase()}")
                     ) {
                         Icon(
                             imageVector = if (isSelected) screen.selectedIcon else screen.unselectedIcon,
                             contentDescription = null,
-                            modifier = Modifier.size(22.dp)
+                            modifier = Modifier.size(20.dp)
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             text = screen.titleEnglish,
                             style = MaterialTheme.typography.labelSmall,
+                            fontSize = 9.5.sp,
+                            letterSpacing = (-0.2).sp,
                             fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Medium,
                             maxLines = 1,
+                            softWrap = false,
                             overflow = TextOverflow.Ellipsis
                         )
                     }

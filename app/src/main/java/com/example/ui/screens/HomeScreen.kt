@@ -8,9 +8,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -59,10 +61,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.audio.KannadaTtsHelper
@@ -113,11 +117,11 @@ fun HomeScreen(
 
     val nextMilestone = SaralaKannadaData.milestones.firstOrNull { it.id !in completedLessons }
 
-    // Kit card skins: cream, yellow and red (see PosterCard)
+    // Clean light-tint rotation so dark ink & red highlights always read crisply
     val chapterPosterColors = listOf(
         PopPosterPaper,
         PopPosterButter,
-        BennePopRed
+        PopPosterCyan
     )
 
     LazyColumn(
@@ -150,18 +154,28 @@ fun HomeScreen(
                     contentColor = PopPosterInk,
                     cornerRadius = 20.dp,
                     shadowOffset = 5.dp,
-                    sticker = com.example.R.drawable.pop_star_reward,
-                    stickerSize = 60.dp,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("home_continue_card")
                 ) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        PosterStampBadge(
-                            text = "CONTINUE LESSON",
-                            containerColor = PopPosterPaper,
-                            contentColor = PopPosterInk
-                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            PosterStampBadge(
+                                text = "CONTINUE LESSON",
+                                containerColor = PopPosterPaper,
+                                contentColor = PopPosterInk
+                            )
+                            Image(
+                                painter = painterResource(com.example.R.drawable.pop_star_reward),
+                                contentDescription = null,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier.size(28.dp)
+                            )
+                        }
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = next.titleEnglish,
@@ -315,7 +329,9 @@ fun HomeScreen(
             }
             Spacer(modifier = Modifier.height(10.dp))
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Max),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 PopQuickModuleCard(
@@ -325,32 +341,34 @@ fun HomeScreen(
                     tagKey = "script",
                     cardColor = PopPosterButter,
                     onClick = onNavigateToVarnamale,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).fillMaxHeight()
                 )
                 PopQuickModuleCard(
                     iconRes = com.example.R.drawable.pop_icon_speech,
                     title = "Dialogues",
                     subtitle = "Real-life talk",
                     tagKey = "dialogue",
-                    cardColor = PopPosterPaper,
+                    cardColor = PopPosterCyan,
                     onClick = onNavigateToConversations,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).fillMaxHeight()
                 )
                 PopQuickModuleCard(
                     iconRes = com.example.R.drawable.pop_icon_trophy,
                     title = "Practice",
                     subtitle = "Cards & quiz",
                     tagKey = "practice",
-                    cardColor = BennePopRed,
+                    cardColor = PopPosterMint,
                     onClick = onNavigateToPractice,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).fillMaxHeight()
                 )
             }
         }
 
-        // Explore Karnataka: the Benne sticker pack in a sideways strip
+        // Explore Karnataka: crisp vector-outlined landmark strip with Kannada audio
         item {
-            KarnatakaStickerStrip()
+            KarnatakaLandmarkStrip(
+                onSpeakLandmark = { ttsHelper.speak(it, playbackSpeed) }
+            )
         }
 
         // Flashcard Deck Poster Spotlight Card
@@ -556,7 +574,8 @@ private fun PopQuickModuleCard(
             Image(
                 painter = painterResource(iconRes),
                 contentDescription = title,
-                modifier = Modifier.size(44.dp)
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.size(40.dp)
             )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
@@ -565,13 +584,15 @@ private fun PopQuickModuleCard(
                 fontSize = 15.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = PopPosterInk,
-                maxLines = 1
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Text(
                 text = subtitle,
                 style = MaterialTheme.typography.labelSmall,
                 color = PopPosterInk.copy(alpha = 0.8f),
-                maxLines = 1
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -625,7 +646,7 @@ private fun PopMilestoneCard(
                             )
                         } else {
                             Text(
-                                text = "0${milestone.levelNumber}",
+                                text = milestone.levelNumber.toString().padStart(2, '0'),
                                 fontFamily = BalooFamily,
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.ExtraBold
@@ -906,7 +927,7 @@ private fun PopLessonStudyContent(
     }
 }
 
-/** Level from XP (100 XP per level) with a playful title. */
+/** Level from XP (100 XP per level) with a playful title and clean non-overlapping mascot badge. */
 @Composable
 private fun LevelCard(xp: Int) {
     val level = xp / 100 + 1
@@ -916,10 +937,8 @@ private fun LevelCard(xp: Int) {
     PosterCard(
         containerColor = PopPosterPaper,
         contentColor = PopPosterInk,
-        cornerRadius = 16.dp,
-        shadowOffset = 3.dp,
-        sticker = com.example.R.drawable.pop_sticker_auto_rickshaw,
-        stickerSize = 56.dp,
+        cornerRadius = 18.dp,
+        shadowOffset = 4.dp,
         modifier = Modifier.fillMaxWidth().testTag("home_level_card")
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
@@ -928,27 +947,65 @@ private fun LevelCard(xp: Int) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Surface(
+                        shape = CircleShape,
+                        color = PopPosterButter,
+                        border = BorderStroke(1.8.dp, PopPosterInk),
+                        modifier = Modifier.size(46.dp)
+                    ) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.padding(4.dp)
+                        ) {
+                            ButterMascot(
+                                size = 38.dp,
+                                pose = com.example.R.drawable.benne_mascot_compact
+                            )
+                        }
+                    }
+                    Column {
+                        PosterStampBadge(
+                            text = "LEVEL $level",
+                            containerColor = PopPosterButter,
+                            contentColor = PopPosterInk
+                        )
+                        Spacer(modifier = Modifier.height(3.dp))
+                        Text(
+                            text = title,
+                            fontFamily = BalooFamily,
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 17.sp,
+                            color = PopPosterInk
+                        )
+                    }
+                }
                 PosterStampBadge(
-                    text = "LEVEL $level",
-                    containerColor = PopPosterButter,
+                    text = "$xp XP",
+                    containerColor = PopPosterMint,
                     contentColor = PopPosterInk
-                )
-                Text(
-                    text = title,
-                    fontFamily = BalooFamily,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 16.sp,
-                    color = PopPosterInk
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
-            LinearProgressIndicator(
-                progress = { into / 100f },
-                modifier = Modifier.fillMaxWidth().height(8.dp),
-                color = MaterialTheme.colorScheme.primary,
-                trackColor = PopPosterCyan,
-                strokeCap = StrokeCap.Round
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(CircleShape)
+                    .border(1.5.dp, PopPosterInk, CircleShape)
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                LinearProgressIndicator(
+                    progress = { into / 100f },
+                    modifier = Modifier.fillMaxWidth().height(9.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = Color.Transparent,
+                    strokeCap = StrokeCap.Round
+                )
+            }
             Spacer(modifier = Modifier.height(6.dp))
             Text(
                 text = "${100 - into} XP to level ${level + 1}. Keep the streak alive!",
@@ -981,32 +1038,34 @@ private fun BadgeRow(lessonsDone: Int, totalLessons: Int, streakDays: Int, xp: I
             PosterStampBadge(
                 text = if (badge.unlocked) badge.label else "Locked: ${badge.hint}",
                 containerColor = if (badge.unlocked) PopPosterButter else PopPosterPaper,
-                contentColor = if (badge.unlocked) PopPosterInk else PopPosterInk.copy(alpha = 0.55f)
+                contentColor = if (badge.unlocked) PopPosterInk else PopPosterInk.copy(alpha = 0.65f)
             )
         }
     }
 }
 
-private val KarnatakaStickers = listOf(
-    "Coconut trees" to com.example.R.drawable.pop_sticker_coconut_trees,
-    "Elephant" to com.example.R.drawable.pop_sticker_elephant,
-    "Gol Gumbaz" to com.example.R.drawable.pop_sticker_gol_gumbaz,
-    "Hampi boulders" to com.example.R.drawable.pop_sticker_hampi_boulders,
-    "Hampi stone chariot" to com.example.R.drawable.pop_sticker_hampi_stone_chariot,
-    "Hill fort" to com.example.R.drawable.pop_sticker_hill_fort,
-    "Jog Falls" to com.example.R.drawable.pop_sticker_jog_falls,
-    "Lotus pond" to com.example.R.drawable.pop_sticker_lotus_pond,
-    "Mysore Palace" to com.example.R.drawable.pop_sticker_mysore_palace,
-    "Nandi" to com.example.R.drawable.pop_sticker_nandi,
-    "River" to com.example.R.drawable.pop_sticker_river,
-    "Shesha cobra" to com.example.R.drawable.pop_sticker_shesha_cobra,
-    "Stone mandapa" to com.example.R.drawable.pop_sticker_stone_mandapa,
-    "Yana rocks" to com.example.R.drawable.pop_sticker_yana_rocks
+private data class KarnatakaLandmark(
+    val nameEn: String,
+    val nameKn: String,
+    @DrawableRes val iconRes: Int
 )
 
-/** Sideways strip of Karnataka stickers (decorative; each has a name for screen readers). */
+private val KarnatakaLandmarks = listOf(
+    KarnatakaLandmark("Mysore Palace", "ಮೈಸೂರು ಅರಮನೆ", com.example.R.drawable.pop_landmark_mysore_palace),
+    KarnatakaLandmark("Hampi Chariot", "ಹಂಪಿ ರಥ", com.example.R.drawable.pop_landmark_hampi_chariot),
+    KarnatakaLandmark("Vidhana Soudha", "ವಿಧಾನ ಸೌಧ", com.example.R.drawable.pop_landmark_vidhana),
+    KarnatakaLandmark("Gol Gumbaz", "ಗೋಲ್ ಗುಂಬಜ್", com.example.R.drawable.pop_landmark_gol_gumbaz),
+    KarnatakaLandmark("Jog Falls", "ಜೋಗ ಜಲಪಾತ", com.example.R.drawable.pop_landmark_jog_falls),
+    KarnatakaLandmark("Badami Caves", "ಬಾದಾಮಿ ಗುಹೆಗಳು", com.example.R.drawable.pop_landmark_badami_caves),
+    KarnatakaLandmark("Belur Temple", "ಬೇಲೂರು ದೇಗುಲ", com.example.R.drawable.pop_landmark_belur_temple),
+    KarnatakaLandmark("Murudeshwara", "ಮುರುಡೇಶ್ವರ", com.example.R.drawable.pop_landmark_murudeshwara)
+)
+
+/** Clean vector-outlined Karnataka landmarks with tap-to-hear Kannada pronunciation. */
 @Composable
-private fun KarnatakaStickerStrip() {
+private fun KarnatakaLandmarkStrip(
+    onSpeakLandmark: (String) -> Unit
+) {
     PosterCard(
         containerColor = PopPosterPaper,
         contentColor = PopPosterInk,
@@ -1015,22 +1074,57 @@ private fun KarnatakaStickerStrip() {
         modifier = Modifier.fillMaxWidth().testTag("home_karnataka_strip")
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
-            Text(
-                text = "EXPLORE KARNATAKA",
-                fontFamily = BalooFamily,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = PopPosterInk
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "EXPLORE KARNATAKA",
+                    fontFamily = BalooFamily,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = PopPosterInk
+                )
+                PosterStampBadge(
+                    text = "TAP TO LISTEN",
+                    containerColor = PopPosterMint,
+                    contentColor = PopPosterInk
+                )
+            }
             Spacer(modifier = Modifier.height(10.dp))
             LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                items(count = KarnatakaStickers.size) { index ->
-                    val (name, res) = KarnatakaStickers[index]
-                    Image(
-                        painter = painterResource(res),
-                        contentDescription = name,
-                        modifier = Modifier.size(72.dp)
-                    )
+                items(count = KarnatakaLandmarks.size) { index ->
+                    val item = KarnatakaLandmarks[index]
+                    Surface(
+                        onClick = { onSpeakLandmark(item.nameKn) },
+                        shape = RoundedCornerShape(16.dp),
+                        color = PopPosterButter.copy(alpha = 0.35f),
+                        border = BorderStroke(1.5.dp, PopPosterInk),
+                        modifier = Modifier.width(104.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 10.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Image(
+                                painter = painterResource(item.iconRes),
+                                contentDescription = item.nameEn,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier.size(54.dp)
+                            )
+                            Spacer(modifier = Modifier.height(6.dp))
+                            Text(
+                                text = item.nameEn,
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = PopPosterInk,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
                 }
             }
         }

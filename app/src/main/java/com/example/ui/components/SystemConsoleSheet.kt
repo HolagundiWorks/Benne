@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
@@ -106,6 +107,7 @@ fun SystemConsoleSheet(
     val reminderHour by progressManager.reminderHour.collectAsState()
     val reminderMinute by progressManager.reminderMinute.collectAsState()
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
+    val showHindiPhonetics by progressManager.showHindiPhonetics.collectAsState()
 
     var nameInput by remember(learnerName) { mutableStateOf(learnerName) }
     var hasPermission by remember { mutableStateOf(StudyReminderManager.hasNotificationPermission(context)) }
@@ -537,6 +539,74 @@ fun SystemConsoleSheet(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
+                // 3b. Hindi Phonetic Guide Section
+                SectionHeader("HINDI PHONETIC GUIDE")
+                Spacer(modifier = Modifier.height(8.dp))
+                PosterCard(
+                    containerColor = PopPosterCyan,
+                    cornerRadius = 20.dp,
+                    shadowOffset = 4.dp,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Translate,
+                                contentDescription = "Hindi phonetics",
+                                tint = PopPosterInk,
+                                modifier = Modifier.size(22.dp)
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Column {
+                                Text(
+                                    text = "Devanagari Phonetics (दीर्घ)",
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = PopPosterInk
+                                )
+                                Text(
+                                    text = "Bold red highlights on long Kannada vowels",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = PopPosterInk.copy(alpha = 0.85f)
+                                )
+                            }
+                        }
+                        Switch(
+                            checked = showHindiPhonetics,
+                            onCheckedChange = { progressManager.setShowHindiPhonetics(it) },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = PopPosterInk,
+                                checkedTrackColor = PopPosterButter,
+                                checkedBorderColor = PopPosterInk,
+                                uncheckedThumbColor = PopPosterInk,
+                                uncheckedTrackColor = PopPosterPaper,
+                                uncheckedBorderColor = PopPosterInk
+                            ),
+                            thumbContent = if (showHindiPhonetics) {
+                                {
+                                    Icon(
+                                        imageVector = Icons.Default.Check,
+                                        contentDescription = null,
+                                        tint = PopPosterButter,
+                                        modifier = Modifier.size(SwitchDefaults.IconSize)
+                                    )
+                                }
+                            } else null,
+                            modifier = Modifier.testTag("settings_hindi_phonetics_switch")
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 // 4. Privacy & Data Management
                 SectionHeader("SECURITY & LOCAL PRIVACY")
                 Spacer(modifier = Modifier.height(8.dp))
@@ -690,7 +760,7 @@ fun SystemConsoleSheet(
                     onClick = {
                         StudyReminderManager.cancelDailyReminder(context)
                         progressManager.resetAllUserData()
-                        nameInput = "Kannada Learner"
+                        nameInput = UserProgressManager.DEFAULT_LEARNER_NAME
                         showResetConfirmation = false
                         statusFeedback = "All local progress has been reset."
                     },

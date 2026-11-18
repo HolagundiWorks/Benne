@@ -66,6 +66,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ui.LocalShowHindiPhonetics
 import com.example.ui.theme.NotoSansKannadaFamily
 import com.example.ui.theme.BalooFamily
 import com.example.ui.theme.PopPosterButter
@@ -108,8 +109,9 @@ fun PosterStampBadge(
 }
 
 /**
- * Displays Kannada text with its English-script phonetic transliteration directly underneath
- * (not the English translation), so non-Kannada speakers can always read how a word or sentence sounds.
+ * Displays Kannada text with its English-script phonetic transliteration directly underneath,
+ * followed by the Hindi (Devanagari) phonetic breakdown with red-stroke Dheergha highlights
+ * when [LocalShowHindiPhonetics] is enabled.
  */
 @Composable
 fun KannadaWithSubscript(
@@ -124,6 +126,11 @@ fun KannadaWithSubscript(
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     textAlign: TextAlign = TextAlign.Start
 ) {
+    val showHindi = LocalShowHindiPhonetics.current
+    val hasKannadaScript = remember(kannadaText) {
+        kannadaText.any { it in '\u0C80'..'\u0CFF' }
+    }
+
     Column(
         modifier = modifier,
         horizontalAlignment = horizontalAlignment
@@ -144,6 +151,15 @@ fun KannadaWithSubscript(
                 style = subscriptStyle,
                 fontWeight = FontWeight.Bold,
                 color = subscriptColor,
+                textAlign = textAlign
+            )
+        }
+        if (showHindi && hasKannadaScript) {
+            Spacer(modifier = Modifier.height(3.dp))
+            HindiPhoneticText(
+                kannadaText = kannadaText,
+                baseFontSize = if (kannadaFontSize.value >= 24f) 15.sp else 12.sp,
+                textColor = kannadaColor,
                 textAlign = textAlign
             )
         }

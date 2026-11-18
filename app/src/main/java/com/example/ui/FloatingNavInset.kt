@@ -18,3 +18,9 @@ val LocalFloatingNavInset = compositionLocalOf { 0.dp }
  * scroll up under it. Set by the main screen from the status-bar inset plus the header height.
  */
 val LocalFloatingHeaderInset = compositionLocalOf { 0.dp }
+
+/**
+ * Controls whether Hindi (Devanagari) phonetic guides with Dheergha red-stroke highlighting
+ * are rendered beneath Kannada text across all screens.
+ */
+val LocalShowHindiPhonetics = compositionLocalOf { true }

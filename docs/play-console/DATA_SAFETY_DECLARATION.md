@@ -73,4 +73,4 @@ Use the exact answers below when completing the **App Content** section in Googl
 - **News app:** Not a news app.
 - **Data safety / Security verification:**
   - `isMinifyEnabled = true` and `isShrinkResources = true` enabled for `release` builds with ProGuard rules stripping verbose/debug logs (`Log.v`, `Log.d`, `Log.i`).
-  - `allowBackup="true"` scoped via `backup_rules.xml` and `data_extraction_rules.xml` strictly to `sarala_kannada_prefs.xml`.
+  - `android:allowBackup="false"` ensures learner profile, XP, and streaks remain strictly on-device and start fresh at 0 on fresh installs.

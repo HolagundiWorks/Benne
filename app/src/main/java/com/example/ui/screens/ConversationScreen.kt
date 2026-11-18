@@ -1,8 +1,10 @@
 package com.example.ui.screens
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -38,7 +40,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -87,8 +91,6 @@ fun ConversationScreen(
                 containerColor = PopPosterPink,
                 cornerRadius = 24.dp,
                 shadowOffset = 5.dp,
-                sticker = com.example.R.drawable.pop_landmark_vidhana,
-                stickerSize = 84.dp,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(modifier = Modifier.padding(18.dp)) {
@@ -127,27 +129,56 @@ fun ConversationScreen(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
-                    Text(
-                        text = activeDialogue.titleEnglish,
-                        fontFamily = BalooFamily,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = PopPosterInk
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = activeDialogue.titleEnglish,
+                                fontFamily = BalooFamily,
+                                fontSize = 23.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                color = PopPosterInk
+                            )
 
-                    Spacer(modifier = Modifier.height(4.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
 
-                    KannadaWithSubscript(
-                        kannadaText = activeDialogue.titleKannada,
-                        transliteration = activeDialogue.titleTransliteration,
-                        kannadaFontSize = 17.sp,
-                        kannadaLineHeight = 22.sp,
-                        kannadaColor = PopPosterInk,
-                        subscriptColor = MaterialTheme.colorScheme.primary,
-                        subscriptStyle = MaterialTheme.typography.labelMedium
-                    )
+                            KannadaWithSubscript(
+                                kannadaText = activeDialogue.titleKannada,
+                                transliteration = activeDialogue.titleTransliteration,
+                                kannadaFontSize = 17.sp,
+                                kannadaLineHeight = 22.sp,
+                                kannadaColor = PopPosterInk,
+                                subscriptColor = MaterialTheme.colorScheme.primary,
+                                subscriptStyle = MaterialTheme.typography.labelMedium
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.width(12.dp))
+
+                        Surface(
+                            shape = RoundedCornerShape(16.dp),
+                            color = PopPosterPaper,
+                            border = BorderStroke(1.8.dp, PopPosterInk),
+                            modifier = Modifier.size(62.dp)
+                        ) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.padding(6.dp)
+                            ) {
+                                Image(
+                                    painter = painterResource(com.example.R.drawable.pop_landmark_vidhana),
+                                    contentDescription = "Vidhana Soudha",
+                                    contentScale = ContentScale.Fit,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
+                        }
+                    }
 
                     Spacer(modifier = Modifier.height(6.dp))
 
