@@ -162,7 +162,7 @@ fun SystemConsoleSheet(
                         Text(
                             text = "Benne Settings",
                             fontFamily = BalooFamily,
-                            fontSize = 24.sp,
+                            fontSize = 22.sp,
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
                         )
@@ -842,7 +842,7 @@ private fun LegalDocumentViewer(
                     Text(
                         text = document.title,
                         fontFamily = BalooFamily,
-                        fontSize = 20.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = PopPosterInk
                     )

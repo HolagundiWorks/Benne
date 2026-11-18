@@ -336,7 +336,7 @@ fun AlphabetScreen(
                         Text(
                             text = letter.char,
                             fontFamily = NotoSansKannadaFamily,
-                            fontSize = 54.sp,
+                            fontSize = 40.sp,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -347,7 +347,7 @@ fun AlphabetScreen(
                 Text(
                     text = "Pronounced \"${letter.englishTransliteration}\"",
                     fontFamily = BalooFamily,
-                    fontSize = 20.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
                 )

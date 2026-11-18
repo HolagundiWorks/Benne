@@ -92,7 +92,7 @@ fun FloatingBottomNav(
                         Text(
                             text = screen.titleEnglish,
                             style = MaterialTheme.typography.labelSmall,
-                            fontSize = 9.5.sp,
+                            fontSize = 12.sp,
                             letterSpacing = (-0.2).sp,
                             fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Medium,
                             maxLines = 1,

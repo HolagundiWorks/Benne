@@ -536,7 +536,7 @@ fun EvaluationQuizView(
                     Text(
                         text = "Question ${currentIndex + 1} of ${questions.size}",
                         fontFamily = BalooFamily,
-                        fontSize = 17.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = PopPosterInk
                     )

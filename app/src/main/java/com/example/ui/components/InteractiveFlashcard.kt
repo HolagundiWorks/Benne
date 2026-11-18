@@ -319,7 +319,7 @@ private fun FlashcardBackFace(
             Text(
                 text = flashcard.englishMeaning,
                 fontFamily = BalooFamily,
-                fontSize = 28.sp,
+                fontSize = 26.sp,
                 lineHeight = 33.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = PopPosterInk,

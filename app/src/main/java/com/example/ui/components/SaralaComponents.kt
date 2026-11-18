@@ -98,7 +98,7 @@ fun PosterStampBadge(
         Text(
             text = text,
             fontFamily = NunitoSansFamily,
-            fontSize = 11.sp,
+            fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
             letterSpacing = 0.6.sp,
             maxLines = 1,

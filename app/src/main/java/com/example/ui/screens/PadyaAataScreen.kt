@@ -323,7 +323,7 @@ fun PadyaAataScreen(
                             Text(
                                 text = if (isUnlocked) "Collected" else "3 games Lv.${poem.levelNumber}",
                                 style = MaterialTheme.typography.labelSmall,
-                                fontSize = 10.sp,
+                                fontSize = 12.sp,
                                 color = if (isUnlocked) PopPosterInk else PopPosterInk.copy(alpha = 0.65f),
                                 fontWeight = FontWeight.Bold,
                                 maxLines = 1

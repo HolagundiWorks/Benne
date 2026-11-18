@@ -300,7 +300,7 @@ fun DictionaryScreen(
                                 Text(
                                     text = phrase.kannada,
                                     fontFamily = NotoSansKannadaFamily,
-                                    fontSize = 19.sp,
+                                    fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = PopPosterInk
                                 )

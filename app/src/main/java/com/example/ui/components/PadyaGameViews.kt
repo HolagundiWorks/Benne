@@ -181,7 +181,7 @@ fun PadyaGameArena(
                 Text(
                     text = "${gameType.displayName} • ${gameType.kannadaTitle}",
                     fontFamily = BalooFamily,
-                    fontSize = 21.sp,
+                    fontSize = 22.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
                 )
@@ -283,7 +283,7 @@ fun PadyaGameArena(
                             Text(
                                 text = "Shabash! +$xpAwarded XP Earned",
                                 fontFamily = BalooFamily,
-                                fontSize = 20.sp,
+                                fontSize = 18.sp,
                                 fontWeight = FontWeight.ExtraBold,
                                 color = PopPosterInk
                             )
@@ -318,7 +318,7 @@ fun PadyaGameArena(
                                         Text(
                                             text = unlockedSticker.title,
                                             fontFamily = BalooFamily,
-                                            fontSize = 17.sp,
+                                            fontSize = 18.sp,
                                             fontWeight = FontWeight.ExtraBold,
                                             color = PopPosterInk
                                         )
@@ -420,7 +420,7 @@ private fun MissingWordGameBody(
                     Text(
                         text = "Find the missing word",
                         fontFamily = BalooFamily,
-                        fontSize = 19.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = PopPosterInk
                     )
@@ -721,7 +721,7 @@ private fun WordHuntGameBody(
                         Text(
                             text = "Find the Kannada word for \"${currentTarget.promptEnglish}\"",
                             fontFamily = BalooFamily,
-                            fontSize = 19.sp,
+                            fontSize = 18.sp,
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
                         )
@@ -747,7 +747,7 @@ private fun WordHuntGameBody(
                 Text(
                     text = "All target words spotted!",
                     fontFamily = BalooFamily,
-                    fontSize = 19.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = BenneTeal
                 )
@@ -1392,7 +1392,7 @@ private fun EchoPoemGameBody(
                 Text(
                     text = "Echo Line ${lineStep + 1} of ${poem.lines.size}",
                     fontFamily = BalooFamily,
-                    fontSize = 19.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
                 )
@@ -1647,7 +1647,7 @@ private fun PoetryRemixGameBody(
                                 Text(
                                     text = choice.kannada,
                                     fontFamily = NotoSansKannadaFamily,
-                                    fontSize = 15.sp,
+                                    fontSize = 16.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = PopPosterInk
                                 )

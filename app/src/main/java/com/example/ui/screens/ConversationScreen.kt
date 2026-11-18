@@ -140,7 +140,7 @@ fun ConversationScreen(
                             Text(
                                 text = activeDialogue.titleEnglish,
                                 fontFamily = BalooFamily,
-                                fontSize = 23.sp,
+                                fontSize = 22.sp,
                                 fontWeight = FontWeight.ExtraBold,
                                 color = PopPosterInk
                             )

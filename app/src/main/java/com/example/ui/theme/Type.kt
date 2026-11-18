@@ -41,12 +41,34 @@ val NotoSansDevanagariFamily = FontFamily(
     Font(R.font.noto_sans_devanagari, FontWeight.ExtraBold)
 )
 
+/**
+ * Benne type hierarchy (sp). Every text size in the app is on one of these steps:
+ *   40  Display   - hero numbers and the largest headline
+ *   34  Headline  - onboarding or celebration headline
+ *   26  Screen    - screen titles
+ *   22  Section   - section and lesson titles
+ *   18  Card      - card titles and Kannada titles
+ *   16  Body      - body text and Kannada body
+ *   14  Label     - tags, labels and buttons
+ *   12  Caption   - captions and small metadata (minimum)
+ */
+object BenneType {
+    const val DISPLAY = 40
+    const val HEADLINE = 34
+    const val SCREEN = 26
+    const val SECTION = 22
+    const val CARD = 18
+    const val BODY = 16
+    const val LABEL = 14
+    const val CAPTION = 12
+}
+
 // Benne — Bold Pop Poster Typography Scale
 val BenneTypography = Typography(
     displayLarge = TextStyle(
         fontFamily = BalooFamily,
         fontWeight = FontWeight.ExtraBold,
-        fontSize = 42.sp,
+        fontSize = 40.sp,
         lineHeight = 46.sp,
         letterSpacing = (-0.8).sp
     ),
@@ -60,7 +82,7 @@ val BenneTypography = Typography(
     displaySmall = TextStyle(
         fontFamily = BalooFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 28.sp,
+        fontSize = 26.sp,
         lineHeight = 32.sp,
         letterSpacing = (-0.25).sp
     ),
@@ -81,14 +103,14 @@ val BenneTypography = Typography(
     headlineSmall = TextStyle(
         fontFamily = BalooFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 20.sp,
+        fontSize = 18.sp,
         lineHeight = 25.sp,
         letterSpacing = (-0.15).sp
     ),
     titleLarge = TextStyle(
         fontFamily = BalooFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 19.sp,
+        fontSize = 18.sp,
         lineHeight = 24.sp,
         letterSpacing = (-0.1).sp
     ),
@@ -144,7 +166,7 @@ val BenneTypography = Typography(
     labelSmall = TextStyle(
         fontFamily = NunitoSansFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 11.sp,
+        fontSize = 12.sp,
         lineHeight = 14.sp,
         letterSpacing = 0.5.sp
     )

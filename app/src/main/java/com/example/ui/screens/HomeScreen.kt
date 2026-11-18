@@ -183,7 +183,7 @@ fun HomeScreen(
                         Text(
                             text = next.titleEnglish,
                             fontFamily = BalooFamily,
-                            fontSize = 20.sp,
+                            fontSize = 18.sp,
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
                         )
@@ -418,7 +418,7 @@ fun HomeScreen(
                         Text(
                             text = "Vocabulary Flashcards",
                             fontFamily = BalooFamily,
-                            fontSize = 20.sp,
+                            fontSize = 18.sp,
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
                         )
@@ -674,7 +674,7 @@ private fun PopQuickModuleCard(
             Text(
                 text = title,
                 fontFamily = BalooFamily,
-                fontSize = 15.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = PopPosterInk,
                 maxLines = 1,
@@ -1072,7 +1072,7 @@ private fun LevelCard(xp: Int) {
                             text = title,
                             fontFamily = BalooFamily,
                             fontWeight = FontWeight.ExtraBold,
-                            fontSize = 17.sp,
+                            fontSize = 18.sp,
                             color = PopPosterInk
                         )
                     }

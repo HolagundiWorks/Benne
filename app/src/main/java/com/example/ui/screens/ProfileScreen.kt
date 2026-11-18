@@ -186,7 +186,7 @@ fun ProfileScreen(
                             Text(
                                 text = effectiveEnglishName,
                                 fontFamily = BalooFamily,
-                                fontSize = 23.sp,
+                                fontSize = 22.sp,
                                 fontWeight = FontWeight.ExtraBold,
                                 color = PopPosterInk,
                                 maxLines = 1
@@ -274,7 +274,7 @@ fun ProfileScreen(
                     Text(
                         text = "Write Your Name in Kannada",
                         fontFamily = BalooFamily,
-                        fontSize = 21.sp,
+                        fontSize = 22.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = PopPosterInk
                     )
@@ -650,7 +650,7 @@ private fun ProfileStatTile(
             Text(
                 text = value,
                 fontFamily = BalooFamily,
-                fontSize = 17.sp,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = PopPosterInk
             )
@@ -691,7 +691,7 @@ private fun DheerghaSampleRow(
                     Text(
                         text = kannada,
                         fontFamily = NotoSansKannadaFamily,
-                        fontSize = 17.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         color = PopPosterInk
                     )
