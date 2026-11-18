@@ -38,7 +38,7 @@ Kannada speech uses the phone's built-in `TextToSpeech` engine (`audio/KannadaTt
 ./gradlew :app:testDebugUnitTest
 ```
 
-The debug build needs a local `debug.keystore` in the repo root (git-ignored). The unit tests currently fail for an environment reason: `app/build.gradle.kts` points Robolectric at a Linux-only offline path. This needs fixing before release.
+The debug build needs a local `debug.keystore` in the repo root (git-ignored). The first unit-test run downloads Robolectric's Android runtime, which is then cached. All 18 unit tests pass (`ExampleRobolectricTest`, `ExampleUnitTest`, `KarnatakaDataTest`).
 
 ## Documentation
 

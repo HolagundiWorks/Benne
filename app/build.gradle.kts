@@ -68,8 +68,8 @@ android {
     unitTests {
       isIncludeAndroidResources = true
       all {
-        it.systemProperty("robolectric.offline", "true")
-        it.systemProperty("robolectric.dependency.dir", "/home/appuser/.m2/repository/org/robolectric/android-all-instrumented/16-robolectric-13921718-i7")
+        // Robolectric downloads its Android runtime on first run (cached afterwards).
+        // The previous hard-coded Linux path made every test fail on Windows.
       }
     }
   }
