@@ -244,3 +244,4 @@ Sources: `BENNE_KARNATAKA_FOOD_ASSETS_IMPLEMENTATION.md`, `BENNE_KARNATAKA_HERIT
 - No images bundled. Photo credits and licences are pending verification per the specs.
 - Verified on device: Home card and Food Explorer (62 items, filters). Heritage screen builds; not checked on the device.
 - Not done: Food photo game, photo credits screen, Hindi-script pronunciation, Kannada audio, quizzes and map links.
+- Google Maps (feature/karnataka-modules): each heritage detail sheet has "Open in Google Maps" (`heritage_open_maps`). It opens a name search "<place>, <district>, Karnataka, India" via a geo: intent to Google Maps, with a fallback to any maps app, or a message if none. No coordinates stored, no location permission, no Maps SDK. Checked: the Maps app opens and runs the search. Map results need internet.

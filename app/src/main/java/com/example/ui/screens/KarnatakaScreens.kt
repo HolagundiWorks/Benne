@@ -36,8 +36,16 @@ import com.example.data.FoodItem
 import com.example.data.HeritagePlace
 import com.example.data.KarnatakaCatalog
 import com.example.ui.LocalFloatingHeaderInset
+import com.example.ui.components.PopActionButton
 import com.example.ui.components.PosterCard
 import com.example.ui.theme.BalooFamily
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterCyan
 import com.example.ui.theme.PopPosterInk
@@ -209,6 +217,7 @@ fun FoodExplorerScreen(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeritageScreen(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
     var query by remember { mutableStateOf("") }
     var selected by remember { mutableStateOf<HeritagePlace?>(null) }
     val places = KarnatakaCatalog.heritage.filter {
@@ -288,9 +297,37 @@ fun HeritageScreen(modifier: Modifier = Modifier) {
                 Text(text = "Focus: ${place.focus}", style = MaterialTheme.typography.bodyMedium, color = PopPosterInk)
                 Text(text = "Editorial priority: ${place.priority}", style = MaterialTheme.typography.bodyMedium, color = PopPosterInk)
                 Spacer(modifier = Modifier.height(12.dp))
+                // User-initiated external map search by name; no location permission, no coordinates stored
+                PopActionButton(
+                    text = "Open in Google Maps",
+                    onClick = { openPlaceInMaps(context, place.englishName, place.district) },
+                    modifier = Modifier.fillMaxWidth().testTag("heritage_open_maps")
+                )
+                Spacer(modifier = Modifier.height(12.dp))
                 CreditsNote("Photo and history: pending verification. Kannada name: pending native review.")
                 Spacer(modifier = Modifier.height(20.dp))
             }
+        }
+    }
+}
+
+/**
+ * Opens Google Maps (or any maps app) at a name search for the place. Uses a plain ACTION_VIEW intent,
+ * so no Maps SDK, API key or location permission is needed. If no maps app is installed, says so.
+ */
+private fun openPlaceInMaps(context: Context, placeName: String, district: String) {
+    val query = Uri.encode("$placeName, $district, Karnataka, India")
+    val uri = Uri.parse("geo:0,0?q=$query")
+    val intent = Intent(Intent.ACTION_VIEW, uri).apply {
+        setPackage("com.google.android.apps.maps")
+    }
+    try {
+        context.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        try {
+            context.startActivity(Intent(Intent.ACTION_VIEW, uri))
+        } catch (e2: ActivityNotFoundException) {
+            Toast.makeText(context, "No maps app is installed.", Toast.LENGTH_SHORT).show()
         }
     }
 }
