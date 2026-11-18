@@ -291,3 +291,10 @@ Components in `ui/components/BenneTypography.kt`:
 - Used by flashcards (front), lesson cards and the lesson sheet.
 - Not yet applied: dialogues, phrases, poems, food, heritage, quizzes. Their content fields are not split into the four stored fields (`english`, `kannadaRomanized`, `kannadaDevanagari`, `kannadaScript`) yet.
 - Verified on device: flashcard front, lesson sheet.
+
+## Typography hierarchy, continued (feature/learning-format)
+- Dialogue lines (Talk > Dialogues): `BenneLearningBlock`. English translation as H1 when "Show English meaning" is on, Latin and Devanagari pronunciation, Kannada script as H3.
+- Phrasebook rows (Talk > Phrases): H1 English meaning with the Essential badge, H2 Latin and Devanagari, H3 Kannada script. The separate "Meaning:" chip is removed.
+- Devanagari for dialogues and phrases comes from `KannadaToHindiPhonetic`; it is unreviewed and goes to native testing.
+- Still on old layouts: poems, food and heritage detail sheets, quiz options and results.
+- Verified on device: Talk > Dialogues, Talk > Phrases.

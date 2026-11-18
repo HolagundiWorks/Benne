@@ -319,14 +319,13 @@ private fun PopDialogueLineBubble(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                KannadaWithSubscript(
-                    kannadaText = line.kannadaText,
-                    transliteration = line.transliteration,
-                    kannadaFontSize = 19.sp,
-                    kannadaLineHeight = 25.sp,
-                    kannadaColor = PopPosterInk,
-                    subscriptColor = MaterialTheme.colorScheme.primary,
-                    subscriptStyle = MaterialTheme.typography.bodyMedium
+                // Standard hierarchy: H1 meaning (shown with the translation toggle), H2 Latin + Devanagari, H3 Kannada
+                com.example.ui.components.BenneLearningBlock(
+                    english = if (showTranslations) line.englishTranslation else "",
+                    kannadaRomanized = line.transliteration,
+                    kannadaDevanagari = com.example.phonetics.KannadaToHindiPhonetic.convertToSegments(line.kannadaText),
+                    kannadaScript = line.kannadaText,
+                    showDevanagari = true
                 )
 
                 if (showTranslations) {

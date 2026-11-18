@@ -44,6 +44,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.audio.KannadaTtsHelper
@@ -296,13 +297,12 @@ fun DictionaryScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
+                            // Standard hierarchy: H1 English, H2 Latin + Devanagari, H3 Kannada script
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(
-                                    text = phrase.kannada,
-                                    fontFamily = NotoSansKannadaFamily,
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = PopPosterInk
+                                com.example.ui.components.BenneH1(
+                                    text = phrase.english,
+                                    align = TextAlign.Start,
+                                    modifier = Modifier.weight(1f, fill = false)
                                 )
                                 if (phrase.isEssential) {
                                     Spacer(modifier = Modifier.width(8.dp))
@@ -313,39 +313,21 @@ fun DictionaryScreen(
                                     )
                                 }
                             }
-
-                            Spacer(modifier = Modifier.height(3.dp))
-
-                            Text(
+                            com.example.ui.components.BenneH2Latin(
                                 text = phrase.transliteration,
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
+                                align = TextAlign.Start
                             )
-
                             if (showHindiPhonetics) {
-                                Spacer(modifier = Modifier.height(2.dp))
-                                HindiPhoneticText(
-                                    kannadaText = phrase.kannada,
-                                    baseFontSize = 14.sp,
-                                    textColor = PopPosterInk
+                                com.example.ui.components.BenneH2Devanagari(
+                                    segments = com.example.phonetics.KannadaToHindiPhonetic.convertToSegments(phrase.kannada),
+                                    align = TextAlign.Start
                                 )
                             }
-
                             Spacer(modifier = Modifier.height(4.dp))
-
-                            Surface(
-                                shape = RoundedCornerShape(8.dp),
-                                color = PopPosterPaper,
-                                border = BorderStroke(1.dp, PopPosterInk.copy(alpha = 0.35f))
-                            ) {
-                                Text(
-                                    text = "Meaning: ${phrase.english}",
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = PopPosterInk,
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
-                                )
-                            }
+                            com.example.ui.components.BenneH3(
+                                text = phrase.kannada,
+                                align = TextAlign.Start
+                            )
                         }
 
                         IconButton(
