@@ -303,3 +303,17 @@ Components in `ui/components/BenneTypography.kt`:
 - Source: `Benne_Badges_Production_Kit/` (15 editable SVG, 512 and 256 px transparent PNG, manifest). Used: the 512 px PNGs, copied into `drawable-nodpi` under their production IDs (`streak_3`, `points_100`, `speed_steady`, and so on). The old set (`streak_*_days`) is removed.
 - Achievement IDs now follow the manifest. Award rules are unchanged: streak is consecutive learning days, points is lifetime XP. Speed badges stay locked; the guide says thresholds must come from validated lesson times and accuracy, which the app doesn't record yet.
 - Verified on device: Profile achievements show the production art, with locked rules.
+
+## Karnataka identity cards: Flag and Map (feature/learning-format)
+- Home: two discovery cards (`home_flag_card`, `home_map_card`), each with H1 English, H2 Latin, H2 Devanagari and H3 Kannada from the brief.
+- Flag screen (`KarnatakaFlagScreen`): bicolour artwork (yellow over red, Benne palette), explanation that it is a cultural identity symbol and not the official state symbol, Kannada colour-name audio, a two-question quiz, and +20 XP on completion.
+- Map screen (`KarnatakaMapScreen`): 30-district Karnataka outline with tap-to-select districts (Pop Red highlight), links to Heritage and Food.
+- Geometry: `data/KarnatakaGeometry.kt`, from `guneetnarula/indian-district-boundaries` (MIT), `topojson/state-wise/karnataka.json`. Projected and simplified; offline.
+- Verified on device: Home cards, map outline, district tap selection; Poems switcher padding fixed.
+
+Limits (not met yet):
+- The boundaries follow the 2011 Census district list. Karnataka has since added a district; replace the file with an official current boundary before release.
+- Kannada district names and the colour-name pronunciations (ಹಳದಿ, ಕೆಂಪು) are pending native review. Devanagari for the colours is not provided.
+- The flag uses Benne's butter and pop red rather than the official shades of the flag.
+- No district facts (cities, historical sites, foods) are shown yet; those need editorial data per district.
+- No unit tests were added for the hit-testing or the quiz.

@@ -1,0 +1,384 @@
+package com.example.ui.screens
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.audio.KannadaTtsHelper
+import com.example.data.KarnatakaGeometry
+import com.example.data.UserProgressManager
+import com.example.phonetics.KannadaToHindiPhonetic
+import com.example.ui.LocalFloatingHeaderInset
+import com.example.ui.components.BenneH1
+import com.example.ui.components.BenneH2Devanagari
+import com.example.ui.components.BenneH2Latin
+import com.example.ui.components.BenneH3
+import com.example.ui.components.PopActionButton
+import com.example.ui.theme.BalooFamily
+import com.example.ui.theme.BennePopRed
+import com.example.ui.theme.BenneTeal
+import com.example.ui.theme.PopPosterButter
+import com.example.ui.theme.PopPosterInk
+import com.example.ui.theme.PopPosterPaper
+import androidx.compose.foundation.clickable
+
+// ---------- Shared geometry helpers ----------
+
+/** Parsed district: normalised rings, x in 0..1 and y in 0..1.58 (Karnataka's aspect). */
+data class DistrictShape(val name: String, val rings: List<List<Offset>>)
+
+private const val MAP_ASPECT_H = 1.58f
+
+val karnatakaShapes: List<DistrictShape> by lazy {
+    KarnatakaGeometry.districts.map { d ->
+        DistrictShape(
+            name = d.name,
+            rings = d.encodedRings.split("|").map { ring ->
+                ring.trim().split(" ").filter { it.isNotBlank() }.map { p ->
+                    val (x, y) = p.split(",")
+                    Offset(x.toFloat() / 10000f, y.toFloat() / 10000f)
+                }
+            }
+        )
+    }
+}
+
+/** Ray-casting point-in-polygon test in normalised coordinates. */
+private fun ringContains(ring: List<Offset>, p: Offset): Boolean {
+    var inside = false
+    var j = ring.size - 1
+    for (i in ring.indices) {
+        val a = ring[i]; val b = ring[j]
+        if ((a.y > p.y) != (b.y > p.y) &&
+            p.x < (b.x - a.x) * (p.y - a.y) / (b.y - a.y) + a.x
+        ) inside = !inside
+        j = i
+    }
+    return inside
+}
+
+private fun DistrictShape.contains(p: Offset): Boolean =
+    rings.count { ringContains(it, p) } % 2 == 1
+
+// ---------- Flag artwork ----------
+
+/** Karnataka bicolour (yellow over red), drawn with the Benne palette. Dominant element of the flag card. */
+@Composable
+fun KarnatakaFlagArtwork(modifier: Modifier = Modifier) {
+    Canvas(
+        modifier = modifier
+            .aspectRatio(3f / 2f)
+            .semantics { contentDescription = "Karnataka bicolour flag: yellow above, red below" }
+    ) {
+        val w = size.width
+        val h = size.height
+        val frame = 6.dp.toPx()
+        // Pop frame
+        drawRoundRect(
+            color = PopPosterInk,
+            size = size,
+            cornerRadius = androidx.compose.ui.geometry.CornerRadius(16.dp.toPx())
+        )
+        val inner = Size(w - frame * 2, h - frame * 2)
+        val innerOffset = Offset(frame, frame)
+        // Yellow upper half, red lower half
+        drawRect(color = PopPosterButter, topLeft = innerOffset, size = Size(inner.width, inner.height / 2))
+        drawRect(color = BennePopRed, topLeft = Offset(frame, frame + inner.height / 2), size = Size(inner.width, inner.height / 2))
+    }
+}
+
+// ---------- Map artwork ----------
+
+@Composable
+fun KarnatakaMapArtwork(
+    selected: String?,
+    onSelect: ((String) -> Unit)?,
+    modifier: Modifier = Modifier,
+    labelOnly: Boolean = false
+) {
+    val shapes = karnatakaShapes
+    Canvas(
+        modifier = modifier
+            .aspectRatio(1f / MAP_ASPECT_H)
+            .then(
+                if (onSelect != null) Modifier.pointerInput(Unit) {
+                    detectTapGestures { tap ->
+                        val s = size.width.toFloat()
+                        val p = Offset(tap.x / s, tap.y / s)
+                        shapes.firstOrNull { it.contains(p) }?.let { onSelect(it.name) }
+                    }
+                } else Modifier
+            )
+            .semantics { contentDescription = "Map of Karnataka with 30 districts" }
+    ) {
+        val s = size.width // normalised x spans 0..1 across the full width
+        for (district in shapes) {
+            val path = Path()
+            for (ring in district.rings) {
+                if (ring.isEmpty()) continue
+                path.moveTo(ring[0].x * s, ring[0].y * s)
+                for (i in 1 until ring.size) path.lineTo(ring[i].x * s, ring[i].y * s)
+                path.close()
+            }
+            val isSel = district.name == selected
+            drawPath(path, color = if (isSel) BennePopRed else PopPosterButter)
+            drawPath(path, color = PopPosterInk, style = Stroke(width = if (isSel) 2.5f else 1.2f))
+        }
+    }
+}
+
+// ---------- Discovery card ----------
+
+/**
+ * Discovery card: artwork preview, then H1 English, H2 Latin, H2 Devanagari and H3 Kannada.
+ * The whole card is the tap target (well above 48dp).
+ */
+@Composable
+fun BenneDiscoveryCard(
+    artwork: @Composable () -> Unit,
+    english: String,
+    latin: String,
+    devanagari: String,
+    kannada: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(20.dp),
+        color = PopPosterPaper,
+        contentColor = PopPosterInk,
+        border = BorderStroke(2.dp, PopPosterInk),
+        modifier = modifier
+    ) {
+        Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            artwork()
+            Spacer(modifier = Modifier.height(8.dp))
+            BenneH1(english)
+            BenneH2Latin(latin)
+            BenneH2Devanagari(
+                segments = listOf(com.example.phonetics.HindiPhoneticSegment(devanagari, false))
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            BenneH3(kannada)
+        }
+    }
+}
+
+// ---------- Flag learning screen ----------
+
+private data class FlagQuestion(val prompt: String, val options: List<String>, val answer: Int)
+
+@Composable
+fun KarnatakaFlagScreen(
+    ttsHelper: KannadaTtsHelper,
+    progressManager: UserProgressManager,
+    modifier: Modifier = Modifier
+) {
+    val playbackSpeed by progressManager.playbackSpeed.collectAsState()
+    val questions = remember {
+        listOf(
+            FlagQuestion("Which colour is on the top half?", listOf("Yellow", "Red"), 0),
+            FlagQuestion("Which colour is on the bottom half?", listOf("Yellow", "Red"), 1)
+        )
+    }
+    var step by remember { mutableStateOf(0) }
+    var score by remember { mutableStateOf(0) }
+    var answered by remember { mutableStateOf<Int?>(null) }
+    var done by remember { mutableStateOf(false) }
+
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        item { KarnatakaFlagArtwork(modifier = Modifier.fillMaxWidth()) }
+        item {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+                BenneH1("Karnataka Flag")
+                BenneH2Latin("Karnatakada Dhwaja")
+                BenneH2Devanagari(listOf(com.example.phonetics.HindiPhoneticSegment("कर्नाटकद ध्वज", false)))
+                BenneH3("ಕರ್ನಾಟಕದ ಧ್ವಜ")
+            }
+        }
+        item {
+            Text(
+                text = "This yellow-and-red flag is a widely used symbol of Kannada identity and culture. " +
+                    "It is not Karnataka's official state symbol.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = PopPosterInk,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        item {
+            // Listen: colour names in Kannada (text shown in H3; audio from the phone's Kannada voice)
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+                PopActionButton(
+                    text = "Listen: yellow",
+                    onClick = { ttsHelper.speak("ಹಳದಿ", playbackSpeed) },
+                    modifier = Modifier.weight(1f)
+                )
+                PopActionButton(
+                    text = "Listen: red",
+                    onClick = { ttsHelper.speak("ಕೆಂಪು", playbackSpeed) },
+                    containerColor = PopPosterButter,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+        item {
+            Text("Colour names: ಹಳದಿ (haḷadi, yellow) and ಕೆಂಪು (kempu, red). Pronunciation pending native review.",
+                style = MaterialTheme.typography.bodySmall, color = PopPosterInk, textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth())
+        }
+        item {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = PopPosterPaper,
+                border = BorderStroke(2.dp, PopPosterInk),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(14.dp)) {
+                    if (done) {
+                        Text("Score: $score of ${questions.size}. +20 XP", fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp, color = PopPosterInk)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        PopActionButton(text = "Try again", onClick = {
+                            step = 0; score = 0; answered = null; done = false
+                        }, modifier = Modifier.fillMaxWidth())
+                    } else {
+                        val q = questions[step]
+                        Text(q.prompt, fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp, color = PopPosterInk)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        q.options.forEachIndexed { i, label ->
+                            Surface(
+                                onClick = { if (answered == null) answered = i },
+                                shape = RoundedCornerShape(14.dp),
+                                color = when {
+                                    answered == null -> PopPosterPaper
+                                    i == q.answer -> BenneTeal
+                                    i == answered -> BennePopRed
+                                    else -> PopPosterPaper
+                                },
+                                border = BorderStroke(2.dp, PopPosterInk),
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                            ) {
+                                Text(label, fontWeight = FontWeight.Bold, color = PopPosterInk,
+                                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp))
+                            }
+                        }
+                        if (answered != null) {
+                            Spacer(modifier = Modifier.height(6.dp))
+                            if (answered == q.answer) score++
+                            Text(if (answered == q.answer) "Correct!" else "Not quite: the answer is ${q.options[q.answer]}.",
+                                style = MaterialTheme.typography.bodyMedium, color = PopPosterInk)
+                            Spacer(modifier = Modifier.height(8.dp))
+                            PopActionButton(
+                                text = if (step < questions.lastIndex) "Next question" else "See result",
+                                onClick = {
+                                    if (step < questions.lastIndex) { step++; answered = null }
+                                    else {
+                                        done = true
+                                        progressManager.addXp(20)
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// ---------- Map exploration screen ----------
+
+@Composable
+fun KarnatakaMapScreen(
+    onOpenHeritage: () -> Unit,
+    onOpenFood: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var selected by remember { mutableStateOf<String?>(null) }
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        item {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+                BenneH1("Karnataka Map")
+                BenneH2Latin("Karnatakada Nakshe")
+                BenneH2Devanagari(listOf(com.example.phonetics.HindiPhoneticSegment("कर्नाटकद नक्शे", false)))
+                BenneH3("ಕರ್ನಾಟಕದ ನಕ್ಷೆ")
+            }
+        }
+        item {
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                KarnatakaMapArtwork(
+                    selected = selected,
+                    onSelect = { selected = it },
+                    modifier = Modifier.fillMaxWidth(0.9f)
+                )
+            }
+        }
+        item {
+            Text(
+                text = selected?.let { "Selected: $it district" } ?: "Tap a district on the map",
+                fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp,
+                color = PopPosterInk, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth()
+            )
+        }
+        item {
+            Text(
+                text = "District names in Kannada and cultural facts are pending native and editorial review.",
+                style = MaterialTheme.typography.bodySmall, color = PopPosterInk, textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        item {
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+                PopActionButton(text = "Heritage places", onClick = onOpenHeritage, modifier = Modifier.weight(1f))
+                PopActionButton(text = "Food & sweets", onClick = onOpenFood, containerColor = PopPosterButter, modifier = Modifier.weight(1f))
+            }
+        }
+    }
+}

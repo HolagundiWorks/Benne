@@ -108,6 +108,8 @@ fun HomeScreen(
     onNavigateToPractice: () -> Unit,
     onNavigateToPoetryPlay: () -> Unit = {},
     onNavigateToFood: () -> Unit = {},
+    onNavigateToFlag: () -> Unit = {},
+    onNavigateToMap: () -> Unit = {},
     onNavigateToHeritage: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -492,6 +494,30 @@ fun HomeScreen(
             KarnatakaLandmarkStrip(
                 onSpeakLandmark = { ttsHelper.speak(it, playbackSpeed) }
             )
+        }
+
+        // Karnataka identity cards: flag and map (discovery cards; open learning screens)
+        item {
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth().height(androidx.compose.foundation.layout.IntrinsicSize.Max).testTag("home_identity_cards")) {
+                com.example.ui.screens.BenneDiscoveryCard(
+                    artwork = { com.example.ui.screens.KarnatakaFlagArtwork(modifier = Modifier.fillMaxWidth()) },
+                    english = "Karnataka Flag",
+                    latin = "Karnatakada Dhwaja",
+                    devanagari = "कर्नाटकद ध्वज",
+                    kannada = "ಕರ್ನಾಟಕದ ಧ್ವಜ",
+                    onClick = onNavigateToFlag,
+                    modifier = Modifier.weight(1f).fillMaxHeight().testTag("home_flag_card")
+                )
+                com.example.ui.screens.BenneDiscoveryCard(
+                    artwork = { com.example.ui.screens.KarnatakaMapArtwork(selected = null, onSelect = null, modifier = Modifier.fillMaxWidth(0.9f)) },
+                    english = "Karnataka Map",
+                    latin = "Karnatakada Nakshe",
+                    devanagari = "कर्नाटकद नक्शे",
+                    kannada = "ಕರ್ನಾಟಕದ ನಕ್ಷೆ",
+                    onClick = onNavigateToMap,
+                    modifier = Modifier.weight(1f).fillMaxHeight().testTag("home_map_card")
+                )
+            }
         }
 
         // Karnataka modules: food and heritage (content pending verification)

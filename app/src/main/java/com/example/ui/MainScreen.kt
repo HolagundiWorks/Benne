@@ -61,6 +61,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import com.example.ui.components.SystemConsoleSheet
 import com.example.ui.screens.AlphabetScreen
 import com.example.ui.screens.FoodExplorerScreen
+import com.example.ui.screens.KarnatakaFlagScreen
+import com.example.ui.screens.KarnatakaMapScreen
 import com.example.ui.screens.HeritageScreen
 import com.example.ui.screens.TalkScreen
 import com.example.ui.screens.HomeScreen
@@ -85,6 +87,8 @@ enum class SaralaScreen(
     PRACTICE("Practice", "ಅಭ್ಯಾಸ", Icons.Default.Psychology, Icons.Outlined.Psychology),
     PROFILE("Profile", "ಪ್ರೊಫೈಲ್", Icons.Default.Person, Icons.Outlined.Person),
     FOOD("Food", "ಆಹಾರ", Icons.Default.Favorite, Icons.Outlined.Favorite, inNav = false),
+    FLAG("Flag", "ಧ್ವಜ", Icons.Default.Favorite, Icons.Outlined.Favorite, inNav = false),
+    MAP("Map", "ನಕ್ಷೆ", Icons.Default.Place, Icons.Outlined.Place, inNav = false),
     HERITAGE("Heritage", "ದರ್ಶನ", Icons.Default.Place, Icons.Outlined.Place, inNav = false)
 }
 
@@ -184,6 +188,8 @@ fun MainScreen(
                                 currentScreen = SaralaScreen.PRACTICE
                             },
                             onNavigateToFood = { currentScreen = SaralaScreen.FOOD },
+                            onNavigateToFlag = { currentScreen = SaralaScreen.FLAG },
+                            onNavigateToMap = { currentScreen = SaralaScreen.MAP },
                             onNavigateToHeritage = { currentScreen = SaralaScreen.HERITAGE },
                             onNavigateToPoetryPlay = {
                                 practiceMode = PracticeMode.POETRY_PLAY
@@ -209,6 +215,8 @@ fun MainScreen(
                             modifier = contentModifier
                         )
                         SaralaScreen.FOOD -> FoodExplorerScreen(modifier = contentModifier)
+                        SaralaScreen.FLAG -> KarnatakaFlagScreen(ttsHelper = ttsHelper, progressManager = progressManager, modifier = contentModifier)
+                        SaralaScreen.MAP -> KarnatakaMapScreen(onOpenHeritage = { currentScreen = SaralaScreen.HERITAGE }, onOpenFood = { currentScreen = SaralaScreen.FOOD }, modifier = contentModifier)
                         SaralaScreen.HERITAGE -> HeritageScreen(modifier = contentModifier)
                         SaralaScreen.PROFILE -> ProfileScreen(
                             onOpenSettings = { showSystemConsole = true },
