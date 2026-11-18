@@ -52,6 +52,8 @@ import com.example.ui.theme.PopPosterCyan
 import com.example.ui.theme.PopPosterInk
 import com.example.ui.theme.PopPosterMint
 import com.example.ui.theme.PopPosterPaper
+import com.example.ui.theme.PopPosterPink
+import com.example.ui.theme.NotoSansKannadaFamily
 
 /**
  * Benne Interactive 3D Flashcard with uniform vector ink border, matched hard drop shadow,
@@ -207,23 +209,26 @@ private fun FlashcardFrontFace(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            KannadaWithSubscript(
-                kannadaText = flashcard.kannadaWord,
-                transliteration = flashcard.transliteration,
-                autoHindiPhonetics = flashcard.hindiPronunciation.isBlank(),
-                kannadaFontSize = 44.sp,
-                kannadaLineHeight = 52.sp,
-                kannadaColor = PopPosterInk,
-                subscriptColor = MaterialTheme.colorScheme.primary,
-                subscriptStyle = MaterialTheme.typography.titleMedium,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            // Learning-card order: English meaning, English-letter phonetic (bold red),
+            // Hindi-script phonetic with red sounds (when reviewed), then the Kannada script.
+            Text(
+                text = flashcard.englishMeaning,
+                fontFamily = BalooFamily,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 22.sp,
+                color = PopPosterInk,
                 textAlign = TextAlign.Center
             )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = flashcard.transliteration,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.ExtraBold,
+                color = com.example.ui.theme.BennePopRed,
+                textAlign = TextAlign.Center
+            )
             if (flashcard.hindiPronunciation.isNotBlank()) {
-                // Hindi-script pronunciation with the verified red highlight, plus a hint toggle
+                Spacer(modifier = Modifier.height(4.dp))
                 BenneLearningText(
                     hindiPronunciation = flashcard.hindiPronunciation,
                     highlight = flashcard.pronunciationHighlight,
@@ -247,20 +252,18 @@ private fun FlashcardFrontFace(
                         )
                     }
                 }
-            } else Surface(
-                shape = CircleShape,
-                color = PopPosterPaper,
-                border = BorderStroke(1.2.dp, PopPosterInk)
-            ) {
-                Text(
-                    text = "Phonetics: ${flashcard.phoneticBreakdown}",
-                    style = MaterialTheme.typography.bodySmall,
-                    fontWeight = FontWeight.Medium,
-                    color = PopPosterInk,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
-                )
             }
+            Spacer(modifier = Modifier.height(10.dp))
+            HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.2f))
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = flashcard.kannadaWord,
+                fontFamily = NotoSansKannadaFamily,
+                fontSize = 40.sp,
+                lineHeight = 48.sp,
+                color = PopPosterInk,
+                textAlign = TextAlign.Center
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
