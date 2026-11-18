@@ -1,0 +1,157 @@
+{
+  "name": "Benne Badge Assets Kit",
+  "version": "1.0",
+  "asset_count": 15,
+  "assets": [
+    {
+      "id": "streak_3_days",
+      "category": "streak",
+      "png": "png/streak_3_days.png",
+      "svg": "svg/streak_3_days.svg",
+      "source": "source/original_badge_sheet.png",
+      "license": "Original AI-generated artwork; review before distribution",
+      "background": "Opaque, source-sheet background",
+      "vector": false
+    },
+    {
+      "id": "streak_7_days",
+      "category": "streak",
+      "png": "png/streak_7_days.png",
+      "svg": "svg/streak_7_days.svg",
+      "source": "source/original_badge_sheet.png",
+      "license": "Original AI-generated artwork; review before distribution",
+      "background": "Opaque, source-sheet background",
+      "vector": false
+    },
+    {
+      "id": "streak_25_days",
+      "category": "streak",
+      "png": "png/streak_25_days.png",
+      "svg": "svg/streak_25_days.svg",
+      "source": "source/original_badge_sheet.png",
+      "license": "Original AI-generated artwork; review before distribution",
+      "background": "Opaque, source-sheet background",
+      "vector": false
+    },
+    {
+      "id": "streak_50_days",
+      "category": "streak",
+      "png": "png/streak_50_days.png",
+      "svg": "svg/streak_50_days.svg",
+      "source": "source/original_badge_sheet.png",
+      "license": "Original AI-generated artwork; review before distribution",
+      "background": "Opaque, source-sheet background",
+      "vector": false
+    },
+    {
+      "id": "streak_100_days",
+      "category": "streak",
+      "png": "png/streak_100_days.png",
+      "svg": "svg/streak_100_days.svg",
+      "source": "source/original_badge_sheet.png",
+      "license": "Original AI-generated artwork; review before distribution",
+      "background": "Opaque, source-sheet background",
+      "vector": false
+    },
+    {
+      "id": "points_100",
+      "category": "points",
+      "png": "png/points_100.png",
+      "svg": "svg/points_100.svg",
+      "source": "source/original_badge_sheet.png",
+      "license": "Original AI-generated artwork; review before distribution",
+      "background": "Opaque, source-sheet background",
+      "vector": false
+    },
+    {
+      "id": "points_500",
+      "category": "points",
+      "png": "png/points_500.png",
+      "svg": "svg/points_500.svg",
+      "source": "source/original_badge_sheet.png",
+      "license": "Original AI-generated artwork; review before distribution",
+      "background": "Opaque, source-sheet background",
+      "vector": false
+    },
+    {
+      "id": "points_1000",
+      "category": "points",
+      "png": "png/points_1000.png",
+      "svg": "svg/points_1000.svg",
+      "source": "source/original_badge_sheet.png",
+      "license": "Original AI-generated artwork; review before distribution",
+      "background": "Opaque, source-sheet background",
+      "vector": false
+    },
+    {
+      "id": "points_5000",
+      "category": "points",
+      "png": "png/points_5000.png",
+      "svg": "svg/points_5000.svg",
+      "source": "source/original_badge_sheet.png",
+      "license": "Original AI-generated artwork; review before distribution",
+      "background": "Opaque, source-sheet background",
+      "vector": false
+    },
+    {
+      "id": "points_10000",
+      "category": "points",
+      "png": "png/points_10000.png",
+      "svg": "svg/points_10000.svg",
+      "source": "source/original_badge_sheet.png",
+      "license": "Original AI-generated artwork; review before distribution",
+      "background": "Opaque, source-sheet background",
+      "vector": false
+    },
+    {
+      "id": "speed_steady",
+      "category": "speed",
+      "png": "png/speed_steady.png",
+      "svg": "svg/speed_steady.svg",
+      "source": "source/original_badge_sheet.png",
+      "license": "Original AI-generated artwork; review before distribution",
+      "background": "Opaque, source-sheet background",
+      "vector": false
+    },
+    {
+      "id": "speed_quick",
+      "category": "speed",
+      "png": "png/speed_quick.png",
+      "svg": "svg/speed_quick.svg",
+      "source": "source/original_badge_sheet.png",
+      "license": "Original AI-generated artwork; review before distribution",
+      "background": "Opaque, source-sheet background",
+      "vector": false
+    },
+    {
+      "id": "speed_fast",
+      "category": "speed",
+      "png": "png/speed_fast.png",
+      "svg": "svg/speed_fast.svg",
+      "source": "source/original_badge_sheet.png",
+      "license": "Original AI-generated artwork; review before distribution",
+      "background": "Opaque, source-sheet background",
+      "vector": false
+    },
+    {
+      "id": "speed_super",
+      "category": "speed",
+      "png": "png/speed_super.png",
+      "svg": "svg/speed_super.svg",
+      "source": "source/original_badge_sheet.png",
+      "license": "Original AI-generated artwork; review before distribution",
+      "background": "Opaque, source-sheet background",
+      "vector": false
+    },
+    {
+      "id": "speed_master",
+      "category": "speed",
+      "png": "png/speed_master.png",
+      "svg": "svg/speed_master.svg",
+      "source": "source/original_badge_sheet.png",
+      "license": "Original AI-generated artwork; review before distribution",
+      "background": "Opaque, source-sheet background",
+      "vector": false
+    }
+  ]
+}

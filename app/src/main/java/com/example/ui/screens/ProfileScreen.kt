@@ -146,6 +146,41 @@ fun ProfileScreen(
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         // 1. Live XP & Local Profile Summary Card
+        // Achievements: streak and points unlock from saved progress; speed needs timing data
+        item {
+            val inputs = com.example.data.AchievementInputs(streakDays = streakDays, xp = xp)
+            Column(modifier = Modifier.fillMaxWidth().testTag("profile_achievements")) {
+                Text(
+                    text = "ACHIEVEMENTS",
+                    fontFamily = BalooFamily,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 16.sp,
+                    color = PopPosterInk
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                com.example.data.Achievements.all.chunked(3).forEach { row ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        row.forEach { a ->
+                            com.example.ui.components.AchievementBadge(
+                                achievement = a,
+                                unlocked = com.example.data.Achievements.isUnlocked(a, inputs),
+                                modifier = Modifier.weight(1f),
+                                size = 84.dp
+                            )
+                        }
+                    }
+                }
+                Text(
+                    text = "Speed badges unlock once Benne records response times. Until then they stay locked.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = PopPosterInk
+                )
+            }
+        }
+
         item {
             PosterCard(
                 containerColor = PopPosterButter,

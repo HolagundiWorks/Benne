@@ -245,3 +245,11 @@ Sources: `BENNE_KARNATAKA_FOOD_ASSETS_IMPLEMENTATION.md`, `BENNE_KARNATAKA_HERIT
 - Verified on device: Home card and Food Explorer (62 items, filters). Heritage screen builds; not checked on the device.
 - Not done: Food photo game, photo credits screen, Hindi-script pronunciation, Kannada audio, quizzes and map links.
 - Google Maps (feature/karnataka-modules): each heritage detail sheet has "Open in Google Maps" (`heritage_open_maps`). It opens a name search "<place>, <district>, Karnataka, India" via a geo: intent to Google Maps, with a fallback to any maps app, or a message if none. No coordinates stored, no location permission, no Maps SDK. Checked: the Maps app opens and runs the search. Map results need internet.
+
+## Achievements from the Benne badge kit (feature/achievements)
+Source: `Benne_Badges_Asset_Kit/` (from `Benne_Badges_Asset_Kit.zip`, tracked here for traceability).
+- Rules: `data/Achievements.kt`. Streak badges (3, 7, 25, 50, 100 days) and points badges (100, 500, 1000, 5000, 10000 XP) derive from saved streak and XP. Nothing new is stored, and it works offline.
+- Speed badges stay locked with an explicit note. The app records no response times, so the kit's speed thresholds can't be measured; no guessing.
+- UI: `ui/components/AchievementBadge.kt`, shown as an "ACHIEVEMENTS" grid on the Profile screen. Each medallion states Unlocked or Locked in text and as a screen-reader label, and locked ones show the unlock rule.
+- Art not used. The kit's PNGs are 260×284 with opaque sheet backgrounds, and its own guide says not to ship them in UI until accepted. The kit license is "review before distribution". The medallions are text until redrawn, approved vector masters exist.
+- Verified on device: Profile achievements grid (all locked, correct rules).
