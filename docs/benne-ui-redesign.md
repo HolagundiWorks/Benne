@@ -234,3 +234,13 @@ Shadow:
 - Reviewed so far: ನಮಸ್ಕಾರ (Namaskaara), highlight "र". NEEDS NATIVE REVIEW before publishing.
 - Not done: English-first card order (English → Hindi → Kannada) for lesson cards; flashcards keep Kannada on the front, so meaning stays hidden until flip. Other words have no reviewed pronunciation yet.
 - Verified on device: Essentials flashcard shows the reviewed line, highlight and note; the toggle hides them.
+
+## Karnataka food and heritage (feature/karnataka-modules)
+Sources: `BENNE_KARNATAKA_FOOD_ASSETS_IMPLEMENTATION.md`, `BENNE_KARNATAKA_HERITAGE_TRAVEL_GUIDE.md`.
+- Data: `data/KarnatakaCatalog.kt`. 62 food items (7 categories) and 35 heritage places, taken from the specs. Kotlin data, not JSON assets, to match `SaralaKannadaData`.
+- Every item has `reviewed = false`. Kannada names are only the ones the specs give; blanks mean pending. No Devanagari pronunciation, historical text, coordinates or opening details are included.
+- Screens: `ui/screens/KarnatakaScreens.kt`. Food Explorer (category filters, detail sheet). Heritage Discover (search by place or district, detail sheet). Both show a "Pending review" label and a credits note.
+- Navigation: Food and Heritage open from Home ("Karnataka" card). They are not in the bottom bar (`SaralaScreen.inNav = false`).
+- No images bundled. Photo credits and licences are pending verification per the specs.
+- Verified on device: Home card and Food Explorer (62 items, filters). Heritage screen builds; not checked on the device.
+- Not done: Food photo game, photo credits screen, Hindi-script pronunciation, Kannada audio, quizzes and map links.

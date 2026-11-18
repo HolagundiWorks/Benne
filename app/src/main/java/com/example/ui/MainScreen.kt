@@ -30,6 +30,10 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Psychology
 import androidx.compose.material.icons.outlined.Translate
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
@@ -56,6 +60,8 @@ import com.example.ui.components.SaralaHeader
 import androidx.compose.runtime.CompositionLocalProvider
 import com.example.ui.components.SystemConsoleSheet
 import com.example.ui.screens.AlphabetScreen
+import com.example.ui.screens.FoodExplorerScreen
+import com.example.ui.screens.HeritageScreen
 import com.example.ui.screens.TalkScreen
 import com.example.ui.screens.HomeScreen
 import com.example.ui.screens.PracticeMode
@@ -69,13 +75,17 @@ enum class SaralaScreen(
     val titleEnglish: String,
     val titleKannada: String,
     val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector
+    val unselectedIcon: ImageVector,
+    /** False for screens opened from Home rather than the bottom bar. */
+    val inNav: Boolean = true
 ) {
     HOME("Home", "ಕಲಿಕೆ", Icons.Default.Home, Icons.Outlined.Home),
     ALPHABET("Letters", "ವರ್ಣಮಾಲೆ", Icons.AutoMirrored.Filled.MenuBook, Icons.AutoMirrored.Outlined.MenuBook),
     CONVERSATION("Talk", "ಸಂಭಾಷಣೆ", Icons.Default.ChatBubble, Icons.Outlined.ChatBubbleOutline),
     PRACTICE("Practice", "ಅಭ್ಯಾಸ", Icons.Default.Psychology, Icons.Outlined.Psychology),
-    PROFILE("Profile", "ಪ್ರೊಫೈಲ್", Icons.Default.Person, Icons.Outlined.Person)
+    PROFILE("Profile", "ಪ್ರೊಫೈಲ್", Icons.Default.Person, Icons.Outlined.Person),
+    FOOD("Food", "ಆಹಾರ", Icons.Default.Favorite, Icons.Outlined.Favorite, inNav = false),
+    HERITAGE("Heritage", "ದರ್ಶನ", Icons.Default.Place, Icons.Outlined.Place, inNav = false)
 }
 
 @Composable
@@ -115,7 +125,7 @@ fun MainScreen(
                         containerColor = PopPosterPaper
                     ) {
                         Spacer(modifier = Modifier.weight(1f))
-                        SaralaScreen.entries.forEach { screen ->
+                        SaralaScreen.entries.filter { it.inNav }.forEach { screen ->
                             val isSelected = currentScreen == screen
                             NavigationRailItem(
                                 selected = isSelected,
@@ -173,6 +183,8 @@ fun MainScreen(
                                 practiceMode = PracticeMode.FLASHCARDS
                                 currentScreen = SaralaScreen.PRACTICE
                             },
+                            onNavigateToFood = { currentScreen = SaralaScreen.FOOD },
+                            onNavigateToHeritage = { currentScreen = SaralaScreen.HERITAGE },
                             onNavigateToPoetryPlay = {
                                 practiceMode = PracticeMode.POETRY_PLAY
                                 currentScreen = SaralaScreen.PRACTICE
@@ -196,6 +208,8 @@ fun MainScreen(
                             onModeChanged = { practiceMode = it },
                             modifier = contentModifier
                         )
+                        SaralaScreen.FOOD -> FoodExplorerScreen(modifier = contentModifier)
+                        SaralaScreen.HERITAGE -> HeritageScreen(modifier = contentModifier)
                         SaralaScreen.PROFILE -> ProfileScreen(
                             progressManager = progressManager,
                             ttsHelper = ttsHelper,

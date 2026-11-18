@@ -105,6 +105,8 @@ fun HomeScreen(
     onNavigateToConversations: () -> Unit,
     onNavigateToPractice: () -> Unit,
     onNavigateToPoetryPlay: () -> Unit = {},
+    onNavigateToFood: () -> Unit = {},
+    onNavigateToHeritage: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val completedLessons by progressManager.completedLessons.collectAsState()
@@ -372,6 +374,50 @@ fun HomeScreen(
             KarnatakaLandmarkStrip(
                 onSpeakLandmark = { ttsHelper.speak(it, playbackSpeed) }
             )
+        }
+
+        // Karnataka modules: food and heritage (content pending verification)
+        item {
+            PosterCard(
+                containerColor = PopPosterPeach,
+                contentColor = PopPosterInk,
+                cornerRadius = 18.dp,
+                shadowOffset = 4.dp,
+                modifier = Modifier.fillMaxWidth().testTag("home_karnataka_modules")
+            ) {
+                Column(modifier = Modifier.padding(14.dp)) {
+                    Text(
+                        text = "KARNATAKA",
+                        fontFamily = BalooFamily,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 16.sp,
+                        color = PopPosterInk
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Surface(
+                            onClick = onNavigateToFood,
+                            shape = RoundedCornerShape(14.dp),
+                            color = PopPosterPaper,
+                            contentColor = PopPosterInk,
+                            border = BorderStroke(1.5.dp, PopPosterInk),
+                            modifier = Modifier.weight(1f).testTag("home_food_button")
+                        ) {
+                            Text("Food", fontWeight = FontWeight.ExtraBold, modifier = Modifier.padding(14.dp))
+                        }
+                        Surface(
+                            onClick = onNavigateToHeritage,
+                            shape = RoundedCornerShape(14.dp),
+                            color = PopPosterPaper,
+                            contentColor = PopPosterInk,
+                            border = BorderStroke(1.5.dp, PopPosterInk),
+                            modifier = Modifier.weight(1f).testTag("home_heritage_button")
+                        ) {
+                            Text("Heritage", fontWeight = FontWeight.ExtraBold, modifier = Modifier.padding(14.dp))
+                        }
+                    }
+                }
+            }
         }
 
         // Flashcard Deck Poster Spotlight Card

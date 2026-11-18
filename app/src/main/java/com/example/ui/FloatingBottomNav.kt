@@ -65,7 +65,7 @@ fun FloatingBottomNav(
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(modifier = Modifier.padding(4.dp)) {
-                SaralaScreen.entries.forEach { screen ->
+                SaralaScreen.entries.filter { it.inNav }.forEach { screen ->
                     val isSelected = selected == screen
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
