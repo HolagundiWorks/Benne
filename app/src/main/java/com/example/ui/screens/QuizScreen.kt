@@ -104,113 +104,119 @@ fun QuizScreen(
 ) {
     var currentMode by remember(initialMode) { mutableStateOf(initialMode) }
 
+    val modeSwitcher: @Composable () -> Unit = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp)
+            ) {
+                SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+                    SegmentedButton(
+                        selected = currentMode == PracticeMode.FLASHCARDS,
+                        onClick = {
+                            currentMode = PracticeMode.FLASHCARDS
+                            onModeChanged(PracticeMode.FLASHCARDS)
+                        },
+                        shape = SegmentedButtonDefaults.itemShape(index = 0, count = 3),
+                        colors = SegmentedButtonDefaults.colors(
+                            activeContainerColor = PopPosterButter,
+                            activeContentColor = PopPosterInk,
+                            inactiveContainerColor = PopPosterPaper,
+                            inactiveContentColor = PopPosterInk,
+                            activeBorderColor = PopPosterInk,
+                            inactiveBorderColor = PopPosterInk
+                        )
+                    ) {
+                        Text(
+                            text = "Flashcards",
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.labelMedium,
+                            maxLines = 1,
+                            softWrap = false
+                        )
+                    }
+                    SegmentedButton(
+                        selected = currentMode == PracticeMode.QUIZ,
+                        onClick = {
+                            currentMode = PracticeMode.QUIZ
+                            onModeChanged(PracticeMode.QUIZ)
+                        },
+                        shape = SegmentedButtonDefaults.itemShape(index = 1, count = 3),
+                        colors = SegmentedButtonDefaults.colors(
+                            activeContainerColor = PopPosterButter,
+                            activeContentColor = PopPosterInk,
+                            inactiveContainerColor = PopPosterPaper,
+                            inactiveContentColor = PopPosterInk,
+                            activeBorderColor = PopPosterInk,
+                            inactiveBorderColor = PopPosterInk
+                        )
+                    ) {
+                        Text(
+                            text = "Quiz",
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.labelMedium,
+                            maxLines = 1,
+                            softWrap = false
+                        )
+                    }
+                    SegmentedButton(
+                        selected = currentMode == PracticeMode.POETRY_PLAY,
+                        onClick = {
+                            currentMode = PracticeMode.POETRY_PLAY
+                            onModeChanged(PracticeMode.POETRY_PLAY)
+                        },
+                        shape = SegmentedButtonDefaults.itemShape(index = 2, count = 3),
+                        colors = SegmentedButtonDefaults.colors(
+                            activeContainerColor = PopPosterButter,
+                            activeContentColor = PopPosterInk,
+                            inactiveContainerColor = PopPosterPaper,
+                            inactiveContentColor = PopPosterInk,
+                            activeBorderColor = PopPosterInk,
+                            inactiveBorderColor = PopPosterInk
+                        ),
+                        modifier = Modifier.testTag("practice_tab_poetry_play")
+                    ) {
+                        Text(
+                            text = "Poems",
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.labelMedium,
+                            maxLines = 1,
+                            softWrap = false
+                        )
+                    }
+                }
+            }
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(top = LocalFloatingHeaderInset.current)
     ) {
-        // Pop Poster Segmented Mode Switcher
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 10.dp)
-        ) {
-            SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-                SegmentedButton(
-                    selected = currentMode == PracticeMode.FLASHCARDS,
-                    onClick = {
-                        currentMode = PracticeMode.FLASHCARDS
-                        onModeChanged(PracticeMode.FLASHCARDS)
-                    },
-                    shape = SegmentedButtonDefaults.itemShape(index = 0, count = 3),
-                    colors = SegmentedButtonDefaults.colors(
-                        activeContainerColor = PopPosterButter,
-                        activeContentColor = PopPosterInk,
-                        inactiveContainerColor = PopPosterPaper,
-                        inactiveContentColor = PopPosterInk,
-                        activeBorderColor = PopPosterInk,
-                        inactiveBorderColor = PopPosterInk
-                    )
-                ) {
-                    Text(
-                        text = "Flashcards",
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.labelMedium,
-                        maxLines = 1,
-                        softWrap = false
-                    )
-                }
-                SegmentedButton(
-                    selected = currentMode == PracticeMode.QUIZ,
-                    onClick = {
-                        currentMode = PracticeMode.QUIZ
-                        onModeChanged(PracticeMode.QUIZ)
-                    },
-                    shape = SegmentedButtonDefaults.itemShape(index = 1, count = 3),
-                    colors = SegmentedButtonDefaults.colors(
-                        activeContainerColor = PopPosterButter,
-                        activeContentColor = PopPosterInk,
-                        inactiveContainerColor = PopPosterPaper,
-                        inactiveContentColor = PopPosterInk,
-                        activeBorderColor = PopPosterInk,
-                        inactiveBorderColor = PopPosterInk
-                    )
-                ) {
-                    Text(
-                        text = "Quiz",
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.labelMedium,
-                        maxLines = 1,
-                        softWrap = false
-                    )
-                }
-                SegmentedButton(
-                    selected = currentMode == PracticeMode.POETRY_PLAY,
-                    onClick = {
-                        currentMode = PracticeMode.POETRY_PLAY
-                        onModeChanged(PracticeMode.POETRY_PLAY)
-                    },
-                    shape = SegmentedButtonDefaults.itemShape(index = 2, count = 3),
-                    colors = SegmentedButtonDefaults.colors(
-                        activeContainerColor = PopPosterButter,
-                        activeContentColor = PopPosterInk,
-                        inactiveContainerColor = PopPosterPaper,
-                        inactiveContentColor = PopPosterInk,
-                        activeBorderColor = PopPosterInk,
-                        inactiveBorderColor = PopPosterInk
-                    ),
-                    modifier = Modifier.testTag("practice_tab_poetry_play")
-                ) {
-                    Text(
-                        text = "Poems",
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.labelMedium,
-                        maxLines = 1,
-                        softWrap = false
-                    )
-                }
-            }
-        }
-
         when (currentMode) {
             PracticeMode.FLASHCARDS -> {
                 FlashcardStudioView(
                     ttsHelper = ttsHelper,
-                    progressManager = progressManager
+                    progressManager = progressManager,
+                    header = modeSwitcher
                 )
             }
             PracticeMode.QUIZ -> {
                 EvaluationQuizView(
                     ttsHelper = ttsHelper,
-                    progressManager = progressManager
+                    progressManager = progressManager,
+                    header = modeSwitcher
                 )
             }
             PracticeMode.POETRY_PLAY -> {
-                PadyaAataScreen(
-                    ttsHelper = ttsHelper,
-                    progressManager = progressManager
-                )
+                // Poems keeps its own layout: the switcher stays fixed, content starts below it
+                Column(modifier = Modifier.fillMaxSize().padding(top = LocalFloatingHeaderInset.current)) {
+                    modeSwitcher()
+                    PadyaAataScreen(
+                        ttsHelper = ttsHelper,
+                        progressManager = progressManager
+                    )
+                }
             }
         }
     }
@@ -219,7 +225,8 @@ fun QuizScreen(
 @Composable
 fun FlashcardStudioView(
     ttsHelper: KannadaTtsHelper,
-    progressManager: UserProgressManager
+    progressManager: UserProgressManager,
+    header: @Composable () -> Unit = {}
 ) {
     val allFlashcards = SaralaKannadaData.flashcards
     val masteredCardIds by progressManager.masteredFlashcardIds.collectAsState()
@@ -245,9 +252,10 @@ fun FlashcardStudioView(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(start = 16.dp, end = 16.dp, top = 6.dp, bottom = 6.dp),
+            .padding(start = 16.dp, end = 16.dp, top = LocalFloatingHeaderInset.current, bottom = 6.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        header()
         // Pop Deck Summary Poster Card
         PosterCard(
             containerColor = PopPosterPaper,
@@ -487,7 +495,8 @@ fun FlashcardStudioView(
 @Composable
 fun EvaluationQuizView(
     ttsHelper: KannadaTtsHelper,
-    progressManager: UserProgressManager
+    progressManager: UserProgressManager,
+    header: @Composable () -> Unit = {}
 ) {
     val questions = SaralaKannadaData.quizzes
     var currentIndex by remember { mutableIntStateOf(0) }
@@ -520,9 +529,10 @@ fun EvaluationQuizView(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 16.dp),
+            .padding(start = 16.dp, end = 16.dp, top = LocalFloatingHeaderInset.current, bottom = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        header()
         // Quiz Progress Poster Card
         PosterCard(
             containerColor = PopPosterPaper,
