@@ -31,11 +31,11 @@ data class AchievementInputs(val streakDays: Int, val xp: Int)
 
 object Achievements {
     val all: List<Achievement> = listOf(
-        Achievement("streak_3_days", AchievementCategory.STREAK, "3-day streak", "Study 3 days in a row") { it.streakDays >= 3 },
-        Achievement("streak_7_days", AchievementCategory.STREAK, "7-day streak", "Study 7 days in a row") { it.streakDays >= 7 },
-        Achievement("streak_25_days", AchievementCategory.STREAK, "25-day streak", "Study 25 days in a row") { it.streakDays >= 25 },
-        Achievement("streak_50_days", AchievementCategory.STREAK, "50-day streak", "Study 50 days in a row") { it.streakDays >= 50 },
-        Achievement("streak_100_days", AchievementCategory.STREAK, "100-day streak", "Study 100 days in a row") { it.streakDays >= 100 },
+        Achievement("streak_3", AchievementCategory.STREAK, "3-day streak", "Study 3 days in a row") { it.streakDays >= 3 },
+        Achievement("streak_7", AchievementCategory.STREAK, "7-day streak", "Study 7 days in a row") { it.streakDays >= 7 },
+        Achievement("streak_25", AchievementCategory.STREAK, "25-day streak", "Study 25 days in a row") { it.streakDays >= 25 },
+        Achievement("streak_50", AchievementCategory.STREAK, "50-day streak", "Study 50 days in a row") { it.streakDays >= 50 },
+        Achievement("streak_100", AchievementCategory.STREAK, "100-day streak", "Study 100 days in a row") { it.streakDays >= 100 },
         Achievement("points_100", AchievementCategory.POINTS, "100 points", "Earn 100 XP") { it.xp >= 100 },
         Achievement("points_500", AchievementCategory.POINTS, "500 points", "Earn 500 XP") { it.xp >= 500 },
         Achievement("points_1000", AchievementCategory.POINTS, "1,000 points", "Earn 1,000 XP") { it.xp >= 1_000 },
@@ -50,11 +50,11 @@ object Achievements {
 
     /** Kit artwork for each achievement id (explicit mapping, no reflection). */
     fun artRes(id: String): Int? = when (id) {
-        "streak_3_days" -> R.drawable.streak_3_days
-        "streak_7_days" -> R.drawable.streak_7_days
-        "streak_25_days" -> R.drawable.streak_25_days
-        "streak_50_days" -> R.drawable.streak_50_days
-        "streak_100_days" -> R.drawable.streak_100_days
+        "streak_3" -> R.drawable.streak_3
+        "streak_7" -> R.drawable.streak_7
+        "streak_25" -> R.drawable.streak_25
+        "streak_50" -> R.drawable.streak_50
+        "streak_100" -> R.drawable.streak_100
         "points_100" -> R.drawable.points_100
         "points_500" -> R.drawable.points_500
         "points_1000" -> R.drawable.points_1000

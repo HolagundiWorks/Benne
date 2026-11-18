@@ -1,0 +1,198 @@
+{
+  "version": "2.0",
+  "design": "Benne butter-cube pop art",
+  "colors": {
+    "butter": "#FFCC29",
+    "red": "#FF3655",
+    "cream": "#FFF7E2",
+    "teal": "#00B8B0",
+    "ink": "#17172D"
+  },
+  "badges": [
+    {
+      "id": "streak_3",
+      "category": "streak",
+      "label": "3",
+      "svg": "svg/streak_3.svg",
+      "png_512": "png/512/streak_3.png",
+      "png_256": "png/256/streak_3.png",
+      "unlock": {
+        "metric": "consecutive_learning_days",
+        "threshold": 3
+      }
+    },
+    {
+      "id": "streak_7",
+      "category": "streak",
+      "label": "7",
+      "svg": "svg/streak_7.svg",
+      "png_512": "png/512/streak_7.png",
+      "png_256": "png/256/streak_7.png",
+      "unlock": {
+        "metric": "consecutive_learning_days",
+        "threshold": 7
+      }
+    },
+    {
+      "id": "streak_25",
+      "category": "streak",
+      "label": "25",
+      "svg": "svg/streak_25.svg",
+      "png_512": "png/512/streak_25.png",
+      "png_256": "png/256/streak_25.png",
+      "unlock": {
+        "metric": "consecutive_learning_days",
+        "threshold": 25
+      }
+    },
+    {
+      "id": "streak_50",
+      "category": "streak",
+      "label": "50",
+      "svg": "svg/streak_50.svg",
+      "png_512": "png/512/streak_50.png",
+      "png_256": "png/256/streak_50.png",
+      "unlock": {
+        "metric": "consecutive_learning_days",
+        "threshold": 50
+      }
+    },
+    {
+      "id": "streak_100",
+      "category": "streak",
+      "label": "100",
+      "svg": "svg/streak_100.svg",
+      "png_512": "png/512/streak_100.png",
+      "png_256": "png/256/streak_100.png",
+      "unlock": {
+        "metric": "consecutive_learning_days",
+        "threshold": 100
+      }
+    },
+    {
+      "id": "points_100",
+      "category": "points",
+      "label": "100",
+      "svg": "svg/points_100.svg",
+      "png_512": "png/512/points_100.png",
+      "png_256": "png/256/points_100.png",
+      "unlock": {
+        "metric": "lifetime_xp",
+        "threshold": 100
+      }
+    },
+    {
+      "id": "points_500",
+      "category": "points",
+      "label": "500",
+      "svg": "svg/points_500.svg",
+      "png_512": "png/512/points_500.png",
+      "png_256": "png/256/points_500.png",
+      "unlock": {
+        "metric": "lifetime_xp",
+        "threshold": 500
+      }
+    },
+    {
+      "id": "points_1000",
+      "category": "points",
+      "label": "1000",
+      "svg": "svg/points_1000.svg",
+      "png_512": "png/512/points_1000.png",
+      "png_256": "png/256/points_1000.png",
+      "unlock": {
+        "metric": "lifetime_xp",
+        "threshold": 1000
+      }
+    },
+    {
+      "id": "points_5000",
+      "category": "points",
+      "label": "5000",
+      "svg": "svg/points_5000.svg",
+      "png_512": "png/512/points_5000.png",
+      "png_256": "png/256/points_5000.png",
+      "unlock": {
+        "metric": "lifetime_xp",
+        "threshold": 5000
+      }
+    },
+    {
+      "id": "points_10000",
+      "category": "points",
+      "label": "10000",
+      "svg": "svg/points_10000.svg",
+      "png_512": "png/512/points_10000.png",
+      "png_256": "png/256/points_10000.png",
+      "unlock": {
+        "metric": "lifetime_xp",
+        "threshold": 10000
+      }
+    },
+    {
+      "id": "speed_steady",
+      "category": "speed",
+      "label": "Steady",
+      "svg": "svg/speed_steady.svg",
+      "png_512": "png/512/speed_steady.png",
+      "png_256": "png/256/speed_steady.png",
+      "unlock": {
+        "metric": "speed_tier",
+        "threshold": "Steady",
+        "rule": "Configure using validated lesson completion times and accuracy; do not award based on speed alone."
+      }
+    },
+    {
+      "id": "speed_quick",
+      "category": "speed",
+      "label": "Quick",
+      "svg": "svg/speed_quick.svg",
+      "png_512": "png/512/speed_quick.png",
+      "png_256": "png/256/speed_quick.png",
+      "unlock": {
+        "metric": "speed_tier",
+        "threshold": "Quick",
+        "rule": "Configure using validated lesson completion times and accuracy; do not award based on speed alone."
+      }
+    },
+    {
+      "id": "speed_fast",
+      "category": "speed",
+      "label": "Fast",
+      "svg": "svg/speed_fast.svg",
+      "png_512": "png/512/speed_fast.png",
+      "png_256": "png/256/speed_fast.png",
+      "unlock": {
+        "metric": "speed_tier",
+        "threshold": "Fast",
+        "rule": "Configure using validated lesson completion times and accuracy; do not award based on speed alone."
+      }
+    },
+    {
+      "id": "speed_super",
+      "category": "speed",
+      "label": "Super",
+      "svg": "svg/speed_super.svg",
+      "png_512": "png/512/speed_super.png",
+      "png_256": "png/256/speed_super.png",
+      "unlock": {
+        "metric": "speed_tier",
+        "threshold": "Super",
+        "rule": "Configure using validated lesson completion times and accuracy; do not award based on speed alone."
+      }
+    },
+    {
+      "id": "speed_master",
+      "category": "speed",
+      "label": "Master",
+      "svg": "svg/speed_master.svg",
+      "png_512": "png/512/speed_master.png",
+      "png_256": "png/256/speed_master.png",
+      "unlock": {
+        "metric": "speed_tier",
+        "threshold": "Master",
+        "rule": "Configure using validated lesson completion times and accuracy; do not award based on speed alone."
+      }
+    }
+  ]
+}

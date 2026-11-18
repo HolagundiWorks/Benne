@@ -298,3 +298,8 @@ Components in `ui/components/BenneTypography.kt`:
 - Devanagari for dialogues and phrases comes from `KannadaToHindiPhonetic`; it is unreviewed and goes to native testing.
 - Still on old layouts: poems, food and heritage detail sheets, quiz options and results.
 - Verified on device: Talk > Dialogues, Talk > Phrases.
+
+## Production badge kit (feature/learning-format)
+- Source: `Benne_Badges_Production_Kit/` (15 editable SVG, 512 and 256 px transparent PNG, manifest). Used: the 512 px PNGs, copied into `drawable-nodpi` under their production IDs (`streak_3`, `points_100`, `speed_steady`, and so on). The old set (`streak_*_days`) is removed.
+- Achievement IDs now follow the manifest. Award rules are unchanged: streak is consecutive learning days, points is lifetime XP. Speed badges stay locked; the guide says thresholds must come from validated lesson times and accuracy, which the app doesn't record yet.
+- Verified on device: Profile achievements show the production art, with locked rules.

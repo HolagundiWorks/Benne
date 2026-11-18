@@ -150,9 +150,9 @@ private fun HeaderBadge(
 
 /** Highest unlocked streak badge (or the first tier, locked). Returns drawable and unlocked state. */
 private fun streakBadge(days: Int): Pair<Int, Boolean> {
-    val tiers = listOf(3 to R.drawable.streak_3_days, 7 to R.drawable.streak_7_days, 25 to R.drawable.streak_25_days, 50 to R.drawable.streak_50_days, 100 to R.drawable.streak_100_days)
+    val tiers = listOf(3 to R.drawable.streak_3, 7 to R.drawable.streak_7, 25 to R.drawable.streak_25, 50 to R.drawable.streak_50, 100 to R.drawable.streak_100)
     val reached = tiers.lastOrNull { days >= it.first }
-    return if (reached != null) reached.second to true else R.drawable.streak_3_days to false
+    return if (reached != null) reached.second to true else R.drawable.streak_3 to false
 }
 
 /** Highest unlocked points badge (or the first tier, locked). */
