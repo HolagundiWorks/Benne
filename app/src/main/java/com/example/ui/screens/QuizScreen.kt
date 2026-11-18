@@ -90,7 +90,8 @@ import com.example.ui.LocalShowHindiPhonetics
 
 enum class PracticeMode {
     FLASHCARDS,
-    QUIZ
+    QUIZ,
+    POETRY_PLAY
 }
 
 @Composable
@@ -98,9 +99,10 @@ fun QuizScreen(
     ttsHelper: KannadaTtsHelper,
     progressManager: UserProgressManager,
     modifier: Modifier = Modifier,
-    initialMode: PracticeMode = PracticeMode.FLASHCARDS
+    initialMode: PracticeMode = PracticeMode.FLASHCARDS,
+    onModeChanged: (PracticeMode) -> Unit = {}
 ) {
-    var currentMode by remember { mutableStateOf(initialMode) }
+    var currentMode by remember(initialMode) { mutableStateOf(initialMode) }
 
     Column(
         modifier = modifier
@@ -117,8 +119,11 @@ fun QuizScreen(
             SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
                 SegmentedButton(
                     selected = currentMode == PracticeMode.FLASHCARDS,
-                    onClick = { currentMode = PracticeMode.FLASHCARDS },
-                    shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
+                    onClick = {
+                        currentMode = PracticeMode.FLASHCARDS
+                        onModeChanged(PracticeMode.FLASHCARDS)
+                    },
+                    shape = SegmentedButtonDefaults.itemShape(index = 0, count = 3),
                     colors = SegmentedButtonDefaults.colors(
                         activeContainerColor = PopPosterButter,
                         activeContentColor = PopPosterInk,
@@ -128,12 +133,21 @@ fun QuizScreen(
                         inactiveBorderColor = PopPosterInk
                     )
                 ) {
-                    Text("Flashcards", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelLarge)
+                    Text(
+                        text = "Flashcards",
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.labelMedium,
+                        maxLines = 1,
+                        softWrap = false
+                    )
                 }
                 SegmentedButton(
                     selected = currentMode == PracticeMode.QUIZ,
-                    onClick = { currentMode = PracticeMode.QUIZ },
-                    shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
+                    onClick = {
+                        currentMode = PracticeMode.QUIZ
+                        onModeChanged(PracticeMode.QUIZ)
+                    },
+                    shape = SegmentedButtonDefaults.itemShape(index = 1, count = 3),
                     colors = SegmentedButtonDefaults.colors(
                         activeContainerColor = PopPosterButter,
                         activeContentColor = PopPosterInk,
@@ -143,7 +157,38 @@ fun QuizScreen(
                         inactiveBorderColor = PopPosterInk
                     )
                 ) {
-                    Text("Evaluation Quiz", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelLarge)
+                    Text(
+                        text = "Quiz",
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.labelMedium,
+                        maxLines = 1,
+                        softWrap = false
+                    )
+                }
+                SegmentedButton(
+                    selected = currentMode == PracticeMode.POETRY_PLAY,
+                    onClick = {
+                        currentMode = PracticeMode.POETRY_PLAY
+                        onModeChanged(PracticeMode.POETRY_PLAY)
+                    },
+                    shape = SegmentedButtonDefaults.itemShape(index = 2, count = 3),
+                    colors = SegmentedButtonDefaults.colors(
+                        activeContainerColor = PopPosterButter,
+                        activeContentColor = PopPosterInk,
+                        inactiveContainerColor = PopPosterPaper,
+                        inactiveContentColor = PopPosterInk,
+                        activeBorderColor = PopPosterInk,
+                        inactiveBorderColor = PopPosterInk
+                    ),
+                    modifier = Modifier.testTag("practice_tab_poetry_play")
+                ) {
+                    Text(
+                        text = "Poems",
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.labelMedium,
+                        maxLines = 1,
+                        softWrap = false
+                    )
                 }
             }
         }
@@ -157,6 +202,12 @@ fun QuizScreen(
             }
             PracticeMode.QUIZ -> {
                 EvaluationQuizView(
+                    ttsHelper = ttsHelper,
+                    progressManager = progressManager
+                )
+            }
+            PracticeMode.POETRY_PLAY -> {
+                PadyaAataScreen(
                     ttsHelper = ttsHelper,
                     progressManager = progressManager
                 )

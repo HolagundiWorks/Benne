@@ -92,6 +92,7 @@ fun ProfileScreen(
     val streakDays by progressManager.streakDays.collectAsState()
     val completedLessons by progressManager.completedLessons.collectAsState()
     val masteredFlashcards by progressManager.masteredFlashcardIds.collectAsState()
+    val unlockedStickers by progressManager.unlockedStickers.collectAsState()
     val favoritePhrases by progressManager.favoritePhraseIds.collectAsState()
     val showHindiPhonetics by progressManager.showHindiPhonetics.collectAsState()
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
@@ -236,6 +237,7 @@ fun ProfileScreen(
                         ProfileStatTile("Streak", "${streakDays}d", Modifier.weight(1f))
                         ProfileStatTile("Units", "${completedLessons.size}", Modifier.weight(1f))
                         ProfileStatTile("Cards", "${masteredFlashcards.size}", Modifier.weight(1f))
+                        ProfileStatTile("Stickers", "${unlockedStickers.size}", Modifier.weight(1f))
                     }
                 }
             }

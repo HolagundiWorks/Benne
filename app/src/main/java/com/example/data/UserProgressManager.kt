@@ -55,6 +55,19 @@ class UserProgressManager(context: Context) {
     private val _showHindiPhonetics = MutableStateFlow(prefs.getBoolean("show_hindi_phonetics", true))
     val showHindiPhonetics: StateFlow<Boolean> = _showHindiPhonetics.asStateFlow()
 
+    private val _showTransliteration = MutableStateFlow(prefs.getBoolean("show_transliteration", true))
+    val showTransliteration: StateFlow<Boolean> = _showTransliteration.asStateFlow()
+
+    private val _completedPoemChallenges = MutableStateFlow(
+        prefs.getStringSet("completed_poem_challenges", emptySet())?.toSet() ?: emptySet()
+    )
+    val completedPoemChallenges: StateFlow<Set<String>> = _completedPoemChallenges.asStateFlow()
+
+    private val _unlockedStickers = MutableStateFlow(
+        prefs.getStringSet("unlocked_stickers", emptySet())?.toSet() ?: emptySet()
+    )
+    val unlockedStickers: StateFlow<Set<String>> = _unlockedStickers.asStateFlow()
+
     private fun todayDateStr(): String =
         SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
 
@@ -167,15 +180,60 @@ class UserProgressManager(context: Context) {
         prefs.edit().putBoolean("show_hindi_phonetics", enabled).apply()
     }
 
+    fun setShowTransliteration(enabled: Boolean) {
+        _showTransliteration.value = enabled
+        prefs.edit().putBoolean("show_transliteration", enabled).apply()
+    }
+
+    /**
+     * Records completion of a Padya Aata challenge.
+     * Awards full [firstTimeXp] on first completion, or +5 XP for repeat pronunciation/rhythm practice.
+     * Unlocks the poem's collectible Karnataka sticker once >= 3 challenges in that poem are completed.
+     *
+     * @return Pair(xpAwarded, newlyUnlockedStickerIdOrNull)
+     */
+    fun recordPoemChallengeCompleted(
+        poemId: String,
+        challengeKey: String,
+        firstTimeXp: Int,
+        stickerId: String
+    ): Pair<Int, String?> {
+        val alreadyDone = _completedPoemChallenges.value.contains(challengeKey)
+        val updatedChallenges = _completedPoemChallenges.value + challengeKey
+        _completedPoemChallenges.value = updatedChallenges
+        prefs.edit().putStringSet("completed_poem_challenges", updatedChallenges).apply()
+
+        val awardedXp = if (alreadyDone) 5 else firstTimeXp
+        addXp(awardedXp)
+
+        val poemCount = PadyaAataData.completedCountForPoem(poemId, updatedChallenges)
+        var newlyUnlocked: String? = null
+        if (poemCount >= 3 && !_unlockedStickers.value.contains(stickerId)) {
+            val updatedStickers = _unlockedStickers.value + stickerId
+            _unlockedStickers.value = updatedStickers
+            prefs.edit().putStringSet("unlocked_stickers", updatedStickers).apply()
+            newlyUnlocked = stickerId
+            // Bonus celebration XP for completing a poem collection sticker
+            addXp(25)
+        }
+        return awardedXp to newlyUnlocked
+    }
+
     fun resetAllUserData() {
         val keepHindi = _showHindiPhonetics.value
+        val keepTranslit = _showTransliteration.value
         prefs.edit().clear().apply()
-        prefs.edit().putBoolean("show_hindi_phonetics", keepHindi).apply()
+        prefs.edit()
+            .putBoolean("show_hindi_phonetics", keepHindi)
+            .putBoolean("show_transliteration", keepTranslit)
+            .apply()
         _xp.value = 0
         _streakDays.value = 0
         _completedLessons.value = emptySet()
         _favoritePhraseIds.value = emptySet()
         _masteredFlashcardIds.value = emptySet()
+        _completedPoemChallenges.value = emptySet()
+        _unlockedStickers.value = emptySet()
         _playbackSpeed.value = 0.85f
         _notificationsEnabled.value = false
         _reminderHour.value = 19

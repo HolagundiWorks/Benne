@@ -4,9 +4,11 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.test.core.app.ApplicationProvider
+import com.example.data.PadyaAataData
 import com.example.data.SaralaKannadaData
 import com.example.data.UserProgressManager
 import com.example.legal.LegalDocuments
+import com.example.model.PadyaGameType
 import com.example.notifications.StudyReminderManager
 import com.example.phonetics.KannadaToHindiPhonetic
 import com.example.phonetics.NameTransliterator
@@ -167,5 +169,92 @@ class ExampleRobolectricTest {
         assertEquals("दोसॆ", doseSegs.joinToString("") { it.text })
         assertTrue(doseSegs[0].isDheergha)
         assertFalse(doseSegs[1].isDheergha)
+    }
+
+    @Test
+    fun `validate padya aata 10 poems and all 8 game datasets`() {
+        val poems = PadyaAataData.poems
+        assertEquals(10, poems.size)
+        assertEquals(8, PadyaGameType.entries.size)
+
+        poems.forEachIndexed { index, poem ->
+            assertEquals(index + 1, poem.levelNumber)
+            assertEquals(4, poem.lines.size)
+            assertTrue(poem.keyWords.size in 4..6)
+
+            poem.lines.forEach { line ->
+                assertTrue(line.kannada.isNotBlank())
+                assertTrue(line.transliteration.isNotBlank())
+                assertTrue(line.english.isNotBlank())
+                assertTrue(line.beats.isNotEmpty())
+            }
+
+            assertTrue(poem.missingWord.correctIndex in poem.missingWord.options.indices)
+            assertTrue(poem.rhymeMatch.correctIndex in poem.rhymeMatch.options.indices)
+            assertTrue(poem.pictureToPoem.correctIndex in poem.pictureToPoem.options.indices)
+            assertEquals(3, poem.remixSlots.size)
+
+            poem.wordHuntTargets.forEach { target ->
+                val lineTokens = poem.lines[target.lineIndex].kannada
+                    .split(" ")
+                    .map { it.trim(',', '.', '!', '?') }
+                assertTrue(
+                    "Word Hunt target '${target.targetWordKannada}' missing in ${poem.id} line ${target.lineIndex}",
+                    lineTokens.contains(target.targetWordKannada)
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `validate padya aata progressive unlock, xp rewards, and sticker collection`() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        context.getSharedPreferences("sarala_kannada_prefs", Context.MODE_PRIVATE)
+            .edit().clear().commit()
+
+        val manager = UserProgressManager(context)
+        val poem1 = PadyaAataData.poems.first()
+
+        // Poems 1-3 unlocked initially, Poem 4 locked until 2 games solved in Poem 3
+        assertTrue(PadyaAataData.isPoemUnlocked(0, manager.completedPoemChallenges.value))
+        assertTrue(PadyaAataData.isPoemUnlocked(2, manager.completedPoemChallenges.value))
+        assertFalse(PadyaAataData.isPoemUnlocked(3, manager.completedPoemChallenges.value))
+
+        // Tier 1 unlocked, Tier 2/3 locked before solving any game
+        assertTrue(PadyaAataData.isGameUnlocked(poem1.id, PadyaGameType.MISSING_WORD, manager.completedPoemChallenges.value))
+        assertFalse(PadyaAataData.isGameUnlocked(poem1.id, PadyaGameType.RHYTHM_TAP, manager.completedPoemChallenges.value))
+        assertFalse(PadyaAataData.isGameUnlocked(poem1.id, PadyaGameType.ECHO_THE_POEM, manager.completedPoemChallenges.value))
+
+        // 1st game solved unlocks Tier 2
+        val (xp1, sticker1) = manager.recordPoemChallengeCompleted(
+            poem1.id, PadyaAataData.challengeKey(poem1.id, PadyaGameType.MISSING_WORD), 10, poem1.sticker.id
+        )
+        assertEquals(10, xp1)
+        assertEquals(null, sticker1)
+        assertTrue(PadyaAataData.isGameUnlocked(poem1.id, PadyaGameType.RHYTHM_TAP, manager.completedPoemChallenges.value))
+
+        // Repeat practice awards +5 XP
+        val (xpRepeat, _) = manager.recordPoemChallengeCompleted(
+            poem1.id, PadyaAataData.challengeKey(poem1.id, PadyaGameType.MISSING_WORD), 10, poem1.sticker.id
+        )
+        assertEquals(5, xpRepeat)
+
+        // 2nd and 3rd unique games unlock Tier 3 + collectible Karnataka sticker (+25 bonus XP)
+        manager.recordPoemChallengeCompleted(
+            poem1.id, PadyaAataData.challengeKey(poem1.id, PadyaGameType.RHYME_MATCH), 15, poem1.sticker.id
+        )
+        val (xp3, sticker3) = manager.recordPoemChallengeCompleted(
+            poem1.id, PadyaAataData.challengeKey(poem1.id, PadyaGameType.RHYTHM_TAP), 15, poem1.sticker.id
+        )
+        assertEquals(15, xp3)
+        assertEquals(poem1.sticker.id, sticker3)
+        assertTrue(manager.unlockedStickers.value.contains(poem1.sticker.id))
+        assertTrue(PadyaAataData.isGameUnlocked(poem1.id, PadyaGameType.POETRY_REMIX, manager.completedPoemChallenges.value))
+        assertEquals(70, manager.xp.value)
+
+        manager.resetAllUserData()
+        assertTrue(manager.completedPoemChallenges.value.isEmpty())
+        assertTrue(manager.unlockedStickers.value.isEmpty())
+        assertEquals(0, manager.xp.value)
     }
 }

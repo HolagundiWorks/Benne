@@ -1,0 +1,1678 @@
+package com.example.ui.components
+
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.GraphicEq
+import androidx.compose.material.icons.filled.MicNone
+import androidx.compose.material.icons.filled.MusicNote
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.TouchApp
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.audio.KannadaTtsHelper
+import com.example.data.PadyaAataData
+import com.example.model.KarnatakaSticker
+import com.example.model.PadyaGameType
+import com.example.model.PadyaPoem
+import com.example.model.PoemLine
+import com.example.ui.LocalFloatingNavInset
+import com.example.ui.theme.BalooFamily
+import com.example.ui.theme.BennePopRed
+import com.example.ui.theme.BenneTeal
+import com.example.ui.theme.NotoSansKannadaFamily
+import com.example.ui.theme.PopPosterButter
+import com.example.ui.theme.PopPosterCyan
+import com.example.ui.theme.PopPosterInk
+import com.example.ui.theme.PopPosterMint
+import com.example.ui.theme.PopPosterPaper
+import com.example.ui.theme.PopPosterPeach
+import com.example.ui.theme.PopPosterPink
+import kotlinx.coroutines.delay
+
+@Composable
+fun PadyaGameArena(
+    poem: PadyaPoem,
+    gameType: PadyaGameType,
+    showTransliteration: Boolean,
+    onToggleTransliteration: (Boolean) -> Unit,
+    ttsHelper: KannadaTtsHelper,
+    playbackSpeed: Float,
+    onChallengeSuccess: (PadyaGameType) -> Pair<Int, KarnatakaSticker?>,
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    BackHandler { onBack() }
+
+    var completionResult by remember(poem.id, gameType) {
+        mutableStateOf<Pair<Int, KarnatakaSticker?>?>(null)
+    }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(
+                start = 16.dp,
+                top = 8.dp,
+                end = 16.dp,
+                bottom = 24.dp + LocalFloatingNavInset.current
+            ),
+        verticalArrangement = Arrangement.spacedBy(14.dp)
+    ) {
+        // Top Navigation & Beginner Transliteration Toggle Row
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Surface(
+                onClick = onBack,
+                shape = CircleShape,
+                color = PopPosterPaper,
+                border = BorderStroke(1.8.dp, PopPosterInk),
+                modifier = Modifier.defaultMinSize(minHeight = 48.dp)
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back to poem",
+                        tint = PopPosterInk,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = "Poem Hub",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = PopPosterInk
+                    )
+                }
+            }
+
+            TransliterationPillToggle(
+                checked = showTransliteration,
+                onCheckedChange = onToggleTransliteration
+            )
+        }
+
+        // Challenge Banner Card
+        PosterCard(
+            containerColor = PopPosterButter,
+            cornerRadius = 22.dp,
+            shadowOffset = 4.dp,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    PosterStampBadge(
+                        text = "BENNE POETRY PLAY · LEVEL ${poem.levelNumber}",
+                        containerColor = PopPosterInk,
+                        contentColor = PopPosterButter
+                    )
+                    PosterStampBadge(
+                        text = "+${gameType.xpReward} XP",
+                        containerColor = PopPosterMint,
+                        contentColor = PopPosterInk
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "${gameType.displayName} • ${gameType.kannadaTitle}",
+                    fontFamily = BalooFamily,
+                    fontSize = 21.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = PopPosterInk
+                )
+                Text(
+                    text = "${gameType.howItWorks} · Goal: ${gameType.learningGoal}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = PopPosterInk.copy(alpha = 0.85f)
+                )
+            }
+        }
+
+        val onFinishGame: () -> Unit = {
+            if (completionResult == null) {
+                completionResult = onChallengeSuccess(gameType)
+            }
+        }
+
+        when (gameType) {
+            PadyaGameType.MISSING_WORD -> MissingWordGameBody(
+                poem = poem,
+                showTransliteration = showTransliteration,
+                ttsHelper = ttsHelper,
+                playbackSpeed = playbackSpeed,
+                onSuccess = onFinishGame
+            )
+            PadyaGameType.RHYME_MATCH -> RhymeMatchGameBody(
+                poem = poem,
+                showTransliteration = showTransliteration,
+                ttsHelper = ttsHelper,
+                playbackSpeed = playbackSpeed,
+                onSuccess = onFinishGame
+            )
+            PadyaGameType.WORD_HUNT -> WordHuntGameBody(
+                poem = poem,
+                showTransliteration = showTransliteration,
+                ttsHelper = ttsHelper,
+                playbackSpeed = playbackSpeed,
+                onSuccess = onFinishGame
+            )
+            PadyaGameType.RHYTHM_TAP -> RhythmTapGameBody(
+                poem = poem,
+                showTransliteration = showTransliteration,
+                ttsHelper = ttsHelper,
+                playbackSpeed = playbackSpeed,
+                onSuccess = onFinishGame
+            )
+            PadyaGameType.PICTURE_TO_POEM -> PictureToPoemGameBody(
+                poem = poem,
+                showTransliteration = showTransliteration,
+                ttsHelper = ttsHelper,
+                playbackSpeed = playbackSpeed,
+                onSuccess = onFinishGame
+            )
+            PadyaGameType.POEM_PUZZLE -> PoemPuzzleGameBody(
+                poem = poem,
+                showTransliteration = showTransliteration,
+                ttsHelper = ttsHelper,
+                playbackSpeed = playbackSpeed,
+                onSuccess = onFinishGame
+            )
+            PadyaGameType.ECHO_THE_POEM -> EchoPoemGameBody(
+                poem = poem,
+                showTransliteration = showTransliteration,
+                ttsHelper = ttsHelper,
+                playbackSpeed = playbackSpeed,
+                onSuccess = onFinishGame
+            )
+            PadyaGameType.POETRY_REMIX -> PoetryRemixGameBody(
+                poem = poem,
+                showTransliteration = showTransliteration,
+                ttsHelper = ttsHelper,
+                playbackSpeed = playbackSpeed,
+                onSuccess = onFinishGame
+            )
+        }
+
+        AnimatedVisibility(visible = completionResult != null) {
+            completionResult?.let { (xpAwarded, unlockedSticker) ->
+                PosterCard(
+                    containerColor = PopPosterMint,
+                    cornerRadius = 22.dp,
+                    shadowOffset = 5.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("padya_game_complete_card")
+                ) {
+                    Column(
+                        modifier = Modifier.padding(18.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.CheckCircle,
+                                contentDescription = "Completed",
+                                tint = PopPosterInk,
+                                modifier = Modifier.size(26.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = "Shabash! +$xpAwarded XP Earned",
+                                fontFamily = BalooFamily,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                color = PopPosterInk
+                            )
+                        }
+
+                        if (unlockedSticker != null) {
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Surface(
+                                shape = RoundedCornerShape(18.dp),
+                                color = PopPosterButter,
+                                border = BorderStroke(2.dp, PopPosterInk),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(12.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Image(
+                                        painter = painterResource(unlockedSticker.drawableRes),
+                                        contentDescription = unlockedSticker.title,
+                                        contentScale = ContentScale.Fit,
+                                        modifier = Modifier.size(64.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(12.dp))
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        PosterStampBadge(
+                                            text = "STICKER UNLOCKED +25 XP",
+                                            containerColor = PopPosterInk,
+                                            contentColor = PopPosterButter
+                                        )
+                                        Spacer(modifier = Modifier.height(4.dp))
+                                        Text(
+                                            text = unlockedSticker.title,
+                                            fontFamily = BalooFamily,
+                                            fontSize = 17.sp,
+                                            fontWeight = FontWeight.ExtraBold,
+                                            color = PopPosterInk
+                                        )
+                                        Text(
+                                            text = "${unlockedSticker.kannadaTitle} • ${unlockedSticker.regionTag}",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = PopPosterInk.copy(alpha = 0.8f)
+                                        )
+                                    }
+                                }
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(14.dp))
+
+                        PopActionButton(
+                            text = "Back to Games",
+                            onClick = onBack,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("padya_back_to_games_btn")
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun TransliterationPillToggle(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        shape = CircleShape,
+        color = PopPosterPaper,
+        border = BorderStroke(1.5.dp, PopPosterInk),
+        modifier = modifier
+    ) {
+        Row(
+            modifier = Modifier.padding(start = 12.dp, end = 6.dp, top = 2.dp, bottom = 2.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Translit",
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Bold,
+                color = PopPosterInk
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Switch(
+                checked = checked,
+                onCheckedChange = onCheckedChange,
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = PopPosterInk,
+                    checkedTrackColor = PopPosterButter,
+                    checkedBorderColor = PopPosterInk,
+                    uncheckedThumbColor = PopPosterInk,
+                    uncheckedTrackColor = PopPosterPaper,
+                    uncheckedBorderColor = PopPosterInk
+                ),
+                modifier = Modifier.testTag("padya_translit_toggle")
+            )
+        }
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * GAME 1: MISSING WORD (Vocabulary)
+ * ────────────────────────────────────────────────────────────────────────────── */
+@Composable
+private fun MissingWordGameBody(
+    poem: PadyaPoem,
+    showTransliteration: Boolean,
+    ttsHelper: KannadaTtsHelper,
+    playbackSpeed: Float,
+    onSuccess: () -> Unit
+) {
+    val challenge = poem.missingWord
+    val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
+    var selectedIdx by remember(poem.id) { mutableStateOf<Int?>(null) }
+    var isSolved by remember(poem.id) { mutableStateOf(false) }
+
+    PosterCard(
+        containerColor = PopPosterPaper,
+        cornerRadius = 22.dp,
+        shadowOffset = 5.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(18.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = "Find the missing word",
+                        fontFamily = BalooFamily,
+                        fontSize = 19.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = PopPosterInk
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    KannadaWithSubscript(
+                        kannadaText = if (isSolved) challenge.fullLineKannada else challenge.promptLineKannada,
+                        transliteration = if (showTransliteration) challenge.promptTranslitMasked else "",
+                        kannadaFontSize = 23.sp,
+                        kannadaLineHeight = 30.sp,
+                        kannadaColor = PopPosterInk,
+                        subscriptColor = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = challenge.promptEnglishMasked,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = PopPosterInk.copy(alpha = 0.8f)
+                    )
+                }
+
+                AudioSpeakButton(
+                    textToSpeak = challenge.fullLineKannada,
+                    isCurrentlySpeaking = speakingText == challenge.fullLineKannada,
+                    onSpeak = { ttsHelper.speak(it, playbackSpeed) },
+                    sizeDp = 50,
+                    iconSizeDp = 24,
+                    containerColor = PopPosterButter,
+                    contentColor = PopPosterInk
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                challenge.options.forEachIndexed { idx, opt ->
+                    val isSelected = selectedIdx == idx
+                    val isCorrect = idx == challenge.correctIndex
+                    val bg = when {
+                        isSelected && isCorrect -> PopPosterMint
+                        isSelected && !isCorrect -> PopPosterPink
+                        else -> MaterialTheme.colorScheme.background
+                    }
+                    Surface(
+                        onClick = {
+                            selectedIdx = idx
+                            ttsHelper.speak(opt.kannada, playbackSpeed)
+                            if (isCorrect) {
+                                isSolved = true
+                                onSuccess()
+                            }
+                        },
+                        shape = RoundedCornerShape(16.dp),
+                        color = bg,
+                        border = BorderStroke(if (isSelected) 2.2.dp else 1.5.dp, PopPosterInk),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .defaultMinSize(minHeight = 60.dp)
+                            .testTag("missing_word_opt_$idx")
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 14.dp, vertical = 10.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                KannadaWithSubscript(
+                                    kannadaText = opt.kannada,
+                                    transliteration = if (showTransliteration) opt.transliteration else "",
+                                    kannadaFontSize = 20.sp,
+                                    kannadaLineHeight = 26.sp,
+                                    kannadaColor = PopPosterInk,
+                                    subscriptColor = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                            Text(
+                                text = opt.english,
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = PopPosterInk
+                            )
+                        }
+                    }
+                }
+            }
+
+            if (selectedIdx != null) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Surface(
+                    shape = RoundedCornerShape(14.dp),
+                    color = if (isSolved) PopPosterMint else PopPosterPeach,
+                    border = BorderStroke(1.5.dp, PopPosterInk)
+                ) {
+                    Text(
+                        text = if (isSolved) challenge.explanation else "Not quite! Listen to the line again and match the meaning.",
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Medium,
+                        color = PopPosterInk,
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * GAME 2: RHYME MATCH (Pronunciation)
+ * ────────────────────────────────────────────────────────────────────────────── */
+@Composable
+private fun RhymeMatchGameBody(
+    poem: PadyaPoem,
+    showTransliteration: Boolean,
+    ttsHelper: KannadaTtsHelper,
+    playbackSpeed: Float,
+    onSuccess: () -> Unit
+) {
+    val rhyme = poem.rhymeMatch
+    val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
+    var selectedIdx by remember(poem.id) { mutableStateOf<Int?>(null) }
+    var isSolved by remember(poem.id) { mutableStateOf(false) }
+
+    PosterCard(
+        containerColor = PopPosterCyan,
+        cornerRadius = 22.dp,
+        shadowOffset = 5.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(18.dp)) {
+            Text(
+                text = "Tap the word that rhymes with:",
+                fontFamily = BalooFamily,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = PopPosterInk
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Surface(
+                shape = RoundedCornerShape(18.dp),
+                color = PopPosterPaper,
+                border = BorderStroke(2.dp, PopPosterInk),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.padding(14.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        KannadaWithSubscript(
+                            kannadaText = rhyme.targetWord.kannada,
+                            transliteration = if (showTransliteration) rhyme.targetWord.transliteration else "",
+                            kannadaFontSize = 26.sp,
+                            kannadaLineHeight = 34.sp,
+                            kannadaColor = PopPosterInk,
+                            subscriptColor = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = "Meaning: ${rhyme.targetWord.english}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = PopPosterInk.copy(alpha = 0.8f)
+                        )
+                    }
+                    AudioSpeakButton(
+                        textToSpeak = rhyme.targetWord.kannada,
+                        isCurrentlySpeaking = speakingText == rhyme.targetWord.kannada,
+                        onSpeak = { ttsHelper.speak(it, playbackSpeed) },
+                        sizeDp = 48,
+                        iconSizeDp = 22
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                rhyme.options.forEachIndexed { idx, opt ->
+                    val isSelected = selectedIdx == idx
+                    val isCorrect = idx == rhyme.correctIndex
+                    val cardColor = when {
+                        isSelected && isCorrect -> PopPosterMint
+                        isSelected && !isCorrect -> PopPosterPink
+                        else -> PopPosterPaper
+                    }
+
+                    Surface(
+                        onClick = {
+                            selectedIdx = idx
+                            ttsHelper.speak(opt.kannada, playbackSpeed)
+                            if (isCorrect) {
+                                isSolved = true
+                                onSuccess()
+                            }
+                        },
+                        shape = RoundedCornerShape(16.dp),
+                        color = cardColor,
+                        border = BorderStroke(if (isSelected) 2.2.dp else 1.5.dp, PopPosterInk),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .defaultMinSize(minHeight = 62.dp)
+                            .testTag("rhyme_opt_$idx")
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 14.dp, vertical = 10.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                KannadaWithSubscript(
+                                    kannadaText = opt.kannada,
+                                    transliteration = if (showTransliteration) opt.transliteration else "",
+                                    kannadaFontSize = 20.sp,
+                                    kannadaLineHeight = 26.sp,
+                                    kannadaColor = PopPosterInk,
+                                    subscriptColor = MaterialTheme.colorScheme.primary
+                                )
+                                Text(
+                                    text = opt.english,
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = PopPosterInk.copy(alpha = 0.78f)
+                                )
+                            }
+                            AudioSpeakButton(
+                                textToSpeak = opt.kannada,
+                                isCurrentlySpeaking = speakingText == opt.kannada,
+                                onSpeak = { ttsHelper.speak(it, playbackSpeed) },
+                                sizeDp = 40,
+                                iconSizeDp = 18
+                            )
+                        }
+                    }
+                }
+            }
+
+            if (selectedIdx != null) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Surface(
+                    shape = RoundedCornerShape(14.dp),
+                    color = if (isSolved) PopPosterMint else PopPosterPeach,
+                    border = BorderStroke(1.5.dp, PopPosterInk)
+                ) {
+                    Text(
+                        text = if (isSolved) rhyme.rhymeExplanation else "Listen closely to the ending syllable and try another word!",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = PopPosterInk,
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * GAME 3: WORD HUNT (Word recognition)
+ * ────────────────────────────────────────────────────────────────────────────── */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun WordHuntGameBody(
+    poem: PadyaPoem,
+    showTransliteration: Boolean,
+    ttsHelper: KannadaTtsHelper,
+    playbackSpeed: Float,
+    onSuccess: () -> Unit
+) {
+    val targets = poem.wordHuntTargets
+    var targetStep by remember(poem.id) { mutableIntStateOf(0) }
+    var lastTappedFeedback by remember(poem.id) { mutableStateOf<String?>(null) }
+    val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
+
+    val currentTarget = targets.getOrNull(targetStep)
+
+    PosterCard(
+        containerColor = PopPosterPaper,
+        cornerRadius = 22.dp,
+        shadowOffset = 5.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(18.dp)) {
+            if (currentTarget != null) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        PosterStampBadge(
+                            text = "WORD ${targetStep + 1} OF ${targets.size}",
+                            containerColor = PopPosterButter,
+                            contentColor = PopPosterInk
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = "Find the Kannada word for \"${currentTarget.promptEnglish}\"",
+                            fontFamily = BalooFamily,
+                            fontSize = 19.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = PopPosterInk
+                        )
+                        if (showTransliteration) {
+                            Text(
+                                text = "Sound clue: ${currentTarget.targetTranslit}",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+
+                    AudioSpeakButton(
+                        textToSpeak = currentTarget.targetWordKannada,
+                        isCurrentlySpeaking = speakingText == currentTarget.targetWordKannada,
+                        onSpeak = { ttsHelper.speak(it, playbackSpeed) },
+                        sizeDp = 48,
+                        iconSizeDp = 22
+                    )
+                }
+            } else {
+                Text(
+                    text = "All target words spotted!",
+                    fontFamily = BalooFamily,
+                    fontSize = 19.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = BenneTeal
+                )
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+            HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.25f))
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                poem.lines.forEach { line ->
+                    val rawTokens = line.kannada.split(" ").filter { it.isNotBlank() }
+                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            rawTokens.forEach { token ->
+                                val cleanWord = token.trim(',', '.', '!', '?')
+                                val alreadyFound = targets.take(targetStep).any { it.targetWordKannada == cleanWord }
+                                Surface(
+                                    onClick = {
+                                        ttsHelper.speak(cleanWord, playbackSpeed)
+                                        if (currentTarget != null) {
+                                            if (cleanWord == currentTarget.targetWordKannada) {
+                                                lastTappedFeedback = "Found '$cleanWord' (${currentTarget.promptEnglish})!"
+                                                if (targetStep + 1 >= targets.size) {
+                                                    targetStep = targets.size
+                                                    onSuccess()
+                                                } else {
+                                                    targetStep += 1
+                                                }
+                                            } else {
+                                                lastTappedFeedback = "You tapped '$cleanWord' — keep looking for \"${currentTarget.promptEnglish}\"!"
+                                            }
+                                        }
+                                    },
+                                    shape = RoundedCornerShape(12.dp),
+                                    color = if (alreadyFound) PopPosterMint else MaterialTheme.colorScheme.background,
+                                    border = BorderStroke(1.5.dp, PopPosterInk),
+                                    modifier = Modifier
+                                        .defaultMinSize(minHeight = 44.dp)
+                                        .testTag("word_hunt_token_$cleanWord")
+                                ) {
+                                    Text(
+                                        text = token,
+                                        fontFamily = NotoSansKannadaFamily,
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = PopPosterInk,
+                                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                                    )
+                                }
+                            }
+                        }
+                        if (showTransliteration) {
+                            Text(
+                                text = "${line.transliteration} — ${line.english}",
+                                style = MaterialTheme.typography.labelSmall,
+                                color = PopPosterInk.copy(alpha = 0.72f)
+                            )
+                        } else {
+                            Text(
+                                text = line.english,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = PopPosterInk.copy(alpha = 0.72f)
+                            )
+                        }
+                    }
+                }
+            }
+
+            lastTappedFeedback?.let { msg ->
+                Spacer(modifier = Modifier.height(12.dp))
+                Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = PopPosterButter,
+                    border = BorderStroke(1.5.dp, PopPosterInk)
+                ) {
+                    Text(
+                        text = msg,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = PopPosterInk,
+                        modifier = Modifier.padding(10.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * GAME 4: RHYTHM TAP (Listening)
+ * ────────────────────────────────────────────────────────────────────────────── */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun RhythmTapGameBody(
+    poem: PadyaPoem,
+    showTransliteration: Boolean,
+    ttsHelper: KannadaTtsHelper,
+    playbackSpeed: Float,
+    onSuccess: () -> Unit
+) {
+    var lineIndex by remember(poem.id) { mutableIntStateOf(0) }
+    val line = poem.lines[lineIndex]
+    var isPlayingBeat by remember(poem.id, lineIndex) { mutableStateOf(false) }
+    var activeGuideBeat by remember(poem.id, lineIndex) { mutableIntStateOf(-1) }
+    var tappedBeatCount by remember(poem.id, lineIndex) { mutableIntStateOf(0) }
+    var rhythmHint by remember(poem.id, lineIndex) { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(isPlayingBeat, lineIndex, poem.id) {
+        if (isPlayingBeat) {
+            ttsHelper.speak(line.kannada, playbackSpeed)
+            val intervalMs = (620 / playbackSpeed.coerceIn(0.6f, 1.3f)).toLong()
+            for (i in line.beats.indices) {
+                activeGuideBeat = i
+                delay(intervalMs)
+            }
+            activeGuideBeat = -1
+            isPlayingBeat = false
+        }
+    }
+
+    PosterCard(
+        containerColor = PopPosterPeach,
+        cornerRadius = 22.dp,
+        shadowOffset = 5.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(18.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Listen & tap the rhythm beats!",
+                    fontFamily = BalooFamily,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = PopPosterInk
+                )
+                PosterStampBadge(
+                    text = "${tappedBeatCount}/${line.beats.size}",
+                    containerColor = PopPosterPaper,
+                    contentColor = PopPosterInk
+                )
+            }
+
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = line.english,
+                style = MaterialTheme.typography.bodySmall,
+                color = PopPosterInk.copy(alpha = 0.85f)
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Button(
+                onClick = {
+                    tappedBeatCount = 0
+                    rhythmHint = null
+                    isPlayingBeat = true
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = PopPosterInk,
+                    contentColor = PopPosterButter
+                ),
+                shape = CircleShape,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.MusicNote,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = if (isPlayingBeat) "Playing Rhythm..." else "1. Hear Spoken Cadence",
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+            Text(
+                text = "2. Tap each beat pad in order (${tappedBeatCount}/${line.beats.size}):",
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.Bold,
+                color = PopPosterInk
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                line.beats.forEachIndexed { idx, beat ->
+                    val isGuideActive = activeGuideBeat == idx
+                    val isDone = idx < tappedBeatCount
+                    val isNext = idx == tappedBeatCount
+                    val padColor = when {
+                        isDone -> PopPosterMint
+                        isGuideActive -> PopPosterButter
+                        isNext -> PopPosterPaper
+                        else -> PopPosterPaper.copy(alpha = 0.85f)
+                    }
+                    Surface(
+                        onClick = {
+                            ttsHelper.speak(beat.text, playbackSpeed)
+                            if (idx == tappedBeatCount) {
+                                tappedBeatCount += 1
+                                rhythmHint = null
+                                if (tappedBeatCount >= line.beats.size) {
+                                    onSuccess()
+                                }
+                            } else if (idx > tappedBeatCount) {
+                                rhythmHint = "Tap beat #${tappedBeatCount + 1} (${line.beats[tappedBeatCount].transliteration}) next!"
+                            }
+                        },
+                        shape = RoundedCornerShape(16.dp),
+                        color = padColor,
+                        border = BorderStroke(if (isGuideActive || isNext) 2.2.dp else 1.5.dp, PopPosterInk),
+                        modifier = Modifier
+                            .defaultMinSize(minWidth = 84.dp, minHeight = 68.dp)
+                            .testTag("rhythm_beat_$idx")
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    imageVector = Icons.Default.TouchApp,
+                                    contentDescription = null,
+                                    tint = PopPosterInk,
+                                    modifier = Modifier.size(14.dp)
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Text(
+                                    text = "${idx + 1}",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    color = PopPosterInk
+                                )
+                            }
+                            Text(
+                                text = beat.text,
+                                fontFamily = NotoSansKannadaFamily,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = PopPosterInk
+                            )
+                            if (showTransliteration) {
+                                Text(
+                                    text = beat.transliteration,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            rhythmHint?.let { msg ->
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    text = msg,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Bold,
+                    color = BennePopRed
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                poem.lines.indices.forEach { idx ->
+                    Surface(
+                        onClick = { lineIndex = idx },
+                        shape = CircleShape,
+                        color = if (lineIndex == idx) PopPosterInk else PopPosterPaper,
+                        border = BorderStroke(1.5.dp, PopPosterInk),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(
+                            text = "Line ${idx + 1}",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = if (lineIndex == idx) PopPosterButter else PopPosterInk,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * GAME 5: PICTURE TO POEM (Comprehension)
+ * ────────────────────────────────────────────────────────────────────────────── */
+@Composable
+private fun PictureToPoemGameBody(
+    poem: PadyaPoem,
+    showTransliteration: Boolean,
+    ttsHelper: KannadaTtsHelper,
+    playbackSpeed: Float,
+    onSuccess: () -> Unit
+) {
+    val challenge = poem.pictureToPoem
+    val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
+    var selectedIdx by remember(poem.id) { mutableStateOf<Int?>(null) }
+    var isSolved by remember(poem.id) { mutableStateOf(false) }
+
+    PosterCard(
+        containerColor = PopPosterPaper,
+        cornerRadius = 22.dp,
+        shadowOffset = 5.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(18.dp)) {
+            Text(
+                text = challenge.questionPrompt,
+                fontFamily = BalooFamily,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = PopPosterInk
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Surface(
+                shape = RoundedCornerShape(18.dp),
+                border = BorderStroke(2.dp, PopPosterInk),
+                color = PopPosterButter,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Image(
+                    painter = painterResource(poem.illustrationRes),
+                    contentDescription = poem.illustrationCaption,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(4f / 3f)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                challenge.options.forEachIndexed { idx, lineOpt ->
+                    val isSelected = selectedIdx == idx
+                    val isCorrect = idx == challenge.correctIndex
+                    val cardBg = when {
+                        isSelected && isCorrect -> PopPosterMint
+                        isSelected && !isCorrect -> PopPosterPink
+                        else -> MaterialTheme.colorScheme.background
+                    }
+                    Surface(
+                        onClick = {
+                            selectedIdx = idx
+                            ttsHelper.speak(lineOpt.kannada, playbackSpeed)
+                            if (isCorrect) {
+                                isSolved = true
+                                onSuccess()
+                            }
+                        },
+                        shape = RoundedCornerShape(16.dp),
+                        color = cardBg,
+                        border = BorderStroke(if (isSelected) 2.2.dp else 1.5.dp, PopPosterInk),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("picture_poem_opt_$idx")
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                KannadaWithSubscript(
+                                    kannadaText = lineOpt.kannada,
+                                    transliteration = if (showTransliteration) lineOpt.transliteration else "",
+                                    kannadaFontSize = 17.sp,
+                                    kannadaLineHeight = 23.sp,
+                                    kannadaColor = PopPosterInk,
+                                    subscriptColor = MaterialTheme.colorScheme.primary
+                                )
+                                Text(
+                                    text = lineOpt.english,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = PopPosterInk.copy(alpha = 0.8f)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            AudioSpeakButton(
+                                textToSpeak = lineOpt.kannada,
+                                isCurrentlySpeaking = speakingText == lineOpt.kannada,
+                                onSpeak = { ttsHelper.speak(it, playbackSpeed) },
+                                sizeDp = 42,
+                                iconSizeDp = 20
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * GAME 6: POEM PUZZLE (Sentence structure — arrange shuffled lines)
+ * ────────────────────────────────────────────────────────────────────────────── */
+@Composable
+private fun PoemPuzzleGameBody(
+    poem: PadyaPoem,
+    showTransliteration: Boolean,
+    ttsHelper: KannadaTtsHelper,
+    playbackSpeed: Float,
+    onSuccess: () -> Unit
+) {
+    val shuffledOrder = remember(poem.id) {
+        val original = poem.lines
+        if (original.size >= 4) listOf(original[2], original[0], original[3], original[1])
+        else original.reversed()
+    }
+    val placedLines = remember(poem.id) { mutableStateListOf<PoemLine>() }
+    val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
+    var feedbackMsg by remember(poem.id) { mutableStateOf<String?>(null) }
+
+    PosterCard(
+        containerColor = PopPosterPaper,
+        cornerRadius = 22.dp,
+        shadowOffset = 5.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(18.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Arrange lines in order (1 → ${poem.lines.size})",
+                    fontFamily = BalooFamily,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = PopPosterInk
+                )
+                IconButton(
+                    onClick = {
+                        placedLines.clear()
+                        feedbackMsg = null
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = "Reset puzzle",
+                        tint = PopPosterInk
+                    )
+                }
+            }
+
+            // Assembled slots box
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = PopPosterButter.copy(alpha = 0.55f),
+                border = BorderStroke(1.8.dp, PopPosterInk),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier.padding(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    if (placedLines.isEmpty()) {
+                        Text(
+                            text = "Tap the shuffled lines below in story & rhythm order...",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = PopPosterInk.copy(alpha = 0.75f),
+                            modifier = Modifier.padding(vertical = 10.dp)
+                        )
+                    } else {
+                        placedLines.forEachIndexed { idx, line ->
+                            val matchesPosition = line.lineNumber == idx + 1
+                            Surface(
+                                onClick = {
+                                    placedLines.remove(line)
+                                    feedbackMsg = null
+                                },
+                                shape = RoundedCornerShape(12.dp),
+                                color = if (matchesPosition) PopPosterMint else PopPosterPaper,
+                                border = BorderStroke(1.5.dp, PopPosterInk),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Row(
+                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Text(
+                                        text = "${idx + 1}. ${line.kannada}",
+                                        fontFamily = NotoSansKannadaFamily,
+                                        fontSize = 16.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = PopPosterInk,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                    Text(
+                                        text = "Remove",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = MaterialTheme.colorScheme.primary,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            val remaining = shuffledOrder.filter { it !in placedLines }
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                remaining.forEach { line ->
+                    Surface(
+                        onClick = {
+                            placedLines.add(line)
+                            ttsHelper.speak(line.kannada, playbackSpeed)
+                            feedbackMsg = null
+                        },
+                        shape = RoundedCornerShape(14.dp),
+                        color = MaterialTheme.colorScheme.background,
+                        border = BorderStroke(1.5.dp, PopPosterInk),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("puzzle_line_${line.lineNumber}")
+                    ) {
+                        Row(
+                            modifier = Modifier.padding(12.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                KannadaWithSubscript(
+                                    kannadaText = line.kannada,
+                                    transliteration = if (showTransliteration) line.transliteration else "",
+                                    kannadaFontSize = 16.sp,
+                                    kannadaLineHeight = 22.sp,
+                                    kannadaColor = PopPosterInk,
+                                    subscriptColor = MaterialTheme.colorScheme.primary
+                                )
+                                Text(
+                                    text = line.english,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = PopPosterInk.copy(alpha = 0.78f)
+                                )
+                            }
+                            AudioSpeakButton(
+                                textToSpeak = line.kannada,
+                                isCurrentlySpeaking = speakingText == line.kannada,
+                                onSpeak = { ttsHelper.speak(it, playbackSpeed) },
+                                sizeDp = 40,
+                                iconSizeDp = 18
+                            )
+                        }
+                    }
+                }
+            }
+
+            if (placedLines.size == poem.lines.size) {
+                Spacer(modifier = Modifier.height(14.dp))
+                PopActionButton(
+                    text = "Check Poem Order",
+                    onClick = {
+                        val isAllCorrect = placedLines.map { it.lineNumber } == poem.lines.map { it.lineNumber }
+                        if (isAllCorrect) {
+                            feedbackMsg = "Perfect rhythm order!"
+                            ttsHelper.speak(poem.lines.joinToString(". ") { it.kannada }, playbackSpeed)
+                            onSuccess()
+                        } else {
+                            feedbackMsg = "Almost! Check the green lines vs white lines and swap the mismatched lines."
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("puzzle_check_btn")
+                )
+            }
+
+            feedbackMsg?.let { msg ->
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    text = msg,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Bold,
+                    color = PopPosterInk
+                )
+            }
+        }
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * GAME 7: ECHO THE POEM (Speaking — Listen and repeat each line)
+ * ────────────────────────────────────────────────────────────────────────────── */
+@Composable
+private fun EchoPoemGameBody(
+    poem: PadyaPoem,
+    showTransliteration: Boolean,
+    ttsHelper: KannadaTtsHelper,
+    playbackSpeed: Float,
+    onSuccess: () -> Unit
+) {
+    var lineStep by remember(poem.id) { mutableIntStateOf(0) }
+    var listenedThisLine by remember(poem.id, lineStep) { mutableStateOf(false) }
+    val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
+    val line = poem.lines[lineStep]
+
+    PosterCard(
+        containerColor = PopPosterCyan,
+        cornerRadius = 22.dp,
+        shadowOffset = 5.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(18.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Echo Line ${lineStep + 1} of ${poem.lines.size}",
+                    fontFamily = BalooFamily,
+                    fontSize = 19.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = PopPosterInk
+                )
+                PosterStampBadge(
+                    text = "SPEAKING",
+                    containerColor = PopPosterPaper,
+                    contentColor = PopPosterInk
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Surface(
+                shape = RoundedCornerShape(18.dp),
+                color = PopPosterPaper,
+                border = BorderStroke(2.dp, PopPosterInk),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    KannadaWithSubscript(
+                        kannadaText = line.kannada,
+                        transliteration = if (showTransliteration) line.transliteration else "",
+                        kannadaFontSize = 22.sp,
+                        kannadaLineHeight = 30.sp,
+                        kannadaColor = PopPosterInk,
+                        subscriptColor = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = line.english,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = PopPosterInk.copy(alpha = 0.85f)
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Button(
+                            onClick = {
+                                listenedThisLine = true
+                                ttsHelper.speak(line.kannada, playbackSpeed)
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = PopPosterButter,
+                                contentColor = PopPosterInk
+                            ),
+                            border = BorderStroke(1.5.dp, PopPosterInk),
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(48.dp)
+                        ) {
+                            Icon(Icons.Default.GraphicEq, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Listen", fontWeight = FontWeight.Bold)
+                        }
+
+                        OutlinedButton(
+                            onClick = {
+                                listenedThisLine = true
+                                ttsHelper.speak(line.kannada, 0.70f)
+                            },
+                            border = BorderStroke(1.5.dp, PopPosterInk),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = MaterialTheme.colorScheme.background,
+                                contentColor = PopPosterInk
+                            ),
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(48.dp)
+                        ) {
+                            Text("Slow 0.7x", fontWeight = FontWeight.Bold)
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = PopPosterButter,
+                border = BorderStroke(1.5.dp, PopPosterInk),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.padding(14.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.MicNone,
+                        contentDescription = "Speak aloud",
+                        tint = PopPosterInk,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = "Say it aloud in rhythm! Notice the Hindi red bold vowels so you hold long sounds cleanly.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = PopPosterInk
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            PopActionButton(
+                text = if (lineStep + 1 < poem.lines.size) "I Echoed It! Next Line" else "Finish Echoing Poem!",
+                onClick = {
+                    if (lineStep + 1 < poem.lines.size) {
+                        lineStep += 1
+                    } else {
+                        onSuccess()
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("echo_next_btn")
+            )
+
+            if (!listenedThisLine && speakingText == null) {
+                Spacer(modifier = Modifier.height(6.dp))
+                Text(
+                    text = "Tip: Tap Listen first to catch the native Kannada cadence.",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = PopPosterInk.copy(alpha = 0.75f)
+                )
+            }
+        }
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────────────────────
+ * GAME 8: POETRY REMIX (Creative Kannada — build a funny verse with tiles)
+ * ────────────────────────────────────────────────────────────────────────────── */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun PoetryRemixGameBody(
+    poem: PadyaPoem,
+    showTransliteration: Boolean,
+    ttsHelper: KannadaTtsHelper,
+    playbackSpeed: Float,
+    onSuccess: () -> Unit
+) {
+    val selectedPerSlot = remember(poem.id) {
+        mutableStateListOf<Int>().apply {
+            repeat(poem.remixSlots.size) { add(0) }
+        }
+    }
+    val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
+
+    val remixedKannada = poem.remixSlots.mapIndexed { idx, slot ->
+        slot.choices[selectedPerSlot.getOrElse(idx) { 0 }].kannada
+    }.joinToString(" ")
+
+    val remixedTranslit = poem.remixSlots.mapIndexed { idx, slot ->
+        slot.choices[selectedPerSlot.getOrElse(idx) { 0 }].transliteration
+    }.joinToString(" ")
+
+    val remixedEnglish = poem.remixSlots.mapIndexed { idx, slot ->
+        slot.choices[selectedPerSlot.getOrElse(idx) { 0 }].english
+    }.joinToString(" ")
+
+    PosterCard(
+        containerColor = PopPosterPaper,
+        cornerRadius = 22.dp,
+        shadowOffset = 5.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(modifier = Modifier.padding(18.dp)) {
+            Text(
+                text = "Tap word tiles to remix your own verse!",
+                fontFamily = BalooFamily,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.ExtraBold,
+                color = PopPosterInk
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Live Remixed Verse Stage
+            Surface(
+                shape = RoundedCornerShape(18.dp),
+                color = PopPosterButter,
+                border = BorderStroke(2.dp, PopPosterInk),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier.padding(14.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        KannadaWithSubscript(
+                            kannadaText = remixedKannada,
+                            transliteration = if (showTransliteration) remixedTranslit else "",
+                            kannadaFontSize = 20.sp,
+                            kannadaLineHeight = 28.sp,
+                            kannadaColor = PopPosterInk,
+                            subscriptColor = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "\"$remixedEnglish\"",
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.SemiBold,
+                            color = PopPosterInk.copy(alpha = 0.85f)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    AudioSpeakButton(
+                        textToSpeak = remixedKannada,
+                        isCurrentlySpeaking = speakingText == remixedKannada,
+                        onSpeak = { ttsHelper.speak(it, playbackSpeed) },
+                        sizeDp = 48,
+                        iconSizeDp = 22
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            poem.remixSlots.forEachIndexed { slotIdx, slot ->
+                Text(
+                    text = slot.label.uppercase(),
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.height(6.dp))
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    slot.choices.forEachIndexed { choiceIdx, choice ->
+                        val isChosen = selectedPerSlot.getOrNull(slotIdx) == choiceIdx
+                        Surface(
+                            onClick = {
+                                if (slotIdx < selectedPerSlot.size) {
+                                    selectedPerSlot[slotIdx] = choiceIdx
+                                }
+                                ttsHelper.speak(choice.kannada, playbackSpeed)
+                            },
+                            shape = RoundedCornerShape(14.dp),
+                            color = if (isChosen) PopPosterMint else MaterialTheme.colorScheme.background,
+                            border = BorderStroke(if (isChosen) 2.dp else 1.5.dp, PopPosterInk),
+                            modifier = Modifier
+                                .defaultMinSize(minHeight = 48.dp)
+                                .testTag("remix_slot_${slotIdx}_choice_$choiceIdx")
+                        ) {
+                            Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+                                Text(
+                                    text = choice.kannada,
+                                    fontFamily = NotoSansKannadaFamily,
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = PopPosterInk
+                                )
+                                Text(
+                                    text = if (showTransliteration) "${choice.transliteration} • ${choice.english}" else choice.english,
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = PopPosterInk.copy(alpha = 0.78f)
+                                )
+                            }
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+
+            PopActionButton(
+                text = "Save Remix & Claim +20 XP",
+                onClick = {
+                    ttsHelper.speak(remixedKannada, playbackSpeed)
+                    onSuccess()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("remix_save_btn")
+            )
+        }
+    }
+}

@@ -104,9 +104,12 @@ fun HomeScreen(
     onNavigateToVarnamale: () -> Unit,
     onNavigateToConversations: () -> Unit,
     onNavigateToPractice: () -> Unit,
+    onNavigateToPoetryPlay: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val completedLessons by progressManager.completedLessons.collectAsState()
+    val unlockedStickers by progressManager.unlockedStickers.collectAsState()
+    val completedPoemChallenges by progressManager.completedPoemChallenges.collectAsState()
     val xpPoints by progressManager.xp.collectAsState()
     val streakNow by progressManager.streakDays.collectAsState()
     val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
@@ -448,6 +451,96 @@ fun HomeScreen(
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                                 contentDescription = "Open Flashcards",
+                                tint = PopPosterInk,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+        // ಪದ್ಯ ಆಟ (Padya Aata) Poetry Play Spotlight Card
+        item {
+            PosterCard(
+                containerColor = PopPosterCyan,
+                contentColor = PopPosterInk,
+                cornerRadius = 22.dp,
+                shadowOffset = 5.dp,
+                onClick = onNavigateToPoetryPlay,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("home_poetry_play_spotlight")
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Surface(
+                        shape = RoundedCornerShape(14.dp),
+                        border = BorderStroke(1.8.dp, PopPosterInk),
+                        color = PopPosterButter,
+                        modifier = Modifier.size(64.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(com.example.R.drawable.img_poem_rain),
+                            contentDescription = "Padya Aata illustration",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(14.dp))
+
+                    Column(modifier = Modifier.weight(1f)) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            PosterStampBadge(
+                                text = "8 POEM GAMES",
+                                containerColor = PopPosterInk,
+                                contentColor = PopPosterButter
+                            )
+                            PosterStampBadge(
+                                text = "${unlockedStickers.size}/10 STICKERS",
+                                containerColor = PopPosterMint,
+                                contentColor = PopPosterInk
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(6.dp))
+                        KannadaWithSubscript(
+                            kannadaText = "ಪದ್ಯ ಆಟ • Poetry Play",
+                            transliteration = "Padya Aata (${completedPoemChallenges.size} solved)",
+                            kannadaFontSize = 18.sp,
+                            kannadaLineHeight = 23.sp,
+                            kannadaColor = PopPosterInk,
+                            subscriptColor = MaterialTheme.colorScheme.primary,
+                            subscriptStyle = MaterialTheme.typography.labelSmall
+                        )
+                        Spacer(modifier = Modifier.height(2.dp))
+                        Text(
+                            text = "Rhymes, rhythm taps, word hunts & poetry remixes",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = PopPosterInk.copy(alpha = 0.85f)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Surface(
+                        shape = CircleShape,
+                        color = PopPosterButter,
+                        border = BorderStroke(1.8.dp, PopPosterInk),
+                        modifier = Modifier.size(38.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                contentDescription = "Open Poetry Play",
                                 tint = PopPosterInk,
                                 modifier = Modifier.size(18.dp)
                             )

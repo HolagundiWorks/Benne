@@ -59,6 +59,7 @@ import com.example.ui.screens.AlphabetScreen
 import com.example.ui.screens.ConversationScreen
 import com.example.ui.screens.DictionaryScreen
 import com.example.ui.screens.HomeScreen
+import com.example.ui.screens.PracticeMode
 import com.example.ui.screens.ProfileScreen
 import com.example.ui.screens.QuizScreen
 import com.example.ui.theme.PopPosterButter
@@ -86,6 +87,7 @@ fun MainScreen(
     modifier: Modifier = Modifier
 ) {
     var currentScreen by remember { mutableStateOf(SaralaScreen.HOME) }
+    var practiceMode by remember { mutableStateOf(PracticeMode.FLASHCARDS) }
     var showSystemConsole by remember { mutableStateOf(false) }
     val streakDays by progressManager.streakDays.collectAsState()
     val xpPoints by progressManager.xp.collectAsState()
@@ -169,7 +171,14 @@ fun MainScreen(
                             ttsHelper = ttsHelper,
                             onNavigateToVarnamale = { currentScreen = SaralaScreen.ALPHABET },
                             onNavigateToConversations = { currentScreen = SaralaScreen.CONVERSATION },
-                            onNavigateToPractice = { currentScreen = SaralaScreen.PRACTICE },
+                            onNavigateToPractice = {
+                                practiceMode = PracticeMode.FLASHCARDS
+                                currentScreen = SaralaScreen.PRACTICE
+                            },
+                            onNavigateToPoetryPlay = {
+                                practiceMode = PracticeMode.POETRY_PLAY
+                                currentScreen = SaralaScreen.PRACTICE
+                            },
                             modifier = contentModifier
                         )
                         SaralaScreen.ALPHABET -> AlphabetScreen(
@@ -185,6 +194,8 @@ fun MainScreen(
                         SaralaScreen.PRACTICE -> QuizScreen(
                             ttsHelper = ttsHelper,
                             progressManager = progressManager,
+                            initialMode = practiceMode,
+                            onModeChanged = { practiceMode = it },
                             modifier = contentModifier
                         )
                         SaralaScreen.DICTIONARY -> DictionaryScreen(
