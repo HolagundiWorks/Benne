@@ -317,3 +317,8 @@ Limits (not met yet):
 - The flag uses Benne's butter and pop red rather than the official shades of the flag.
 - No district facts (cities, historical sites, foods) are shown yet; those need editorial data per district.
 - No unit tests were added for the hit-testing or the quiz.
+
+## District facts (feature/learning-format)
+- `data/KarnatakaDistrictFacts.kt`: heritage places and foods mapped to map districts, using only the project's catalogues. Heritage districts map to the boundary file's names (Bagalkot to Bagalkote, Bengaluru Urban to Bengaluru). Hampi is under Ballari because Vijayanagara district (2021) is not in the 2011 boundary file. Foods appear only where the catalogue states a region.
+- Tapping a district opens `DistrictDetailSheet`: district name, Kannada name marked pending, heritage and food lists, and links to Heritage and Food. Important cities are not included; they need editorial review.
+- Verified on device: Kalaburagi sheet (empty lists, correct).

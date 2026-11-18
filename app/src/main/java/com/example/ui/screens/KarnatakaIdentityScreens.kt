@@ -381,4 +381,62 @@ fun KarnatakaMapScreen(
             }
         }
     }
+
+    selected?.let { district ->
+        DistrictDetailSheet(
+            district = district,
+            onDismiss = { selected = null },
+            onOpenHeritage = onOpenHeritage,
+            onOpenFood = onOpenFood
+        )
+    }
+}
+
+/** Bottom sheet with what the project knows about a district (from its own catalogues). */
+@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+@Composable
+fun DistrictDetailSheet(
+    district: String,
+    onDismiss: () -> Unit,
+    onOpenHeritage: () -> Unit,
+    onOpenFood: () -> Unit
+) {
+    val sheetState = androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val heritage = com.example.data.KarnatakaDistrictFacts.heritageFor(district)
+    val foods = com.example.data.KarnatakaDistrictFacts.foodsFor(district)
+    androidx.compose.material3.ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
+        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
+            Text(
+                text = district,
+                fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, fontSize = 26.sp,
+                color = PopPosterInk
+            )
+            Text("Kannada name: pending native review", style = MaterialTheme.typography.bodySmall, color = PopPosterInk)
+            Spacer(modifier = Modifier.height(10.dp))
+            Text("Heritage places", fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, color = PopPosterInk)
+            if (heritage.isEmpty()) {
+                Text("None in the catalogue yet.", style = MaterialTheme.typography.bodyMedium, color = PopPosterInk)
+            } else {
+                heritage.forEach { Text("• ${it.englishName}", style = MaterialTheme.typography.bodyMedium, color = PopPosterInk) }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text("Foods and sweets", fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, color = PopPosterInk)
+            if (foods.isEmpty()) {
+                Text("No region is given for foods here yet.", style = MaterialTheme.typography.bodyMedium, color = PopPosterInk)
+            } else {
+                foods.forEach { Text("• ${it.englishName}", style = MaterialTheme.typography.bodyMedium, color = PopPosterInk) }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                "Important cities and local facts: pending editorial review.",
+                style = MaterialTheme.typography.bodySmall, color = PopPosterInk
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+                PopActionButton(text = "Heritage", onClick = onOpenHeritage, modifier = Modifier.weight(1f))
+                PopActionButton(text = "Food", onClick = onOpenFood, containerColor = PopPosterButter, modifier = Modifier.weight(1f))
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+        }
+    }
 }
