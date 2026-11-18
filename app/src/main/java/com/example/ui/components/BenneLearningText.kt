@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import com.example.phonetics.HindiPhoneticSegment
 import com.example.ui.theme.BennePopRed
 import com.example.ui.theme.NotoSansDevanagariFamily
 import com.example.ui.theme.PopPosterInk
@@ -45,6 +46,48 @@ fun BenneLearningText(
         }
     }
 
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = annotated,
+            fontFamily = NotoSansDevanagariFamily,
+            fontSize = 26.sp,
+            fontWeight = FontWeight.Bold,
+            color = PopPosterInk,
+            textAlign = TextAlign.Center
+        )
+        if (note.isNotBlank()) {
+            Text(
+                text = note,
+                style = MaterialTheme.typography.bodySmall,
+                color = PopPosterInk.copy(alpha = 0.8f),
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+/**
+ * Hindi-script phonetic built from the app's converter segments. Long-vowel segments (dheergha) are
+ * shown in red. Used where no reviewed Devanagari text exists yet; reviewers confirm it in testing.
+ */
+@Composable
+fun BenneLearningText(
+    segments: List<HindiPhoneticSegment>,
+    note: String,
+    showHints: Boolean,
+    modifier: Modifier = Modifier
+) {
+    if (!showHints || segments.isEmpty()) return
+    val annotated: AnnotatedString = buildAnnotatedString {
+        for (seg in segments) {
+            if (seg.text.isEmpty()) continue
+            if (seg.isDheergha) {
+                withStyle(SpanStyle(color = BennePopRed, fontWeight = FontWeight.ExtraBold)) { append(seg.text) }
+            } else {
+                append(seg.text)
+            }
+        }
+    }
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = annotated,

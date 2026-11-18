@@ -1,18 +1,15 @@
 package com.example.ui.components
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -22,9 +19,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.data.Achievement
 import com.example.ui.theme.BalooFamily
-import com.example.ui.theme.PopPosterButter
 import com.example.ui.theme.PopPosterInk
-import com.example.ui.theme.PopPosterPaper
 
 /**
  * Achievement medallion. Shows text until approved badge art exists; locked and unlocked states
@@ -46,22 +41,12 @@ fun AchievementBadge(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
-        Surface(
-            modifier = Modifier.size(size),
-            shape = CircleShape,
-            color = if (unlocked) PopPosterButter else PopPosterPaper,
-            contentColor = PopPosterInk,
-            border = BorderStroke(2.dp, PopPosterInk)
-        ) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(8.dp)) {
-                Text(
-                    text = if (unlocked) "★" else "🔒",
-                    fontFamily = BalooFamily,
-                    fontWeight = FontWeight.ExtraBold,
-                    style = MaterialTheme.typography.titleLarge,
-                    textAlign = TextAlign.Center
-                )
-            }
+        achievementArt(achievement.id)?.let { res ->
+            Image(
+                painter = painterResource(res),
+                contentDescription = null,
+                modifier = Modifier.size(size)
+            )
         }
         Text(
             text = achievement.title,
@@ -73,7 +58,7 @@ fun AchievementBadge(
             modifier = Modifier.fillMaxWidth()
         )
         Text(
-            text = if (unlocked) "Unlocked" else achievement.rule,
+            text = if (unlocked) "Unlocked" else "Locked: ${achievement.rule}",
             style = MaterialTheme.typography.labelSmall,
             color = PopPosterInk.copy(alpha = 0.8f),
             textAlign = TextAlign.Center,
@@ -81,3 +66,5 @@ fun AchievementBadge(
         )
     }
 }
+
+private fun achievementArt(id: String): Int? = com.example.data.Achievements.artRes(id)

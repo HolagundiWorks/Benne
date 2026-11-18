@@ -117,6 +117,8 @@ fun HomeScreen(
     val xpPoints by progressManager.xp.collectAsState()
     val streakNow by progressManager.streakDays.collectAsState()
     val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
+    val kannadaVoiceReady by ttsHelper.kannadaVoiceAvailable.collectAsState()
+    val context = androidx.compose.ui.platform.LocalContext.current
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
 
     var activeLessonForStudy by remember { mutableStateOf<LessonMilestone?>(null) }
@@ -138,19 +140,32 @@ fun HomeScreen(
         contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 14.dp + LocalFloatingNavInset.current),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        // Level card: XP-driven level, a playful title and progress to the next level
+        // Voice notice: only when the speech engine is ready and Kannada voice data is missing
         item {
-            LevelCard(xp = xpPoints)
-        }
-
-        // Badges: unlocked from existing progress (lessons, streak, XP)
-        item {
-            BadgeRow(
-                lessonsDone = completedLessons.size,
-                totalLessons = SaralaKannadaData.milestones.size,
-                streakDays = streakNow,
-                xp = xpPoints
-            )
+            val engineReady by ttsHelper.isReady.collectAsState()
+            if (engineReady && !kannadaVoiceReady) {
+                PosterCard(
+                    containerColor = PopPosterPink,
+                    contentColor = PopPosterInk,
+                    cornerRadius = 16.dp,
+                    shadowOffset = 3.dp,
+                    modifier = Modifier.fillMaxWidth().testTag("home_voice_notice")
+                ) {
+                    Column(modifier = Modifier.padding(14.dp)) {
+                        Text(
+                            text = "Kannada voice is not installed on this phone, so pronunciation audio is off.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = PopPosterInk
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        PopActionButton(
+                            text = "Open voice settings",
+                            onClick = { openTtsSettings(context) },
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+            }
         }
 
         // Continue Lesson: next unfinished chapter, one tap back into its study sheet
@@ -226,6 +241,165 @@ fun HomeScreen(
                             onClick = { activeLessonForStudy = next },
                             modifier = Modifier.testTag("home_continue_button")
                         )
+                    }
+                }
+            }
+        }
+
+        // Level card: XP-driven level, a playful title and progress to the next level
+        item {
+            LevelCard(xp = xpPoints)
+        }
+
+        // Badges: unlocked from existing progress (lessons, streak, XP)
+        item {
+            BadgeRow(
+                lessonsDone = completedLessons.size,
+                totalLessons = SaralaKannadaData.milestones.size,
+                streakDays = streakNow,
+                xp = xpPoints
+            )
+        }
+
+        // Quick Learning Poster Tiles
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "EXPLORE MODULES",
+                    fontFamily = BalooFamily,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = 0.4.sp,
+                    color = PopPosterInk
+                )
+                PosterStampBadge(
+                    text = "3 CORE TRACKS",
+                    containerColor = PopPosterPaper,
+                    contentColor = PopPosterInk
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Max),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                PopQuickModuleCard(
+                    iconRes = com.example.R.drawable.pop_icon_book,
+                    title = "Alphabet",
+                    subtitle = "Letters & sounds",
+                    tagKey = "script",
+                    cardColor = PopPosterButter,
+                    onClick = onNavigateToVarnamale,
+                    modifier = Modifier.weight(1f).fillMaxHeight()
+                )
+                PopQuickModuleCard(
+                    iconRes = com.example.R.drawable.pop_icon_speech,
+                    title = "Dialogues",
+                    subtitle = "Real-life talk",
+                    tagKey = "dialogue",
+                    cardColor = PopPosterCyan,
+                    onClick = onNavigateToConversations,
+                    modifier = Modifier.weight(1f).fillMaxHeight()
+                )
+                PopQuickModuleCard(
+                    iconRes = com.example.R.drawable.pop_icon_trophy,
+                    title = "Practice",
+                    subtitle = "Cards & quiz",
+                    tagKey = "practice",
+                    cardColor = PopPosterMint,
+                    onClick = onNavigateToPractice,
+                    modifier = Modifier.weight(1f).fillMaxHeight()
+                )
+            }
+        }
+
+        // Flashcard Deck Poster Spotlight Card
+        item {
+            PosterCard(
+                containerColor = PopPosterPeach,
+                contentColor = PopPosterInk,
+                cornerRadius = 22.dp,
+                shadowOffset = 5.dp,
+                onClick = onNavigateToPractice,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("home_flashcards_spotlight")
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Surface(
+                        shape = RoundedCornerShape(14.dp),
+                        color = PopPosterInk,
+                        contentColor = PopPosterButter,
+                        modifier = Modifier.size(48.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Style,
+                            contentDescription = null,
+                            modifier = Modifier.padding(11.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(14.dp))
+
+                    Column(modifier = Modifier.weight(1f)) {
+                        PosterStampBadge(
+                            text = "INTERACTIVE DECK",
+                            containerColor = PopPosterPaper,
+                            contentColor = PopPosterInk
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = "Vocabulary Flashcards",
+                            fontFamily = BalooFamily,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = PopPosterInk
+                        )
+                        KannadaWithSubscript(
+                            kannadaText = "ಪದಕೋಶ ಫ್ಲ್ಯಾಶ್‌ಕಾರ್ಡ್‌ಗಳು",
+                            transliteration = "Padakosha flashcards",
+                            kannadaFontSize = 14.sp,
+                            kannadaLineHeight = 19.sp,
+                            kannadaColor = PopPosterInk,
+                            subscriptColor = MaterialTheme.colorScheme.primary,
+                            subscriptStyle = MaterialTheme.typography.labelSmall
+                        )
+                        Spacer(modifier = Modifier.height(3.dp))
+                        Text(
+                            text = "Flip to reveal meanings with native spoken audio",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = PopPosterInk.copy(alpha = 0.85f)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    Surface(
+                        shape = CircleShape,
+                        color = PopPosterPaper,
+                        border = BorderStroke(1.8.dp, PopPosterInk),
+                        modifier = Modifier.size(38.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                contentDescription = "Open Flashcards",
+                                tint = PopPosterInk,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -313,64 +487,6 @@ fun HomeScreen(
             }
         }
 
-        // Quick Learning Poster Tiles
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "EXPLORE MODULES",
-                    fontFamily = BalooFamily,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = 0.4.sp,
-                    color = PopPosterInk
-                )
-                PosterStampBadge(
-                    text = "3 CORE TRACKS",
-                    containerColor = PopPosterPaper,
-                    contentColor = PopPosterInk
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Max),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                PopQuickModuleCard(
-                    iconRes = com.example.R.drawable.pop_icon_book,
-                    title = "Alphabet",
-                    subtitle = "Letters & sounds",
-                    tagKey = "script",
-                    cardColor = PopPosterButter,
-                    onClick = onNavigateToVarnamale,
-                    modifier = Modifier.weight(1f).fillMaxHeight()
-                )
-                PopQuickModuleCard(
-                    iconRes = com.example.R.drawable.pop_icon_speech,
-                    title = "Dialogues",
-                    subtitle = "Real-life talk",
-                    tagKey = "dialogue",
-                    cardColor = PopPosterCyan,
-                    onClick = onNavigateToConversations,
-                    modifier = Modifier.weight(1f).fillMaxHeight()
-                )
-                PopQuickModuleCard(
-                    iconRes = com.example.R.drawable.pop_icon_trophy,
-                    title = "Practice",
-                    subtitle = "Cards & quiz",
-                    tagKey = "practice",
-                    cardColor = PopPosterMint,
-                    onClick = onNavigateToPractice,
-                    modifier = Modifier.weight(1f).fillMaxHeight()
-                )
-            }
-        }
-
         // Explore Karnataka: crisp vector-outlined landmark strip with Kannada audio
         item {
             KarnatakaLandmarkStrip(
@@ -416,92 +532,6 @@ fun HomeScreen(
                             modifier = Modifier.weight(1f).testTag("home_heritage_button")
                         ) {
                             Text("Heritage", fontWeight = FontWeight.ExtraBold, modifier = Modifier.padding(14.dp))
-                        }
-                    }
-                }
-            }
-        }
-
-        // Flashcard Deck Poster Spotlight Card
-        item {
-            PosterCard(
-                containerColor = PopPosterPeach,
-                contentColor = PopPosterInk,
-                cornerRadius = 22.dp,
-                shadowOffset = 5.dp,
-                onClick = onNavigateToPractice,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("home_flashcards_spotlight")
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Surface(
-                        shape = RoundedCornerShape(14.dp),
-                        color = PopPosterInk,
-                        contentColor = PopPosterButter,
-                        modifier = Modifier.size(48.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Style,
-                            contentDescription = null,
-                            modifier = Modifier.padding(11.dp)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(14.dp))
-
-                    Column(modifier = Modifier.weight(1f)) {
-                        PosterStampBadge(
-                            text = "INTERACTIVE DECK",
-                            containerColor = PopPosterPaper,
-                            contentColor = PopPosterInk
-                        )
-                        Spacer(modifier = Modifier.height(6.dp))
-                        Text(
-                            text = "Vocabulary Flashcards",
-                            fontFamily = BalooFamily,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.ExtraBold,
-                            color = PopPosterInk
-                        )
-                        KannadaWithSubscript(
-                            kannadaText = "ಪದಕೋಶ ಫ್ಲ್ಯಾಶ್‌ಕಾರ್ಡ್‌ಗಳು",
-                            transliteration = "Padakosha flashcards",
-                            kannadaFontSize = 14.sp,
-                            kannadaLineHeight = 19.sp,
-                            kannadaColor = PopPosterInk,
-                            subscriptColor = MaterialTheme.colorScheme.primary,
-                            subscriptStyle = MaterialTheme.typography.labelSmall
-                        )
-                        Spacer(modifier = Modifier.height(3.dp))
-                        Text(
-                            text = "Flip to reveal meanings with native spoken audio",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = PopPosterInk.copy(alpha = 0.85f)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    Surface(
-                        shape = CircleShape,
-                        color = PopPosterPaper,
-                        border = BorderStroke(1.8.dp, PopPosterInk),
-                        modifier = Modifier.size(38.dp)
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                                contentDescription = "Open Flashcards",
-                                tint = PopPosterInk,
-                                modifier = Modifier.size(18.dp)
-                            )
                         }
                     }
                 }
@@ -967,11 +997,17 @@ private fun PopLessonStudyContent(
                     color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 if (step.hindiPhonetic.isNotBlank()) {
-                    Spacer(modifier = Modifier.height(4.dp))
                     BenneLearningText(
                         hindiPronunciation = step.hindiPhonetic,
                         highlight = step.hindiHighlight,
+                        note = "",
+                        showHints = true
+                    )
+                } else {
+                    BenneLearningText(
+                        segments = com.example.phonetics.KannadaToHindiPhonetic.convertToSegments(step.kannadaText),
                         note = "",
                         showHints = true
                     )
@@ -1284,5 +1320,15 @@ private fun KarnatakaLandmarkStrip(
                 }
             }
         }
+    }
+}
+
+/** Opens the phone's text-to-speech settings so the Kannada voice can be installed. */
+private fun openTtsSettings(context: android.content.Context) {
+    val intent = android.content.Intent("com.android.settings.TTS_SETTINGS")
+    try {
+        context.startActivity(intent)
+    } catch (e: android.content.ActivityNotFoundException) {
+        context.startActivity(android.content.Intent(android.provider.Settings.ACTION_SETTINGS))
     }
 }

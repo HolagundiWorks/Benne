@@ -79,11 +79,13 @@ import com.example.ui.theme.PopPosterInk
 import com.example.ui.theme.PopPosterMint
 import com.example.ui.theme.PopPosterPaper
 import com.example.ui.theme.PopPosterPeach
+import androidx.compose.material.icons.outlined.Settings
 
 @Composable
 fun ProfileScreen(
     progressManager: UserProgressManager,
     ttsHelper: KannadaTtsHelper,
+    onOpenSettings: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -146,6 +148,35 @@ fun ProfileScreen(
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         // 1. Live XP & Local Profile Summary Card
+        // Settings: standard place for app settings
+        item {
+            Surface(
+                onClick = onOpenSettings,
+                shape = RoundedCornerShape(16.dp),
+                color = PopPosterPaper,
+                contentColor = PopPosterInk,
+                border = BorderStroke(2.dp, PopPosterInk),
+                modifier = Modifier.fillMaxWidth().testTag("profile_settings_row")
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(imageVector = Icons.Outlined.Settings, contentDescription = null)
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = "Settings",
+                        fontFamily = BalooFamily,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 18.sp,
+                        color = PopPosterInk,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(text = "Reminders, speed, legal", style = MaterialTheme.typography.bodySmall, color = PopPosterInk)
+                }
+            }
+        }
+
         // Achievements: streak and points unlock from saved progress; speed needs timing data
         item {
             val inputs = com.example.data.AchievementInputs(streakDays = streakDays, xp = xp)

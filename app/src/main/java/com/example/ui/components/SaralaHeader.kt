@@ -49,7 +49,7 @@ import com.example.ui.theme.PopPosterPaper
 import java.util.Locale
 
 /**
- * Floating Benne header: a pill with streak, XP and speed badges and the settings button.
+ * Floating Benne header: a pill with the earned streak and points badges.
  * The official long-shadow logo sits at the right edge. It overhangs the top of the pill; its
  * left, bottom and right are cropped at the pill's outer edge (about 3 dp overlap on left and bottom).
  */

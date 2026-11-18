@@ -272,3 +272,11 @@ Found, not fixed (decisions needed):
 - Settings opens as a sheet from the dock, which covers the screen until closed.
 - Achievement medallions on Profile are text while the header uses kit art; they should match once approved art exists.
 - Hindi-script lines are missing for all items except Namaskaara, pending native review.
+
+## Fixes from UX audit (feature/learning-format)
+- Speed badge: removed from the header; the header shows earned streak and points badges only.
+- Settings: out of the dock (now five sections). Profile has a Settings row at the top, which opens the same settings sheet.
+- Achievements: Profile medallions use the same kit artwork as the header (`Achievements.artRes`), with "Unlocked" or "Locked: <rule>" under each.
+- Hindi lines: every flashcard and lesson step shows a Hindi-script line. Reviewed text is used where it exists; otherwise the app's converter (`KannadaToHindiPhonetic`) builds it, and its long vowels are shown in red. Automatic lines are unreviewed and go to native testing.
+- Missing-voice notice: Home shows a card when the speech engine is ready and Kannada voice data is missing, with a button to open the phone's text-to-speech settings.
+- Home order: Continue lesson first, then level and badges, quick module tiles, flashcard spotlight, daily quote, Explore Karnataka, poetry, and the chapter list.

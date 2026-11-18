@@ -44,7 +44,6 @@ import com.example.ui.theme.PopPosterPaper
 fun FloatingBottomNav(
     selected: SaralaScreen,
     onSelect: (SaralaScreen) -> Unit,
-    onOpenSettings: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val shape = RoundedCornerShape(28.dp)
@@ -103,36 +102,6 @@ fun FloatingBottomNav(
                             overflow = TextOverflow.Ellipsis
                         )
                     }
-                }
-                // Settings: an action, not a tab; opens the settings sheet
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(54.dp)
-                        .clip(RoundedCornerShape(22.dp))
-                        .background(PopPosterPaper)
-                        .clickable(role = Role.Button, onClick = onOpenSettings)
-                        .padding(horizontal = 2.dp)
-                        .testTag("nav_item_settings")
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Settings,
-                        contentDescription = "Settings",
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(modifier = Modifier.height(2.dp))
-                    Text(
-                        text = "Settings",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontSize = 12.sp,
-                        letterSpacing = (-0.2).sp,
-                        fontWeight = FontWeight.Medium,
-                        maxLines = 1,
-                        softWrap = false,
-                        overflow = TextOverflow.Ellipsis
-                    )
                 }
             }
         }

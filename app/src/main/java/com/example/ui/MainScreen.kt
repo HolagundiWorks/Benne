@@ -211,6 +211,7 @@ fun MainScreen(
                         SaralaScreen.FOOD -> FoodExplorerScreen(modifier = contentModifier)
                         SaralaScreen.HERITAGE -> HeritageScreen(modifier = contentModifier)
                         SaralaScreen.PROFILE -> ProfileScreen(
+                            onOpenSettings = { showSystemConsole = true },
                             progressManager = progressManager,
                             ttsHelper = ttsHelper,
                             modifier = contentModifier
@@ -234,7 +235,6 @@ fun MainScreen(
             FloatingBottomNav(
                 selected = currentScreen,
                 onSelect = { currentScreen = it },
-                onOpenSettings = { showSystemConsole = true },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .navigationBarsPadding()

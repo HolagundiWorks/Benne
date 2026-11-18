@@ -1,5 +1,7 @@
 package com.example.data
 
+import com.example.R
+
 /**
  * Achievement rules for the Benne badge set (see Benne_Badges_Asset_Kit/IMPLEMENTATION.md).
  *
@@ -45,6 +47,26 @@ object Achievements {
         Achievement("speed_super", AchievementCategory.SPEED, "Super", "Needs response-time tracking", null),
         Achievement("speed_master", AchievementCategory.SPEED, "Master", "Needs response-time tracking", null)
     )
+
+    /** Kit artwork for each achievement id (explicit mapping, no reflection). */
+    fun artRes(id: String): Int? = when (id) {
+        "streak_3_days" -> R.drawable.streak_3_days
+        "streak_7_days" -> R.drawable.streak_7_days
+        "streak_25_days" -> R.drawable.streak_25_days
+        "streak_50_days" -> R.drawable.streak_50_days
+        "streak_100_days" -> R.drawable.streak_100_days
+        "points_100" -> R.drawable.points_100
+        "points_500" -> R.drawable.points_500
+        "points_1000" -> R.drawable.points_1000
+        "points_5000" -> R.drawable.points_5000
+        "points_10000" -> R.drawable.points_10000
+        "speed_steady" -> R.drawable.speed_steady
+        "speed_quick" -> R.drawable.speed_quick
+        "speed_fast" -> R.drawable.speed_fast
+        "speed_super" -> R.drawable.speed_super
+        "speed_master" -> R.drawable.speed_master
+        else -> null
+    }
 
     /** True when an achievement can be evaluated and is unlocked. */
     fun isUnlocked(a: Achievement, inputs: AchievementInputs): Boolean = a.check?.invoke(inputs) ?: false
