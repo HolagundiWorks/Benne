@@ -24,7 +24,11 @@ data class LessonStep(
     val kannadaText: String,
     val transliteration: String,
     val englishText: String,
-    val tip: String = ""
+    val tip: String = "",
+    /** Kannada sound in Hindi (Devanagari) script; empty until reviewed. */
+    val hindiPhonetic: String = "",
+    /** Exact substring of hindiPhonetic to show in red (reviewed). */
+    val hindiHighlight: String = ""
 )
 
 data class LessonMilestone(

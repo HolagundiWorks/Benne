@@ -75,7 +75,9 @@ import com.example.data.UserProgressManager
 import com.example.model.LessonMilestone
 import com.example.ui.components.AudioSpeakButton
 import com.example.ui.components.ButterMascot
+import com.example.ui.components.BenneLearningText
 import com.example.ui.components.KannadaWithSubscript
+import com.example.ui.theme.NotoSansKannadaFamily
 import com.example.ui.components.PopActionButton
 import com.example.ui.components.PosterCard
 import com.example.ui.components.PosterStampBadge
@@ -947,26 +949,41 @@ private fun PopLessonStudyContent(
 
                 Spacer(modifier = Modifier.height(14.dp))
 
-                KannadaWithSubscript(
-                    kannadaText = step.kannadaText,
-                    transliteration = step.transliteration,
-                    kannadaFontSize = 30.sp,
-                    kannadaLineHeight = 38.sp,
-                    kannadaColor = PopPosterInk,
-                    subscriptColor = MaterialTheme.colorScheme.primary,
-                    subscriptStyle = MaterialTheme.typography.titleMedium,
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                // Learning-card order: English meaning, English-letter phonetic (bold),
+                // Hindi-script phonetic with red sounds (bold), then the Kannada script.
+                Text(
+                    text = step.englishText,
+                    fontFamily = BalooFamily,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 22.sp,
+                    color = PopPosterInk,
                     textAlign = TextAlign.Center
                 )
-
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = step.transliteration,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = TextAlign.Center
+                )
+                if (step.hindiPhonetic.isNotBlank()) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    BenneLearningText(
+                        hindiPronunciation = step.hindiPhonetic,
+                        highlight = step.hindiHighlight,
+                        note = "",
+                        showHints = true
+                    )
+                }
                 Spacer(modifier = Modifier.height(10.dp))
                 HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.2f))
                 Spacer(modifier = Modifier.height(10.dp))
-
                 Text(
-                    text = "Meaning: ${step.englishText}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium,
+                    text = step.kannadaText,
+                    fontFamily = NotoSansKannadaFamily,
+                    fontSize = 34.sp,
+                    lineHeight = 42.sp,
                     color = PopPosterInk,
                     textAlign = TextAlign.Center
                 )
