@@ -50,7 +50,7 @@ import java.util.Locale
 /**
  * Floating Benne header: a pill with streak, XP and speed badges and the settings button.
  * The official long-shadow logo sits at the right edge. It overhangs the top of the pill; its
- * bottom and right are cropped at the pill's outer edge.
+ * left, bottom and right are cropped at the pill's outer edge (about 3 dp overlap on left and bottom).
  */
 @Composable
 fun SaralaHeader(
@@ -126,7 +126,8 @@ fun SaralaHeader(
             modifier = Modifier
                 .matchParentSize()
                 .drawWithContent {
-                    clipRect(-100000f, -100000f, size.width, size.height) {
+                    // Crop left, bottom and right at the pill's outer edges; the top stays open
+                    clipRect(0f, -100000f, size.width, size.height) {
                         this@drawWithContent.drawContent()
                     }
                 }
@@ -137,7 +138,7 @@ fun SaralaHeader(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(end = 4.5.dp)
-                    .offset(y = (-11).dp)
+                    .offset(x = (-3).dp, y = (-8).dp)
                     .requiredHeight(88.dp)
             )
         }
