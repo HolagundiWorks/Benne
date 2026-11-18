@@ -260,3 +260,5 @@ Source: `Benne_Badges_Asset_Kit/` (from `Benne_Badges_Asset_Kit.zip`, tracked he
 - Settings is a dock item (`nav_item_settings`) that opens the settings sheet, not a screen.
 - The kit PNGs have opaque sheet backgrounds (see Benne_Badges_Asset_Kit/IMPLEMENTATION.md). Shown in the app as requested for now; approved transparent art is still needed before release.
 - Verified on device: header badges, dock Settings, settings sheet.
+- Badge cleanup (feature/achievements): the app copies in `drawable-nodpi/*.png` are background-free versions of the kit PNGs. The grey/beige sheet background is removed from the edges inward, the white halo is replaced with a 2 px ink outline, and a light sharpening pass is applied. Kit originals are unchanged.
+- Limit: the source is 260×284 raster, so the badges stay soft at 44 dp and some faint grey remains in places. Crisp badges need the vector redraw from the kit guide.
