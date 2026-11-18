@@ -262,3 +262,13 @@ Source: `Benne_Badges_Asset_Kit/` (from `Benne_Badges_Asset_Kit.zip`, tracked he
 - Verified on device: header badges, dock Settings, settings sheet.
 - Badge cleanup (feature/achievements): the app copies in `drawable-nodpi/*.png` are background-free versions of the kit PNGs. The grey/beige sheet background is removed from the edges inward, the white halo is replaced with a 2 px ink outline, and a light sharpening pass is applied. Kit originals are unchanged.
 - Limit: the source is 260×284 raster, so the badges stay soft at 44 dp and some faint grey remains in places. Crisp badges need the vector redraw from the kit guide.
+
+## UX audit (feature/learning-format)
+Checked on device: Home, Letters, Talk (Dialogues), Practice (flashcards), Profile (achievements), Settings sheet. Logcat: no crashes.
+Fixed:
+- Header showed locked streak, points and speed badges at full colour, so new learners looked like they had earned them. The header now shows only earned badges, or "Earn badges by learning" when none are earned.
+Found, not fixed (decisions needed):
+- Speed badge can't unlock until response times are recorded.
+- Settings opens as a sheet from the dock, which covers the screen until closed.
+- Achievement medallions on Profile are text while the header uses kit art; they should match once approved art exists.
+- Hindi-script lines are missing for all items except Namaskaara, pending native review.

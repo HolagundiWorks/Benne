@@ -75,10 +75,16 @@ fun SaralaHeader(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                BadgeImage(res = streak.first, unlocked = streak.second, description = "Streak badge")
-                BadgeImage(res = points.first, unlocked = points.second, description = "Points badge")
-                // Speed badge: response times are not recorded yet, so it stays locked
-                BadgeImage(res = R.drawable.speed_steady, unlocked = false, description = "Speed badge, locked")
+                // Show only earned badges, so new learners don't see badges they haven't unlocked
+                if (streak.second) BadgeImage(res = streak.first, unlocked = true, description = "Streak badge")
+                if (points.second) BadgeImage(res = points.first, unlocked = true, description = "Points badge")
+                if (!streak.second && !points.second) {
+                    Text(
+                        text = "Earn badges by learning",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = PopPosterInk
+                    )
+                }
             }
         }
 
