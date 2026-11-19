@@ -1,5 +1,10 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.Radius
+import com.example.ui.theme.Border
+import com.example.ui.theme.Depth
+import com.example.ui.theme.TypeScale
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -142,22 +147,22 @@ fun PadyaAataScreen(
             .fillMaxSize()
             .testTag("padya_aata_hub"),
         contentPadding = PaddingValues(
-            start = 16.dp,
-            top = 6.dp,
-            end = 16.dp,
-            bottom = 18.dp + LocalFloatingNavInset.current
+            start = Space.X16,
+            top = Space.X6,
+            end = Space.X16,
+            bottom = Space.X18 + LocalFloatingNavInset.current
         ),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
+        verticalArrangement = Arrangement.spacedBy(Space.X14)
     ) {
         // Hero Card
         item {
             PosterCard(
                 containerColor = PopPosterButter,
-                cornerRadius = 24.dp,
-                shadowOffset = 5.dp,
+                cornerRadius = Radius.R24,
+                shadowOffset = Depth.S5,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(18.dp)) {
+                Column(modifier = Modifier.padding(Space.X18)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -174,43 +179,43 @@ fun PadyaAataScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(Space.X10))
 
                     Text(
                         text = "Learn Kannada Through Rhythm & Rhymes",
                         fontFamily = BalooFamily,
-                        fontSize = 22.sp,
+                        fontSize = TypeScale.T22,
                         lineHeight = 27.sp,
                         fontWeight = FontWeight.ExtraBold,
                         color = PopPosterInk
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(Space.X4))
                     Text(
                         text = "Short original verses with sound, beats, and 8 playful challenges. Complete 3 games in any poem to unlock its Karnataka sticker!",
                         style = MaterialTheme.typography.bodySmall,
                         color = PopPosterInk.copy(alpha = 0.85f)
                     )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(Space.X12))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(Space.X8)
                     ) {
                         Surface(
-                            shape = RoundedCornerShape(12.dp),
+                            shape = RoundedCornerShape(Radius.R12),
                             color = PopPosterPaper,
-                            border = BorderStroke(1.5.dp, PopPosterInk),
+                            border = BorderStroke(Border.W1_5, PopPosterInk),
                             modifier = Modifier.weight(1f)
                         ) {
                             Column(
-                                modifier = Modifier.padding(10.dp),
+                                modifier = Modifier.padding(Space.X10),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
                                     text = "${completedChallenges.size}/$totalChallengesPossible",
                                     fontFamily = BalooFamily,
-                                    fontSize = 18.sp,
+                                    fontSize = TypeScale.T18,
                                     fontWeight = FontWeight.ExtraBold,
                                     color = PopPosterInk
                                 )
@@ -223,19 +228,19 @@ fun PadyaAataScreen(
                         }
 
                         Surface(
-                            shape = RoundedCornerShape(12.dp),
+                            shape = RoundedCornerShape(Radius.R12),
                             color = PopPosterMint,
-                            border = BorderStroke(1.5.dp, PopPosterInk),
+                            border = BorderStroke(Border.W1_5, PopPosterInk),
                             modifier = Modifier.weight(1f)
                         ) {
                             Column(
-                                modifier = Modifier.padding(10.dp),
+                                modifier = Modifier.padding(Space.X10),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
                                     text = "${unlockedStickers.size}/${PadyaAataData.poems.size}",
                                     fontFamily = BalooFamily,
-                                    fontSize = 18.sp,
+                                    fontSize = TypeScale.T18,
                                     fontWeight = FontWeight.ExtraBold,
                                     color = PopPosterInk
                                 )
@@ -256,14 +261,14 @@ fun PadyaAataScreen(
             Text(
                 text = "KARNATAKA STICKER COLLECTION",
                 fontFamily = BalooFamily,
-                fontSize = 16.sp,
+                fontSize = TypeScale.T16,
                 fontWeight = FontWeight.ExtraBold,
                 color = PopPosterInk
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(Space.X8))
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                contentPadding = PaddingValues(horizontal = 2.dp)
+                horizontalArrangement = Arrangement.spacedBy(Space.X10),
+                contentPadding = PaddingValues(horizontal = Space.X2)
             ) {
                 items(PadyaAataData.poems, key = { it.sticker.id }) { poem ->
                     val isUnlocked = unlockedStickers.contains(poem.sticker.id)
@@ -273,13 +278,13 @@ fun PadyaAataScreen(
                                 selectedPoemId = poem.id
                             }
                         },
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(Radius.R16),
                         color = if (isUnlocked) PopPosterMint else PopPosterPaper,
                         border = BorderStroke(1.6.dp, PopPosterInk),
                         modifier = Modifier.width(106.dp)
                     ) {
                         Column(
-                            modifier = Modifier.padding(10.dp),
+                            modifier = Modifier.padding(Space.X10),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Box(
@@ -298,20 +303,20 @@ fun PadyaAataScreen(
                                     Surface(
                                         shape = CircleShape,
                                         color = PopPosterButter,
-                                        border = BorderStroke(1.2.dp, PopPosterInk)
+                                        border = BorderStroke(Border.W1_2, PopPosterInk)
                                     ) {
                                         Icon(
                                             imageVector = Icons.Default.Lock,
                                             contentDescription = "Locked sticker",
                                             tint = PopPosterInk,
                                             modifier = Modifier
-                                                .padding(4.dp)
-                                                .size(14.dp)
+                                                .padding(Space.X4)
+                                                .size(Space.X14)
                                         )
                                     }
                                 }
                             }
-                            Spacer(modifier = Modifier.height(4.dp))
+                            Spacer(modifier = Modifier.height(Space.X4))
                             Text(
                                 text = poem.sticker.title,
                                 style = MaterialTheme.typography.labelSmall,
@@ -323,7 +328,7 @@ fun PadyaAataScreen(
                             Text(
                                 text = if (isUnlocked) "Collected" else "3 games Lv.${poem.levelNumber}",
                                 style = MaterialTheme.typography.labelSmall,
-                                fontSize = 12.sp,
+                                fontSize = TypeScale.T12,
                                 color = if (isUnlocked) PopPosterInk else PopPosterInk.copy(alpha = 0.65f),
                                 fontWeight = FontWeight.Bold,
                                 maxLines = 1
@@ -344,8 +349,8 @@ fun PadyaAataScreen(
 
             PosterCard(
                 containerColor = cardBg,
-                cornerRadius = 22.dp,
-                shadowOffset = if (unlocked) 5.dp else 2.dp,
+                cornerRadius = Radius.R22,
+                shadowOffset = if (unlocked) 5.dp else Space.X2,
                 onClick = {
                     if (unlocked) selectedPoemId = poem.id
                 },
@@ -356,12 +361,12 @@ fun PadyaAataScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(14.dp),
+                        .padding(Space.X14),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Surface(
-                        shape = RoundedCornerShape(14.dp),
-                        border = BorderStroke(1.5.dp, PopPosterInk),
+                        shape = RoundedCornerShape(Radius.R14),
+                        border = BorderStroke(Border.W1_5, PopPosterInk),
                         color = PopPosterButter,
                         modifier = Modifier.size(76.dp)
                     ) {
@@ -385,11 +390,11 @@ fun PadyaAataScreen(
                         }
                     }
 
-                    Spacer(modifier = Modifier.width(12.dp))
+                    Spacer(modifier = Modifier.width(Space.X12))
 
                     Column(modifier = Modifier.weight(1f)) {
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            horizontalArrangement = Arrangement.spacedBy(Space.X6),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             PosterStampBadge(
@@ -403,7 +408,7 @@ fun PadyaAataScreen(
                                 contentColor = PopPosterInk
                             )
                         }
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(Space.X6))
                         KannadaWithSubscript(
                             kannadaText = poem.titleKannada,
                             transliteration = if (showTransliteration) poem.titleTranslit else "",
@@ -425,7 +430,7 @@ fun PadyaAataScreen(
                     }
 
                     if (unlocked) {
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(Space.X8))
                         AudioSpeakButton(
                             textToSpeak = poem.lines.joinToString(", ") { it.kannada },
                             isCurrentlySpeaking = speakingText == poem.lines.joinToString(", ") { it.kannada },
@@ -465,12 +470,12 @@ private fun PadyaPoemDetailView(
             .fillMaxSize()
             .testTag("padya_poem_detail"),
         contentPadding = PaddingValues(
-            start = 16.dp,
-            top = 6.dp,
-            end = 16.dp,
-            bottom = 24.dp + LocalFloatingNavInset.current
+            start = Space.X16,
+            top = Space.X6,
+            end = Space.X16,
+            bottom = Space.X24 + LocalFloatingNavInset.current
         ),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
+        verticalArrangement = Arrangement.spacedBy(Space.X14)
     ) {
         // Top navigation bar
         item {
@@ -483,20 +488,20 @@ private fun PadyaPoemDetailView(
                     onClick = onBack,
                     shape = CircleShape,
                     color = PopPosterPaper,
-                    border = BorderStroke(1.8.dp, PopPosterInk),
+                    border = BorderStroke(Border.W1_8, PopPosterInk),
                     modifier = Modifier.defaultMinSize(minHeight = 48.dp)
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                        modifier = Modifier.padding(horizontal = Space.X14, vertical = Space.X10),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back to poems",
                             tint = PopPosterInk,
-                            modifier = Modifier.size(18.dp)
+                            modifier = Modifier.size(Space.X18)
                         )
-                        Spacer(modifier = Modifier.width(6.dp))
+                        Spacer(modifier = Modifier.width(Space.X6))
                         Text(
                             text = "All Poems",
                             style = MaterialTheme.typography.labelLarge,
@@ -517,11 +522,11 @@ private fun PadyaPoemDetailView(
         item {
             PosterCard(
                 containerColor = PopPosterPaper,
-                cornerRadius = 24.dp,
-                shadowOffset = 5.dp,
+                cornerRadius = Radius.R24,
+                shadowOffset = Depth.S5,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column(modifier = Modifier.padding(Space.X16)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -539,11 +544,11 @@ private fun PadyaPoemDetailView(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(Space.X10))
 
                     Surface(
-                        shape = RoundedCornerShape(16.dp),
-                        border = BorderStroke(1.8.dp, PopPosterInk),
+                        shape = RoundedCornerShape(Radius.R16),
+                        border = BorderStroke(Border.W1_8, PopPosterInk),
                         color = PopPosterButter,
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -557,7 +562,7 @@ private fun PadyaPoemDetailView(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(Space.X12))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -587,31 +592,31 @@ private fun PadyaPoemDetailView(
                                 containerColor = PopPosterButter,
                                 contentColor = PopPosterInk
                             ),
-                            border = BorderStroke(1.8.dp, PopPosterInk),
+                            border = BorderStroke(Border.W1_8, PopPosterInk),
                             shape = CircleShape,
                             modifier = Modifier.height(48.dp)
                         ) {
-                            Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(18.dp))
-                            Spacer(modifier = Modifier.width(4.dp))
+                            Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(Space.X18))
+                            Spacer(modifier = Modifier.width(Space.X4))
                             Text("Listen Poem", fontWeight = FontWeight.Bold)
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(Space.X12))
                     HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.25f))
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(Space.X10))
 
-                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Column(verticalArrangement = Arrangement.spacedBy(Space.X10)) {
                         poem.lines.forEach { line ->
                             Surface(
                                 onClick = { ttsHelper.speak(line.kannada, playbackSpeed) },
-                                shape = RoundedCornerShape(14.dp),
+                                shape = RoundedCornerShape(Radius.R14),
                                 color = MaterialTheme.colorScheme.background,
-                                border = BorderStroke(1.2.dp, PopPosterInk),
+                                border = BorderStroke(Border.W1_2, PopPosterInk),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Row(
-                                    modifier = Modifier.padding(12.dp),
+                                    modifier = Modifier.padding(Space.X12),
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
@@ -630,7 +635,7 @@ private fun PadyaPoemDetailView(
                                             color = PopPosterInk.copy(alpha = 0.78f)
                                         )
                                     }
-                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Spacer(modifier = Modifier.width(Space.X8))
                                     AudioSpeakButton(
                                         textToSpeak = line.kannada,
                                         isCurrentlySpeaking = speakingText == line.kannada,
@@ -651,23 +656,23 @@ private fun PadyaPoemDetailView(
             Text(
                 text = "KEY WORDS (${poem.keyWords.size})",
                 fontFamily = BalooFamily,
-                fontSize = 16.sp,
+                fontSize = TypeScale.T16,
                 fontWeight = FontWeight.ExtraBold,
                 color = PopPosterInk
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(Space.X8))
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                horizontalArrangement = Arrangement.spacedBy(Space.X10)
             ) {
                 items(poem.keyWords, key = { it.kannada }) { word ->
                     PosterCard(
                         containerColor = PopPosterButter,
-                        cornerRadius = 18.dp,
-                        shadowOffset = 3.dp,
+                        cornerRadius = Radius.R18,
+                        shadowOffset = Depth.S3,
                         onClick = { ttsHelper.speak(word.kannada, playbackSpeed) },
                         modifier = Modifier.width(172.dp)
                     ) {
-                        Column(modifier = Modifier.padding(12.dp)) {
+                        Column(modifier = Modifier.padding(Space.X12)) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -691,7 +696,7 @@ private fun PadyaPoemDetailView(
                                     iconSizeDp = 16
                                 )
                             }
-                            Spacer(modifier = Modifier.height(4.dp))
+                            Spacer(modifier = Modifier.height(Space.X4))
                             Text(
                                 text = word.english,
                                 style = MaterialTheme.typography.titleSmall,
@@ -720,7 +725,7 @@ private fun PadyaPoemDetailView(
                 Text(
                     text = "8 POETRY CHALLENGES",
                     fontFamily = BalooFamily,
-                    fontSize = 18.sp,
+                    fontSize = TypeScale.T18,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
                 )
@@ -743,8 +748,8 @@ private fun PadyaPoemDetailView(
 
             PosterCard(
                 containerColor = if (isCompleted) PopPosterMint else if (gameUnlocked) tierColor else PopPosterPaper.copy(alpha = 0.7f),
-                cornerRadius = 18.dp,
-                shadowOffset = if (gameUnlocked) 4.dp else 2.dp,
+                cornerRadius = Radius.R18,
+                shadowOffset = if (gameUnlocked) Space.X4 else Space.X2,
                 onClick = {
                     if (gameUnlocked) onLaunchGame(game)
                 },
@@ -755,13 +760,13 @@ private fun PadyaPoemDetailView(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(14.dp),
+                        .padding(Space.X14),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Row(
-                            horizontalArrangement = Arrangement.spacedBy(6.dp),
+                            horizontalArrangement = Arrangement.spacedBy(Space.X6),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             PosterStampBadge(
@@ -775,11 +780,11 @@ private fun PadyaPoemDetailView(
                                 contentColor = PopPosterInk
                             )
                         }
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(Space.X6))
                         Text(
                             text = "${game.displayName} • ${game.kannadaTitle}",
                             fontFamily = BalooFamily,
-                            fontSize = 18.sp,
+                            fontSize = TypeScale.T18,
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
                         )
@@ -795,12 +800,12 @@ private fun PadyaPoemDetailView(
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(10.dp))
+                    Spacer(modifier = Modifier.width(Space.X10))
 
                     Surface(
                         shape = CircleShape,
                         color = if (isCompleted) BenneTeal else PopPosterButter,
-                        border = BorderStroke(1.5.dp, PopPosterInk),
+                        border = BorderStroke(Border.W1_5, PopPosterInk),
                         modifier = Modifier.size(42.dp)
                     ) {
                         Box(contentAlignment = Alignment.Center) {

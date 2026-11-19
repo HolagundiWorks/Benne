@@ -3,7 +3,7 @@ package com.example.data
 import com.example.R
 
 /**
- * Achievement rules for the Benne badge set (see Benne_Badges_Asset_Kit/IMPLEMENTATION.md).
+ * Achievement rules for the Benne badge set (see assets/badges/IMPLEMENTATION.md).
  *
  * Streak and points badges are derived from progress the app already stores (streak days, XP),
  * so nothing new is persisted and progress works offline.

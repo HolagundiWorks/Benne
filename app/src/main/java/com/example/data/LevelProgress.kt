@@ -1,20 +1,11 @@
 package com.example.data
 
 /**
- * Level rules shared by the header meter and the locked Home cards.
- * Level 1 starts at 0 XP and every level takes [XP_PER_LEVEL] XP.
+ * Level rules for the header meter and the Home dashboard.
+ * Level 1 starts at 0 XP and every level takes [XP_PER_LEVEL] XP. All content is unlocked.
  */
 object LevelProgress {
     const val XP_PER_LEVEL = 100
-
-    /** Level needed for the Karnataka flag and map cards. */
-    const val FLAG_AND_MAP_LEVEL = 2
-
-    /** Level needed for Food and Heritage. */
-    const val FOOD_AND_HERITAGE_LEVEL = 3
-
-    /** Level needed for Poetry Play. */
-    const val POETRY_PLAY_LEVEL = 4
 
     /** Current level for a total XP value (never below level 1). */
     fun levelFor(xp: Int): Int = xp.coerceAtLeast(0) / XP_PER_LEVEL + 1
@@ -25,6 +16,8 @@ object LevelProgress {
     /** Progress through the current level, 0f..1f. */
     fun fractionIntoLevel(xp: Int): Float = xpIntoLevel(xp) / XP_PER_LEVEL.toFloat()
 
-    /** True once the learner has reached [requiredLevel]. */
-    fun isUnlocked(xp: Int, requiredLevel: Int): Boolean = levelFor(xp) >= requiredLevel
+    private val learnerTypes = listOf("Tender Learner", "Filter Coffee Fan", "Auto Negotiator", "Darshini Regular", "Bengaluru Local")
+
+    /** Learner type shown for a level; the last type repeats for higher levels. */
+    fun learnerTypeFor(level: Int): String = learnerTypes[(level - 1).coerceIn(0, learnerTypes.lastIndex)]
 }

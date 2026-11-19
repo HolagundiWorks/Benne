@@ -4,19 +4,22 @@ An offline Android app that teaches Kannada to Hindi-speaking learners. Built wi
 
 **Package:** `com.benne.kannada` · **Min SDK** 24 · **Target SDK** 36
 
-## Learning sections
+## Menu
 
-| Section | What it covers |
+| Item | What it covers |
 |---|---|
-| **Home** | Continue lesson, level and badges, daily quote, Karnataka flag and map cards, Food and Heritage, Poetry Play, the chapter list |
-| **Letters** | Kannada vowels and consonants, with pronunciation and stroke tips |
-| **Talk** | Dialogues (street scenarios) and the Phrasebook |
-| **Practice** | Flashcards, a multiple-choice quiz, and Poetry Play (poem games) |
-| **Profile** | Achievements, stickers, favourites, Settings |
+| **Home** | Dashboard: word of the day, progress, scores, Continue lesson, voice notice |
+| **Alphabets** | Kannada letters (vowels, consonants, combinations), with pronunciation and stroke tips |
+| **Dialogues** | Street dialogues and the Phrasebook |
+| **Flashcards** | Flashcards and the multiple-choice quiz |
+| **Curriculum** | Practice tiles (flashcards, quiz, poetry), the guided roadmap and its chapters |
+| **Geography** | Karnataka map (30 districts; tap for heritage and foods), with Heritage and Food screens |
+| **Awards** | Benne identity awards, achievements, share cards and the learner's name |
+| **Settings** | Reminders, speed and legal (opens as a sheet) |
 
-Karnataka explorers: **Karnataka Flag** (quiz and audio), **Karnataka Map** (30 districts, tap for heritage and foods), **Food** (62 dishes, pending review), **Heritage** (35 places, pending review).
+The top bar shows the greeting, the learner's level and XP. The Karnataka flag sticker in the top bar opens the flag lesson. Profile (XP, stats, phonetic guide, reset) opens from the learner row under the top bar.
 
-## Text hierarchy
+## Learning text
 
 Learning content uses three levels, in this order:
 
@@ -30,6 +33,16 @@ Components: `ui/components/BenneTypography.kt`. Devanagari comes from reviewed t
 
 Kannada speech uses the phone's built-in `TextToSpeech` engine (`audio/KannadaTtsHelper.kt`). The app picks the best Kannada voice the phone offers. If none is installed, speech is skipped and Home shows a card that opens the phone's text-to-speech settings. No audio files or network calls are used.
 
+## Design
+
+- **Tokens:** colours, spacing, radius, border, depth and type are named in `app/src/main/java/com/example/ui/theme/` (`Color.kt`, `Tokens.kt`). Use the names, not raw numbers. See [`docs/design-tokens.md`](docs/design-tokens.md).
+- **Cards** are for things the learner can tap or control. Information sits directly on the screen.
+- **Screen rules and history:** [`docs/benne-ui-redesign.md`](docs/benne-ui-redesign.md).
+
+## Assets
+
+All brand, art and store assets are in `assets/`, with a catalogue at [`assets/README.md`](assets/README.md). Files the app uses are copied into `app/src/main/res/`.
+
 ## Build and test
 
 ```bash
@@ -38,21 +51,15 @@ Kannada speech uses the phone's built-in `TextToSpeech` engine (`audio/KannadaTt
 ./gradlew :app:testDebugUnitTest
 ```
 
-The debug build needs a local `debug.keystore` in the repo root (git-ignored). The first unit-test run downloads Robolectric's Android runtime, which is then cached. All 18 unit tests pass (`ExampleRobolectricTest`, `ExampleUnitTest`, `KarnatakaDataTest`).
+The debug build needs a local `debug.keystore` in the repo root (git-ignored). The first unit-test run downloads Robolectric's Android runtime, which is then cached. All 27 unit tests pass (`ExampleRobolectricTest`, `ExampleUnitTest`, `KarnatakaDataTest`, `LevelProgressTest`, `AwardRulesTest`).
 
 ## Documentation
 
-- `docs/benne-ui-redesign.md`: design decisions and the record of each pass
-- `docs/ux-audit.md`: UX laws and app-structure audit
-- `docs/play-console/`: Play Store listing, data safety, privacy policy, upload checklist and store assets
+- [`docs/benne-ui-redesign.md`](docs/benne-ui-redesign.md): current design and screen rules
+- [`docs/design-tokens.md`](docs/design-tokens.md): token names and where to use them
+- [`docs/security-performance-audit.md`](docs/security-performance-audit.md): security and performance status
+- [`docs/play-console/`](docs/play-console/): Play Store listing, data safety, privacy policy, terms, upload checklist
 - Privacy policy (published): https://holagundiworks.github.io/Benne/privacy-policy.html
-
-## Brand assets
-
-- `benne_brand_kit/`: palette, logos, mascot, app icon sources
-- `Benne_Pop_Elements_Karnataka_Kit/`: cards, bursts, ribbons, landmarks
-- `Benne_Karnataka_Stickers_PNG/`: Karnataka sticker pack
-- `Benne_Badges_Production_Kit/`: achievement badges (SVG and transparent PNG)
 
 ## Palette
 

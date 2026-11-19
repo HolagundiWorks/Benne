@@ -1,5 +1,10 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.Radius
+import com.example.ui.theme.Border
+import com.example.ui.theme.Depth
+import com.example.ui.theme.TypeScale
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -82,18 +87,18 @@ fun ConversationScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
-        contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 14.dp + LocalFloatingNavInset.current),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        contentPadding = PaddingValues(start = Space.X16, top = Space.X14 + LocalFloatingHeaderInset.current, end = Space.X16, bottom = Space.X14 + LocalFloatingNavInset.current),
+        verticalArrangement = Arrangement.spacedBy(Space.X12)
     ) {
         // Pop Poster Scenario Header Card
         item {
             PosterCard(
                 containerColor = PopPosterPink,
-                cornerRadius = 24.dp,
-                shadowOffset = 5.dp,
+                cornerRadius = Radius.R24,
+                shadowOffset = Depth.S5,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(18.dp)) {
+                Column(modifier = Modifier.padding(Space.X18)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -108,10 +113,10 @@ fun ConversationScreen(
                             shape = CircleShape,
                             color = PopPosterPaper,
                             contentColor = PopPosterInk,
-                            border = BorderStroke(1.5.dp, PopPosterInk)
+                            border = BorderStroke(Border.W1_5, PopPosterInk)
                         ) {
                             Row(
-                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                                modifier = Modifier.padding(horizontal = Space.X10, vertical = Space.X4),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Icon(
@@ -129,7 +134,7 @@ fun ConversationScreen(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(Space.X12))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -140,12 +145,12 @@ fun ConversationScreen(
                             Text(
                                 text = activeDialogue.titleEnglish,
                                 fontFamily = BalooFamily,
-                                fontSize = 22.sp,
+                                fontSize = TypeScale.T22,
                                 fontWeight = FontWeight.ExtraBold,
                                 color = PopPosterInk
                             )
 
-                            Spacer(modifier = Modifier.height(4.dp))
+                            Spacer(modifier = Modifier.height(Space.X4))
 
                             KannadaWithSubscript(
                                 kannadaText = activeDialogue.titleKannada,
@@ -158,17 +163,17 @@ fun ConversationScreen(
                             )
                         }
 
-                        Spacer(modifier = Modifier.width(12.dp))
+                        Spacer(modifier = Modifier.width(Space.X12))
 
                         Surface(
-                            shape = RoundedCornerShape(16.dp),
+                            shape = RoundedCornerShape(Radius.R16),
                             color = PopPosterPaper,
-                            border = BorderStroke(1.8.dp, PopPosterInk),
+                            border = BorderStroke(Border.W1_8, PopPosterInk),
                             modifier = Modifier.size(62.dp)
                         ) {
                             Box(
                                 contentAlignment = Alignment.Center,
-                                modifier = Modifier.padding(6.dp)
+                                modifier = Modifier.padding(Space.X6)
                             ) {
                                 Image(
                                     painter = painterResource(com.example.R.drawable.pop_landmark_vidhana),
@@ -180,7 +185,7 @@ fun ConversationScreen(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(Space.X6))
 
                     Text(
                         text = activeDialogue.contextDescription,
@@ -188,9 +193,9 @@ fun ConversationScreen(
                         color = PopPosterInk.copy(alpha = 0.85f)
                     )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(Space.X12))
                     HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk)
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(Space.X8))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -232,7 +237,7 @@ fun ConversationScreen(
         // Pop FilterChip Scenario Switcher
         item {
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(Space.X8),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(dialogues, key = { it.id }) { dialogue ->
@@ -252,7 +257,7 @@ fun ConversationScreen(
                             borderColor = PopPosterInk,
                             selectedBorderColor = PopPosterInk,
                             borderWidth = 1.5.dp,
-                            selectedBorderWidth = 2.dp
+                            selectedBorderWidth = Space.X2
                         ),
                         label = {
                             Text(
@@ -278,7 +283,7 @@ fun ConversationScreen(
         }
 
         item {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(Space.X16))
         }
     }
 }
@@ -299,13 +304,13 @@ private fun PopDialogueLineBubble(
 
     PosterCard(
         containerColor = cardBg,
-        cornerRadius = 20.dp,
-        shadowOffset = 4.dp,
+        cornerRadius = Radius.R20,
+        shadowOffset = Depth.S4,
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(Space.X16)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -317,7 +322,7 @@ private fun PopDialogueLineBubble(
                     contentColor = if (isUser) PopPosterButter else PopPosterInk
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(Space.X8))
 
                 // Standard hierarchy: H1 meaning (shown with the translation toggle), H2 Latin + Devanagari, H3 Kannada
                 com.example.ui.components.BenneLearningBlock(
@@ -329,9 +334,9 @@ private fun PopDialogueLineBubble(
                 )
 
                 if (showTranslations) {
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(Space.X6))
                     Surface(
-                        shape = RoundedCornerShape(8.dp),
+                        shape = RoundedCornerShape(Space.X8),
                         color = if (isUser) PopPosterPaper else MaterialTheme.colorScheme.background,
                         border = BorderStroke(1.dp, PopPosterInk.copy(alpha = 0.35f))
                     ) {
@@ -339,13 +344,13 @@ private fun PopDialogueLineBubble(
                             text = "Meaning: ${line.englishTranslation}",
                             style = MaterialTheme.typography.bodySmall,
                             color = PopPosterInk,
-                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            modifier = Modifier.padding(horizontal = Space.X8, vertical = Space.X4)
                         )
                     }
                 }
             }
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(Space.X12))
 
             AudioSpeakButton(
                 textToSpeak = line.kannadaText,

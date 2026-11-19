@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Space
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +24,7 @@ fun <T> CardGrid(
     items: List<T>,
     columns: Int,
     modifier: Modifier = Modifier,
-    spacing: Dp = 10.dp,
+    spacing: Dp = Space.X10,
     cell: @Composable (T) -> Unit
 ) {
     require(columns == 1 || columns == 2 || columns == 3 || columns == 5) {

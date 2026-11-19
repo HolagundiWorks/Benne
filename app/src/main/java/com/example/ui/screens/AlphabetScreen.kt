@@ -1,5 +1,10 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.Radius
+import com.example.ui.theme.Border
+import com.example.ui.theme.Depth
+import com.example.ui.theme.TypeScale
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -54,6 +59,7 @@ import com.example.data.UserProgressManager
 import com.example.model.AlphabetCategory
 import com.example.model.AlphabetItem
 import com.example.ui.components.AudioSpeakButton
+import com.example.ui.components.ButterMascot
 import com.example.ui.components.HindiPhoneticText
 import com.example.ui.components.KannadaWithSubscript
 import com.example.ui.components.PosterCard
@@ -102,9 +108,9 @@ fun AlphabetScreen(
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 94.dp),
-        contentPadding = PaddingValues(start = 16.dp, top = 16.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 16.dp + LocalFloatingNavInset.current),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(start = Space.X16, top = Space.X16 + LocalFloatingHeaderInset.current, end = Space.X16, bottom = Space.X16 + LocalFloatingNavInset.current),
+        horizontalArrangement = Arrangement.spacedBy(Space.X8),
+        verticalArrangement = Arrangement.spacedBy(Space.X8),
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
@@ -112,13 +118,9 @@ fun AlphabetScreen(
     ) {
         // Pop Poster Header Card
         item(span = { GridItemSpan(maxLineSpan) }) {
-            PosterCard(
-                containerColor = PopPosterCyan,
-                cornerRadius = 24.dp,
-                shadowOffset = 5.dp,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.padding(18.dp)) {
+            // Informational: shown directly on the screen, no card
+            run {
+                Column(modifier = Modifier.fillMaxWidth()) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -136,17 +138,24 @@ fun AlphabetScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(Space.X10))
 
-                    Text(
-                        text = "Kannada Alphabet",
-                        fontFamily = BalooFamily,
-                        fontSize = 26.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = PopPosterInk
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = "Kannada Alphabet",
+                            fontFamily = BalooFamily,
+                            fontSize = TypeScale.T26,
+                            fontWeight = FontWeight.ExtraBold,
+                            color = PopPosterInk
+                        )
+                        ButterMascot(size = 56.dp, pose = com.example.R.drawable.benne_mascot_hello)
+                    }
 
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(Space.X4))
 
                     KannadaWithSubscript(
                         kannadaText = "ಕನ್ನಡ ಅಕ್ಷರಮಾಲೆ",
@@ -158,7 +167,7 @@ fun AlphabetScreen(
                         subscriptStyle = MaterialTheme.typography.labelMedium
                     )
 
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(Space.X6))
 
                     Text(
                         text = "Tap any letter card to hear pronunciation, or tap info for stroke tips.",
@@ -204,8 +213,8 @@ fun AlphabetScreen(
 
             PosterCard(
                 containerColor = tileBg,
-                cornerRadius = 16.dp,
-                shadowOffset = 3.dp,
+                cornerRadius = Radius.R16,
+                shadowOffset = Depth.S3,
                 onClick = { ttsHelper.speak(item.char, playbackSpeed) },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -220,7 +229,7 @@ fun AlphabetScreen(
                             imageVector = Icons.Outlined.Info,
                             contentDescription = "Inspect ${item.char}",
                             tint = PopPosterInk,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(Space.X16)
                         )
                     }
 
@@ -228,29 +237,29 @@ fun AlphabetScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .defaultMinSize(minHeight = 148.dp)
-                            .padding(start = 8.dp, end = 8.dp, top = 28.dp, bottom = 12.dp),
+                            .padding(start = Space.X8, end = Space.X8, top = 28.dp, bottom = Space.X12),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
                             text = item.char,
                             fontFamily = NotoSansKannadaFamily,
-                            fontSize = 34.sp,
+                            fontSize = TypeScale.T34,
                             fontWeight = FontWeight.Bold,
                             color = PopPosterInk,
                             textAlign = TextAlign.Center
                         )
 
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(Space.X4))
 
                         Surface(
                             shape = CircleShape,
                             color = PopPosterPaper,
-                            border = BorderStroke(1.2.dp, PopPosterInk)
+                            border = BorderStroke(Border.W1_2, PopPosterInk)
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(4.dp),
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                                horizontalArrangement = Arrangement.spacedBy(Space.X4),
+                                modifier = Modifier.padding(horizontal = Space.X8, vertical = Space.X2)
                             ) {
                                 Text(
                                     text = item.englishTransliteration,
@@ -300,7 +309,7 @@ fun AlphabetScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 10.dp)
+                    .padding(horizontal = Space.X24, vertical = Space.X10)
                     .testTag("letter_inspection_sheet"),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -323,46 +332,46 @@ fun AlphabetScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(Space.X10))
 
                 Surface(
                     modifier = Modifier.size(104.dp),
                     shape = CircleShape,
                     color = PopPosterButter,
                     contentColor = PopPosterInk,
-                    border = BorderStroke(2.5.dp, PopPosterInk)
+                    border = BorderStroke(Border.W2_5, PopPosterInk)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Text(
                             text = letter.char,
                             fontFamily = NotoSansKannadaFamily,
-                            fontSize = 40.sp,
+                            fontSize = TypeScale.T40,
                             fontWeight = FontWeight.Bold
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(Space.X10))
 
                 Text(
                     text = "Pronounced \"${letter.englishTransliteration}\"",
                     fontFamily = BalooFamily,
-                    fontSize = 18.sp,
+                    fontSize = TypeScale.T18,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
                 )
 
                 if (showHindiPhonetics) {
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(Space.X6))
                     Surface(
-                        shape = RoundedCornerShape(12.dp),
+                        shape = RoundedCornerShape(Radius.R12),
                         color = PopPosterPaper,
-                        border = BorderStroke(1.5.dp, PopPosterInk)
+                        border = BorderStroke(Border.W1_5, PopPosterInk)
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp),
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                            horizontalArrangement = Arrangement.spacedBy(Space.X6),
+                            modifier = Modifier.padding(horizontal = Space.X12, vertical = Space.X4)
                         ) {
                             Text(
                                 text = "Hindi:",
@@ -380,11 +389,11 @@ fun AlphabetScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(Space.X14))
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalArrangement = Arrangement.spacedBy(Space.X10)
                 ) {
                     AudioSpeakButton(
                         textToSpeak = letter.char,
@@ -402,18 +411,18 @@ fun AlphabetScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Space.X16))
 
                 PosterCard(
                     containerColor = PopPosterMint,
-                    cornerRadius = 18.dp,
-                    shadowOffset = 4.dp,
+                    cornerRadius = Radius.R18,
+                    shadowOffset = Depth.S4,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(14.dp),
+                            .padding(Space.X14),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
@@ -423,7 +432,7 @@ fun AlphabetScreen(
                                 containerColor = PopPosterPaper,
                                 contentColor = PopPosterInk
                             )
-                            Spacer(modifier = Modifier.height(6.dp))
+                            Spacer(modifier = Modifier.height(Space.X6))
                             KannadaWithSubscript(
                                 kannadaText = letter.sampleWordKn,
                                 transliteration = letter.sampleWordTransliteration,
@@ -433,7 +442,7 @@ fun AlphabetScreen(
                                 subscriptColor = MaterialTheme.colorScheme.primary,
                                 subscriptStyle = MaterialTheme.typography.bodyMedium
                             )
-                            Spacer(modifier = Modifier.height(2.dp))
+                            Spacer(modifier = Modifier.height(Space.X2))
                             Text(
                                 text = "Meaning: ${letter.sampleWordEn}",
                                 style = MaterialTheme.typography.bodySmall,
@@ -454,15 +463,15 @@ fun AlphabetScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(Space.X12))
 
                 PosterCard(
                     containerColor = PopPosterPaper,
-                    cornerRadius = 18.dp,
-                    shadowOffset = 4.dp,
+                    cornerRadius = Radius.R18,
+                    shadowOffset = Depth.S4,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Column(modifier = Modifier.padding(14.dp)) {
+                    Column(modifier = Modifier.padding(Space.X14)) {
                         Text(
                             text = "PRONUNCIATION GUIDE",
                             style = MaterialTheme.typography.labelSmall,
@@ -474,7 +483,7 @@ fun AlphabetScreen(
                             color = PopPosterInk
                         )
 
-                        Spacer(modifier = Modifier.height(10.dp))
+                        Spacer(modifier = Modifier.height(Space.X10))
 
                         Text(
                             text = "STROKE GUIDANCE",
@@ -489,7 +498,7 @@ fun AlphabetScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(Space.X24))
             }
         }
     }

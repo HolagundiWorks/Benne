@@ -24,7 +24,7 @@ Scope: manifest, network and backup configuration, logging, storage, threading, 
 | P2 | Map drawing | `KarnatakaMapArtwork` rebuilds every district `Path` (about 3,800 points) on each draw, so selection redraws all of it. | Medium (jank on selection) | Build the paths once in `remember` and reuse them. Hit-testing can stay as it is |
 | P3 | Flag artwork | Canvas drawing of two rectangles. | OK | None |
 | P4 | Threading | No `GlobalScope`, `runBlocking` or `Thread.sleep`. TTS callbacks update StateFlows. | OK | None |
-| P5 | Lists | Home, Letters, Talk, Practice and Profile use lazy lists. Food and heritage filter on each recomposition over at most 62 items. | Low | Optional `remember` on filtered lists |
+| P5 | Lists | Home, Alphabets, Dialogues, Flashcards, Curriculum and Profile use lazy lists. Food and heritage filter on each recomposition over at most 62 items. | Low | Optional `remember` on filtered lists |
 | P6 | Drawable decoding | `ImageBitmap.imageResource` is called in each `PosterCard`. Compose caches decoded resources, so this is acceptable. | Low | Optional: share one decoded bitmap per skin |
 | P7 | Release size | Unknown until a release build runs (no upload keystore on this PC). The debug APK is 24.8 MB. | Unknown | Measure after the keystore is in place |
 | P8 | Badge art | Production badge PNGs are 512 px and under 50 KB each. | OK | None |
@@ -41,4 +41,4 @@ Scope: manifest, network and backup configuration, logging, storage, threading, 
 - **P2 done:** the district paths are built once per size with `drawWithCache`. Selection only changes the fill colour.
 - **S5 done:** the unreferenced `backup_rules.xml` and `data_extraction_rules.xml` were removed. `allowBackup` stays `false`.
 - **P7 open:** the release bundle size still needs measuring once the upload keystore is set up.
-- Verified: build passes, 18 unit tests pass, the poem screen loads its artwork, and the map shows and selects districts on the phone. The debug APK went from 24.8 MB to 23.7 MB.
+- Verified: build passes, 27 unit tests pass (at the time of the last check), the poem screen loads its artwork, and the map shows and selects districts on the phone. The debug APK went from 24.8 MB to 23.7 MB.

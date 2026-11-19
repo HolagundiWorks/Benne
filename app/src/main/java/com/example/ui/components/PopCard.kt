@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Space
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
@@ -40,9 +41,9 @@ fun PosterCard(
     contentColor: Color = PopPosterInk,
     shadowColor: Color = PopPosterInk,
     borderColor: Color = PopPosterInk,
-    cornerRadius: Dp = 20.dp,
-    shadowOffset: Dp = 4.dp,
-    borderWidth: Dp = 2.dp,
+    cornerRadius: Dp = Space.X20,
+    shadowOffset: Dp = Space.X4,
+    borderWidth: Dp = Space.X2,
     @Suppress("UNUSED_PARAMETER") plain: Boolean = false,
     onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit

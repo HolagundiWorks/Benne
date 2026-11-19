@@ -1,5 +1,12 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.Radius
+import com.example.ui.theme.Border
+import com.example.ui.theme.Depth
+import com.example.ui.theme.TypeScale
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -112,14 +119,12 @@ fun HomeScreen(
     progressManager: UserProgressManager,
     ttsHelper: KannadaTtsHelper,
     onOpenProfile: () -> Unit,
-    onOpenCurriculum: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val completedLessons by progressManager.completedLessons.collectAsState()
     val unlockedStickers by progressManager.unlockedStickers.collectAsState()
     val completedPoemChallenges by progressManager.completedPoemChallenges.collectAsState()
     val masteredFlashcards by progressManager.masteredFlashcardIds.collectAsState()
-    val learnerName by progressManager.learnerName.collectAsState()
     val xpPoints by progressManager.xp.collectAsState()
     val streakNow by progressManager.streakDays.collectAsState()
     val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
@@ -138,6 +143,9 @@ fun HomeScreen(
     val badgesUnlocked = Achievements.all.count {
         Achievements.isUnlocked(it, AchievementInputs(streakDays = streakNow, xp = xpPoints))
     }
+    val earnedBadges = Achievements.all
+        .filter { Achievements.isUnlocked(it, AchievementInputs(streakDays = streakNow, xp = xpPoints)) }
+        .mapNotNull { Achievements.artRes(it.id) }
     val scores = listOf(
         ScoreItem("$xpPoints", "Total XP", PopPosterButter, "xp"),
         ScoreItem("$badgesUnlocked/${Achievements.all.size}", "Badges", PopPosterCyan, "badges"),
@@ -151,25 +159,40 @@ fun HomeScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
-        contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 14.dp + LocalFloatingNavInset.current),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
+        contentPadding = PaddingValues(start = Space.X16, top = Space.X14 + LocalFloatingHeaderInset.current, end = Space.X16, bottom = Space.X14 + LocalFloatingNavInset.current),
+        verticalArrangement = Arrangement.spacedBy(Space.X14)
     ) {
-        // User details: name, level, progress to the next level. Tap opens Profile.
-        item { LevelCard(name = learnerName, xp = xpPoints, onClick = onOpenProfile) }
-
         // Continue Lesson: next unfinished chapter, one tap back into its study sheet
+        item { WordOfTheDayCard(word = word, speakingText = speakingText, onSpeak = { ttsHelper.speak(it, playbackSpeed) }) }
+
+        item { HomeSectionHeader("YOUR PROGRESS") }
+        item {
+            ProgressCard(
+                lessonsDone = completedLessons.size,
+                totalLessons = totalChapters,
+                cardsMastered = masteredCount,
+                cardsTotal = flashcardTotal,
+                earnedBadges = earnedBadges
+            )
+        }
+
+        item { HomeSectionHeader("SCORES") }
+        item {
+            CardGrid(items = scores, columns = 3) { score -> ScoreTile(score) }
+        }
+
         nextMilestone?.let { next ->
             item {
                 PosterCard(
                     containerColor = PopPosterCyan,
                     contentColor = PopPosterInk,
-                    cornerRadius = 20.dp,
-                    shadowOffset = 5.dp,
+                    cornerRadius = Radius.R20,
+                    shadowOffset = Depth.S5,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("home_continue_card")
                 ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
+                    Column(modifier = Modifier.padding(Space.X16)) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -187,11 +210,11 @@ fun HomeScreen(
                                 modifier = Modifier.size(28.dp)
                             )
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(Space.X8))
                         Text(
                             text = next.titleEnglish,
                             fontFamily = BalooFamily,
-                            fontSize = 18.sp,
+                            fontSize = TypeScale.T18,
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
                         )
@@ -204,7 +227,7 @@ fun HomeScreen(
                             subscriptColor = PopPosterInk.copy(alpha = 0.75f),
                             subscriptStyle = MaterialTheme.typography.labelMedium
                         )
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(Space.X12))
                         val totalChapters = SaralaKannadaData.milestones.size.coerceAtLeast(1)
                         Text(
                             text = "Lesson ${SaralaKannadaData.milestones.indexOf(next) + 1} of $totalChapters",
@@ -212,18 +235,18 @@ fun HomeScreen(
                             fontWeight = FontWeight.Bold,
                             color = PopPosterInk
                         )
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(Space.X6))
                         LinearProgressIndicator(
                             progress = { completedLessons.size.toFloat() / totalChapters },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(8.dp)
+                                .height(Space.X8)
                                 .testTag("home_continue_progress"),
                             color = MaterialTheme.colorScheme.primary,
                             trackColor = PopPosterPaper,
                             strokeCap = StrokeCap.Round
                         )
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(Space.X12))
                         PopActionButton(
                             text = "Continue",
                             icon = Icons.Default.PlayArrow,
@@ -242,17 +265,17 @@ fun HomeScreen(
                 PosterCard(
                     containerColor = PopPosterPink,
                     contentColor = PopPosterInk,
-                    cornerRadius = 16.dp,
-                    shadowOffset = 3.dp,
+                    cornerRadius = Radius.R16,
+                    shadowOffset = Depth.S3,
                     modifier = Modifier.fillMaxWidth().testTag("home_voice_notice")
                 ) {
-                    Column(modifier = Modifier.padding(14.dp)) {
+                    Column(modifier = Modifier.padding(Space.X14)) {
                         Text(
                             text = "Kannada voice is not installed on this phone, so pronunciation audio is off.",
                             style = MaterialTheme.typography.bodyMedium,
                             color = PopPosterInk
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(Space.X8))
                         PopActionButton(
                             text = "Open voice settings",
                             onClick = { openTtsSettings(context) },
@@ -263,36 +286,8 @@ fun HomeScreen(
             }
         }
 
-        item { WordOfTheDayCard(word = word, speakingText = speakingText, onSpeak = { ttsHelper.speak(it, playbackSpeed) }) }
-
-        item { HomeSectionHeader("YOUR PROGRESS") }
         item {
-            ProgressCard(
-                lessonsDone = completedLessons.size,
-                totalLessons = totalChapters,
-                cardsMastered = masteredCount,
-                cardsTotal = flashcardTotal,
-                onOpenCurriculum = onOpenCurriculum
-            )
-        }
-
-        item { HomeSectionHeader("SCORES") }
-        item {
-            CardGrid(items = scores, columns = 3) { score -> ScoreTile(score) }
-        }
-
-        item { HomeSectionHeader("BADGES") }
-        item {
-            BadgeRow(
-                lessonsDone = completedLessons.size,
-                totalLessons = SaralaKannadaData.milestones.size,
-                streakDays = streakNow,
-                xp = xpPoints
-            )
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(Space.X16))
         }
     }
 
@@ -335,13 +330,13 @@ private fun WordOfTheDayCard(
     PosterCard(
         containerColor = PopPosterButter,
         contentColor = PopPosterInk,
-        cornerRadius = 24.dp,
-        shadowOffset = 6.dp,
+        cornerRadius = Radius.R24,
+        shadowOffset = Depth.S6,
         modifier = Modifier
             .fillMaxWidth()
             .testTag("home_word_of_day")
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(Space.X16)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -359,7 +354,7 @@ private fun WordOfTheDayCard(
                 )
             }
 
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(Space.X14))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -376,27 +371,27 @@ private fun WordOfTheDayCard(
                         subscriptColor = PopPosterInk.copy(alpha = 0.75f),
                         subscriptStyle = MaterialTheme.typography.labelLarge
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(Space.X8))
                     Surface(
-                        shape = RoundedCornerShape(10.dp),
+                        shape = RoundedCornerShape(Radius.R10),
                         color = PopPosterPaper,
-                        border = BorderStroke(1.5.dp, PopPosterInk)
+                        border = BorderStroke(Border.W1_5, PopPosterInk)
                     ) {
                         Text(
                             text = "Meaning: \"${word.englishMeaning}\"",
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight.SemiBold,
                             color = PopPosterInk,
-                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)
+                            modifier = Modifier.padding(horizontal = Space.X10, vertical = Space.X6)
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(Space.X12))
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     ButterMascot(size = 76.dp, pose = com.example.R.drawable.benne_mascot_hello)
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(Space.X6))
                     AudioSpeakButton(
                         textToSpeak = word.kannadaWord,
                         isCurrentlySpeaking = speakingText == word.kannadaWord,
@@ -416,34 +411,25 @@ private data class ScoreItem(val value: String, val label: String, val color: Co
 
 @Composable
 private fun ScoreTile(score: ScoreItem) {
-    PosterCard(
-        containerColor = score.color,
-        contentColor = PopPosterInk,
-        cornerRadius = 16.dp,
-        shadowOffset = 4.dp,
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag("home_score_${score.tag}")
-    ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Text(
-                text = score.value,
-                fontFamily = BalooFamily,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 22.sp,
-                color = PopPosterInk,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = score.label,
-                style = MaterialTheme.typography.labelSmall,
-                color = PopPosterInk,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
+    // Informational: shown directly on the screen, no card
+    Column(modifier = Modifier.fillMaxWidth().testTag("home_score_${score.tag}")) {
+        Text(
+            text = score.value,
+            fontFamily = BalooFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = TypeScale.T22,
+            color = PopPosterInk,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        Spacer(modifier = Modifier.height(Space.X2))
+        Text(
+            text = score.label,
+            style = MaterialTheme.typography.labelSmall,
+            color = PopPosterInk,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 
@@ -453,40 +439,65 @@ private fun ProgressCard(
     totalLessons: Int,
     cardsMastered: Int,
     cardsTotal: Int,
-    onOpenCurriculum: () -> Unit
+    earnedBadges: List<Int>
 ) {
-    PosterCard(
-        containerColor = PopPosterPaper,
-        cornerRadius = 18.dp,
-        shadowOffset = 4.dp,
+    // Informational lines are shown directly on the screen; only the button is a control
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .testTag("home_progress_card")
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            ProgressLine(
-                label = "Curriculum",
-                value = "$lessonsDone of $totalLessons chapters",
-                fraction = lessonsDone.toFloat() / totalLessons
+        ProgressLine(
+            label = "Curriculum",
+            value = "$lessonsDone of $totalLessons chapters",
+            fraction = lessonsDone.toFloat() / totalLessons
+        )
+        Spacer(modifier = Modifier.height(Space.X12))
+        ProgressLine(
+            label = "Flashcards",
+            value = "$cardsMastered of $cardsTotal mastered",
+            fraction = cardsMastered.toFloat() / cardsTotal
+        )
+        Spacer(modifier = Modifier.height(Space.X14))
+        Text(
+            text = "EARNED BADGES",
+            fontFamily = BalooFamily,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = TypeScale.T14,
+            letterSpacing = 1.sp,
+            color = PopPosterInk
+        )
+        Spacer(modifier = Modifier.height(Space.X8))
+        if (earnedBadges.isEmpty()) {
+            Text(
+                text = "No badges yet. Keep learning to earn them.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = PopPosterInk
             )
-            Spacer(modifier = Modifier.height(12.dp))
-            ProgressLine(
-                label = "Flashcards",
-                value = "$cardsMastered of $cardsTotal mastered",
-                fraction = cardsMastered.toFloat() / cardsTotal
-            )
-            Spacer(modifier = Modifier.height(14.dp))
-            PopActionButton(
-                text = "Open curriculum",
-                onClick = onOpenCurriculum,
-                modifier = Modifier.fillMaxWidth()
-            )
+        } else {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState())
+                    .testTag("home_earned_badges"),
+                horizontalArrangement = Arrangement.spacedBy(Space.X10)
+            ) {
+                earnedBadges.forEach { res ->
+                    Image(
+                        painter = painterResource(res),
+                        contentDescription = "Earned badge",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.size(56.dp)
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
 private fun ProgressLine(label: String, value: String, fraction: Float) {
+    val animatedFraction by animateFloatAsState(targetValue = fraction, animationSpec = tween(700), label = "progress_line")
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -496,7 +507,7 @@ private fun ProgressLine(label: String, value: String, fraction: Float) {
             text = label,
             fontFamily = BalooFamily,
             fontWeight = FontWeight.ExtraBold,
-            fontSize = 16.sp,
+            fontSize = TypeScale.T16,
             color = PopPosterInk
         )
         Text(
@@ -506,149 +517,23 @@ private fun ProgressLine(label: String, value: String, fraction: Float) {
             color = PopPosterInk
         )
     }
-    Spacer(modifier = Modifier.height(6.dp))
+    Spacer(modifier = Modifier.height(Space.X6))
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clip(CircleShape)
-            .border(1.5.dp, PopPosterInk, CircleShape)
+            .border(Border.W1_5, PopPosterInk, CircleShape)
             .background(MaterialTheme.colorScheme.background)
     ) {
         LinearProgressIndicator(
-            progress = { fraction.coerceIn(0f, 1f) },
+            progress = { animatedFraction.coerceIn(0f, 1f) },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(10.dp),
+                .height(Space.X10),
             color = MaterialTheme.colorScheme.primary,
             trackColor = Color.Transparent,
             strokeCap = StrokeCap.Round
         )
-    }
-}
-
-/** Level from XP (100 XP per level) with a playful title and clean non-overlapping mascot badge. */
-@Composable
-private fun LevelCard(name: String, xp: Int, onClick: () -> Unit) {
-    val level = xp / 100 + 1
-    val titles = listOf("Tender Learner", "Filter Coffee Fan", "Auto Negotiator", "Darshini Regular", "Bengaluru Local")
-    val title = titles[minOf(level - 1, titles.lastIndex)]
-    val into = xp % 100
-    PosterCard(
-        containerColor = PopPosterPaper,
-        contentColor = PopPosterInk,
-        cornerRadius = 18.dp,
-        shadowOffset = 4.dp,
-        onClick = onClick,
-        modifier = Modifier.fillMaxWidth().testTag("home_level_card")
-    ) {
-        Column(modifier = Modifier.padding(14.dp)) {
-            Text(
-                text = name,
-                fontFamily = BalooFamily,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 20.sp,
-                color = PopPosterInk
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Surface(
-                        shape = CircleShape,
-                        color = PopPosterButter,
-                        border = BorderStroke(1.8.dp, PopPosterInk),
-                        modifier = Modifier.size(46.dp)
-                    ) {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier.padding(4.dp)
-                        ) {
-                            ButterMascot(
-                                size = 38.dp,
-                                pose = com.example.R.drawable.benne_mascot_compact
-                            )
-                        }
-                    }
-                    Column {
-                        PosterStampBadge(
-                            text = "LEVEL $level",
-                            containerColor = PopPosterButter,
-                            contentColor = PopPosterInk
-                        )
-                        Spacer(modifier = Modifier.height(3.dp))
-                        Text(
-                            text = title,
-                            fontFamily = BalooFamily,
-                            fontWeight = FontWeight.ExtraBold,
-                            fontSize = 18.sp,
-                            color = PopPosterInk
-                        )
-                    }
-                }
-                PosterStampBadge(
-                    text = "$xp XP",
-                    containerColor = PopPosterMint,
-                    contentColor = PopPosterInk
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(CircleShape)
-                    .border(1.5.dp, PopPosterInk, CircleShape)
-                    .background(MaterialTheme.colorScheme.background)
-            ) {
-                LinearProgressIndicator(
-                    progress = { into / 100f },
-                    modifier = Modifier.fillMaxWidth().height(9.dp),
-                    color = MaterialTheme.colorScheme.primary,
-                    trackColor = Color.Transparent,
-                    strokeCap = StrokeCap.Round
-                )
-            }
-            Spacer(modifier = Modifier.height(6.dp))
-            Text(
-                text = "${100 - into} XP to level ${level + 1}. Keep the streak alive!",
-                style = MaterialTheme.typography.labelMedium,
-                color = PopPosterInk
-            )
-        }
-    }
-}
-
-private data class Badge(val label: String, val unlocked: Boolean, val hint: String)
-
-/** Badges derived from existing progress; a locked badge shows what unlocks it. */
-@Composable
-private fun BadgeRow(lessonsDone: Int, totalLessons: Int, streakDays: Int, xp: Int) {
-    val badges = listOf(
-        Badge("First Steps", lessonsDone >= 1, "Finish 1 lesson"),
-        Badge("On Fire", streakDays >= 3, "3-day streak"),
-        Badge("XP Hunter", xp >= 300, "Earn 300 XP"),
-        Badge("Chapter Champ", totalLessons > 0 && lessonsDone >= totalLessons, "Finish every lesson")
-    )
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState())
-            .testTag("home_badges"),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        badges.forEach { badge ->
-            PosterStampBadge(
-                text = if (badge.unlocked) badge.label else "Locked: ${badge.hint}",
-                containerColor = if (badge.unlocked) PopPosterButter else PopPosterPaper,
-                contentColor = if (badge.unlocked) PopPosterInk else PopPosterInk.copy(alpha = 0.65f)
-            )
-        }
     }
 }
 
@@ -669,9 +554,9 @@ internal fun HomeSectionHeader(title: String) {
         text = title,
         fontFamily = BalooFamily,
         fontWeight = FontWeight.ExtraBold,
-        fontSize = 14.sp,
+        fontSize = TypeScale.T14,
         letterSpacing = 1.sp,
         color = PopPosterInk,
-        modifier = Modifier.padding(top = 8.dp, bottom = 2.dp).testTag("home_section_$title")
+        modifier = Modifier.padding(top = Space.X8, bottom = Space.X2).testTag("home_section_$title")
     )
 }

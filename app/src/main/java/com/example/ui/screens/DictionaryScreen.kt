@@ -1,5 +1,9 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.Radius
+import com.example.ui.theme.Depth
+import com.example.ui.theme.TypeScale
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -104,18 +108,18 @@ fun DictionaryScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
-        contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 14.dp + LocalFloatingNavInset.current),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        contentPadding = PaddingValues(start = Space.X16, top = Space.X14 + LocalFloatingHeaderInset.current, end = Space.X16, bottom = Space.X14 + LocalFloatingNavInset.current),
+        verticalArrangement = Arrangement.spacedBy(Space.X10)
     ) {
         // Pop Poster Search Header Card
         item {
             PosterCard(
                 containerColor = PopPosterMint,
-                cornerRadius = 24.dp,
-                shadowOffset = 5.dp,
+                cornerRadius = Radius.R24,
+                shadowOffset = Depth.S5,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(18.dp)) {
+                Column(modifier = Modifier.padding(Space.X18)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -133,17 +137,17 @@ fun DictionaryScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(Space.X10))
 
                     Text(
                         text = "Kannada Phrasebook",
                         fontFamily = BalooFamily,
-                        fontSize = 26.sp,
+                        fontSize = TypeScale.T26,
                         fontWeight = FontWeight.ExtraBold,
                         color = PopPosterInk
                     )
 
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(Space.X4))
 
                     KannadaWithSubscript(
                         kannadaText = "ಕನ್ನಡ ಪದಕೋಶ",
@@ -155,7 +159,7 @@ fun DictionaryScreen(
                         subscriptStyle = MaterialTheme.typography.labelMedium
                     )
 
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(Space.X6))
 
                     Text(
                         text = "Search by English meaning, pronunciation, or Kannada script.",
@@ -163,7 +167,7 @@ fun DictionaryScreen(
                         color = PopPosterInk.copy(alpha = 0.85f)
                     )
 
-                    Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(modifier = Modifier.height(Space.X14))
 
                     OutlinedTextField(
                         value = searchQuery,
@@ -211,7 +215,7 @@ fun DictionaryScreen(
         // Pop FilterChips
         item {
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(Space.X8),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(categories) { cat ->
@@ -231,7 +235,7 @@ fun DictionaryScreen(
                             borderColor = PopPosterInk,
                             selectedBorderColor = PopPosterInk,
                             borderWidth = 1.5.dp,
-                            selectedBorderWidth = 2.dp
+                            selectedBorderWidth = Space.X2
                         ),
                         label = { Text(cat, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium) },
                         modifier = Modifier.testTag("dict_chip_${cat.lowercase().replace(" ", "_")}")
@@ -244,14 +248,14 @@ fun DictionaryScreen(
             item {
                 PosterCard(
                     containerColor = PopPosterPaper,
-                    cornerRadius = 20.dp,
-                    shadowOffset = 4.dp,
+                    cornerRadius = Radius.R20,
+                    shadowOffset = Depth.S4,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 40.dp, horizontal = 16.dp),
+                            .padding(vertical = 40.dp, horizontal = Space.X16),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Icon(
@@ -260,11 +264,11 @@ fun DictionaryScreen(
                             tint = PopPosterInk,
                             modifier = Modifier.size(40.dp)
                         )
-                        Spacer(modifier = Modifier.height(10.dp))
+                        Spacer(modifier = Modifier.height(Space.X10))
                         Text(
                             text = "No matching phrases found",
                             fontFamily = BalooFamily,
-                            fontSize = 18.sp,
+                            fontSize = TypeScale.T18,
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
                         )
@@ -284,8 +288,8 @@ fun DictionaryScreen(
 
                 PosterCard(
                     containerColor = cardBg,
-                    cornerRadius = 18.dp,
-                    shadowOffset = 4.dp,
+                    cornerRadius = Radius.R18,
+                    shadowOffset = Depth.S4,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("phrase_card_${phrase.id}")
@@ -293,7 +297,7 @@ fun DictionaryScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 14.dp),
+                            .padding(horizontal = Space.X16, vertical = Space.X14),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
@@ -305,7 +309,7 @@ fun DictionaryScreen(
                                     modifier = Modifier.weight(1f, fill = false)
                                 )
                                 if (phrase.isEssential) {
-                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Spacer(modifier = Modifier.width(Space.X8))
                                     PosterStampBadge(
                                         text = "ESSENTIAL",
                                         containerColor = PopPosterButter,
@@ -323,7 +327,7 @@ fun DictionaryScreen(
                                     align = TextAlign.Start
                                 )
                             }
-                            Spacer(modifier = Modifier.height(4.dp))
+                            Spacer(modifier = Modifier.height(Space.X4))
                             com.example.ui.components.BenneH3(
                                 text = phrase.kannada,
                                 align = TextAlign.Start
@@ -355,7 +359,7 @@ fun DictionaryScreen(
         }
 
         item {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(Space.X16))
         }
     }
 }

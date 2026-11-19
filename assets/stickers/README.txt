@@ -1,0 +1,1 @@
+Benne Karnataka Sticker Pack - 15 individual transparent PNG assets. Each illustration is a stylized interpretation, not an exact architectural depiction. Original cropped assets and 512x512 padded variants included. White sticker borders retained where possible.

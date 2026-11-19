@@ -1,5 +1,8 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.Border
+import com.example.ui.theme.TypeScale
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
@@ -93,17 +96,17 @@ fun PosterStampBadge(
         shape = CircleShape,
         color = containerColor,
         contentColor = contentColor,
-        border = BorderStroke(1.5.dp, borderColor)
+        border = BorderStroke(Border.W1_5, borderColor)
     ) {
         Text(
             text = text,
             fontFamily = NunitoSansFamily,
-            fontSize = 12.sp,
+            fontSize = TypeScale.T12,
             fontWeight = FontWeight.Bold,
             letterSpacing = 0.6.sp,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+            modifier = Modifier.padding(horizontal = Space.X10, vertical = Space.X4)
         )
     }
 }
@@ -147,7 +150,7 @@ fun KannadaWithSubscript(
             textAlign = textAlign
         )
         if (transliteration.isNotBlank()) {
-            Spacer(modifier = Modifier.height(2.dp))
+            Spacer(modifier = Modifier.height(Space.X2))
             Text(
                 text = transliteration,
                 style = subscriptStyle,
@@ -227,7 +230,7 @@ fun AudioSpeakButton(
             shape = CircleShape,
             color = animatedBg,
             contentColor = animatedContent,
-            border = BorderStroke(1.8.dp, PopPosterInk)
+            border = BorderStroke(Border.W1_8, PopPosterInk)
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Icon(

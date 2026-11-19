@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Space
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,7 +51,7 @@ fun TalkScreen(
         SingleChoiceSegmentedButtonRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp)
+                .padding(start = Space.X16, end = Space.X16, top = Space.X12, bottom = Space.X4)
         ) {
             tabs.forEachIndexed { index, item ->
                 SegmentedButton(

@@ -1,5 +1,7 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.TypeScale
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -52,7 +54,7 @@ fun BenneH1(text: String, modifier: Modifier = Modifier, align: TextAlign = Text
         modifier = modifier,
         fontFamily = NunitoSansFamily,
         fontWeight = FontWeight.Medium,
-        fontSize = 24.sp,
+        fontSize = TypeScale.T24,
         lineHeight = 30.sp,
         color = PopPosterInk,
         textAlign = align
@@ -66,7 +68,7 @@ fun BenneH2Latin(text: String, modifier: Modifier = Modifier, align: TextAlign =
         modifier = modifier,
         fontFamily = NunitoSansFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 18.sp,
+        fontSize = TypeScale.T18,
         lineHeight = 24.sp,
         color = PopPosterInk,
         textAlign = align
@@ -95,7 +97,7 @@ fun BenneH2Devanagari(
         modifier = modifier,
         fontFamily = NotoSansDevanagariFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 18.sp,
+        fontSize = TypeScale.T18,
         lineHeight = 26.sp,
         color = PopPosterInk,
         textAlign = align
@@ -109,7 +111,7 @@ fun BenneH3(text: String, modifier: Modifier = Modifier, align: TextAlign = Text
         modifier = modifier,
         fontFamily = NotoSansKannadaFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 22.sp,
+        fontSize = TypeScale.T22,
         lineHeight = 32.sp,
         color = PopPosterInk,
         textAlign = align
@@ -132,14 +134,14 @@ fun BenneLearningBlock(
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         BenneH1(english)
         if (kannadaRomanized.isNotBlank()) {
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(Space.X4))
             BenneH2Latin(kannadaRomanized)
         }
         if (showDevanagari && kannadaDevanagari.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(Space.X4))
             BenneH2Devanagari(kannadaDevanagari)
         }
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(Space.X10))
         BenneH3(kannadaScript)
     }
 }

@@ -1,5 +1,12 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.Radius
+import com.example.ui.theme.Border
+import com.example.ui.theme.Depth
+import com.example.ui.theme.TypeScale
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -71,7 +78,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.audio.KannadaTtsHelper
-import com.example.data.LevelProgress
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Place
 import com.example.data.Achievements
@@ -115,7 +121,6 @@ fun CurriculumScreen(
     modifier: Modifier = Modifier
 ) {
     val completedLessons by progressManager.completedLessons.collectAsState()
-    val xpPoints by progressManager.xp.collectAsState()
     val speakingText by ttsHelper.currentlySpeakingText.collectAsState()
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
 
@@ -136,8 +141,7 @@ fun CurriculumScreen(
             tagKey = "flashcards",
             iconRes = com.example.R.drawable.pop_icon_book,
             color = PopPosterButter,
-            mode = PracticeMode.FLASHCARDS,
-            requiredLevel = 1
+            mode = PracticeMode.FLASHCARDS
         ),
         PracticeTile(
             title = "Quiz",
@@ -145,8 +149,7 @@ fun CurriculumScreen(
             tagKey = "quiz",
             iconRes = com.example.R.drawable.pop_icon_trophy,
             color = PopPosterMint,
-            mode = PracticeMode.QUIZ,
-            requiredLevel = 1
+            mode = PracticeMode.QUIZ
         ),
         PracticeTile(
             title = "Poetry",
@@ -154,8 +157,7 @@ fun CurriculumScreen(
             tagKey = "poetry",
             iconRes = com.example.R.drawable.pop_icon_speech,
             color = PopPosterCyan,
-            mode = PracticeMode.POETRY_PLAY,
-            requiredLevel = LevelProgress.POETRY_PLAY_LEVEL
+            mode = PracticeMode.POETRY_PLAY
         )
     )
 
@@ -163,29 +165,48 @@ fun CurriculumScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
-        contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 14.dp + LocalFloatingNavInset.current),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
+        contentPadding = PaddingValues(start = Space.X16, top = Space.X14 + LocalFloatingHeaderInset.current, end = Space.X16, bottom = Space.X14 + LocalFloatingNavInset.current),
+        verticalArrangement = Arrangement.spacedBy(Space.X14)
     ) {
+        item {
+            // Informational: shown directly on the screen, no card
+            run {
+                Row(
+                    modifier = Modifier.fillMaxWidth().testTag("curriculum_hero"),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Learn step by step",
+                            fontFamily = BalooFamily,
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = TypeScale.T20,
+                            color = PopPosterInk
+                        )
+                        Spacer(modifier = Modifier.height(Space.X4))
+                        Text(
+                            text = "Finish each chapter, then practise what you learned.",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = PopPosterInk
+                        )
+                    }
+                    ButterMascot(size = 72.dp, pose = com.example.R.drawable.benne_mascot_learning)
+                }
+            }
+        }
         item { HomeSectionHeader("PRACTICE") }
         item {
             CardGrid(items = practiceTiles, columns = 3) { tile ->
-                if (LevelProgress.isUnlocked(xpPoints, tile.requiredLevel)) {
-                    PopQuickModuleCard(
-                        iconRes = tile.iconRes,
-                        title = tile.title,
-                        subtitle = tile.subtitle,
-                        tagKey = tile.tagKey,
-                        cardColor = tile.color,
-                        onClick = { onOpenPractice(tile.mode) },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                } else {
-                    LockedTile(
-                        title = tile.title,
-                        requiredLevel = tile.requiredLevel,
-                        testTag = "practice_locked_${tile.tagKey}"
-                    )
-                }
+                PopQuickModuleCard(
+                    iconRes = tile.iconRes,
+                    title = tile.title,
+                    subtitle = tile.subtitle,
+                    tagKey = tile.tagKey,
+                    cardColor = tile.color,
+                    onClick = { onOpenPractice(tile.mode) },
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
 
@@ -193,14 +214,11 @@ fun CurriculumScreen(
         item {
             val totalUnits = SaralaKannadaData.milestones.size.coerceAtLeast(1)
             val progressFraction = completedLessons.size.toFloat() / totalUnits
+            val animatedProgress by animateFloatAsState(targetValue = progressFraction, animationSpec = tween(700), label = "roadmap_progress")
 
-            PosterCard(
-                containerColor = PopPosterPaper,
-                cornerRadius = 18.dp,
-                shadowOffset = 4.dp,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.padding(16.dp)) {
+            // Informational: shown directly on the screen, no card
+            run {
+                Column(modifier = Modifier.fillMaxWidth()) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -209,7 +227,7 @@ fun CurriculumScreen(
                         Text(
                             text = "GUIDED ROADMAP",
                             fontFamily = BalooFamily,
-                            fontSize = 18.sp,
+                            fontSize = TypeScale.T18,
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
                         )
@@ -219,19 +237,19 @@ fun CurriculumScreen(
                             contentColor = PopPosterInk
                         )
                     }
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(Space.X10))
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(CircleShape)
-                            .border(1.5.dp, PopPosterInk, CircleShape)
+                            .border(Border.W1_5, PopPosterInk, CircleShape)
                             .background(MaterialTheme.colorScheme.background)
                     ) {
                         LinearProgressIndicator(
-                            progress = { progressFraction },
+                            progress = { animatedProgress },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(10.dp),
+                                .height(Space.X10),
                             color = MaterialTheme.colorScheme.primary,
                             trackColor = Color.Transparent,
                             strokeCap = StrokeCap.Round
@@ -253,7 +271,7 @@ fun CurriculumScreen(
         }
 
         item {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(Space.X16))
         }
     }
 
@@ -285,47 +303,8 @@ private data class PracticeTile(
     val tagKey: String,
     @DrawableRes val iconRes: Int,
     val color: Color,
-    val mode: PracticeMode,
-    val requiredLevel: Int
+    val mode: PracticeMode
 )
-
-/** Placeholder for a card that unlocks at a later level. Solid panel, no tap action. */
-@Composable
-internal fun LockedTile(title: String, requiredLevel: Int, testTag: String) {
-    PosterCard(
-        containerColor = PopPosterPaper,
-        cornerRadius = 16.dp,
-        shadowOffset = 3.dp,
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag(testTag)
-    ) {
-        Column(modifier = Modifier.fillMaxWidth().padding(12.dp)) {
-            Icon(
-                imageVector = Icons.Filled.Lock,
-                contentDescription = null,
-                tint = PopPosterInk,
-                modifier = Modifier.size(22.dp)
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = title,
-                fontFamily = BalooFamily,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 14.sp,
-                color = PopPosterInk,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = "Level $requiredLevel",
-                style = MaterialTheme.typography.labelSmall,
-                color = PopPosterInk,
-                maxLines = 1
-            )
-        }
-    }
-}
 
 @Composable
 private fun PopQuickModuleCard(
@@ -340,15 +319,15 @@ private fun PopQuickModuleCard(
     PosterCard(
         containerColor = cardColor,
         contentColor = PopPosterInk,
-        cornerRadius = 18.dp,
-        shadowOffset = 4.dp,
+        cornerRadius = Radius.R18,
+        shadowOffset = Depth.S4,
         onClick = onClick,
         modifier = modifier.testTag("function_tile_$tagKey")
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
+                .padding(Space.X12),
             horizontalAlignment = Alignment.Start
         ) {
             Image(
@@ -357,11 +336,11 @@ private fun PopQuickModuleCard(
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.size(40.dp)
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(Space.X10))
             Text(
                 text = title,
                 fontFamily = BalooFamily,
-                fontSize = 16.sp,
+                fontSize = TypeScale.T16,
                 fontWeight = FontWeight.ExtraBold,
                 color = PopPosterInk,
                 maxLines = 1,
@@ -388,8 +367,8 @@ private fun PopMilestoneCard(
     PosterCard(
         containerColor = if (isCompleted) PopPosterMint else cardColor,
         contentColor = PopPosterInk,
-        cornerRadius = 20.dp,
-        shadowOffset = 4.dp,
+        cornerRadius = Radius.R20,
+        shadowOffset = Depth.S4,
         onClick = onStartLesson,
         modifier = Modifier
             .fillMaxWidth()
@@ -398,15 +377,15 @@ private fun PopMilestoneCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(Space.X16),
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Chapter Poster Number Stamp with mini shadow
-            Box(modifier = Modifier.padding(end = 2.dp, bottom = 2.dp)) {
+            Box(modifier = Modifier.padding(end = Space.X2, bottom = Space.X2)) {
                 Box(
                     modifier = Modifier
                         .size(46.dp)
-                        .offset(x = 2.dp, y = 2.dp)
+                        .offset(x = Space.X2, y = Space.X2)
                         .clip(CircleShape)
                         .background(PopPosterInk)
                 )
@@ -415,7 +394,7 @@ private fun PopMilestoneCard(
                     shape = CircleShape,
                     color = if (isCompleted) PopPosterInk else PopPosterPaper,
                     contentColor = if (isCompleted) PopPosterMint else PopPosterInk,
-                    border = BorderStroke(2.dp, PopPosterInk)
+                    border = BorderStroke(Border.W2, PopPosterInk)
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         if (isCompleted) {
@@ -428,7 +407,7 @@ private fun PopMilestoneCard(
                             Text(
                                 text = milestone.levelNumber.toString().padStart(2, '0'),
                                 fontFamily = BalooFamily,
-                                fontSize = 18.sp,
+                                fontSize = TypeScale.T18,
                                 fontWeight = FontWeight.ExtraBold
                             )
                         }
@@ -436,11 +415,11 @@ private fun PopMilestoneCard(
                 }
             }
 
-            Spacer(modifier = Modifier.width(14.dp))
+            Spacer(modifier = Modifier.width(Space.X14))
 
             Column(modifier = Modifier.weight(1f)) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    horizontalArrangement = Arrangement.spacedBy(Space.X6),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     PosterStampBadge(
@@ -449,11 +428,11 @@ private fun PopMilestoneCard(
                         contentColor = PopPosterInk
                     )
                 }
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(Space.X6))
                 Text(
                     text = milestone.titleEnglish,
                     fontFamily = BalooFamily,
-                    fontSize = 18.sp,
+                    fontSize = TypeScale.T18,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
                 )
@@ -469,7 +448,7 @@ private fun PopMilestoneCard(
                 )
             }
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(Space.X8))
 
             Surface(
                 shape = CircleShape,
@@ -504,7 +483,7 @@ internal fun PopLessonStudyContent(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .padding(horizontal = Space.X20, vertical = Space.X10)
             .testTag("lesson_study_sheet")
     ) {
         Row(
@@ -518,15 +497,15 @@ internal fun PopLessonStudyContent(
                     containerColor = PopPosterButter,
                     contentColor = PopPosterInk
                 )
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(Space.X6))
                 Text(
                     text = milestone.titleEnglish,
                     fontFamily = BalooFamily,
-                    fontSize = 22.sp,
+                    fontSize = TypeScale.T22,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
                 )
-                Spacer(modifier = Modifier.height(2.dp))
+                Spacer(modifier = Modifier.height(Space.X2))
                 KannadaWithSubscript(
                     kannadaText = milestone.titleKannada,
                     transliteration = milestone.titleTransliteration,
@@ -546,32 +525,32 @@ internal fun PopLessonStudyContent(
             }
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(Space.X10))
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(CircleShape)
-                .border(1.5.dp, PopPosterInk, CircleShape)
+                .border(Border.W1_5, PopPosterInk, CircleShape)
                 .background(PopPosterPaper)
         ) {
             LinearProgressIndicator(
                 progress = { (currentStepIndex + 1).toFloat() / milestone.steps.size },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(10.dp),
+                    .height(Space.X10),
                 color = MaterialTheme.colorScheme.primary,
                 trackColor = Color.Transparent,
                 strokeCap = StrokeCap.Round
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(Space.X16))
 
         PosterCard(
             containerColor = PopPosterPaper,
-            cornerRadius = 24.dp,
-            shadowOffset = 5.dp,
+            cornerRadius = Radius.R24,
+            shadowOffset = Depth.S5,
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
@@ -586,7 +565,7 @@ internal fun PopLessonStudyContent(
                     contentColor = PopPosterInk
                 )
 
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(Space.X14))
 
                 // Standard hierarchy: H1 English, H2 Latin + Devanagari pronunciation, H3 Kannada script
                 val lessonSegments = remember(step.kannadaText, step.hindiPhonetic, step.hindiHighlight) {
@@ -603,9 +582,9 @@ internal fun PopLessonStudyContent(
                     kannadaScript = step.kannadaText,
                     showDevanagari = true
                 )
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(Space.X10))
                 HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.2f))
-                Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = Modifier.height(Space.X18))
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -620,26 +599,26 @@ internal fun PopLessonStudyContent(
                         containerColor = PopPosterButter,
                         contentColor = PopPosterInk
                     )
-                    Spacer(modifier = Modifier.width(12.dp))
+                    Spacer(modifier = Modifier.width(Space.X12))
                     Text(
                         text = "Listen to pronunciation",
                         fontFamily = NunitoSansFamily,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp,
+                        fontSize = TypeScale.T14,
                         color = PopPosterInk
                     )
                 }
 
                 if (step.tip.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(Space.X16))
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(Radius.R14),
                         color = PopPosterMint,
-                        border = BorderStroke(1.5.dp, PopPosterInk)
+                        border = BorderStroke(Border.W1_5, PopPosterInk)
                     ) {
                         Row(
-                            modifier = Modifier.padding(12.dp),
+                            modifier = Modifier.padding(Space.X12),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
@@ -648,7 +627,7 @@ internal fun PopLessonStudyContent(
                                 tint = PopPosterInk,
                                 modifier = Modifier.size(17.dp)
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(Space.X8))
                             Text(
                                 text = step.tip,
                                 style = MaterialTheme.typography.bodySmall,
@@ -661,7 +640,7 @@ internal fun PopLessonStudyContent(
             }
         }
 
-        Spacer(modifier = Modifier.height(18.dp))
+        Spacer(modifier = Modifier.height(Space.X18))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -670,7 +649,7 @@ internal fun PopLessonStudyContent(
             if (currentStepIndex > 0) {
                 OutlinedButton(
                     onClick = { currentStepIndex-- },
-                    border = BorderStroke(1.8.dp, PopPosterInk),
+                    border = BorderStroke(Border.W1_8, PopPosterInk),
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = PopPosterPaper,
                         contentColor = PopPosterInk
@@ -696,6 +675,6 @@ internal fun PopLessonStudyContent(
             )
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(Space.X20))
     }
 }

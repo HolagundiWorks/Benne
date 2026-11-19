@@ -1,5 +1,10 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.Radius
+import com.example.ui.theme.Border
+import com.example.ui.theme.Depth
+import com.example.ui.theme.TypeScale
 import android.Manifest
 import android.content.Intent
 import android.net.Uri
@@ -149,7 +154,7 @@ fun SystemConsoleSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 20.dp, vertical = 8.dp)
+                    .padding(horizontal = Space.X20, vertical = Space.X8)
                     .testTag("system_console_sheet")
             ) {
                 // Header
@@ -162,7 +167,7 @@ fun SystemConsoleSheet(
                         Text(
                             text = "Benne Settings",
                             fontFamily = BalooFamily,
-                            fontSize = 22.sp,
+                            fontSize = TypeScale.T22,
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
                         )
@@ -181,18 +186,18 @@ fun SystemConsoleSheet(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Space.X16))
 
                 // 1. Local-Only Learner Info (No Login)
                 SectionHeader("LOCAL LEARNER INFO")
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(Space.X8))
                 PosterCard(
                     containerColor = PopPosterButter,
-                    cornerRadius = 20.dp,
-                    shadowOffset = 4.dp,
+                    cornerRadius = Radius.R20,
+                    shadowOffset = Depth.S4,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
+                    Column(modifier = Modifier.padding(Space.X16)) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -203,18 +208,18 @@ fun SystemConsoleSheet(
                                     shape = CircleShape,
                                     color = PopPosterPaper,
                                     contentColor = PopPosterInk,
-                                    border = BorderStroke(1.8.dp, PopPosterInk),
+                                    border = BorderStroke(Border.W1_8, PopPosterInk),
                                     modifier = Modifier.size(40.dp)
                                 ) {
                                     Box(contentAlignment = Alignment.Center) {
                                         Icon(
                                             imageVector = Icons.Default.Person,
                                             contentDescription = "Local Learner",
-                                            modifier = Modifier.size(20.dp)
+                                            modifier = Modifier.size(Space.X20)
                                         )
                                     }
                                 }
-                                Spacer(modifier = Modifier.width(10.dp))
+                                Spacer(modifier = Modifier.width(Space.X10))
                                 Column {
                                     Text(
                                         text = learnerName,
@@ -236,11 +241,11 @@ fun SystemConsoleSheet(
                             )
                         }
 
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(Space.X12))
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(Space.X8),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             OutlinedTextField(
@@ -248,7 +253,7 @@ fun SystemConsoleSheet(
                                 onValueChange = { nameInput = it.take(32) },
                                 label = { Text("Local display name") },
                                 singleLine = true,
-                                shape = RoundedCornerShape(14.dp),
+                                shape = RoundedCornerShape(Radius.R14),
                                 colors = OutlinedTextFieldDefaults.colors(
                                     focusedContainerColor = PopPosterPaper,
                                     unfocusedContainerColor = PopPosterPaper,
@@ -274,11 +279,11 @@ fun SystemConsoleSheet(
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(Space.X12))
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(Space.X8)
                         ) {
                             LocalStatChip(label = "XP", value = "$xp", modifier = Modifier.weight(1f))
                             LocalStatChip(label = "Streak", value = "${streakDays}d", modifier = Modifier.weight(1f))
@@ -288,18 +293,18 @@ fun SystemConsoleSheet(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Space.X16))
 
                 // 2. Notifications Section
                 SectionHeader("DAILY STUDY NOTIFICATIONS")
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(Space.X8))
                 PosterCard(
                     containerColor = PopPosterPaper,
-                    cornerRadius = 20.dp,
-                    shadowOffset = 4.dp,
+                    cornerRadius = Radius.R20,
+                    shadowOffset = Depth.S4,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
+                    Column(modifier = Modifier.padding(Space.X16)) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -310,9 +315,9 @@ fun SystemConsoleSheet(
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Surface(
-                                    shape = RoundedCornerShape(12.dp),
+                                    shape = RoundedCornerShape(Radius.R12),
                                     color = PopPosterCyan,
-                                    border = BorderStroke(1.5.dp, PopPosterInk),
+                                    border = BorderStroke(Border.W1_5, PopPosterInk),
                                     modifier = Modifier.size(40.dp)
                                 ) {
                                     Icon(
@@ -322,7 +327,7 @@ fun SystemConsoleSheet(
                                         modifier = Modifier.padding(9.dp)
                                     )
                                 }
-                                Spacer(modifier = Modifier.width(12.dp))
+                                Spacer(modifier = Modifier.width(Space.X12))
                                 Column {
                                     Text(
                                         text = "Daily Practice Reminder",
@@ -383,18 +388,18 @@ fun SystemConsoleSheet(
                             )
                         }
 
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(Space.X12))
 
                         Text(
                             text = "Reminder Time",
                             style = MaterialTheme.typography.labelMedium,
                             color = PopPosterInk
                         )
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(Space.X6))
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(Space.X8)
                         ) {
                             listOf(
                                 Triple(8, 30, "08:30 AM"),
@@ -423,7 +428,7 @@ fun SystemConsoleSheet(
                                         borderColor = PopPosterInk,
                                         selectedBorderColor = PopPosterInk,
                                         borderWidth = 1.5.dp,
-                                        selectedBorderWidth = 2.dp
+                                        selectedBorderWidth = Space.X2
                                     ),
                                     label = {
                                         Text(
@@ -437,11 +442,11 @@ fun SystemConsoleSheet(
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(10.dp))
+                        Spacer(modifier = Modifier.height(Space.X10))
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(Space.X8)
                         ) {
                             OutlinedButton(
                                 onClick = {
@@ -458,7 +463,7 @@ fun SystemConsoleSheet(
                                         }
                                     }
                                 },
-                                border = BorderStroke(1.5.dp, PopPosterInk),
+                                border = BorderStroke(Border.W1_5, PopPosterInk),
                                 colors = ButtonDefaults.outlinedButtonColors(
                                     containerColor = PopPosterCyan,
                                     contentColor = PopPosterInk
@@ -478,7 +483,7 @@ fun SystemConsoleSheet(
                                         }
                                         context.startActivity(intent)
                                     },
-                                    border = BorderStroke(1.5.dp, PopPosterInk),
+                                    border = BorderStroke(Border.W1_5, PopPosterInk),
                                     colors = ButtonDefaults.outlinedButtonColors(
                                         containerColor = PopPosterPaper,
                                         contentColor = PopPosterInk
@@ -491,11 +496,11 @@ fun SystemConsoleSheet(
                         }
 
                         statusFeedback?.let { msg ->
-                            Spacer(modifier = Modifier.height(10.dp))
+                            Spacer(modifier = Modifier.height(Space.X10))
                             Surface(
-                                shape = RoundedCornerShape(10.dp),
+                                shape = RoundedCornerShape(Radius.R10),
                                 color = PopPosterMint,
-                                border = BorderStroke(1.2.dp, PopPosterInk),
+                                border = BorderStroke(Border.W1_2, PopPosterInk),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
@@ -503,18 +508,18 @@ fun SystemConsoleSheet(
                                     style = MaterialTheme.typography.bodySmall,
                                     fontWeight = FontWeight.SemiBold,
                                     color = PopPosterInk,
-                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                                    modifier = Modifier.padding(horizontal = Space.X12, vertical = Space.X8)
                                 )
                             }
                         }
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Space.X16))
 
                 // 3. Speech Rate Section
                 SectionHeader("AUDIO PLAYBACK SPEED")
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(Space.X8))
                 val speeds = listOf(0.75f to "0.75x Slow", 0.85f to "0.85x Normal", 1.0f to "1.0x Fast")
                 SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
                     speeds.forEachIndexed { index, (rate, label) ->
@@ -537,21 +542,21 @@ fun SystemConsoleSheet(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Space.X16))
 
                 // 3b. Hindi Phonetic Guide Section
                 SectionHeader("HINDI PHONETIC GUIDE")
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(Space.X8))
                 PosterCard(
                     containerColor = PopPosterCyan,
-                    cornerRadius = 20.dp,
-                    shadowOffset = 4.dp,
+                    cornerRadius = Radius.R20,
+                    shadowOffset = Depth.S4,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
+                            .padding(Space.X16),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -565,7 +570,7 @@ fun SystemConsoleSheet(
                                 tint = PopPosterInk,
                                 modifier = Modifier.size(22.dp)
                             )
-                            Spacer(modifier = Modifier.width(10.dp))
+                            Spacer(modifier = Modifier.width(Space.X10))
                             Column {
                                 Text(
                                     text = "Devanagari Phonetics (दीर्घ)",
@@ -605,26 +610,26 @@ fun SystemConsoleSheet(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Space.X16))
 
                 // 4. Privacy & Data Management
                 SectionHeader("SECURITY & LOCAL PRIVACY")
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(Space.X8))
                 PosterCard(
                     containerColor = PopPosterPeach,
-                    cornerRadius = 20.dp,
-                    shadowOffset = 4.dp,
+                    cornerRadius = Radius.R20,
+                    shadowOffset = Depth.S4,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
+                    Column(modifier = Modifier.padding(Space.X16)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 imageVector = Icons.Default.Shield,
                                 contentDescription = "Privacy Verified",
                                 tint = PopPosterInk,
-                                modifier = Modifier.size(18.dp)
+                                modifier = Modifier.size(Space.X18)
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(Space.X8))
                             Text(
                                 text = "ZERO TELEMETRY • ZERO LOGINS • LOCAL ONLY",
                                 style = MaterialTheme.typography.labelMedium,
@@ -632,16 +637,16 @@ fun SystemConsoleSheet(
                                 color = PopPosterInk
                             )
                         }
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(Space.X6))
                         Text(
                             text = "No sign-in or account exists. Your display name, XP, flashcards, and streaks are stored locally on your device and never transmitted.",
                             style = MaterialTheme.typography.bodySmall,
                             color = PopPosterInk
                         )
-                        Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(Space.X12))
                         OutlinedButton(
                             onClick = { showResetConfirmation = true },
-                            border = BorderStroke(1.8.dp, PopPosterInk),
+                            border = BorderStroke(Border.W1_8, PopPosterInk),
                             colors = ButtonDefaults.outlinedButtonColors(
                                 containerColor = PopPosterPaper,
                                 contentColor = MaterialTheme.colorScheme.error
@@ -653,30 +658,30 @@ fun SystemConsoleSheet(
                             Icon(
                                 imageVector = Icons.Default.DeleteOutline,
                                 contentDescription = "Reset Progress",
-                                modifier = Modifier.size(18.dp)
+                                modifier = Modifier.size(Space.X18)
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(Space.X8))
                             Text("Reset All Local Progress", fontWeight = FontWeight.Bold)
                         }
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Space.X16))
 
                 // 5. Legal & Open Source Notices
                 SectionHeader("LEGAL & COMPLIANCE")
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(Space.X8))
                 PosterCard(
                     containerColor = PopPosterPaper,
-                    cornerRadius = 20.dp,
-                    shadowOffset = 4.dp,
+                    cornerRadius = Radius.R20,
+                    shadowOffset = Depth.S4,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Column {
                         LegalDocuments.all.forEachIndexed { index, doc ->
                             ListItem(
                                 modifier = Modifier
-                                    .clip(RoundedCornerShape(12.dp))
+                                    .clip(RoundedCornerShape(Radius.R12))
                                     .clickable { activeLegalDoc = doc }
                                     .testTag("legal_doc_${doc.id}"),
                                 colors = ListItemDefaults.colors(containerColor = Color.Transparent),
@@ -710,7 +715,7 @@ fun SystemConsoleSheet(
                             )
                             if (index < LegalDocuments.all.lastIndex) {
                                 HorizontalDivider(
-                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                    modifier = Modifier.padding(horizontal = Space.X16),
                                     color = PopPosterInk.copy(alpha = 0.25f)
                                 )
                             }
@@ -718,9 +723,9 @@ fun SystemConsoleSheet(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Space.X16))
                 HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.3f))
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(Space.X10))
                 Text(
                     text = "Benne (${BuildConfig.APPLICATION_ID}) • v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
                     style = MaterialTheme.typography.bodySmall,
@@ -731,7 +736,7 @@ fun SystemConsoleSheet(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(Space.X24))
             }
         }
     }
@@ -789,18 +794,18 @@ private fun LocalStatChip(
 ) {
     Surface(
         modifier = modifier,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(Radius.R12),
         color = PopPosterPaper,
-        border = BorderStroke(1.5.dp, PopPosterInk)
+        border = BorderStroke(Border.W1_5, PopPosterInk)
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 6.dp),
+            modifier = Modifier.padding(vertical = Space.X8, horizontal = Space.X6),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = value,
                 fontFamily = BalooFamily,
-                fontSize = 16.sp,
+                fontSize = TypeScale.T16,
                 fontWeight = FontWeight.ExtraBold,
                 color = PopPosterInk
             )
@@ -822,7 +827,7 @@ private fun LegalDocumentViewer(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 8.dp)
+            .padding(horizontal = Space.X20, vertical = Space.X8)
             .testTag("legal_viewer_${document.id}")
     ) {
         Row(
@@ -842,7 +847,7 @@ private fun LegalDocumentViewer(
                     Text(
                         text = document.title,
                         fontFamily = BalooFamily,
-                        fontSize = 18.sp,
+                        fontSize = TypeScale.T18,
                         fontWeight = FontWeight.ExtraBold,
                         color = PopPosterInk
                     )
@@ -862,12 +867,12 @@ private fun LegalDocumentViewer(
             }
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(Space.X10))
 
         PosterCard(
             containerColor = PopPosterPaper,
-            cornerRadius = 16.dp,
-            shadowOffset = 4.dp,
+            cornerRadius = Radius.R16,
+            shadowOffset = Depth.S4,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(380.dp)
@@ -878,11 +883,11 @@ private fun LegalDocumentViewer(
                 color = PopPosterInk,
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
-                    .padding(16.dp)
+                    .padding(Space.X16)
             )
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(Space.X20))
     }
 }
 
@@ -891,7 +896,7 @@ private fun SectionHeader(text: String) {
     Text(
         text = text,
         fontFamily = BalooFamily,
-        fontSize = 14.sp,
+        fontSize = TypeScale.T14,
         fontWeight = FontWeight.ExtraBold,
         letterSpacing = 0.5.sp,
         color = PopPosterInk

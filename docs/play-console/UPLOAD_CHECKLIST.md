@@ -49,9 +49,9 @@ Status key: **Done** = verified here · **Ready** = prepared, needs your action 
 | App name | 30 characters max | Done | "Benne" (5 characters), as in `PLAY_STORE_LISTING.md`. |
 | Short description | 80 characters max | Ready | See `PLAY_STORE_LISTING.md`. |
 | Full description | 4000 characters max | Ready | See `PLAY_STORE_LISTING.md`. |
-| App icon | 512 × 512 PNG, 32-bit | Done | `docs/play-console/assets/play_store_icon_512.png` (from the corrected app icon). |
-| Feature graphic | 1024 × 500 PNG or JPG | Done | `docs/play-console/assets/feature_graphic_1024x500.png` (replaced; the old graphic had no Benne branding). |
-| Phone screenshots | 2–8 images; 320–3840 px per side; aspect ratio at most 2:1 | Done | `docs/play-console/screenshots/` (720 × 1440). Four screens: Home, Practice, Dialogues, Letters. Add a results screen and a lesson sheet if you have them. |
+| App icon | 512 × 512 PNG, 32-bit | Done | `assets/store/listing/play_store_icon_512.png` (from the corrected app icon). |
+| Feature graphic | 1024 × 500 PNG or JPG | Done | `assets/store/listing/feature_graphic_1024x500.png` (replaced; the old graphic had no Benne branding). |
+| Phone screenshots | 2–8 images; 320–3840 px per side; aspect ratio at most 2:1 | Done | `assets/store/screenshots/` (720 × 1440). Four screens: Home, Practice, Dialogues, Letters. Add a results screen and a lesson sheet if you have them. |
 | Tablet screenshots | Optional | Not prepared | Only needed for tablet listings. |
 | Promo video | Optional | Not prepared | — |
 

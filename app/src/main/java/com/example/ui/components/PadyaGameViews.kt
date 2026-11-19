@@ -1,5 +1,10 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.Radius
+import com.example.ui.theme.Border
+import com.example.ui.theme.Depth
+import com.example.ui.theme.TypeScale
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
@@ -107,12 +112,12 @@ fun PadyaGameArena(
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(
-                start = 16.dp,
-                top = 8.dp,
-                end = 16.dp,
-                bottom = 24.dp + LocalFloatingNavInset.current
+                start = Space.X16,
+                top = Space.X8,
+                end = Space.X16,
+                bottom = Space.X24 + LocalFloatingNavInset.current
             ),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
+        verticalArrangement = Arrangement.spacedBy(Space.X14)
     ) {
         // Top Navigation & Beginner Transliteration Toggle Row
         Row(
@@ -124,20 +129,20 @@ fun PadyaGameArena(
                 onClick = onBack,
                 shape = CircleShape,
                 color = PopPosterPaper,
-                border = BorderStroke(1.8.dp, PopPosterInk),
+                border = BorderStroke(Border.W1_8, PopPosterInk),
                 modifier = Modifier.defaultMinSize(minHeight = 48.dp)
             ) {
                 Row(
-                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                    modifier = Modifier.padding(horizontal = Space.X14, vertical = Space.X10),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back to poem",
                         tint = PopPosterInk,
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(Space.X18)
                     )
-                    Spacer(modifier = Modifier.width(6.dp))
+                    Spacer(modifier = Modifier.width(Space.X6))
                     Text(
                         text = "Poem Hub",
                         style = MaterialTheme.typography.labelLarge,
@@ -156,11 +161,11 @@ fun PadyaGameArena(
         // Challenge Banner Card
         PosterCard(
             containerColor = PopPosterButter,
-            cornerRadius = 22.dp,
-            shadowOffset = 4.dp,
+            cornerRadius = Radius.R22,
+            shadowOffset = Depth.S4,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
+            Column(modifier = Modifier.padding(Space.X16)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -177,11 +182,11 @@ fun PadyaGameArena(
                         contentColor = PopPosterInk
                     )
                 }
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(Space.X8))
                 Text(
                     text = "${gameType.displayName} • ${gameType.kannadaTitle}",
                     fontFamily = BalooFamily,
-                    fontSize = 22.sp,
+                    fontSize = TypeScale.T22,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
                 )
@@ -262,14 +267,14 @@ fun PadyaGameArena(
             completionResult?.let { (xpAwarded, unlockedSticker) ->
                 PosterCard(
                     containerColor = PopPosterMint,
-                    cornerRadius = 22.dp,
-                    shadowOffset = 5.dp,
+                    cornerRadius = Radius.R22,
+                    shadowOffset = Depth.S5,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("padya_game_complete_card")
                 ) {
                     Column(
-                        modifier = Modifier.padding(18.dp),
+                        modifier = Modifier.padding(Space.X18),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -279,26 +284,26 @@ fun PadyaGameArena(
                                 tint = PopPosterInk,
                                 modifier = Modifier.size(26.dp)
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(Space.X8))
                             Text(
                                 text = "Shabash! +$xpAwarded XP Earned",
                                 fontFamily = BalooFamily,
-                                fontSize = 18.sp,
+                                fontSize = TypeScale.T18,
                                 fontWeight = FontWeight.ExtraBold,
                                 color = PopPosterInk
                             )
                         }
 
                         if (unlockedSticker != null) {
-                            Spacer(modifier = Modifier.height(12.dp))
+                            Spacer(modifier = Modifier.height(Space.X12))
                             Surface(
-                                shape = RoundedCornerShape(18.dp),
+                                shape = RoundedCornerShape(Radius.R18),
                                 color = PopPosterButter,
-                                border = BorderStroke(2.dp, PopPosterInk),
+                                border = BorderStroke(Border.W2, PopPosterInk),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Row(
-                                    modifier = Modifier.padding(12.dp),
+                                    modifier = Modifier.padding(Space.X12),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Image(
@@ -307,18 +312,18 @@ fun PadyaGameArena(
                                         contentScale = ContentScale.Fit,
                                         modifier = Modifier.size(64.dp)
                                     )
-                                    Spacer(modifier = Modifier.width(12.dp))
+                                    Spacer(modifier = Modifier.width(Space.X12))
                                     Column(modifier = Modifier.weight(1f)) {
                                         PosterStampBadge(
                                             text = "STICKER UNLOCKED +25 XP",
                                             containerColor = PopPosterInk,
                                             contentColor = PopPosterButter
                                         )
-                                        Spacer(modifier = Modifier.height(4.dp))
+                                        Spacer(modifier = Modifier.height(Space.X4))
                                         Text(
                                             text = unlockedSticker.title,
                                             fontFamily = BalooFamily,
-                                            fontSize = 18.sp,
+                                            fontSize = TypeScale.T18,
                                             fontWeight = FontWeight.ExtraBold,
                                             color = PopPosterInk
                                         )
@@ -332,7 +337,7 @@ fun PadyaGameArena(
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(14.dp))
+                        Spacer(modifier = Modifier.height(Space.X14))
 
                         PopActionButton(
                             text = "Back to Games",
@@ -357,11 +362,11 @@ fun TransliterationPillToggle(
     Surface(
         shape = CircleShape,
         color = PopPosterPaper,
-        border = BorderStroke(1.5.dp, PopPosterInk),
+        border = BorderStroke(Border.W1_5, PopPosterInk),
         modifier = modifier
     ) {
         Row(
-            modifier = Modifier.padding(start = 12.dp, end = 6.dp, top = 2.dp, bottom = 2.dp),
+            modifier = Modifier.padding(start = Space.X12, end = Space.X6, top = Space.X2, bottom = Space.X2),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -370,7 +375,7 @@ fun TransliterationPillToggle(
                 fontWeight = FontWeight.Bold,
                 color = PopPosterInk
             )
-            Spacer(modifier = Modifier.width(6.dp))
+            Spacer(modifier = Modifier.width(Space.X6))
             Switch(
                 checked = checked,
                 onCheckedChange = onCheckedChange,
@@ -406,11 +411,11 @@ private fun MissingWordGameBody(
 
     PosterCard(
         containerColor = PopPosterPaper,
-        cornerRadius = 22.dp,
-        shadowOffset = 5.dp,
+        cornerRadius = Radius.R22,
+        shadowOffset = Depth.S5,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(18.dp)) {
+        Column(modifier = Modifier.padding(Space.X18)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -420,11 +425,11 @@ private fun MissingWordGameBody(
                     Text(
                         text = "Find the missing word",
                         fontFamily = BalooFamily,
-                        fontSize = 18.sp,
+                        fontSize = TypeScale.T18,
                         fontWeight = FontWeight.ExtraBold,
                         color = PopPosterInk
                     )
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(Space.X6))
                     KannadaWithSubscript(
                         kannadaText = if (isSolved) challenge.fullLineKannada else challenge.promptLineKannada,
                         transliteration = if (showTransliteration) challenge.promptTranslitMasked else "",
@@ -433,7 +438,7 @@ private fun MissingWordGameBody(
                         kannadaColor = PopPosterInk,
                         subscriptColor = MaterialTheme.colorScheme.primary
                     )
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(Space.X6))
                     Text(
                         text = challenge.promptEnglishMasked,
                         style = MaterialTheme.typography.bodyMedium,
@@ -453,9 +458,9 @@ private fun MissingWordGameBody(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(Space.X16))
 
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(Space.X10)) {
                 challenge.options.forEachIndexed { idx, opt ->
                     val isSelected = selectedIdx == idx
                     val isCorrect = idx == challenge.correctIndex
@@ -473,7 +478,7 @@ private fun MissingWordGameBody(
                                 onSuccess()
                             }
                         },
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(Radius.R16),
                         color = bg,
                         border = BorderStroke(if (isSelected) 2.2.dp else 1.5.dp, PopPosterInk),
                         modifier = Modifier
@@ -484,7 +489,7 @@ private fun MissingWordGameBody(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 14.dp, vertical = 10.dp),
+                                .padding(horizontal = Space.X14, vertical = Space.X10),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -510,18 +515,18 @@ private fun MissingWordGameBody(
             }
 
             if (selectedIdx != null) {
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(Space.X12))
                 Surface(
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(Radius.R14),
                     color = if (isSolved) PopPosterMint else PopPosterPeach,
-                    border = BorderStroke(1.5.dp, PopPosterInk)
+                    border = BorderStroke(Border.W1_5, PopPosterInk)
                 ) {
                     Text(
                         text = if (isSolved) challenge.explanation else "Not quite! Listen to the line again and match the meaning.",
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Medium,
                         color = PopPosterInk,
-                        modifier = Modifier.padding(12.dp)
+                        modifier = Modifier.padding(Space.X12)
                     )
                 }
             }
@@ -547,28 +552,28 @@ private fun RhymeMatchGameBody(
 
     PosterCard(
         containerColor = PopPosterCyan,
-        cornerRadius = 22.dp,
-        shadowOffset = 5.dp,
+        cornerRadius = Radius.R22,
+        shadowOffset = Depth.S5,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(18.dp)) {
+        Column(modifier = Modifier.padding(Space.X18)) {
             Text(
                 text = "Tap the word that rhymes with:",
                 fontFamily = BalooFamily,
-                fontSize = 18.sp,
+                fontSize = TypeScale.T18,
                 fontWeight = FontWeight.ExtraBold,
                 color = PopPosterInk
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(Space.X10))
 
             Surface(
-                shape = RoundedCornerShape(18.dp),
+                shape = RoundedCornerShape(Radius.R18),
                 color = PopPosterPaper,
-                border = BorderStroke(2.dp, PopPosterInk),
+                border = BorderStroke(Border.W2, PopPosterInk),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
-                    modifier = Modifier.padding(14.dp),
+                    modifier = Modifier.padding(Space.X14),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -597,9 +602,9 @@ private fun RhymeMatchGameBody(
                 }
             }
 
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(Space.X14))
 
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(Space.X10)) {
                 rhyme.options.forEachIndexed { idx, opt ->
                     val isSelected = selectedIdx == idx
                     val isCorrect = idx == rhyme.correctIndex
@@ -618,7 +623,7 @@ private fun RhymeMatchGameBody(
                                 onSuccess()
                             }
                         },
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(Radius.R16),
                         color = cardColor,
                         border = BorderStroke(if (isSelected) 2.2.dp else 1.5.dp, PopPosterInk),
                         modifier = Modifier
@@ -629,7 +634,7 @@ private fun RhymeMatchGameBody(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 14.dp, vertical = 10.dp),
+                                .padding(horizontal = Space.X14, vertical = Space.X10),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -661,17 +666,17 @@ private fun RhymeMatchGameBody(
             }
 
             if (selectedIdx != null) {
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(Space.X12))
                 Surface(
-                    shape = RoundedCornerShape(14.dp),
+                    shape = RoundedCornerShape(Radius.R14),
                     color = if (isSolved) PopPosterMint else PopPosterPeach,
-                    border = BorderStroke(1.5.dp, PopPosterInk)
+                    border = BorderStroke(Border.W1_5, PopPosterInk)
                 ) {
                     Text(
                         text = if (isSolved) rhyme.rhymeExplanation else "Listen closely to the ending syllable and try another word!",
                         style = MaterialTheme.typography.bodySmall,
                         color = PopPosterInk,
-                        modifier = Modifier.padding(12.dp)
+                        modifier = Modifier.padding(Space.X12)
                     )
                 }
             }
@@ -700,11 +705,11 @@ private fun WordHuntGameBody(
 
     PosterCard(
         containerColor = PopPosterPaper,
-        cornerRadius = 22.dp,
-        shadowOffset = 5.dp,
+        cornerRadius = Radius.R22,
+        shadowOffset = Depth.S5,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(18.dp)) {
+        Column(modifier = Modifier.padding(Space.X18)) {
             if (currentTarget != null) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -717,11 +722,11 @@ private fun WordHuntGameBody(
                             containerColor = PopPosterButter,
                             contentColor = PopPosterInk
                         )
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(Space.X6))
                         Text(
                             text = "Find the Kannada word for \"${currentTarget.promptEnglish}\"",
                             fontFamily = BalooFamily,
-                            fontSize = 18.sp,
+                            fontSize = TypeScale.T18,
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
                         )
@@ -747,23 +752,23 @@ private fun WordHuntGameBody(
                 Text(
                     text = "All target words spotted!",
                     fontFamily = BalooFamily,
-                    fontSize = 18.sp,
+                    fontSize = TypeScale.T18,
                     fontWeight = FontWeight.ExtraBold,
                     color = BenneTeal
                 )
             }
 
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(Space.X14))
             HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.25f))
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(Space.X12))
 
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(Space.X12)) {
                 poem.lines.forEach { line ->
                     val rawTokens = line.kannada.split(" ").filter { it.isNotBlank() }
-                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Column(verticalArrangement = Arrangement.spacedBy(Space.X6)) {
                         FlowRow(
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                            horizontalArrangement = Arrangement.spacedBy(Space.X8),
+                            verticalArrangement = Arrangement.spacedBy(Space.X8)
                         ) {
                             rawTokens.forEach { token ->
                                 val cleanWord = token.trim(',', '.', '!', '?')
@@ -785,9 +790,9 @@ private fun WordHuntGameBody(
                                             }
                                         }
                                     },
-                                    shape = RoundedCornerShape(12.dp),
+                                    shape = RoundedCornerShape(Radius.R12),
                                     color = if (alreadyFound) PopPosterMint else MaterialTheme.colorScheme.background,
-                                    border = BorderStroke(1.5.dp, PopPosterInk),
+                                    border = BorderStroke(Border.W1_5, PopPosterInk),
                                     modifier = Modifier
                                         .defaultMinSize(minHeight = 44.dp)
                                         .testTag("word_hunt_token_$cleanWord")
@@ -795,10 +800,10 @@ private fun WordHuntGameBody(
                                     Text(
                                         text = token,
                                         fontFamily = NotoSansKannadaFamily,
-                                        fontSize = 18.sp,
+                                        fontSize = TypeScale.T18,
                                         fontWeight = FontWeight.Bold,
                                         color = PopPosterInk,
-                                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+                                        modifier = Modifier.padding(horizontal = Space.X12, vertical = Space.X8)
                                     )
                                 }
                             }
@@ -821,18 +826,18 @@ private fun WordHuntGameBody(
             }
 
             lastTappedFeedback?.let { msg ->
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(Space.X12))
                 Surface(
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(Radius.R12),
                     color = PopPosterButter,
-                    border = BorderStroke(1.5.dp, PopPosterInk)
+                    border = BorderStroke(Border.W1_5, PopPosterInk)
                 ) {
                     Text(
                         text = msg,
                         style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.SemiBold,
                         color = PopPosterInk,
-                        modifier = Modifier.padding(10.dp)
+                        modifier = Modifier.padding(Space.X10)
                     )
                 }
             }
@@ -874,11 +879,11 @@ private fun RhythmTapGameBody(
 
     PosterCard(
         containerColor = PopPosterPeach,
-        cornerRadius = 22.dp,
-        shadowOffset = 5.dp,
+        cornerRadius = Radius.R22,
+        shadowOffset = Depth.S5,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(18.dp)) {
+        Column(modifier = Modifier.padding(Space.X18)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -887,7 +892,7 @@ private fun RhythmTapGameBody(
                 Text(
                     text = "Listen & tap the rhythm beats!",
                     fontFamily = BalooFamily,
-                    fontSize = 18.sp,
+                    fontSize = TypeScale.T18,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
                 )
@@ -898,14 +903,14 @@ private fun RhythmTapGameBody(
                 )
             }
 
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(Space.X6))
             Text(
                 text = line.english,
                 style = MaterialTheme.typography.bodySmall,
                 color = PopPosterInk.copy(alpha = 0.85f)
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(Space.X12))
 
             Button(
                 onClick = {
@@ -925,27 +930,27 @@ private fun RhythmTapGameBody(
                 Icon(
                     imageVector = Icons.Default.MusicNote,
                     contentDescription = null,
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(Space.X18)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(Space.X8))
                 Text(
                     text = if (isPlayingBeat) "Playing Rhythm..." else "1. Hear Spoken Cadence",
                     fontWeight = FontWeight.Bold
                 )
             }
 
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(Space.X14))
             Text(
                 text = "2. Tap each beat pad in order (${tappedBeatCount}/${line.beats.size}):",
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
                 color = PopPosterInk
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(Space.X10))
 
             FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(Space.X10),
+                verticalArrangement = Arrangement.spacedBy(Space.X10),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 line.beats.forEachIndexed { idx, beat ->
@@ -971,7 +976,7 @@ private fun RhythmTapGameBody(
                                 rhythmHint = "Tap beat #${tappedBeatCount + 1} (${line.beats[tappedBeatCount].transliteration}) next!"
                             }
                         },
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(Radius.R16),
                         color = padColor,
                         border = BorderStroke(if (isGuideActive || isNext) 2.2.dp else 1.5.dp, PopPosterInk),
                         modifier = Modifier
@@ -979,7 +984,7 @@ private fun RhythmTapGameBody(
                             .testTag("rhythm_beat_$idx")
                     ) {
                         Column(
-                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                            modifier = Modifier.padding(horizontal = Space.X14, vertical = Space.X10),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -987,9 +992,9 @@ private fun RhythmTapGameBody(
                                     imageVector = Icons.Default.TouchApp,
                                     contentDescription = null,
                                     tint = PopPosterInk,
-                                    modifier = Modifier.size(14.dp)
+                                    modifier = Modifier.size(Space.X14)
                                 )
-                                Spacer(modifier = Modifier.width(4.dp))
+                                Spacer(modifier = Modifier.width(Space.X4))
                                 Text(
                                     text = "${idx + 1}",
                                     style = MaterialTheme.typography.labelSmall,
@@ -1000,7 +1005,7 @@ private fun RhythmTapGameBody(
                             Text(
                                 text = beat.text,
                                 fontFamily = NotoSansKannadaFamily,
-                                fontSize = 18.sp,
+                                fontSize = TypeScale.T18,
                                 fontWeight = FontWeight.Bold,
                                 color = PopPosterInk
                             )
@@ -1018,7 +1023,7 @@ private fun RhythmTapGameBody(
             }
 
             rhythmHint?.let { msg ->
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(Space.X10))
                 Text(
                     text = msg,
                     style = MaterialTheme.typography.bodySmall,
@@ -1027,17 +1032,17 @@ private fun RhythmTapGameBody(
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(Space.X12))
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(Space.X8)
             ) {
                 poem.lines.indices.forEach { idx ->
                     Surface(
                         onClick = { lineIndex = idx },
                         shape = CircleShape,
                         color = if (lineIndex == idx) PopPosterInk else PopPosterPaper,
-                        border = BorderStroke(1.5.dp, PopPosterInk),
+                        border = BorderStroke(Border.W1_5, PopPosterInk),
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(
@@ -1046,7 +1051,7 @@ private fun RhythmTapGameBody(
                             fontWeight = FontWeight.Bold,
                             color = if (lineIndex == idx) PopPosterButter else PopPosterInk,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(vertical = 8.dp)
+                            modifier = Modifier.padding(vertical = Space.X8)
                         )
                     }
                 }
@@ -1073,23 +1078,23 @@ private fun PictureToPoemGameBody(
 
     PosterCard(
         containerColor = PopPosterPaper,
-        cornerRadius = 22.dp,
-        shadowOffset = 5.dp,
+        cornerRadius = Radius.R22,
+        shadowOffset = Depth.S5,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(18.dp)) {
+        Column(modifier = Modifier.padding(Space.X18)) {
             Text(
                 text = challenge.questionPrompt,
                 fontFamily = BalooFamily,
-                fontSize = 18.sp,
+                fontSize = TypeScale.T18,
                 fontWeight = FontWeight.ExtraBold,
                 color = PopPosterInk
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(Space.X10))
 
             Surface(
-                shape = RoundedCornerShape(18.dp),
-                border = BorderStroke(2.dp, PopPosterInk),
+                shape = RoundedCornerShape(Radius.R18),
+                border = BorderStroke(Border.W2, PopPosterInk),
                 color = PopPosterButter,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -1103,9 +1108,9 @@ private fun PictureToPoemGameBody(
                 )
             }
 
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(Space.X14))
 
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(Space.X10)) {
                 challenge.options.forEachIndexed { idx, lineOpt ->
                     val isSelected = selectedIdx == idx
                     val isCorrect = idx == challenge.correctIndex
@@ -1123,7 +1128,7 @@ private fun PictureToPoemGameBody(
                                 onSuccess()
                             }
                         },
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(Radius.R16),
                         color = cardBg,
                         border = BorderStroke(if (isSelected) 2.2.dp else 1.5.dp, PopPosterInk),
                         modifier = Modifier
@@ -1133,7 +1138,7 @@ private fun PictureToPoemGameBody(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(12.dp),
+                                .padding(Space.X12),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -1152,7 +1157,7 @@ private fun PictureToPoemGameBody(
                                     color = PopPosterInk.copy(alpha = 0.8f)
                                 )
                             }
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(Space.X8))
                             AudioSpeakButton(
                                 textToSpeak = lineOpt.kannada,
                                 isCurrentlySpeaking = speakingText == lineOpt.kannada,
@@ -1190,11 +1195,11 @@ private fun PoemPuzzleGameBody(
 
     PosterCard(
         containerColor = PopPosterPaper,
-        cornerRadius = 22.dp,
-        shadowOffset = 5.dp,
+        cornerRadius = Radius.R22,
+        shadowOffset = Depth.S5,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(18.dp)) {
+        Column(modifier = Modifier.padding(Space.X18)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -1203,7 +1208,7 @@ private fun PoemPuzzleGameBody(
                 Text(
                     text = "Arrange lines in order (1 → ${poem.lines.size})",
                     fontFamily = BalooFamily,
-                    fontSize = 18.sp,
+                    fontSize = TypeScale.T18,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
                 )
@@ -1223,21 +1228,21 @@ private fun PoemPuzzleGameBody(
 
             // Assembled slots box
             Surface(
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(Radius.R16),
                 color = PopPosterButter.copy(alpha = 0.55f),
-                border = BorderStroke(1.8.dp, PopPosterInk),
+                border = BorderStroke(Border.W1_8, PopPosterInk),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
-                    modifier = Modifier.padding(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    modifier = Modifier.padding(Space.X12),
+                    verticalArrangement = Arrangement.spacedBy(Space.X8)
                 ) {
                     if (placedLines.isEmpty()) {
                         Text(
                             text = "Tap the shuffled lines below in story & rhythm order...",
                             style = MaterialTheme.typography.bodySmall,
                             color = PopPosterInk.copy(alpha = 0.75f),
-                            modifier = Modifier.padding(vertical = 10.dp)
+                            modifier = Modifier.padding(vertical = Space.X10)
                         )
                     } else {
                         placedLines.forEachIndexed { idx, line ->
@@ -1247,20 +1252,20 @@ private fun PoemPuzzleGameBody(
                                     placedLines.remove(line)
                                     feedbackMsg = null
                                 },
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(Radius.R12),
                                 color = if (matchesPosition) PopPosterMint else PopPosterPaper,
-                                border = BorderStroke(1.5.dp, PopPosterInk),
+                                border = BorderStroke(Border.W1_5, PopPosterInk),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Row(
-                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                                    modifier = Modifier.padding(horizontal = Space.X12, vertical = Space.X8),
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.SpaceBetween
                                 ) {
                                     Text(
                                         text = "${idx + 1}. ${line.kannada}",
                                         fontFamily = NotoSansKannadaFamily,
-                                        fontSize = 16.sp,
+                                        fontSize = TypeScale.T16,
                                         fontWeight = FontWeight.Bold,
                                         color = PopPosterInk,
                                         modifier = Modifier.weight(1f)
@@ -1278,10 +1283,10 @@ private fun PoemPuzzleGameBody(
                 }
             }
 
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(Space.X14))
 
             val remaining = shuffledOrder.filter { it !in placedLines }
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(Space.X8)) {
                 remaining.forEach { line ->
                     Surface(
                         onClick = {
@@ -1289,15 +1294,15 @@ private fun PoemPuzzleGameBody(
                             ttsHelper.speak(line.kannada, playbackSpeed)
                             feedbackMsg = null
                         },
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(Radius.R14),
                         color = MaterialTheme.colorScheme.background,
-                        border = BorderStroke(1.5.dp, PopPosterInk),
+                        border = BorderStroke(Border.W1_5, PopPosterInk),
                         modifier = Modifier
                             .fillMaxWidth()
                             .testTag("puzzle_line_${line.lineNumber}")
                     ) {
                         Row(
-                            modifier = Modifier.padding(12.dp),
+                            modifier = Modifier.padding(Space.X12),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -1329,7 +1334,7 @@ private fun PoemPuzzleGameBody(
             }
 
             if (placedLines.size == poem.lines.size) {
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(Space.X14))
                 PopActionButton(
                     text = "Check Poem Order",
                     onClick = {
@@ -1349,7 +1354,7 @@ private fun PoemPuzzleGameBody(
             }
 
             feedbackMsg?.let { msg ->
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(Space.X10))
                 Text(
                     text = msg,
                     style = MaterialTheme.typography.bodySmall,
@@ -1379,11 +1384,11 @@ private fun EchoPoemGameBody(
 
     PosterCard(
         containerColor = PopPosterCyan,
-        cornerRadius = 22.dp,
-        shadowOffset = 5.dp,
+        cornerRadius = Radius.R22,
+        shadowOffset = Depth.S5,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(18.dp)) {
+        Column(modifier = Modifier.padding(Space.X18)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -1392,7 +1397,7 @@ private fun EchoPoemGameBody(
                 Text(
                     text = "Echo Line ${lineStep + 1} of ${poem.lines.size}",
                     fontFamily = BalooFamily,
-                    fontSize = 18.sp,
+                    fontSize = TypeScale.T18,
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
                 )
@@ -1403,15 +1408,15 @@ private fun EchoPoemGameBody(
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(Space.X12))
 
             Surface(
-                shape = RoundedCornerShape(18.dp),
+                shape = RoundedCornerShape(Radius.R18),
                 color = PopPosterPaper,
-                border = BorderStroke(2.dp, PopPosterInk),
+                border = BorderStroke(Border.W2, PopPosterInk),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(16.dp)) {
+                Column(modifier = Modifier.padding(Space.X16)) {
                     KannadaWithSubscript(
                         kannadaText = line.kannada,
                         transliteration = if (showTransliteration) line.transliteration else "",
@@ -1420,17 +1425,17 @@ private fun EchoPoemGameBody(
                         kannadaColor = PopPosterInk,
                         subscriptColor = MaterialTheme.colorScheme.primary
                     )
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(Space.X6))
                     Text(
                         text = line.english,
                         style = MaterialTheme.typography.bodyMedium,
                         color = PopPosterInk.copy(alpha = 0.85f)
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(Space.X12))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        horizontalArrangement = Arrangement.spacedBy(Space.X10)
                     ) {
                         Button(
                             onClick = {
@@ -1441,13 +1446,13 @@ private fun EchoPoemGameBody(
                                 containerColor = PopPosterButter,
                                 contentColor = PopPosterInk
                             ),
-                            border = BorderStroke(1.5.dp, PopPosterInk),
+                            border = BorderStroke(Border.W1_5, PopPosterInk),
                             modifier = Modifier
                                 .weight(1f)
                                 .height(48.dp)
                         ) {
-                            Icon(Icons.Default.GraphicEq, contentDescription = null, modifier = Modifier.size(18.dp))
-                            Spacer(modifier = Modifier.width(6.dp))
+                            Icon(Icons.Default.GraphicEq, contentDescription = null, modifier = Modifier.size(Space.X18))
+                            Spacer(modifier = Modifier.width(Space.X6))
                             Text("Listen", fontWeight = FontWeight.Bold)
                         }
 
@@ -1456,7 +1461,7 @@ private fun EchoPoemGameBody(
                                 listenedThisLine = true
                                 ttsHelper.speak(line.kannada, 0.70f)
                             },
-                            border = BorderStroke(1.5.dp, PopPosterInk),
+                            border = BorderStroke(Border.W1_5, PopPosterInk),
                             colors = ButtonDefaults.outlinedButtonColors(
                                 containerColor = MaterialTheme.colorScheme.background,
                                 contentColor = PopPosterInk
@@ -1471,25 +1476,25 @@ private fun EchoPoemGameBody(
                 }
             }
 
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(Space.X14))
 
             Surface(
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(Radius.R16),
                 color = PopPosterButter,
-                border = BorderStroke(1.5.dp, PopPosterInk),
+                border = BorderStroke(Border.W1_5, PopPosterInk),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
-                    modifier = Modifier.padding(14.dp),
+                    modifier = Modifier.padding(Space.X14),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         imageVector = Icons.Default.MicNone,
                         contentDescription = "Speak aloud",
                         tint = PopPosterInk,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(Space.X24)
                     )
-                    Spacer(modifier = Modifier.width(10.dp))
+                    Spacer(modifier = Modifier.width(Space.X10))
                     Text(
                         text = "Say it aloud in rhythm! Notice the Hindi red bold vowels so you hold long sounds cleanly.",
                         style = MaterialTheme.typography.bodySmall,
@@ -1498,7 +1503,7 @@ private fun EchoPoemGameBody(
                 }
             }
 
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(Space.X14))
 
             PopActionButton(
                 text = if (lineStep + 1 < poem.lines.size) "I Echoed It! Next Line" else "Finish Echoing Poem!",
@@ -1515,7 +1520,7 @@ private fun EchoPoemGameBody(
             )
 
             if (!listenedThisLine && speakingText == null) {
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(Space.X6))
                 Text(
                     text = "Tip: Tap Listen first to catch the native Kannada cadence.",
                     style = MaterialTheme.typography.labelSmall,
@@ -1559,29 +1564,29 @@ private fun PoetryRemixGameBody(
 
     PosterCard(
         containerColor = PopPosterPaper,
-        cornerRadius = 22.dp,
-        shadowOffset = 5.dp,
+        cornerRadius = Radius.R22,
+        shadowOffset = Depth.S5,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(18.dp)) {
+        Column(modifier = Modifier.padding(Space.X18)) {
             Text(
                 text = "Tap word tiles to remix your own verse!",
                 fontFamily = BalooFamily,
-                fontSize = 18.sp,
+                fontSize = TypeScale.T18,
                 fontWeight = FontWeight.ExtraBold,
                 color = PopPosterInk
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(Space.X10))
 
             // Live Remixed Verse Stage
             Surface(
-                shape = RoundedCornerShape(18.dp),
+                shape = RoundedCornerShape(Radius.R18),
                 color = PopPosterButter,
-                border = BorderStroke(2.dp, PopPosterInk),
+                border = BorderStroke(Border.W2, PopPosterInk),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(
-                    modifier = Modifier.padding(14.dp),
+                    modifier = Modifier.padding(Space.X14),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -1594,7 +1599,7 @@ private fun PoetryRemixGameBody(
                             kannadaColor = PopPosterInk,
                             subscriptColor = MaterialTheme.colorScheme.primary
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(Space.X4))
                         Text(
                             text = "\"$remixedEnglish\"",
                             style = MaterialTheme.typography.bodySmall,
@@ -1602,7 +1607,7 @@ private fun PoetryRemixGameBody(
                             color = PopPosterInk.copy(alpha = 0.85f)
                         )
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(Space.X8))
                     AudioSpeakButton(
                         textToSpeak = remixedKannada,
                         isCurrentlySpeaking = speakingText == remixedKannada,
@@ -1613,7 +1618,7 @@ private fun PoetryRemixGameBody(
                 }
             }
 
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(Space.X14))
 
             poem.remixSlots.forEachIndexed { slotIdx, slot ->
                 Text(
@@ -1622,10 +1627,10 @@ private fun PoetryRemixGameBody(
                     fontWeight = FontWeight.ExtraBold,
                     color = MaterialTheme.colorScheme.primary
                 )
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(Space.X6))
                 FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(Space.X8),
+                    verticalArrangement = Arrangement.spacedBy(Space.X8)
                 ) {
                     slot.choices.forEachIndexed { choiceIdx, choice ->
                         val isChosen = selectedPerSlot.getOrNull(slotIdx) == choiceIdx
@@ -1636,18 +1641,18 @@ private fun PoetryRemixGameBody(
                                 }
                                 ttsHelper.speak(choice.kannada, playbackSpeed)
                             },
-                            shape = RoundedCornerShape(14.dp),
+                            shape = RoundedCornerShape(Radius.R14),
                             color = if (isChosen) PopPosterMint else MaterialTheme.colorScheme.background,
-                            border = BorderStroke(if (isChosen) 2.dp else 1.5.dp, PopPosterInk),
+                            border = BorderStroke(if (isChosen) Space.X2 else 1.5.dp, PopPosterInk),
                             modifier = Modifier
                                 .defaultMinSize(minHeight = 48.dp)
                                 .testTag("remix_slot_${slotIdx}_choice_$choiceIdx")
                         ) {
-                            Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
+                            Column(modifier = Modifier.padding(horizontal = Space.X12, vertical = Space.X8)) {
                                 Text(
                                     text = choice.kannada,
                                     fontFamily = NotoSansKannadaFamily,
-                                    fontSize = 16.sp,
+                                    fontSize = TypeScale.T16,
                                     fontWeight = FontWeight.Bold,
                                     color = PopPosterInk
                                 )
@@ -1660,7 +1665,7 @@ private fun PoetryRemixGameBody(
                         }
                     }
                 }
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(Space.X10))
             }
 
             PopActionButton(

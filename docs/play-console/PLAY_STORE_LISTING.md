@@ -62,10 +62,10 @@ KEY FEATURES
 
 | Asset | Requirements | Local Path | Status |
 | :--- | :--- | :--- | :--- |
-| **App Icon** | 512 x 512 px, PNG, <= 1 MB | `docs/play-console/assets/play_store_icon_512.png` | Ready |
-| **Feature Graphic** | 1024 x 500 px, PNG/JPG, <= 15 MB | `docs/play-console/assets/feature_graphic_1024x500.png` | Ready |
+| **App Icon** | 512 x 512 px, PNG, <= 1 MB | `assets/store/listing/play_store_icon_512.png` | Ready |
+| **Feature Graphic** | 1024 x 500 px, PNG/JPG, <= 15 MB | `assets/store/listing/feature_graphic_1024x500.png` | Ready |
 | **Adaptive Launcher Icon** | Foreground + background in APK | `app/src/main/res/mipmap-*` & `res/drawable/ic_launcher_*` | Ready |
-| **Phone Screenshots** | 2–8 screenshots (16:9 or 9:16, min 320px, max 3840px) | `docs/play-console/screenshots/01_home.png` through `04_letters.png` | Ready |
+| **Phone Screenshots** | 2–8 screenshots (16:9 or 9:16, min 320px, max 3840px) | `assets/store/screenshots/01_home.png` through `04_letters.png` | Ready |
 
 ---
 
@@ -82,4 +82,4 @@ KEY FEATURES
 - [x] **In-App Legal Access & Data Reset:** Privacy Policy, Terms of Service, Open Source Notices, and local progress reset available inside System Console
 - [ ] **Host Privacy Policy URL:** Enable GitHub Pages (`main` branch, `/docs` folder) to serve `docs/privacy-policy.html` at HTTPS and enter the URL in Play Console
 - [ ] **Build Signed Android App Bundle (`.aab`):** Export or build with your Play upload keystore (`gradle :app:bundleRelease` with `KEYSTORE_PATH`, `STORE_PASSWORD`, `KEY_PASSWORD` environment variables)
-- [ ] **Upload Store Listing & Complete Testing:** Upload `play_store_icon_512.png`, `feature_graphic_1024x500.png`, and `docs/play-console/screenshots/*.png`, then complete Internal/Closed Testing before Production rollout
+- [ ] **Upload Store Listing & Complete Testing:** Upload `play_store_icon_512.png`, `feature_graphic_1024x500.png`, and `assets/store/screenshots/*.png`, then complete Internal/Closed Testing before Production rollout

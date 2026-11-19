@@ -1,5 +1,21 @@
 package com.example.ui
 
+import com.example.ui.theme.Space
+import androidx.compose.material.icons.outlined.EmojiEvents
+import androidx.compose.material.icons.filled.EmojiEvents
+import kotlin.math.abs
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Style
+import androidx.compose.material.icons.filled.Style
+import androidx.compose.material.icons.automirrored.outlined.List
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.outlined.Dashboard
+import androidx.compose.material.icons.filled.Dashboard
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -62,6 +78,7 @@ import com.example.ui.components.SaralaHeader
 import androidx.compose.runtime.CompositionLocalProvider
 import com.example.ui.components.SystemConsoleSheet
 import com.example.ui.screens.AlphabetScreen
+import com.example.ui.screens.AwardsScreen
 import com.example.ui.screens.CurriculumScreen
 import com.example.ui.screens.GeographyScreen
 import com.example.ui.screens.FoodExplorerScreen
@@ -85,11 +102,16 @@ enum class SaralaScreen(
     /** False for screens opened from Home rather than the bottom bar. */
     val inNav: Boolean = true
 ) {
-    HOME("Home", "ಕಲಿಕೆ", Icons.Default.Home, Icons.Outlined.Home),
+    HOME("Home", "ಕಲಿಕೆ", Icons.Filled.Dashboard, Icons.Outlined.Dashboard),
     ALPHABET("Alphabets", "ವರ್ಣಮಾಲೆ", Icons.AutoMirrored.Filled.MenuBook, Icons.AutoMirrored.Outlined.MenuBook),
     CONVERSATION("Dialogues", "ಸಂಭಾಷಣೆ", Icons.Default.ChatBubble, Icons.Outlined.ChatBubbleOutline),
-    CURRICULUM("Curriculum", "ಪಠ್ಯಕ್ರಮ", Icons.Filled.Star, Icons.Outlined.Star),
-    GEOGRAPHY("Geography", "ಭೂಗೋಳ", Icons.Default.Place, Icons.Outlined.Place),
+    FLASHCARDS("Flashcards", "ಕಾರ್ಡ್", Icons.Filled.Style, Icons.Outlined.Style),
+    CURRICULUM("Curriculum", "ಪಠ್ಯಕ್ರಮ", Icons.AutoMirrored.Filled.List, Icons.AutoMirrored.Outlined.List),
+    GEOGRAPHY("Geography", "ಭೂಗೋಳ", Icons.Filled.Place, Icons.Outlined.Place),
+    /** Awards, achievements and the learner's name. */
+    AWARDS("Awards", "ಪ್ರಶಸ್ತಿ", Icons.Filled.EmojiEvents, Icons.Outlined.EmojiEvents),
+    /** Opens the settings sheet instead of a screen. */
+    SETTINGS("Settings", "ಸೆಟ್ಟಿಂಗ್ಸ್", Icons.Filled.Settings, Icons.Outlined.Settings),
     /** Opened from Curriculum; not in the bottom bar. */
     PRACTICE("Practice", "ಅಭ್ಯಾಸ", Icons.Default.Psychology, Icons.Outlined.Psychology, inNav = false),
     /** Opened from the learner card on Home; not in the bottom bar. */
@@ -109,10 +131,32 @@ fun MainScreen(
     var currentScreen by remember { mutableStateOf(SaralaScreen.HOME) }
     var practiceMode by remember { mutableStateOf(PracticeMode.FLASHCARDS) }
     var showSystemConsole by remember { mutableStateOf(false) }
+    // The learner row under the top bar hides while the content scrolls down and returns on scroll up
+    var showLearnerRow by remember { mutableStateOf(true) }
+    val learnerRowScroll = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                if (abs(available.y) > 2f) showLearnerRow = available.y > 0f
+                return Offset.Zero
+            }
+        }
+    }
     val streakDays by progressManager.streakDays.collectAsState()
     val xpPoints by progressManager.xp.collectAsState()
+    val learnerName by progressManager.learnerName.collectAsState()
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
     val showHindiPhonetics by progressManager.showHindiPhonetics.collectAsState()
+
+    fun selectScreen(screen: SaralaScreen) {
+        when (screen) {
+            SaralaScreen.SETTINGS -> showSystemConsole = true
+            SaralaScreen.FLASHCARDS -> {
+                practiceMode = PracticeMode.FLASHCARDS
+                currentScreen = screen
+            }
+            else -> currentScreen = screen
+        }
+    }
 
     if (currentScreen != SaralaScreen.HOME) {
         BackHandler {
@@ -120,7 +164,7 @@ fun MainScreen(
         }
     }
 
-    val headerInset = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 112.dp
+    val headerInset = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 136.dp
 
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
         val useNavigationRail = maxWidth >= 600.dp
@@ -141,7 +185,7 @@ fun MainScreen(
                             val isSelected = currentScreen == screen
                             NavigationRailItem(
                                 selected = isSelected,
-                                onClick = { currentScreen = screen },
+                                onClick = { selectScreen(screen) },
                                 colors = NavigationRailItemDefaults.colors(
                                     indicatorColor = PopPosterButter,
                                     selectedIconColor = PopPosterInk,
@@ -150,10 +194,7 @@ fun MainScreen(
                                     unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
                                 ),
                                 icon = {
-                                    Icon(
-                                        imageVector = if (isSelected) screen.selectedIcon else screen.unselectedIcon,
-                                        contentDescription = screen.titleEnglish
-                                    )
+                                    SaralaNavIcon(screen = screen, selected = isSelected)
                                 },
                                 label = {
                                     Text(
@@ -169,11 +210,11 @@ fun MainScreen(
                         }
                         Spacer(modifier = Modifier.weight(1f))
                     }
-                    VerticalDivider(thickness = 2.dp, color = PopPosterInk)
+                    VerticalDivider(thickness = Space.X2, color = PopPosterInk)
                 }
 
                 Box(
-                    modifier = Modifier.weight(1f).fillMaxHeight(),
+                    modifier = Modifier.weight(1f).fillMaxHeight().nestedScroll(learnerRowScroll),
                     contentAlignment = Alignment.TopCenter
                 ) {
                     val contentModifier = Modifier
@@ -185,12 +226,13 @@ fun MainScreen(
                         LocalFloatingHeaderInset provides headerInset,
                         LocalShowHindiPhonetics provides showHindiPhonetics
                     ) {
-                    when (currentScreen) {
+                    // Each tab fades in and out, so switching feels smooth
+                    androidx.compose.animation.Crossfade(targetState = currentScreen, label = "tab_fade") { screen ->
+                    when (screen) {
                         SaralaScreen.HOME -> HomeScreen(
                             progressManager = progressManager,
                             ttsHelper = ttsHelper,
                             onOpenProfile = { currentScreen = SaralaScreen.PROFILE },
-                            onOpenCurriculum = { currentScreen = SaralaScreen.CURRICULUM },
                             modifier = contentModifier
                         )
                         SaralaScreen.CURRICULUM -> CurriculumScreen(
@@ -203,10 +245,6 @@ fun MainScreen(
                             modifier = contentModifier
                         )
                         SaralaScreen.GEOGRAPHY -> GeographyScreen(
-                            progressManager = progressManager,
-                            ttsHelper = ttsHelper,
-                            onOpenFlag = { currentScreen = SaralaScreen.FLAG },
-                            onOpenMap = { currentScreen = SaralaScreen.MAP },
                             onOpenFood = { currentScreen = SaralaScreen.FOOD },
                             onOpenHeritage = { currentScreen = SaralaScreen.HERITAGE },
                             modifier = contentModifier
@@ -221,7 +259,7 @@ fun MainScreen(
                             progressManager = progressManager,
                             modifier = contentModifier
                         )
-                        SaralaScreen.PRACTICE -> QuizScreen(
+                        SaralaScreen.PRACTICE, SaralaScreen.FLASHCARDS -> QuizScreen(
                             ttsHelper = ttsHelper,
                             progressManager = progressManager,
                             initialMode = practiceMode,
@@ -232,6 +270,12 @@ fun MainScreen(
                         SaralaScreen.FLAG -> KarnatakaFlagScreen(ttsHelper = ttsHelper, progressManager = progressManager, modifier = contentModifier)
                         SaralaScreen.MAP -> KarnatakaMapScreen(onOpenHeritage = { currentScreen = SaralaScreen.HERITAGE }, onOpenFood = { currentScreen = SaralaScreen.FOOD }, modifier = contentModifier)
                         SaralaScreen.HERITAGE -> HeritageScreen(modifier = contentModifier)
+                        SaralaScreen.AWARDS -> AwardsScreen(
+                            progressManager = progressManager,
+                            ttsHelper = ttsHelper,
+                            modifier = contentModifier
+                        )
+                        SaralaScreen.SETTINGS -> Unit
                         SaralaScreen.PROFILE -> ProfileScreen(
                             onOpenSettings = { showSystemConsole = true },
                             progressManager = progressManager,
@@ -240,27 +284,32 @@ fun MainScreen(
                         )
                     }
                     }
+                    }
                 }
             }
             // Floating header over the content; screens scroll up under it
             SaralaHeader(
                 streakDays = streakDays,
                 xpPoints = xpPoints,
+                learnerName = learnerName,
+                showLearnerRow = showLearnerRow,
+                onOpenProfile = { currentScreen = SaralaScreen.PROFILE },
+                onOpenFlag = { currentScreen = SaralaScreen.FLAG },
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .windowInsetsPadding(WindowInsets.statusBars)
-                    .padding(start = 16.dp, end = 16.dp, top = 34.dp, bottom = 8.dp)
+                    .padding(start = Space.X16, end = Space.X16, top = 34.dp, bottom = Space.X8)
             )
         }
 
         if (!useNavigationRail) {
             FloatingBottomNav(
                 selected = currentScreen,
-                onSelect = { currentScreen = it },
+                onSelect = { selectScreen(it) },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .navigationBarsPadding()
-                    .padding(horizontal = 10.dp, vertical = 8.dp)
+                    .padding(horizontal = Space.X10, vertical = Space.X8)
                     .widthIn(max = 600.dp)
                     .fillMaxWidth()
             )

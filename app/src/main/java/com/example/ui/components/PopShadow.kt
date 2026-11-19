@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Space
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -17,14 +18,14 @@ import androidx.compose.ui.unit.dp
  * never overlaps neighbouring content.
  *
  * Use on cards with a solid background. For example:
- * `Modifier.BennePopShadow(offsetDp = 6.dp, borderDp = 2.dp, shadowColor = BenneInk, backgroundColor = BenneCream)`
+ * `Modifier.BennePopShadow(offsetDp = Space.X6, borderDp = Space.X2, shadowColor = BenneInk, backgroundColor = BenneCream)`
  */
 fun Modifier.BennePopShadow(
-    offsetDp: Dp = 4.dp,
-    borderDp: Dp = 2.dp,
+    offsetDp: Dp = Space.X4,
+    borderDp: Dp = Space.X2,
     shadowColor: Color = Color(0xFF17172D),
     backgroundColor: Color = Color(0xFFFFF7E2),
-    cornerRadius: Dp = 16.dp
+    cornerRadius: Dp = Space.X16
 ): Modifier = this
     .padding(end = offsetDp, bottom = offsetDp)
     .drawBehind {

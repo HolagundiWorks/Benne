@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,7 +40,7 @@ fun AchievementBadge(
     Column(
         modifier = modifier.semantics { contentDescription = description },
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(6.dp)
+        verticalArrangement = Arrangement.spacedBy(Space.X6)
     ) {
         achievementArt(achievement.id)?.let { res ->
             Image(

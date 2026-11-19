@@ -1,5 +1,9 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.Radius
+import com.example.ui.theme.Border
+import com.example.ui.theme.TypeScale
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
@@ -100,29 +104,15 @@ private fun DistrictShape.contains(p: Offset): Boolean =
 
 // ---------- Flag artwork ----------
 
-/** Karnataka bicolour (yellow over red), drawn with the Benne palette. Dominant element of the flag card. */
+/** Karnataka flag artwork: the supplied waving flag image (yellow over red). */
 @Composable
 fun KarnatakaFlagArtwork(modifier: Modifier = Modifier) {
-    Canvas(
-        modifier = modifier
-            .aspectRatio(3f / 2f)
-            .semantics { contentDescription = "Karnataka bicolour flag: yellow above, red below" }
-    ) {
-        val w = size.width
-        val h = size.height
-        val frame = 6.dp.toPx()
-        // Pop frame
-        drawRoundRect(
-            color = PopPosterInk,
-            size = size,
-            cornerRadius = androidx.compose.ui.geometry.CornerRadius(16.dp.toPx())
-        )
-        val inner = Size(w - frame * 2, h - frame * 2)
-        val innerOffset = Offset(frame, frame)
-        // Yellow upper half, red lower half
-        drawRect(color = PopPosterButter, topLeft = innerOffset, size = Size(inner.width, inner.height / 2))
-        drawRect(color = BennePopRed, topLeft = Offset(frame, frame + inner.height / 2), size = Size(inner.width, inner.height / 2))
-    }
+    androidx.compose.foundation.Image(
+        painter = androidx.compose.ui.res.painterResource(com.example.R.drawable.karnataka_flag_wave),
+        contentDescription = "Karnataka flag: yellow above, red below",
+        contentScale = androidx.compose.ui.layout.ContentScale.Fit,
+        modifier = modifier.aspectRatio(1774f / 887f)
+    )
 }
 
 // ---------- Map artwork ----------
@@ -190,21 +180,21 @@ fun BenneDiscoveryCard(
 ) {
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(Radius.R20),
         color = PopPosterPaper,
         contentColor = PopPosterInk,
-        border = BorderStroke(2.dp, PopPosterInk),
+        border = BorderStroke(Border.W2, PopPosterInk),
         modifier = modifier
     ) {
-        Column(modifier = Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(modifier = Modifier.padding(Space.X12), horizontalAlignment = Alignment.CenterHorizontally) {
             artwork()
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(Space.X8))
             BenneH1(english)
             BenneH2Latin(latin)
             BenneH2Devanagari(
                 segments = listOf(com.example.phonetics.HindiPhoneticSegment(devanagari, false))
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(Space.X4))
             BenneH3(kannada)
         }
     }
@@ -234,8 +224,8 @@ fun KarnatakaFlagScreen(
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        contentPadding = PaddingValues(start = Space.X16, top = Space.X14 + LocalFloatingHeaderInset.current, end = Space.X16, bottom = Space.X16),
+        verticalArrangement = Arrangement.spacedBy(Space.X12)
     ) {
         item { KarnatakaFlagArtwork(modifier = Modifier.fillMaxWidth()) }
         item {
@@ -258,7 +248,7 @@ fun KarnatakaFlagScreen(
         }
         item {
             // Listen: colour names in Kannada (text shown in H3; audio from the phone's Kannada voice)
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+            Row(horizontalArrangement = Arrangement.spacedBy(Space.X10), modifier = Modifier.fillMaxWidth()) {
                 PopActionButton(
                     text = "Listen: yellow",
                     onClick = { ttsHelper.speak("ಹಳದಿ", playbackSpeed) },
@@ -279,45 +269,45 @@ fun KarnatakaFlagScreen(
         }
         item {
             Surface(
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(Radius.R16),
                 color = PopPosterPaper,
-                border = BorderStroke(2.dp, PopPosterInk),
+                border = BorderStroke(Border.W2, PopPosterInk),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(14.dp)) {
+                Column(modifier = Modifier.padding(Space.X14)) {
                     if (done) {
-                        Text("Score: $score of ${questions.size}. +20 XP", fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp, color = PopPosterInk)
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Text("Score: $score of ${questions.size}. +20 XP", fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, fontSize = TypeScale.T18, color = PopPosterInk)
+                        Spacer(modifier = Modifier.height(Space.X8))
                         PopActionButton(text = "Try again", onClick = {
                             step = 0; score = 0; answered = null; done = false
                         }, modifier = Modifier.fillMaxWidth())
                     } else {
                         val q = questions[step]
-                        Text(q.prompt, fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp, color = PopPosterInk)
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(q.prompt, fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, fontSize = TypeScale.T18, color = PopPosterInk)
+                        Spacer(modifier = Modifier.height(Space.X8))
                         q.options.forEachIndexed { i, label ->
                             Surface(
                                 onClick = { if (answered == null) answered = i },
-                                shape = RoundedCornerShape(14.dp),
+                                shape = RoundedCornerShape(Radius.R14),
                                 color = when {
                                     answered == null -> PopPosterPaper
                                     i == q.answer -> BenneTeal
                                     i == answered -> BennePopRed
                                     else -> PopPosterPaper
                                 },
-                                border = BorderStroke(2.dp, PopPosterInk),
-                                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                                border = BorderStroke(Border.W2, PopPosterInk),
+                                modifier = Modifier.fillMaxWidth().padding(vertical = Space.X4)
                             ) {
                                 Text(label, fontWeight = FontWeight.Bold, color = PopPosterInk,
-                                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp))
+                                    modifier = Modifier.padding(horizontal = Space.X14, vertical = Space.X12))
                             }
                         }
                         if (answered != null) {
-                            Spacer(modifier = Modifier.height(6.dp))
+                            Spacer(modifier = Modifier.height(Space.X6))
                             if (answered == q.answer) score++
                             Text(if (answered == q.answer) "Correct!" else "Not quite: the answer is ${q.options[q.answer]}.",
                                 style = MaterialTheme.typography.bodyMedium, color = PopPosterInk)
-                            Spacer(modifier = Modifier.height(8.dp))
+                            Spacer(modifier = Modifier.height(Space.X8))
                             PopActionButton(
                                 text = if (step < questions.lastIndex) "Next question" else "See result",
                                 onClick = {
@@ -348,8 +338,8 @@ fun KarnatakaMapScreen(
     var selected by remember { mutableStateOf<String?>(null) }
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        contentPadding = PaddingValues(start = Space.X16, top = Space.X14 + LocalFloatingHeaderInset.current, end = Space.X16, bottom = Space.X16),
+        verticalArrangement = Arrangement.spacedBy(Space.X12)
     ) {
         item {
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
@@ -371,7 +361,7 @@ fun KarnatakaMapScreen(
         item {
             Text(
                 text = selected?.let { "Selected: $it district" } ?: "Tap a district on the map",
-                fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, fontSize = 18.sp,
+                fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, fontSize = TypeScale.T18,
                 color = PopPosterInk, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth()
             )
         }
@@ -383,7 +373,7 @@ fun KarnatakaMapScreen(
             )
         }
         item {
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+            Row(horizontalArrangement = Arrangement.spacedBy(Space.X10), modifier = Modifier.fillMaxWidth()) {
                 PopActionButton(text = "Heritage places", onClick = onOpenHeritage, modifier = Modifier.weight(1f))
                 PopActionButton(text = "Food & sweets", onClick = onOpenFood, containerColor = PopPosterButter, modifier = Modifier.weight(1f))
             }
@@ -413,38 +403,38 @@ fun DistrictDetailSheet(
     val heritage = com.example.data.KarnatakaDistrictFacts.heritageFor(district)
     val foods = com.example.data.KarnatakaDistrictFacts.foodsFor(district)
     androidx.compose.material3.ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
-        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
+        Column(modifier = Modifier.padding(horizontal = Space.X20, vertical = Space.X8)) {
             Text(
                 text = district,
-                fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, fontSize = 26.sp,
+                fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, fontSize = TypeScale.T26,
                 color = PopPosterInk
             )
             Text("Kannada name: pending native review", style = MaterialTheme.typography.bodySmall, color = PopPosterInk)
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(Space.X10))
             Text("Heritage places", fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, color = PopPosterInk)
             if (heritage.isEmpty()) {
                 Text("None in the catalogue yet.", style = MaterialTheme.typography.bodyMedium, color = PopPosterInk)
             } else {
                 heritage.forEach { Text("• ${it.englishName}", style = MaterialTheme.typography.bodyMedium, color = PopPosterInk) }
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(Space.X8))
             Text("Foods and sweets", fontFamily = BalooFamily, fontWeight = FontWeight.ExtraBold, color = PopPosterInk)
             if (foods.isEmpty()) {
                 Text("No region is given for foods here yet.", style = MaterialTheme.typography.bodyMedium, color = PopPosterInk)
             } else {
                 foods.forEach { Text("• ${it.englishName}", style = MaterialTheme.typography.bodyMedium, color = PopPosterInk) }
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(Space.X8))
             Text(
                 "Important cities and local facts: pending editorial review.",
                 style = MaterialTheme.typography.bodySmall, color = PopPosterInk
             )
-            Spacer(modifier = Modifier.height(12.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+            Spacer(modifier = Modifier.height(Space.X12))
+            Row(horizontalArrangement = Arrangement.spacedBy(Space.X10), modifier = Modifier.fillMaxWidth()) {
                 PopActionButton(text = "Heritage", onClick = onOpenHeritage, modifier = Modifier.weight(1f))
                 PopActionButton(text = "Food", onClick = onOpenFood, containerColor = PopPosterButter, modifier = Modifier.weight(1f))
             }
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(Space.X20))
         }
     }
 }

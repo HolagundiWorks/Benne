@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import com.example.ui.theme.TypeScale
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -50,7 +51,7 @@ fun BenneLearningText(
         Text(
             text = annotated,
             fontFamily = NotoSansDevanagariFamily,
-            fontSize = 26.sp,
+            fontSize = TypeScale.T26,
             fontWeight = FontWeight.Bold,
             color = PopPosterInk,
             textAlign = TextAlign.Center
@@ -92,7 +93,7 @@ fun BenneLearningText(
         Text(
             text = annotated,
             fontFamily = NotoSansDevanagariFamily,
-            fontSize = 26.sp,
+            fontSize = TypeScale.T26,
             fontWeight = FontWeight.Bold,
             color = PopPosterInk,
             textAlign = TextAlign.Center

@@ -1,5 +1,9 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.Radius
+import com.example.ui.theme.Border
+import com.example.ui.theme.TypeScale
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -78,7 +82,7 @@ fun InteractiveVocabularyFlashcard(
         animationSpec = tween(durationMillis = 420, easing = FastOutSlowInEasing),
         label = "flashcard_3d_flip"
     )
-    val shape = RoundedCornerShape(24.dp)
+    val shape = RoundedCornerShape(Radius.R24)
     val surfaceColor = when {
         rotation <= 90f && !isMastered -> PopPosterButter
         rotation <= 90f && isMastered -> PopPosterMint
@@ -89,13 +93,13 @@ fun InteractiveVocabularyFlashcard(
         modifier = modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
-            .padding(end = 6.dp, bottom = 6.dp)
+            .padding(end = Space.X6, bottom = Space.X6)
     ) {
         // Hard offset poster drop shadow matching exact card bounds
         Box(
             modifier = Modifier
                 .matchParentSize()
-                .offset(x = 6.dp, y = 6.dp)
+                .offset(x = Space.X6, y = Space.X6)
                 .clip(shape)
                 .background(PopPosterInk)
         )
@@ -122,7 +126,7 @@ fun InteractiveVocabularyFlashcard(
                     .defaultMinSize(minHeight = 336.dp),
                 shape = shape,
                 color = surfaceColor,
-                border = BorderStroke(2.dp, PopPosterInk)
+                border = BorderStroke(Border.W2, PopPosterInk)
             ) {
                 if (rotation <= 90f) {
                     FlashcardFrontFace(
@@ -165,7 +169,7 @@ private fun FlashcardFrontFace(
         modifier = Modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = 336.dp)
-            .padding(20.dp),
+            .padding(Space.X20),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         // Top Status & Category Badges
@@ -178,16 +182,16 @@ private fun FlashcardFrontFace(
                 shape = CircleShape,
                 color = if (isMastered) PopPosterInk else PopPosterPaper,
                 contentColor = if (isMastered) PopPosterMint else PopPosterInk,
-                border = BorderStroke(1.5.dp, PopPosterInk)
+                border = BorderStroke(Border.W1_5, PopPosterInk)
             ) {
                 Row(
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+                    modifier = Modifier.padding(horizontal = Space.X10, vertical = 5.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         imageVector = if (isMastered) Icons.Default.CheckCircle else Icons.Outlined.RadioButtonUnchecked,
                         contentDescription = null,
-                        modifier = Modifier.size(14.dp)
+                        modifier = Modifier.size(Space.X14)
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
@@ -226,7 +230,7 @@ private fun FlashcardFrontFace(
                 showDevanagari = showHints
             )
             if (showHints && flashcard.pronunciationNote.isNotBlank() && flashcard.hindiPronunciation.isNotBlank()) {
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(Space.X4))
                 Text(
                     text = flashcard.pronunciationNote,
                     style = MaterialTheme.typography.bodySmall,
@@ -236,12 +240,12 @@ private fun FlashcardFrontFace(
             }
             if (hindiSegs.isNotEmpty()) {
                 onToggleHints?.let { toggle ->
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(Space.X6))
                     Surface(
                         onClick = toggle,
                         shape = CircleShape,
                         color = PopPosterPaper,
-                        border = BorderStroke(1.2.dp, PopPosterInk),
+                        border = BorderStroke(Border.W1_2, PopPosterInk),
                         modifier = Modifier.testTag("flashcard_hints_toggle")
                     ) {
                         Text(
@@ -249,12 +253,12 @@ private fun FlashcardFrontFace(
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Bold,
                             color = PopPosterInk,
-                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp)
+                            modifier = Modifier.padding(horizontal = Space.X12, vertical = Space.X4)
                         )
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(Space.X16))
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -269,7 +273,7 @@ private fun FlashcardFrontFace(
                     containerColor = PopPosterPaper,
                     contentColor = PopPosterInk
                 )
-                Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(Space.X10))
                 Text(
                     text = "Tap to listen",
                     style = MaterialTheme.typography.labelLarge,
@@ -281,7 +285,7 @@ private fun FlashcardFrontFace(
         // Bottom Flip Prompt
         Column(modifier = Modifier.fillMaxWidth()) {
             HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk)
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(Space.X10))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
@@ -291,9 +295,9 @@ private fun FlashcardFrontFace(
                     imageVector = Icons.Default.Flip,
                     contentDescription = "Flip card",
                     tint = PopPosterInk,
-                    modifier = Modifier.size(16.dp)
+                    modifier = Modifier.size(Space.X16)
                 )
-                Spacer(modifier = Modifier.width(6.dp))
+                Spacer(modifier = Modifier.width(Space.X6))
                 Text(
                     text = "TAP CARD TO REVEAL MEANING",
                     style = MaterialTheme.typography.labelSmall,
@@ -314,7 +318,7 @@ private fun FlashcardBackFace(
         modifier = Modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = 336.dp)
-            .padding(20.dp),
+            .padding(Space.X20),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         // Top Bar
@@ -343,26 +347,26 @@ private fun FlashcardBackFace(
             Text(
                 text = flashcard.englishMeaning,
                 fontFamily = BalooFamily,
-                fontSize = 26.sp,
+                fontSize = TypeScale.T26,
                 lineHeight = 33.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = PopPosterInk,
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(Space.X12))
 
             // Contextual Example Sentence Card
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(Radius.R16),
                 color = PopPosterButter,
-                border = BorderStroke(1.8.dp, PopPosterInk)
+                border = BorderStroke(Border.W1_8, PopPosterInk)
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(14.dp),
+                        .padding(Space.X14),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -372,7 +376,7 @@ private fun FlashcardBackFace(
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.primary
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(Space.X4))
                         KannadaWithSubscript(
                             kannadaText = flashcard.exampleSentenceKn,
                             transliteration = flashcard.exampleSentenceTranslit,
@@ -382,7 +386,7 @@ private fun FlashcardBackFace(
                             subscriptColor = MaterialTheme.colorScheme.primary,
                             subscriptStyle = MaterialTheme.typography.bodySmall
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(Space.X4))
                         Text(
                             text = "Meaning: \"${flashcard.exampleSentenceEn}\"",
                             style = MaterialTheme.typography.bodySmall,
@@ -391,7 +395,7 @@ private fun FlashcardBackFace(
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(Space.X8))
 
                     AudioSpeakButton(
                         textToSpeak = flashcard.exampleSentenceKn,
@@ -406,24 +410,24 @@ private fun FlashcardBackFace(
             }
 
             if (flashcard.culturalNote.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(Space.X10))
                 Surface(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(Radius.R12),
                     color = PopPosterCyan,
-                    border = BorderStroke(1.5.dp, PopPosterInk)
+                    border = BorderStroke(Border.W1_5, PopPosterInk)
                 ) {
                     Row(
-                        modifier = Modifier.padding(10.dp),
+                        modifier = Modifier.padding(Space.X10),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(
                             imageVector = Icons.Default.Lightbulb,
                             contentDescription = "Usage note",
                             tint = PopPosterInk,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(Space.X16)
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(Space.X8))
                         Text(
                             text = flashcard.culturalNote,
                             style = MaterialTheme.typography.bodySmall,
@@ -444,9 +448,9 @@ private fun FlashcardBackFace(
                 imageVector = Icons.Default.Flip,
                 contentDescription = "Flip to front",
                 tint = PopPosterInk,
-                modifier = Modifier.size(16.dp)
+                modifier = Modifier.size(Space.X16)
             )
-            Spacer(modifier = Modifier.width(6.dp))
+            Spacer(modifier = Modifier.width(Space.X6))
             Text(
                 text = "TAP CARD TO FLIP BACK",
                 style = MaterialTheme.typography.labelSmall,

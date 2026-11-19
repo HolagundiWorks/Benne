@@ -25,6 +25,17 @@ class UserProgressManager(context: Context) {
     )
     val completedLessons: StateFlow<Set<String>> = _completedLessons.asStateFlow()
 
+    // Awards unlock once and stay unlocked; see AwardRules
+    private val _unlockedAwards = MutableStateFlow(
+        prefs.getStringSet("awards_unlocked", emptySet())?.toSet() ?: emptySet()
+    )
+    val unlockedAwards: StateFlow<Set<String>> = _unlockedAwards.asStateFlow()
+
+    init {
+        // Awards already earned by saved progress (e.g. a name entered before this version)
+        unlockEarnedAwards()
+    }
+
     private val _favoritePhraseIds = MutableStateFlow(
         prefs.getStringSet("favorite_phrases", emptySet())?.toSet() ?: emptySet()
     )
@@ -130,6 +141,22 @@ class UserProgressManager(context: Context) {
         _completedLessons.value = updated
         prefs.edit().putStringSet("completed_lessons", updated).apply()
         addXp(if (alreadyDone) 15 else 50)
+        unlockEarnedAwards()
+    }
+
+    /** Adds any newly earned awards. An award that is already unlocked is never removed or repeated. */
+    private fun unlockEarnedAwards() {
+        val nameRegistered = prefs.getBoolean(NAME_REGISTERED, false)
+        val earned = AwardRules.earned(
+            _completedLessons.value,
+            SaralaKannadaData.milestones.map { it.id },
+            nameRegistered
+        )
+        val newlyEarned = earned - _unlockedAwards.value
+        if (newlyEarned.isEmpty()) return
+        val updated = _unlockedAwards.value + newlyEarned
+        _unlockedAwards.value = updated
+        prefs.edit().putStringSet("awards_unlocked", updated).apply()
     }
 
     fun toggleFavoritePhrase(phraseId: String) {
@@ -178,9 +205,15 @@ class UserProgressManager(context: Context) {
     }
 
     fun setLearnerName(name: String) {
-        val cleaned = name.trim().ifEmpty { DEFAULT_LEARNER_NAME }.take(32)
+        val trimmed = name.trim()
+        val cleaned = trimmed.ifEmpty { DEFAULT_LEARNER_NAME }.take(32)
         _learnerName.value = cleaned
         prefs.edit().putString("learner_name", cleaned).apply()
+        if (trimmed.isNotEmpty()) {
+            // Registering a name earns Benne Kannadiga
+            prefs.edit().putBoolean(NAME_REGISTERED, true).apply()
+            unlockEarnedAwards()
+        }
     }
 
     fun setShowHindiPhonetics(enabled: Boolean) {
@@ -238,6 +271,7 @@ class UserProgressManager(context: Context) {
         _xp.value = 0
         _streakDays.value = 0
         _completedLessons.value = emptySet()
+        _unlockedAwards.value = emptySet()
         _favoritePhraseIds.value = emptySet()
         _masteredFlashcardIds.value = emptySet()
         _completedPoemChallenges.value = emptySet()
@@ -251,5 +285,6 @@ class UserProgressManager(context: Context) {
 
     companion object {
         const val DEFAULT_LEARNER_NAME = "Kannada Learner"
+        private const val NAME_REGISTERED = "name_registered"
     }
 }

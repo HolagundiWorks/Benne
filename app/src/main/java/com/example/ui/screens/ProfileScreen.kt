@@ -1,5 +1,19 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.Radius
+import com.example.ui.theme.Border
+import com.example.ui.theme.Depth
+import com.example.ui.theme.TypeScale
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.foundation.Image
+import com.example.ui.components.PopActionButton
+import com.example.ui.components.ShareSheet
+import com.example.data.SaralaKannadaData
+import com.example.data.Award
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -140,35 +154,35 @@ fun ProfileScreen(
             .background(MaterialTheme.colorScheme.background)
             .testTag("profile_screen"),
         contentPadding = PaddingValues(
-            start = 16.dp,
-            top = 14.dp + LocalFloatingHeaderInset.current,
-            end = 16.dp,
-            bottom = 14.dp + LocalFloatingNavInset.current
+            start = Space.X16,
+            top = Space.X14 + LocalFloatingHeaderInset.current,
+            end = Space.X16,
+            bottom = Space.X14 + LocalFloatingNavInset.current
         ),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
+        verticalArrangement = Arrangement.spacedBy(Space.X14)
     ) {
         // 1. Live XP & Local Profile Summary Card
         // Settings: standard place for app settings
         item {
             Surface(
                 onClick = onOpenSettings,
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(Radius.R16),
                 color = PopPosterPaper,
                 contentColor = PopPosterInk,
-                border = BorderStroke(2.dp, PopPosterInk),
+                border = BorderStroke(Border.W2, PopPosterInk),
                 modifier = Modifier.fillMaxWidth().testTag("profile_settings_row")
             ) {
                 Row(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+                    modifier = Modifier.padding(horizontal = Space.X16, vertical = Space.X14),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(imageVector = Icons.Outlined.Settings, contentDescription = null)
-                    Spacer(modifier = Modifier.width(12.dp))
+                    Spacer(modifier = Modifier.width(Space.X12))
                     Text(
                         text = "Settings",
                         fontFamily = BalooFamily,
                         fontWeight = FontWeight.ExtraBold,
-                        fontSize = 18.sp,
+                        fontSize = TypeScale.T18,
                         color = PopPosterInk,
                         modifier = Modifier.weight(1f)
                     )
@@ -177,49 +191,10 @@ fun ProfileScreen(
             }
         }
 
-        // Achievements: streak and points unlock from saved progress; speed needs timing data
         item {
-            val inputs = com.example.data.AchievementInputs(streakDays = streakDays, xp = xp)
-            Column(modifier = Modifier.fillMaxWidth().testTag("profile_achievements")) {
-                Text(
-                    text = "ACHIEVEMENTS",
-                    fontFamily = BalooFamily,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 16.sp,
-                    color = PopPosterInk
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                com.example.data.Achievements.all.chunked(3).forEach { row ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
-                        row.forEach { a ->
-                            com.example.ui.components.AchievementBadge(
-                                achievement = a,
-                                unlocked = com.example.data.Achievements.isUnlocked(a, inputs),
-                                modifier = Modifier.weight(1f),
-                                size = 84.dp
-                            )
-                        }
-                    }
-                }
-                Text(
-                    text = "Speed badges unlock once Benne records response times. Until then they stay locked.",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = PopPosterInk
-                )
-            }
-        }
-
-        item {
-            PosterCard(
-                containerColor = PopPosterButter,
-                cornerRadius = 24.dp,
-                shadowOffset = 5.dp,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.padding(18.dp)) {
+            // Informational: shown directly on the screen, no card
+            run {
+                Column(modifier = Modifier.fillMaxWidth()) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -237,7 +212,7 @@ fun ProfileScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(modifier = Modifier.height(Space.X14))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -247,12 +222,12 @@ fun ProfileScreen(
                             size = 72.dp,
                             pose = R.drawable.benne_mascot_learning
                         )
-                        Spacer(modifier = Modifier.width(14.dp))
+                        Spacer(modifier = Modifier.width(Space.X14))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 text = effectiveEnglishName,
                                 fontFamily = BalooFamily,
-                                fontSize = 22.sp,
+                                fontSize = TypeScale.T22,
                                 fontWeight = FontWeight.ExtraBold,
                                 color = PopPosterInk,
                                 maxLines = 1
@@ -262,7 +237,7 @@ fun ProfileScreen(
                                 style = MaterialTheme.typography.labelLarge,
                                 color = PopPosterInk.copy(alpha = 0.8f)
                             )
-                            Spacer(modifier = Modifier.height(6.dp))
+                            Spacer(modifier = Modifier.height(Space.X6))
                             Text(
                                 text = "$xp XP • ${100 - xpIntoLevel} XP to Level ${level + 1}",
                                 style = MaterialTheme.typography.labelSmall,
@@ -273,31 +248,31 @@ fun ProfileScreen(
                         }
                     }
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(Space.X10))
 
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(CircleShape)
-                            .border(1.5.dp, PopPosterInk, CircleShape)
+                            .border(Border.W1_5, PopPosterInk, CircleShape)
                             .background(PopPosterPaper)
                     ) {
                         LinearProgressIndicator(
                             progress = { xpIntoLevel / 100f },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(10.dp),
+                                .height(Space.X10),
                             color = BennePopRed,
                             trackColor = Color.Transparent,
                             strokeCap = StrokeCap.Round
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(14.dp))
+                    Spacer(modifier = Modifier.height(Space.X14))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        horizontalArrangement = Arrangement.spacedBy(Space.X8)
                     ) {
                         ProfileStatTile("XP", "$xp", Modifier.weight(1f))
                         ProfileStatTile("Streak", "${streakDays}d", Modifier.weight(1f))
@@ -309,174 +284,15 @@ fun ProfileScreen(
             }
         }
 
-        // 2. English Name -> Kannada Script & Hindi Phonetics Card
-        item {
-            PosterCard(
-                containerColor = PopPosterPaper,
-                cornerRadius = 22.dp,
-                shadowOffset = 5.dp,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(modifier = Modifier.padding(18.dp)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        PosterStampBadge(
-                            text = "YOUR NAME SCRIPT LAB",
-                            containerColor = PopPosterCyan,
-                            contentColor = PopPosterInk
-                        )
-                        PosterStampBadge(
-                            text = "${favoritePhrases.size} SAVED",
-                            containerColor = PopPosterMint,
-                            contentColor = PopPosterInk
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    Text(
-                        text = "Write Your Name in Kannada",
-                        fontFamily = BalooFamily,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = PopPosterInk
-                    )
-                    Text(
-                        text = "Enter your name in English to see how it is written in Kannada script and pronounced in Hindi.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = PopPosterInk.copy(alpha = 0.8f)
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    OutlinedTextField(
-                        value = nameInput,
-                        onValueChange = { raw ->
-                            val bounded = raw.take(32)
-                            nameInput = bounded
-                            progressManager.setLearnerName(bounded)
-                        },
-                        placeholder = {
-                            Text(
-                                text = "Enter your name in English (e.g. Priya, Rahul)",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        },
-                        leadingIcon = {
-                            Icon(
-                                imageVector = Icons.Default.Person,
-                                contentDescription = "Learner name",
-                                tint = PopPosterInk
-                            )
-                        },
-                        trailingIcon = {
-                            if (nameInput.isNotEmpty()) {
-                                IconButton(
-                                    onClick = {
-                                        nameInput = ""
-                                        progressManager.setLearnerName("")
-                                    }
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Clear,
-                                        contentDescription = "Clear name",
-                                        tint = PopPosterInk
-                                    )
-                                }
-                            }
-                        },
-                        singleLine = true,
-                        shape = RoundedCornerShape(16.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedContainerColor = MaterialTheme.colorScheme.background,
-                            unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                            focusedBorderColor = PopPosterInk,
-                            unfocusedBorderColor = PopPosterInk
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .testTag("profile_name_input")
-                    )
-
-                    Spacer(modifier = Modifier.height(14.dp))
-
-                    Surface(
-                        shape = RoundedCornerShape(18.dp),
-                        color = PopPosterMint,
-                        border = BorderStroke(1.8.dp, PopPosterInk),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(modifier = Modifier.padding(14.dp)) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        text = "KANNADA SCRIPT",
-                                        style = MaterialTheme.typography.labelSmall,
-                                        fontWeight = FontWeight.Bold,
-                                        color = MaterialTheme.colorScheme.primary
-                                    )
-                                    Spacer(modifier = Modifier.height(2.dp))
-                                    Text(
-                                        text = kannadaName,
-                                        fontFamily = NotoSansKannadaFamily,
-                                        fontSize = 26.sp,
-                                        lineHeight = 34.sp,
-                                        fontWeight = FontWeight.ExtraBold,
-                                        color = PopPosterInk,
-                                        modifier = Modifier.testTag("profile_kannada_name")
-                                    )
-                                }
-
-                                AudioSpeakButton(
-                                    textToSpeak = kannadaName,
-                                    isCurrentlySpeaking = speakingText == kannadaName,
-                                    onSpeak = { ttsHelper.speak(it, playbackSpeed) },
-                                    sizeDp = 46,
-                                    iconSizeDp = 22,
-                                    containerColor = PopPosterButter,
-                                    contentColor = PopPosterInk
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.height(10.dp))
-                            HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.25f))
-                            Spacer(modifier = Modifier.height(10.dp))
-
-                            Text(
-                                text = "HINDI PHONETIC (हिन्दी उच्चारण)",
-                                style = MaterialTheme.typography.labelSmall,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            HindiPhoneticText(
-                                kannadaText = kannadaName,
-                                baseFontSize = 20.sp,
-                                textColor = PopPosterInk,
-                                modifier = Modifier.testTag("profile_hindi_name")
-                            )
-                        }
-                    }
-                }
-            }
-        }
-
         // 3. Hindi Language Support & Dheergha Pronunciation Highlighter Card
         item {
             PosterCard(
                 containerColor = PopPosterCyan,
-                cornerRadius = 22.dp,
-                shadowOffset = 5.dp,
+                cornerRadius = Radius.R22,
+                shadowOffset = Depth.S5,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(18.dp)) {
+                Column(modifier = Modifier.padding(Space.X18)) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
@@ -487,24 +303,24 @@ fun ProfileScreen(
                             modifier = Modifier.weight(1f)
                         ) {
                             Surface(
-                                shape = RoundedCornerShape(12.dp),
+                                shape = RoundedCornerShape(Radius.R12),
                                 color = PopPosterPaper,
-                                border = BorderStroke(1.5.dp, PopPosterInk),
+                                border = BorderStroke(Border.W1_5, PopPosterInk),
                                 modifier = Modifier.size(40.dp)
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Translate,
                                     contentDescription = "Hindi Phonetics",
                                     tint = PopPosterInk,
-                                    modifier = Modifier.padding(8.dp)
+                                    modifier = Modifier.padding(Space.X8)
                                 )
                             }
-                            Spacer(modifier = Modifier.width(12.dp))
+                            Spacer(modifier = Modifier.width(Space.X12))
                             Column {
                                 Text(
                                     text = "Hindi Phonetic Guide",
                                     fontFamily = BalooFamily,
-                                    fontSize = 18.sp,
+                                    fontSize = TypeScale.T18,
                                     fontWeight = FontWeight.ExtraBold,
                                     color = PopPosterInk
                                 )
@@ -541,9 +357,9 @@ fun ProfileScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(Space.X12))
                     HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.3f))
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(Space.X10))
 
                     Text(
                         text = "DHEERGHA (दीर्घ) PRONUNCIATION KEY",
@@ -551,16 +367,16 @@ fun ProfileScreen(
                         fontWeight = FontWeight.Bold,
                         color = PopPosterInk
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.height(Space.X4))
                     Text(
                         text = "Long vowel syllables (आ, ई, ऊ, ए, ऐ, ओ, औ) appear in bold red so you stretch the right syllable.",
                         style = MaterialTheme.typography.bodySmall,
                         color = PopPosterInk.copy(alpha = 0.88f)
                     )
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(Space.X10))
 
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Column(verticalArrangement = Arrangement.spacedBy(Space.X8)) {
                         DheerghaSampleRow(
                             kannada = "ಕನ್ನಡ",
                             note = "Short vowels — crisp ending",
@@ -594,19 +410,19 @@ fun ProfileScreen(
         item {
             PosterCard(
                 containerColor = PopPosterPeach,
-                cornerRadius = 22.dp,
-                shadowOffset = 5.dp,
+                cornerRadius = Radius.R22,
+                shadowOffset = Depth.S5,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(18.dp)) {
+                Column(modifier = Modifier.padding(Space.X18)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             imageVector = Icons.Default.Shield,
                             contentDescription = "Local only storage",
                             tint = PopPosterInk,
-                            modifier = Modifier.size(18.dp)
+                            modifier = Modifier.size(Space.X18)
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(Space.X8))
                         Text(
                             text = "STRICTLY LOCAL • NO ACCOUNT",
                             style = MaterialTheme.typography.labelMedium,
@@ -614,18 +430,18 @@ fun ProfileScreen(
                             color = PopPosterInk
                         )
                     }
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(Space.X6))
                     Text(
                         text = "Your profile, XP, and streaks stay strictly on this device. Fresh installs always begin at 0 XP, or you can reset everything below.",
                         style = MaterialTheme.typography.bodySmall,
                         color = PopPosterInk
                     )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(Space.X12))
 
                     OutlinedButton(
                         onClick = { showResetDialog = true },
-                        border = BorderStroke(1.8.dp, PopPosterInk),
+                        border = BorderStroke(Border.W1_8, PopPosterInk),
                         colors = ButtonDefaults.outlinedButtonColors(
                             containerColor = PopPosterPaper,
                             contentColor = MaterialTheme.colorScheme.error
@@ -638,9 +454,9 @@ fun ProfileScreen(
                         Icon(
                             imageVector = Icons.Default.DeleteOutline,
                             contentDescription = "Reset Profile and XP",
-                            modifier = Modifier.size(18.dp)
+                            modifier = Modifier.size(Space.X18)
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(Space.X8))
                         Text("Reset Profile & XP to 0", fontWeight = FontWeight.Bold)
                     }
                 }
@@ -648,7 +464,7 @@ fun ProfileScreen(
         }
 
         item {
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(Space.X12))
         }
     }
 
@@ -703,29 +519,23 @@ private fun ProfileStatTile(
     value: String,
     modifier: Modifier = Modifier
 ) {
-    Surface(
+    // Informational: a plain number and label, no box
+    Column(
         modifier = modifier,
-        shape = RoundedCornerShape(14.dp),
-        color = PopPosterPaper,
-        border = BorderStroke(1.5.dp, PopPosterInk)
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 6.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = value,
-                fontFamily = BalooFamily,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = PopPosterInk
-            )
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        Text(
+            text = value,
+            fontFamily = BalooFamily,
+            fontSize = TypeScale.T18,
+            fontWeight = FontWeight.ExtraBold,
+            color = PopPosterInk
+        )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 
@@ -737,27 +547,27 @@ private fun DheerghaSampleRow(
     onSpeak: (String) -> Unit
 ) {
     Surface(
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(Radius.R14),
         color = PopPosterPaper,
-        border = BorderStroke(1.5.dp, PopPosterInk),
+        border = BorderStroke(Border.W1_5, PopPosterInk),
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 8.dp),
+                .padding(horizontal = Space.X12, vertical = Space.X8),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(Space.X8)
                 ) {
                     Text(
                         text = kannada,
                         fontFamily = NotoSansKannadaFamily,
-                        fontSize = 18.sp,
+                        fontSize = TypeScale.T18,
                         fontWeight = FontWeight.Bold,
                         color = PopPosterInk
                     )

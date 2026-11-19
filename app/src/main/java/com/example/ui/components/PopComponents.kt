@@ -1,5 +1,8 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.Radius
+import com.example.ui.theme.Border
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -40,20 +43,20 @@ fun PopActionButton(
     Surface(
         onClick = onClick,
         enabled = enabled,
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(Radius.R16),
         color = containerColor,
         contentColor = contentColor,
-        border = BorderStroke(2.dp, PopPosterInk),
+        border = BorderStroke(Border.W2, PopPosterInk),
         modifier = modifier.defaultMinSize(minHeight = 52.dp)
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
+            modifier = Modifier.padding(horizontal = Space.X20, vertical = Space.X12),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
             if (icon != null) {
-                Icon(imageVector = icon, contentDescription = null, modifier = Modifier.size(18.dp))
-                Spacer(modifier = Modifier.width(8.dp))
+                Icon(imageVector = icon, contentDescription = null, modifier = Modifier.size(Space.X18))
+                Spacer(modifier = Modifier.width(Space.X8))
             }
             Text(
                 text = text,

@@ -1,6 +1,0 @@
-{
-  "name": "Benne",
-  "description": "Benne (ಬೆಣ್ಣೆ) — A vibrant neo-pop poster-styled Kannada learning app for non-Kannada speakers featuring interactive 3D vocabulary flashcards, Varnamale letter explorer, Bengaluru street dialogues, native spoken audio, and quizzes.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

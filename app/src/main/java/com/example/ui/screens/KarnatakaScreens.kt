@@ -1,5 +1,10 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.Radius
+import com.example.ui.theme.Border
+import com.example.ui.theme.Depth
+import com.example.ui.theme.TypeScale
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -59,13 +64,13 @@ private fun PillChip(text: String, selected: Boolean, onClick: () -> Unit) {
         shape = CircleShape,
         color = if (selected) PopPosterButter else PopPosterPaper,
         contentColor = PopPosterInk,
-        border = BorderStroke(1.5.dp, PopPosterInk)
+        border = BorderStroke(Border.W1_5, PopPosterInk)
     ) {
         Text(
             text = text,
             style = MaterialTheme.typography.labelLarge,
             fontWeight = if (selected) FontWeight.ExtraBold else FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp)
+            modifier = Modifier.padding(horizontal = Space.X14, vertical = Space.X8)
         )
     }
 }
@@ -77,13 +82,13 @@ private fun PendingBadge() {
         shape = CircleShape,
         color = PopPosterCyan,
         contentColor = PopPosterInk,
-        border = BorderStroke(1.2.dp, PopPosterInk)
+        border = BorderStroke(Border.W1_2, PopPosterInk)
     ) {
         Text(
             text = "PENDING REVIEW",
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+            modifier = Modifier.padding(horizontal = Space.X8, vertical = 3.dp)
         )
     }
 }
@@ -93,19 +98,19 @@ private fun PendingBadge() {
 private fun CreditsNote(text: String) {
     PosterCard(
         containerColor = PopPosterPaper,
-        cornerRadius = 16.dp,
-        shadowOffset = 3.dp,
+        cornerRadius = Radius.R16,
+        shadowOffset = Depth.S3,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(14.dp)) {
+        Column(modifier = Modifier.padding(Space.X14)) {
             Text(
                 text = "PHOTOS & CREDITS",
                 fontFamily = BalooFamily,
                 fontWeight = FontWeight.ExtraBold,
-                fontSize = 14.sp,
+                fontSize = TypeScale.T14,
                 color = PopPosterInk
             )
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(Space.X6))
             Text(text = text, style = MaterialTheme.typography.bodySmall, color = PopPosterInk)
         }
     }
@@ -122,15 +127,15 @@ fun FoodExplorerScreen(modifier: Modifier = Modifier) {
 
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        contentPadding = PaddingValues(start = Space.X16, top = Space.X14 + LocalFloatingHeaderInset.current, end = Space.X16, bottom = Space.X16),
+        verticalArrangement = Arrangement.spacedBy(Space.X10)
     ) {
         item {
             Text(
                 text = "Karnataka Food",
                 fontFamily = BalooFamily,
                 fontWeight = FontWeight.ExtraBold,
-                fontSize = 26.sp,
+                fontSize = TypeScale.T26,
                 color = PopPosterInk
             )
             Text(
@@ -140,7 +145,7 @@ fun FoodExplorerScreen(modifier: Modifier = Modifier) {
             )
         }
         item {
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(Space.X8)) {
                 item { PillChip("All", category == null) { category = null } }
                 items(FoodCategory.entries) { c ->
                     PillChip(c.label, category == c) { category = c }
@@ -150,25 +155,25 @@ fun FoodExplorerScreen(modifier: Modifier = Modifier) {
         items(items, key = { it.id }) { food ->
             PosterCard(
                 containerColor = PopPosterPaper,
-                cornerRadius = 16.dp,
-                shadowOffset = 3.dp,
+                cornerRadius = Radius.R16,
+                shadowOffset = Depth.S3,
                 onClick = { selected = food },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(14.dp)) {
+                Column(modifier = Modifier.padding(Space.X14)) {
                     Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                         Text(
                             text = food.englishName,
                             fontFamily = BalooFamily,
                             fontWeight = FontWeight.ExtraBold,
-                            fontSize = 18.sp,
+                            fontSize = TypeScale.T18,
                             color = PopPosterInk,
                             modifier = Modifier.weight(1f)
                         )
                         PendingBadge()
                     }
                     if (food.kannadaName.isNotBlank()) {
-                        Text(text = food.kannadaName, fontSize = 16.sp, color = PopPosterInk)
+                        Text(text = food.kannadaName, fontSize = TypeScale.T16, color = PopPosterInk)
                     }
                     Text(
                         text = listOfNotNull(food.category.label, food.region.ifBlank { null }).joinToString(" · "),
@@ -186,27 +191,27 @@ fun FoodExplorerScreen(modifier: Modifier = Modifier) {
     selected?.let { food ->
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
         ModalBottomSheet(onDismissRequest = { selected = null }, sheetState = sheetState) {
-            Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
+            Column(modifier = Modifier.padding(horizontal = Space.X20, vertical = Space.X8)) {
                 Text(
                     text = food.englishName,
                     fontFamily = BalooFamily,
                     fontWeight = FontWeight.ExtraBold,
-                    fontSize = 26.sp,
+                    fontSize = TypeScale.T26,
                     color = PopPosterInk
                 )
                 if (food.kannadaName.isNotBlank()) {
-                    Text(text = food.kannadaName, fontSize = 20.sp, color = PopPosterInk)
+                    Text(text = food.kannadaName, fontSize = TypeScale.T20, color = PopPosterInk)
                 }
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(Space.X8))
                 Text(text = "Category: ${food.category.label}", style = MaterialTheme.typography.bodyMedium, color = PopPosterInk)
                 Text(
                     text = if (food.region.isBlank()) "Region: to be confirmed" else "Region: ${food.region}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = PopPosterInk
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(Space.X12))
                 CreditsNote("Photo: not yet verified. Pronunciation: pending native review. Description: pending editorial review.")
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(Space.X20))
             }
         }
     }
@@ -226,15 +231,15 @@ fun HeritageScreen(modifier: Modifier = Modifier) {
 
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(start = 16.dp, top = 14.dp + LocalFloatingHeaderInset.current, end = 16.dp, bottom = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        contentPadding = PaddingValues(start = Space.X16, top = Space.X14 + LocalFloatingHeaderInset.current, end = Space.X16, bottom = Space.X16),
+        verticalArrangement = Arrangement.spacedBy(Space.X10)
     ) {
         item {
             Text(
                 text = "Karnataka Darshana",
                 fontFamily = BalooFamily,
                 fontWeight = FontWeight.ExtraBold,
-                fontSize = 26.sp,
+                fontSize = TypeScale.T26,
                 color = PopPosterInk
             )
             Text(
@@ -255,18 +260,18 @@ fun HeritageScreen(modifier: Modifier = Modifier) {
         items(places, key = { it.id }) { place ->
             PosterCard(
                 containerColor = PopPosterCyan,
-                cornerRadius = 16.dp,
-                shadowOffset = 3.dp,
+                cornerRadius = Radius.R16,
+                shadowOffset = Depth.S3,
                 onClick = { selected = place },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column(modifier = Modifier.padding(14.dp)) {
+                Column(modifier = Modifier.padding(Space.X14)) {
                     Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                         Text(
                             text = place.englishName,
                             fontFamily = BalooFamily,
                             fontWeight = FontWeight.ExtraBold,
-                            fontSize = 18.sp,
+                            fontSize = TypeScale.T18,
                             color = PopPosterInk,
                             modifier = Modifier.weight(1f)
                         )
@@ -284,28 +289,28 @@ fun HeritageScreen(modifier: Modifier = Modifier) {
     selected?.let { place ->
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
         ModalBottomSheet(onDismissRequest = { selected = null }, sheetState = sheetState) {
-            Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)) {
+            Column(modifier = Modifier.padding(horizontal = Space.X20, vertical = Space.X8)) {
                 Text(
                     text = place.englishName,
                     fontFamily = BalooFamily,
                     fontWeight = FontWeight.ExtraBold,
-                    fontSize = 26.sp,
+                    fontSize = TypeScale.T26,
                     color = PopPosterInk
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(Space.X8))
                 Text(text = "District: ${place.district}", style = MaterialTheme.typography.bodyMedium, color = PopPosterInk)
                 Text(text = "Focus: ${place.focus}", style = MaterialTheme.typography.bodyMedium, color = PopPosterInk)
                 Text(text = "Editorial priority: ${place.priority}", style = MaterialTheme.typography.bodyMedium, color = PopPosterInk)
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(Space.X12))
                 // User-initiated external map search by name; no location permission, no coordinates stored
                 PopActionButton(
                     text = "Open in Google Maps",
                     onClick = { openPlaceInMaps(context, place.englishName, place.district) },
                     modifier = Modifier.fillMaxWidth().testTag("heritage_open_maps")
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(Space.X12))
                 CreditsNote("Photo and history: pending verification. Kannada name: pending native review.")
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(Space.X20))
             }
         }
     }

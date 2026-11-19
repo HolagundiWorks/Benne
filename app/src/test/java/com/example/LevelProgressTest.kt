@@ -2,8 +2,6 @@ package com.example
 
 import com.example.data.LevelProgress
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class LevelProgressTest {
@@ -22,12 +20,5 @@ class LevelProgressTest {
         assertEquals(50, LevelProgress.xpIntoLevel(250))
         assertEquals(0.5f, LevelProgress.fractionIntoLevel(250), 0.0001f)
         assertEquals(0, LevelProgress.xpIntoLevel(200))
-    }
-
-    @Test
-    fun cardsUnlockAtTheirRequiredLevel() {
-        assertFalse(LevelProgress.isUnlocked(99, 2))
-        assertTrue(LevelProgress.isUnlocked(100, 2))
-        assertTrue(LevelProgress.isUnlocked(0, 1))
     }
 }
