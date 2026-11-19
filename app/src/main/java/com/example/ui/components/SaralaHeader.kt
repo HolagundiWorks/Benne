@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.Radius
 import com.example.ui.theme.Border
@@ -99,7 +100,7 @@ fun SaralaHeader(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = Space.X24, end = 212.dp, top = Space.X8, bottom = Space.X8),
+                    .padding(start = Space.X24, end = Dim.S212, top = Space.X8, bottom = Space.X8),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(Space.X10)
             ) {
@@ -126,7 +127,7 @@ fun SaralaHeader(
                 Box(
                     modifier = Modifier
                         .background(BenneCream, RoundedCornerShape(50))
-                        .padding(horizontal = Space.X8, vertical = 3.dp)
+                        .padding(horizontal = Space.X8, vertical = Space.X3)
                 ) {
                     LearnerStatusRow(xp = xpPoints, onClick = onOpenProfile)
                 }
@@ -137,8 +138,8 @@ fun SaralaHeader(
         Box(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
-                .padding(end = 96.dp)
-                .size(width = 88.dp, height = 44.dp)
+                .padding(end = Dim.S96)
+                .size(width = Dim.S88, height = Dim.S44)
                 .graphicsLayer { rotationZ = -6f }
                 .then(if (onOpenFlag != null) Modifier.clickable(onClick = onOpenFlag) else Modifier)
                 .testTag("header_flag")
@@ -168,7 +169,7 @@ fun SaralaHeader(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .offset(y = (-1).dp)
-                    .requiredHeight(88.dp)
+                    .requiredHeight(Dim.S88)
             )
         }
     }
@@ -179,7 +180,7 @@ fun SaralaHeader(
  * level the learner is working towards.
  */
 /** Pill height. Fixed so the learner row below it can be placed exactly. */
-private val PILL_HEIGHT = 60.dp
+private val PILL_HEIGHT = Dim.S60
 
 /** Line 1 "ನಮಸ್ಕಾರ" (greeting), line 2 the learner's name. Tapping opens Profile when [onClick] is set. */
 @Composable
@@ -280,9 +281,9 @@ private fun HeaderBadge(
                 imageVector = icon,
                 contentDescription = description,
                 tint = PopPosterInk,
-                modifier = Modifier.size(13.dp)
+                modifier = Modifier.size(Space.X13)
             )
-            Spacer(modifier = Modifier.width(3.dp))
+            Spacer(modifier = Modifier.width(Space.X3))
             Text(
                 text = text,
                 style = MaterialTheme.typography.labelSmall,
@@ -314,6 +315,6 @@ private fun BadgeImage(res: Int, unlocked: Boolean, description: String) {
         painter = painterResource(res),
         contentDescription = if (unlocked) description else "$description, locked",
         modifier = Modifier
-            .height(44.dp)
+            .height(Dim.S44)
     )
 }

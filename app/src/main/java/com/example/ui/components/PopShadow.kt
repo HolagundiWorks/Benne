@@ -1,5 +1,7 @@
 package com.example.ui.components
 
+import com.example.ui.theme.BenneInk
+import com.example.ui.theme.BenneCream
 import com.example.ui.theme.Space
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
@@ -23,8 +25,8 @@ import androidx.compose.ui.unit.dp
 fun Modifier.BennePopShadow(
     offsetDp: Dp = Space.X4,
     borderDp: Dp = Space.X2,
-    shadowColor: Color = Color(0xFF17172D),
-    backgroundColor: Color = Color(0xFFFFF7E2),
+    shadowColor: Color = BenneInk,
+    backgroundColor: Color = BenneCream,
     cornerRadius: Dp = Space.X16
 ): Modifier = this
     .padding(end = offsetDp, bottom = offsetDp)

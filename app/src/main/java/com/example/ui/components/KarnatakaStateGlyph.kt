@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
@@ -36,7 +37,7 @@ fun KarnatakaStateGlyph(modifier: Modifier = Modifier, glyphSize: androidx.compo
         // Upper half yellow, lower half red: the flag colours
         clipHalf(top = true) { drawPath(state, BenneButterYellow) }
         clipHalf(top = false) { drawPath(state, BennePopRed) }
-        drawPath(state, PopPosterInk, style = Stroke(width = 1.2.dp.toPx()))
+        drawPath(state, PopPosterInk, style = Stroke(width = Dim.S1_2.toPx()))
     }
 }
 

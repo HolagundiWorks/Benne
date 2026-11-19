@@ -7,6 +7,8 @@ val BenneButterYellow = Color(0xFFFFCC29)
 val BennePopRed = Color(0xFFFF3655)
 val BenneCream = Color(0xFFFFF7E2)
 val BenneTeal = Color(0xFF00B8B0)
+// Deeper red for Devanagari long-vowel highlights (readable on cream)
+val BenneDheerghaRed = Color(0xFFD61938)
 val BenneInk = Color(0xFF17172D)
 
 // Legacy token names kept so existing screens re-skin with the Benne palette.

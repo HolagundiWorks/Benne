@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +34,7 @@ fun AchievementBadge(
     achievement: Achievement,
     unlocked: Boolean,
     modifier: Modifier = Modifier,
-    size: Dp = 96.dp
+    size: Dp = Dim.S96
 ) {
     val state = if (unlocked) "Unlocked" else "Locked"
     val description = "${achievement.title}, $state. ${if (unlocked) "" else achievement.rule}"

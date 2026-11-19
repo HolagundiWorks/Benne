@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.TypeScale
 import androidx.compose.foundation.layout.Arrangement
@@ -64,7 +65,7 @@ fun GeographyScreen(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            ButterMascot(size = 36.dp, pose = com.example.R.drawable.benne_mascot_compact)
+            ButterMascot(size = Dim.S36, pose = com.example.R.drawable.benne_mascot_compact)
             Spacer(modifier = Modifier.width(Space.X8))
             Text(
                 text = selected?.let { "Selected: $it district" } ?: "Tap a district on the map",

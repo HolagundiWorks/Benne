@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.Radius
 import com.example.ui.theme.Depth
@@ -152,8 +153,8 @@ fun DictionaryScreen(
                     KannadaWithSubscript(
                         kannadaText = "ಕನ್ನಡ ಪದಕೋಶ",
                         transliteration = "Kannada padakosha",
-                        kannadaFontSize = 17.sp,
-                        kannadaLineHeight = 22.sp,
+                        kannadaFontSize = TypeScale.T17,
+                        kannadaLineHeight = TypeScale.T22,
                         kannadaColor = PopPosterInk,
                         subscriptColor = MaterialTheme.colorScheme.primary,
                         subscriptStyle = MaterialTheme.typography.labelMedium
@@ -234,7 +235,7 @@ fun DictionaryScreen(
                             selected = isSelected,
                             borderColor = PopPosterInk,
                             selectedBorderColor = PopPosterInk,
-                            borderWidth = 1.5.dp,
+                            borderWidth = Dim.S1_5,
                             selectedBorderWidth = Space.X2
                         ),
                         label = { Text(cat, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium) },
@@ -255,14 +256,14 @@ fun DictionaryScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 40.dp, horizontal = Space.X16),
+                            .padding(vertical = Dim.S40, horizontal = Space.X16),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.SearchOff,
                             contentDescription = null,
                             tint = PopPosterInk,
-                            modifier = Modifier.size(40.dp)
+                            modifier = Modifier.size(Dim.S40)
                         )
                         Spacer(modifier = Modifier.height(Space.X10))
                         Text(

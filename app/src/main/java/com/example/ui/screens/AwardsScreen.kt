@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.Radius
 import com.example.ui.theme.Border
@@ -175,7 +176,7 @@ fun AwardsScreen(
                     fontFamily = BalooFamily,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = TypeScale.T14,
-                    letterSpacing = 1.sp,
+                    letterSpacing = TypeScale.T1,
                     color = PopPosterInk
                 )
                 Row(
@@ -194,12 +195,12 @@ fun AwardsScreen(
                                     painter = painterResource(award.badgeRes),
                                     contentDescription = award.titleEnglish,
                                     contentScale = ContentScale.Fit,
-                                    modifier = Modifier.size(96.dp)
+                                    modifier = Modifier.size(Dim.S96)
                                 )
                             } else {
                                 Box(
                                     modifier = Modifier
-                                        .size(96.dp)
+                                        .size(Dim.S96)
                                         .clip(RoundedCornerShape(Radius.R16))
                                         .border(Border.W1_5, PopPosterInk, RoundedCornerShape(Radius.R16)),
                                     contentAlignment = Alignment.Center
@@ -208,7 +209,7 @@ fun AwardsScreen(
                                         imageVector = Icons.Filled.Lock,
                                         contentDescription = "${award.titleEnglish}, locked",
                                         tint = PopPosterInk,
-                                        modifier = Modifier.size(28.dp)
+                                        modifier = Modifier.size(Dim.S28)
                                     )
                                 }
                             }
@@ -259,7 +260,7 @@ fun AwardsScreen(
                                 achievement = a,
                                 unlocked = com.example.data.Achievements.isUnlocked(a, inputs),
                                 modifier = Modifier.weight(1f),
-                                size = 84.dp
+                                size = Dim.S84
                             )
                         }
                     }
@@ -390,7 +391,7 @@ fun AwardsScreen(
                                         text = kannadaName,
                                         fontFamily = NotoSansKannadaFamily,
                                         fontSize = TypeScale.T26,
-                                        lineHeight = 34.sp,
+                                        lineHeight = TypeScale.T34,
                                         fontWeight = FontWeight.ExtraBold,
                                         color = PopPosterInk,
                                         modifier = Modifier.testTag("profile_kannada_name")
@@ -409,7 +410,7 @@ fun AwardsScreen(
                             }
 
                             Spacer(modifier = Modifier.height(Space.X10))
-                            HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.25f))
+                            HorizontalDivider(thickness = Dim.S1_5, color = PopPosterInk.copy(alpha = 0.25f))
                             Spacer(modifier = Modifier.height(Space.X10))
 
                             Text(
@@ -421,7 +422,7 @@ fun AwardsScreen(
                             Spacer(modifier = Modifier.height(Space.X4))
                             HindiPhoneticText(
                                 kannadaText = kannadaName,
-                                baseFontSize = 20.sp,
+                                baseFontSize = TypeScale.T20,
                                 textColor = PopPosterInk,
                                 modifier = Modifier.testTag("profile_hindi_name")
                             )
@@ -435,8 +436,8 @@ fun AwardsScreen(
 
     if (showShare) {
         ShareSheet(
-            learnerName = effectiveEnglishName,
             xp = xp,
+            streakDays = streakDays,
             lessonsDone = completedLessons.size,
             lessonsTotal = SaralaKannadaData.milestones.size,
             earnedAwards = earnedAwards,

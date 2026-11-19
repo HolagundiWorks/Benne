@@ -19,9 +19,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.phonetics.HindiPhoneticSegment
 import com.example.ui.theme.BennePopRed
-import com.example.ui.theme.NotoSansDevanagariFamily
+import com.example.ui.theme.BalooFamily
 import com.example.ui.theme.NotoSansKannadaFamily
-import com.example.ui.theme.NunitoSansFamily
+import com.example.ui.theme.BalooFamily
 import com.example.ui.theme.PopPosterInk
 
 /*
@@ -52,10 +52,10 @@ fun BenneH1(text: String, modifier: Modifier = Modifier, align: TextAlign = Text
     Text(
         text = text,
         modifier = modifier,
-        fontFamily = NunitoSansFamily,
+        fontFamily = BalooFamily,
         fontWeight = FontWeight.Medium,
         fontSize = TypeScale.T24,
-        lineHeight = 30.sp,
+        lineHeight = TypeScale.T30,
         color = PopPosterInk,
         textAlign = align
     )
@@ -66,10 +66,10 @@ fun BenneH2Latin(text: String, modifier: Modifier = Modifier, align: TextAlign =
     Text(
         text = text,
         modifier = modifier,
-        fontFamily = NunitoSansFamily,
+        fontFamily = BalooFamily,
         fontWeight = FontWeight.Normal,
         fontSize = TypeScale.T18,
-        lineHeight = 24.sp,
+        lineHeight = TypeScale.T24,
         color = PopPosterInk,
         textAlign = align
     )
@@ -95,10 +95,10 @@ fun BenneH2Devanagari(
     Text(
         text = annotated,
         modifier = modifier,
-        fontFamily = NotoSansDevanagariFamily,
+        fontFamily = BalooFamily,
         fontWeight = FontWeight.Normal,
         fontSize = TypeScale.T18,
-        lineHeight = 26.sp,
+        lineHeight = TypeScale.T26,
         color = PopPosterInk,
         textAlign = align
     )
@@ -112,7 +112,7 @@ fun BenneH3(text: String, modifier: Modifier = Modifier, align: TextAlign = Text
         fontFamily = NotoSansKannadaFamily,
         fontWeight = FontWeight.Bold,
         fontSize = TypeScale.T22,
-        lineHeight = 32.sp,
+        lineHeight = TypeScale.T32,
         color = PopPosterInk,
         textAlign = align
     )

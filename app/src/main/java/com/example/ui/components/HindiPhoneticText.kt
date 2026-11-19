@@ -1,5 +1,7 @@
 package com.example.ui.components
 
+import com.example.ui.theme.BenneDheerghaRed
+import com.example.ui.theme.TypeScale
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -16,13 +18,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.example.phonetics.KannadaToHindiPhonetic
-import com.example.ui.theme.NotoSansDevanagariFamily
+import com.example.ui.theme.BalooFamily
 import com.example.ui.theme.PopPosterInk
 
-private val DheerghaRed = Color(0xFFD61938)
+private val DheerghaRed = BenneDheerghaRed
 
 /**
- * Renders Kannada text as Hindi (Devanagari) phonetics using [NotoSansDevanagariFamily].
+ * Renders Kannada text as Hindi (Devanagari) phonetics using [BalooFamily].
  *
  * Dheergha (दीर्घ / long-vowel) syllables are highlighted cleanly with bold crimson-red text
  * and a slight typographic emphasis (without any surrounding box or border) so learners
@@ -32,7 +34,7 @@ private val DheerghaRed = Color(0xFFD61938)
 fun HindiPhoneticText(
     kannadaText: String,
     modifier: Modifier = Modifier,
-    baseFontSize: TextUnit = 13.sp,
+    baseFontSize: TextUnit = TypeScale.T13,
     textColor: Color = PopPosterInk,
     dheerghaColor: Color = DheerghaRed,
     textAlign: TextAlign = TextAlign.Start
@@ -49,10 +51,10 @@ fun HindiPhoneticText(
                 if (segment.isDheergha) {
                     withStyle(
                         SpanStyle(
-                            fontFamily = NotoSansDevanagariFamily,
+                            fontFamily = BalooFamily,
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = (baseFontSize.value * 1.14f).sp,
-                            letterSpacing = 0.25.sp,
+                            letterSpacing = TypeScale.T0_25,
                             color = dheerghaColor
                         )
                     ) {
@@ -61,7 +63,7 @@ fun HindiPhoneticText(
                 } else {
                     withStyle(
                         SpanStyle(
-                            fontFamily = NotoSansDevanagariFamily,
+                            fontFamily = BalooFamily,
                             fontWeight = FontWeight.Medium,
                             fontSize = baseFontSize,
                             color = textColor
@@ -77,7 +79,7 @@ fun HindiPhoneticText(
     Text(
         text = annotatedText,
         style = TextStyle(
-            fontFamily = NotoSansDevanagariFamily,
+            fontFamily = BalooFamily,
             fontSize = baseFontSize,
             lineHeight = (baseFontSize.value * 1.45f).sp,
             textAlign = textAlign,

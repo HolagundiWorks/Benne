@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.Radius
 import com.example.ui.theme.Border
@@ -107,7 +108,7 @@ fun AlphabetScreen(
     val tileColors = listOf(PopPosterPaper, PopPosterCyan, PopPosterMint, PopPosterPeach, PopPosterLavender)
 
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 94.dp),
+        columns = GridCells.Adaptive(minSize = Dim.S94),
         contentPadding = PaddingValues(start = Space.X16, top = Space.X16 + LocalFloatingHeaderInset.current, end = Space.X16, bottom = Space.X16 + LocalFloatingNavInset.current),
         horizontalArrangement = Arrangement.spacedBy(Space.X8),
         verticalArrangement = Arrangement.spacedBy(Space.X8),
@@ -152,7 +153,7 @@ fun AlphabetScreen(
                             fontWeight = FontWeight.ExtraBold,
                             color = PopPosterInk
                         )
-                        ButterMascot(size = 56.dp, pose = com.example.R.drawable.benne_mascot_hello)
+                        ButterMascot(size = Dim.S56, pose = com.example.R.drawable.benne_mascot_hello)
                     }
 
                     Spacer(modifier = Modifier.height(Space.X4))
@@ -160,8 +161,8 @@ fun AlphabetScreen(
                     KannadaWithSubscript(
                         kannadaText = "ಕನ್ನಡ ಅಕ್ಷರಮಾಲೆ",
                         transliteration = "Kannada aksharamale",
-                        kannadaFontSize = 17.sp,
-                        kannadaLineHeight = 22.sp,
+                        kannadaFontSize = TypeScale.T17,
+                        kannadaLineHeight = TypeScale.T22,
                         kannadaColor = PopPosterInk,
                         subscriptColor = MaterialTheme.colorScheme.primary,
                         subscriptStyle = MaterialTheme.typography.labelMedium
@@ -236,8 +237,8 @@ fun AlphabetScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .defaultMinSize(minHeight = 148.dp)
-                            .padding(start = Space.X8, end = Space.X8, top = 28.dp, bottom = Space.X12),
+                            .defaultMinSize(minHeight = Dim.S148)
+                            .padding(start = Space.X8, end = Space.X8, top = Dim.S28, bottom = Space.X12),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
@@ -271,7 +272,7 @@ fun AlphabetScreen(
                                 if (showHindiPhonetics) {
                                     HindiPhoneticText(
                                         kannadaText = item.char,
-                                        baseFontSize = 12.sp,
+                                        baseFontSize = TypeScale.T12,
                                         textColor = PopPosterInk,
                                         textAlign = TextAlign.Center
                                     )
@@ -279,13 +280,13 @@ fun AlphabetScreen(
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(5.dp))
+                        Spacer(modifier = Modifier.height(Space.X5))
 
                         KannadaWithSubscript(
                             kannadaText = item.sampleWordKn,
                             transliteration = item.sampleWordTransliteration,
-                            kannadaFontSize = 12.sp,
-                            kannadaLineHeight = 16.sp,
+                            kannadaFontSize = TypeScale.T12,
+                            kannadaLineHeight = TypeScale.T16,
                             kannadaColor = PopPosterInk,
                             subscriptColor = MaterialTheme.colorScheme.primary,
                             subscriptStyle = MaterialTheme.typography.labelSmall,
@@ -335,7 +336,7 @@ fun AlphabetScreen(
                 Spacer(modifier = Modifier.height(Space.X10))
 
                 Surface(
-                    modifier = Modifier.size(104.dp),
+                    modifier = Modifier.size(Dim.S104),
                     shape = CircleShape,
                     color = PopPosterButter,
                     contentColor = PopPosterInk,
@@ -381,7 +382,7 @@ fun AlphabetScreen(
                             )
                             HindiPhoneticText(
                                 kannadaText = letter.char,
-                                baseFontSize = 18.sp,
+                                baseFontSize = TypeScale.T18,
                                 textColor = PopPosterInk,
                                 textAlign = TextAlign.Center
                             )
@@ -436,8 +437,8 @@ fun AlphabetScreen(
                             KannadaWithSubscript(
                                 kannadaText = letter.sampleWordKn,
                                 transliteration = letter.sampleWordTransliteration,
-                                kannadaFontSize = 20.sp,
-                                kannadaLineHeight = 26.sp,
+                                kannadaFontSize = TypeScale.T20,
+                                kannadaLineHeight = TypeScale.T26,
                                 kannadaColor = PopPosterInk,
                                 subscriptColor = MaterialTheme.colorScheme.primary,
                                 subscriptStyle = MaterialTheme.typography.bodyMedium

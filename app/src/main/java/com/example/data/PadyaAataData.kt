@@ -288,7 +288,7 @@ object PadyaAataData {
                 title = "Benne Butter Emblem",
                 kannadaTitle = "ಬೆಣ್ಣೆ ದೋಸೆ",
                 regionTag = "Davanagere",
-                drawableRes = R.drawable.benne_pose_reward
+                drawableRes = R.drawable.benne_mascot_hello
             )
         ),
 

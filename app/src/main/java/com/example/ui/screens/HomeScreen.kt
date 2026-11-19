@@ -1,5 +1,8 @@
 package com.example.ui.screens
 
+import com.example.ui.components.ShareSheet
+import com.example.data.Award
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.Radius
 import com.example.ui.theme.Border
@@ -106,7 +109,7 @@ import com.example.ui.theme.PopPosterMint
 import com.example.ui.theme.PopPosterPaper
 import com.example.ui.theme.PopPosterPeach
 import com.example.ui.theme.PopPosterPink
-import com.example.ui.theme.NunitoSansFamily
+import com.example.ui.theme.BalooFamily
 import com.example.ui.LocalFloatingNavInset
 import com.example.ui.LocalFloatingHeaderInset
 import androidx.compose.foundation.horizontalScroll
@@ -133,6 +136,9 @@ fun HomeScreen(
     val playbackSpeed by progressManager.playbackSpeed.collectAsState()
 
     var activeLessonForStudy by remember { mutableStateOf<LessonMilestone?>(null) }
+    var showShare by remember { mutableStateOf(false) }
+    val unlockedAwards by progressManager.unlockedAwards.collectAsState()
+    val earnedAwards = Award.entries.filter { it.id in unlockedAwards }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val nextMilestone = SaralaKannadaData.milestones.firstOrNull { it.id !in completedLessons }
@@ -176,6 +182,14 @@ fun HomeScreen(
             )
         }
 
+        item {
+            PopActionButton(
+                text = "Share my progress",
+                onClick = { showShare = true },
+                modifier = Modifier.fillMaxWidth().testTag("home_share_progress")
+            )
+        }
+
         item { HomeSectionHeader("SCORES") }
         item {
             CardGrid(items = scores, columns = 3) { score -> ScoreTile(score) }
@@ -207,7 +221,7 @@ fun HomeScreen(
                                 painter = painterResource(com.example.R.drawable.pop_star_reward),
                                 contentDescription = null,
                                 contentScale = ContentScale.Fit,
-                                modifier = Modifier.size(28.dp)
+                                modifier = Modifier.size(Dim.S28)
                             )
                         }
                         Spacer(modifier = Modifier.height(Space.X8))
@@ -221,8 +235,8 @@ fun HomeScreen(
                         KannadaWithSubscript(
                             kannadaText = next.titleKannada,
                             transliteration = next.titleTransliteration,
-                            kannadaFontSize = 18.sp,
-                            kannadaLineHeight = 28.sp,
+                            kannadaFontSize = TypeScale.T18,
+                            kannadaLineHeight = TypeScale.T28,
                             kannadaColor = PopPosterInk,
                             subscriptColor = PopPosterInk.copy(alpha = 0.75f),
                             subscriptStyle = MaterialTheme.typography.labelMedium
@@ -289,6 +303,17 @@ fun HomeScreen(
         item {
             Spacer(modifier = Modifier.height(Space.X16))
         }
+    }
+
+    if (showShare) {
+        ShareSheet(
+            xp = xpPoints,
+            streakDays = streakNow,
+            lessonsDone = completedLessons.size,
+            lessonsTotal = SaralaKannadaData.milestones.size,
+            earnedAwards = earnedAwards,
+            onDismiss = { showShare = false }
+        )
     }
 
     activeLessonForStudy?.let { milestone ->
@@ -365,8 +390,8 @@ private fun WordOfTheDayCard(
                     KannadaWithSubscript(
                         kannadaText = word.kannadaWord,
                         transliteration = word.transliteration,
-                        kannadaFontSize = 26.sp,
-                        kannadaLineHeight = 34.sp,
+                        kannadaFontSize = TypeScale.T26,
+                        kannadaLineHeight = TypeScale.T34,
                         kannadaColor = PopPosterInk,
                         subscriptColor = PopPosterInk.copy(alpha = 0.75f),
                         subscriptStyle = MaterialTheme.typography.labelLarge
@@ -390,7 +415,7 @@ private fun WordOfTheDayCard(
                 Spacer(modifier = Modifier.width(Space.X12))
 
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    ButterMascot(size = 76.dp, pose = com.example.R.drawable.benne_mascot_hello)
+                    ButterMascot(size = Dim.S76, pose = com.example.R.drawable.benne_mascot_hello)
                     Spacer(modifier = Modifier.height(Space.X6))
                     AudioSpeakButton(
                         textToSpeak = word.kannadaWord,
@@ -464,7 +489,7 @@ private fun ProgressCard(
             fontFamily = BalooFamily,
             fontWeight = FontWeight.ExtraBold,
             fontSize = TypeScale.T14,
-            letterSpacing = 1.sp,
+            letterSpacing = TypeScale.T1,
             color = PopPosterInk
         )
         Spacer(modifier = Modifier.height(Space.X8))
@@ -487,7 +512,7 @@ private fun ProgressCard(
                         painter = painterResource(res),
                         contentDescription = "Earned badge",
                         contentScale = ContentScale.Fit,
-                        modifier = Modifier.size(56.dp)
+                        modifier = Modifier.size(Dim.S56)
                     )
                 }
             }
@@ -555,7 +580,7 @@ internal fun HomeSectionHeader(title: String) {
         fontFamily = BalooFamily,
         fontWeight = FontWeight.ExtraBold,
         fontSize = TypeScale.T14,
-        letterSpacing = 1.sp,
+        letterSpacing = TypeScale.T1,
         color = PopPosterInk,
         modifier = Modifier.padding(top = Space.X8, bottom = Space.X2).testTag("home_section_$title")
     )

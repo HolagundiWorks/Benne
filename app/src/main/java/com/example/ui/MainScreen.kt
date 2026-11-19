@@ -1,5 +1,6 @@
 package com.example.ui
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import androidx.compose.material.icons.outlined.EmojiEvents
 import androidx.compose.material.icons.filled.EmojiEvents
@@ -164,10 +165,10 @@ fun MainScreen(
         }
     }
 
-    val headerInset = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 136.dp
+    val headerInset = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + Dim.S136
 
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
-        val useNavigationRail = maxWidth >= 600.dp
+        val useNavigationRail = maxWidth >= Dim.S600
 
         Box(
             modifier = Modifier
@@ -219,10 +220,10 @@ fun MainScreen(
                 ) {
                     val contentModifier = Modifier
                         .fillMaxSize()
-                        .widthIn(max = 760.dp)
+                        .widthIn(max = Dim.S760)
 
                     CompositionLocalProvider(
-                        LocalFloatingNavInset provides if (useNavigationRail) 0.dp else FloatingNavClearance,
+                        LocalFloatingNavInset provides if (useNavigationRail) Space.X0 else FloatingNavClearance,
                         LocalFloatingHeaderInset provides headerInset,
                         LocalShowHindiPhonetics provides showHindiPhonetics
                     ) {
@@ -298,7 +299,7 @@ fun MainScreen(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .windowInsetsPadding(WindowInsets.statusBars)
-                    .padding(start = Space.X16, end = Space.X16, top = 34.dp, bottom = Space.X8)
+                    .padding(start = Space.X16, end = Space.X16, top = Dim.S34, bottom = Space.X8)
             )
         }
 
@@ -310,7 +311,7 @@ fun MainScreen(
                     .align(Alignment.BottomCenter)
                     .navigationBarsPadding()
                     .padding(horizontal = Space.X10, vertical = Space.X8)
-                    .widthIn(max = 600.dp)
+                    .widthIn(max = Dim.S600)
                     .fillMaxWidth()
             )
         }

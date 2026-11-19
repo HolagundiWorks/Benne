@@ -1,5 +1,7 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Space
+import com.example.ui.theme.Dim
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -31,7 +33,7 @@ import com.example.R
 @Composable
 fun ButterMascot(
     modifier: Modifier = Modifier,
-    size: Dp = 96.dp,
+    size: Dp = Dim.S96,
     @DrawableRes pose: Int = R.drawable.benne_mascot_compact,
     contentDescription: String? = null,
     idle: Boolean = true
@@ -57,7 +59,7 @@ fun ButterMascot(
         modifier = modifier
             .size(size)
             .graphicsLayer {
-                translationY = bob * 3.dp.toPx()
+                translationY = bob * Space.X3.toPx()
                 rotationZ = bob * 1.5f
             }
             .semantics { if (contentDescription != null) this.contentDescription = contentDescription }

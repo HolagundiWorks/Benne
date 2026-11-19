@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.Radius
 import com.example.ui.theme.Border
@@ -209,7 +210,7 @@ fun SystemConsoleSheet(
                                     color = PopPosterPaper,
                                     contentColor = PopPosterInk,
                                     border = BorderStroke(Border.W1_8, PopPosterInk),
-                                    modifier = Modifier.size(40.dp)
+                                    modifier = Modifier.size(Dim.S40)
                                 ) {
                                     Box(contentAlignment = Alignment.Center) {
                                         Icon(
@@ -318,13 +319,13 @@ fun SystemConsoleSheet(
                                     shape = RoundedCornerShape(Radius.R12),
                                     color = PopPosterCyan,
                                     border = BorderStroke(Border.W1_5, PopPosterInk),
-                                    modifier = Modifier.size(40.dp)
+                                    modifier = Modifier.size(Dim.S40)
                                 ) {
                                     Icon(
                                         imageVector = Icons.Default.NotificationsActive,
                                         contentDescription = "Daily Study Reminders",
                                         tint = PopPosterInk,
-                                        modifier = Modifier.padding(9.dp)
+                                        modifier = Modifier.padding(Space.X9)
                                     )
                                 }
                                 Spacer(modifier = Modifier.width(Space.X12))
@@ -427,7 +428,7 @@ fun SystemConsoleSheet(
                                         selected = selected,
                                         borderColor = PopPosterInk,
                                         selectedBorderColor = PopPosterInk,
-                                        borderWidth = 1.5.dp,
+                                        borderWidth = Dim.S1_5,
                                         selectedBorderWidth = Space.X2
                                     ),
                                     label = {
@@ -568,7 +569,7 @@ fun SystemConsoleSheet(
                                 imageVector = Icons.Default.Translate,
                                 contentDescription = "Hindi phonetics",
                                 tint = PopPosterInk,
-                                modifier = Modifier.size(22.dp)
+                                modifier = Modifier.size(Space.X22)
                             )
                             Spacer(modifier = Modifier.width(Space.X10))
                             Column {
@@ -724,7 +725,7 @@ fun SystemConsoleSheet(
                 }
 
                 Spacer(modifier = Modifier.height(Space.X16))
-                HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.3f))
+                HorizontalDivider(thickness = Dim.S1_5, color = PopPosterInk.copy(alpha = 0.3f))
                 Spacer(modifier = Modifier.height(Space.X10))
                 Text(
                     text = "Benne (${BuildConfig.APPLICATION_ID}) • v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
@@ -771,7 +772,7 @@ fun SystemConsoleSheet(
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error,
-                        contentColor = Color.White
+                        contentColor = PopPosterPaper
                     )
                 ) {
                     Text("Reset", fontWeight = FontWeight.Bold)
@@ -875,7 +876,7 @@ private fun LegalDocumentViewer(
             shadowOffset = Depth.S4,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(380.dp)
+                .height(Dim.S380)
         ) {
             Text(
                 text = document.content,
@@ -898,7 +899,7 @@ private fun SectionHeader(text: String) {
         fontFamily = BalooFamily,
         fontSize = TypeScale.T14,
         fontWeight = FontWeight.ExtraBold,
-        letterSpacing = 0.5.sp,
+        letterSpacing = TypeScale.T0_5,
         color = PopPosterInk
     )
 }

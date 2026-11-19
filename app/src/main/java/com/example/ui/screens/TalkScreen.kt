@@ -77,7 +77,7 @@ fun TalkScreen(
         }
 
         // The inner screens already start below the header, so they get no extra top space here
-        CompositionLocalProvider(LocalFloatingHeaderInset provides 0.dp) {
+        CompositionLocalProvider(LocalFloatingHeaderInset provides Space.X0) {
         Box(modifier = Modifier.fillMaxSize()) {
             when (tab) {
                 TalkTab.DIALOGUES -> ConversationScreen(

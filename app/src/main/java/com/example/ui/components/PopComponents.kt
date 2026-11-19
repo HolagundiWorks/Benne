@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.Radius
 import com.example.ui.theme.Border
@@ -47,7 +48,7 @@ fun PopActionButton(
         color = containerColor,
         contentColor = contentColor,
         border = BorderStroke(Border.W2, PopPosterInk),
-        modifier = modifier.defaultMinSize(minHeight = 52.dp)
+        modifier = modifier.defaultMinSize(minHeight = Dim.S52)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = Space.X20, vertical = Space.X12),

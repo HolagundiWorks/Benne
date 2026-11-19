@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.Radius
 import com.example.ui.theme.Border
@@ -122,9 +123,9 @@ fun ConversationScreen(
                                 Icon(
                                     imageVector = Icons.Default.Place,
                                     contentDescription = null,
-                                    modifier = Modifier.size(13.dp)
+                                    modifier = Modifier.size(Space.X13)
                                 )
-                                Spacer(modifier = Modifier.width(3.dp))
+                                Spacer(modifier = Modifier.width(Space.X3))
                                 Text(
                                     text = activeDialogue.locationTag,
                                     style = MaterialTheme.typography.labelSmall,
@@ -155,8 +156,8 @@ fun ConversationScreen(
                             KannadaWithSubscript(
                                 kannadaText = activeDialogue.titleKannada,
                                 transliteration = activeDialogue.titleTransliteration,
-                                kannadaFontSize = 17.sp,
-                                kannadaLineHeight = 22.sp,
+                                kannadaFontSize = TypeScale.T17,
+                                kannadaLineHeight = TypeScale.T22,
                                 kannadaColor = PopPosterInk,
                                 subscriptColor = MaterialTheme.colorScheme.primary,
                                 subscriptStyle = MaterialTheme.typography.labelMedium
@@ -169,7 +170,7 @@ fun ConversationScreen(
                             shape = RoundedCornerShape(Radius.R16),
                             color = PopPosterPaper,
                             border = BorderStroke(Border.W1_8, PopPosterInk),
-                            modifier = Modifier.size(62.dp)
+                            modifier = Modifier.size(Dim.S62)
                         ) {
                             Box(
                                 contentAlignment = Alignment.Center,
@@ -194,7 +195,7 @@ fun ConversationScreen(
                     )
 
                     Spacer(modifier = Modifier.height(Space.X12))
-                    HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk)
+                    HorizontalDivider(thickness = Dim.S1_5, color = PopPosterInk)
                     Spacer(modifier = Modifier.height(Space.X8))
 
                     Row(
@@ -256,7 +257,7 @@ fun ConversationScreen(
                             selected = isSelected,
                             borderColor = PopPosterInk,
                             selectedBorderColor = PopPosterInk,
-                            borderWidth = 1.5.dp,
+                            borderWidth = Dim.S1_5,
                             selectedBorderWidth = Space.X2
                         ),
                         label = {
@@ -338,7 +339,7 @@ private fun PopDialogueLineBubble(
                     Surface(
                         shape = RoundedCornerShape(Space.X8),
                         color = if (isUser) PopPosterPaper else MaterialTheme.colorScheme.background,
-                        border = BorderStroke(1.dp, PopPosterInk.copy(alpha = 0.35f))
+                        border = BorderStroke(Border.W1, PopPosterInk.copy(alpha = 0.35f))
                     ) {
                         Text(
                             text = "Meaning: ${line.englishTranslation}",

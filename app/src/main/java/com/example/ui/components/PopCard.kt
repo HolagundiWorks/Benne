@@ -52,7 +52,7 @@ fun PosterCard(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
     val pressOffset by animateDpAsState(
-        targetValue = if (onClick != null && isPressed) (shadowOffset * 0.65f) else 0.dp,
+        targetValue = if (onClick != null && isPressed) (shadowOffset * 0.65f) else Space.X0,
         animationSpec = spring(stiffness = Spring.StiffnessHigh),
         label = "pop_card_press"
     )

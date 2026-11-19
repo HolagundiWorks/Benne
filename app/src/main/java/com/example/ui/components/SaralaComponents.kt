@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.Border
 import com.example.ui.theme.TypeScale
@@ -77,7 +78,7 @@ import com.example.ui.theme.PopPosterCyan
 import com.example.ui.theme.PopPosterInk
 import com.example.ui.theme.PopPosterMint
 import com.example.ui.theme.PopPosterPaper
-import com.example.ui.theme.NunitoSansFamily
+import com.example.ui.theme.BalooFamily
 import java.util.Locale
 
 /**
@@ -100,10 +101,10 @@ fun PosterStampBadge(
     ) {
         Text(
             text = text,
-            fontFamily = NunitoSansFamily,
+            fontFamily = BalooFamily,
             fontSize = TypeScale.T12,
             fontWeight = FontWeight.Bold,
-            letterSpacing = 0.6.sp,
+            letterSpacing = TypeScale.T0_6,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(horizontal = Space.X10, vertical = Space.X4)
@@ -121,8 +122,8 @@ fun KannadaWithSubscript(
     kannadaText: String,
     transliteration: String,
     modifier: Modifier = Modifier,
-    kannadaFontSize: TextUnit = 19.sp,
-    kannadaLineHeight: TextUnit = 26.sp,
+    kannadaFontSize: TextUnit = TypeScale.T19,
+    kannadaLineHeight: TextUnit = TypeScale.T26,
     kannadaColor: Color = MaterialTheme.colorScheme.onSurface,
     subscriptColor: Color = MaterialTheme.colorScheme.primary,
     subscriptStyle: TextStyle = MaterialTheme.typography.bodySmall,
@@ -160,10 +161,10 @@ fun KannadaWithSubscript(
             )
         }
         if (showHindi && hasKannadaScript) {
-            Spacer(modifier = Modifier.height(3.dp))
+            Spacer(modifier = Modifier.height(Space.X3))
             HindiPhoneticText(
                 kannadaText = kannadaText,
-                baseFontSize = if (kannadaFontSize.value >= 24f) 15.sp else 12.sp,
+                baseFontSize = if (kannadaFontSize.value >= 24f) TypeScale.T15 else TypeScale.T12,
                 textColor = kannadaColor,
                 textAlign = textAlign
             )
@@ -205,20 +206,20 @@ fun AudioSpeakButton(
         label = "bgColor"
     )
     val animatedContent by animateColorAsState(
-        targetValue = if (isCurrentlySpeaking) Color.White else contentColor,
+        targetValue = if (isCurrentlySpeaking) PopPosterPaper else contentColor,
         label = "fgColor"
     )
 
     Box(
         modifier = modifier
             .minimumInteractiveComponentSize()
-            .padding(end = 2.5.dp, bottom = 2.5.dp)
+            .padding(end = Dim.S2_5, bottom = Dim.S2_5)
             .scale(pulseScale)
     ) {
         Box(
             modifier = Modifier
                 .size(sizeDp.dp)
-                .offset(x = 2.5.dp, y = 2.5.dp)
+                .offset(x = Dim.S2_5, y = Dim.S2_5)
                 .clip(CircleShape)
                 .background(PopPosterInk)
         )

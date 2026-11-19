@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import com.example.phonetics.HindiPhoneticSegment
 import com.example.ui.theme.BennePopRed
-import com.example.ui.theme.NotoSansDevanagariFamily
+import com.example.ui.theme.BalooFamily
 import com.example.ui.theme.PopPosterInk
 
 /**
@@ -50,7 +50,7 @@ fun BenneLearningText(
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = annotated,
-            fontFamily = NotoSansDevanagariFamily,
+            fontFamily = BalooFamily,
             fontSize = TypeScale.T26,
             fontWeight = FontWeight.Bold,
             color = PopPosterInk,
@@ -92,7 +92,7 @@ fun BenneLearningText(
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = annotated,
-            fontFamily = NotoSansDevanagariFamily,
+            fontFamily = BalooFamily,
             fontSize = TypeScale.T26,
             fontWeight = FontWeight.Bold,
             color = PopPosterInk,

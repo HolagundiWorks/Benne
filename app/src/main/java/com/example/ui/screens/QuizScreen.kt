@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.Radius
 import com.example.ui.theme.Border
@@ -366,7 +367,7 @@ fun FlashcardStudioView(
                         selected = isSelected,
                         borderColor = PopPosterInk,
                         selectedBorderColor = PopPosterInk,
-                        borderWidth = 1.5.dp,
+                        borderWidth = Dim.S1_5,
                         selectedBorderWidth = Space.X2
                     ),
                     label = { Text(cat, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium) },
@@ -476,7 +477,7 @@ fun FlashcardStudioView(
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp)
+                    .height(Dim.S48)
                     .testTag("flashcard_mastery_button")
             ) {
                 Icon(
@@ -644,7 +645,7 @@ fun EvaluationQuizView(
                                 Spacer(modifier = Modifier.height(Space.X4))
                                 HindiPhoneticText(
                                     kannadaText = currentQuestion.kannadaText,
-                                    baseFontSize = 16.sp,
+                                    baseFontSize = TypeScale.T16,
                                     textColor = PopPosterInk,
                                     textAlign = TextAlign.Center
                                 )
@@ -685,11 +686,11 @@ fun EvaluationQuizView(
                 containerColor = containerColor,
                 cornerRadius = Radius.R16,
                 plain = true,
-                shadowOffset = if (isSelected) Space.X2 else 3.5.dp,
+                shadowOffset = if (isSelected) Space.X2 else Dim.S3_5,
                 onClick = if (!hasAnswered) ({ selectedOptionIndex = index }) else null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 3.dp)
+                    .padding(vertical = Space.X3)
                     .testTag("quiz_option_$index")
             ) {
                 Row(
@@ -699,7 +700,7 @@ fun EvaluationQuizView(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Surface(
-                        modifier = Modifier.size(34.dp),
+                        modifier = Modifier.size(Dim.S34),
                         shape = CircleShape,
                         color = when {
                             hasAnswered && isCorrect -> PopPosterInk
@@ -709,7 +710,7 @@ fun EvaluationQuizView(
                         },
                         contentColor = when {
                             hasAnswered && isCorrect -> PopPosterMint
-                            hasAnswered && isSelected -> Color.White
+                            hasAnswered && isSelected -> PopPosterPaper
                             isSelected -> PopPosterButter
                             else -> PopPosterInk
                         },
@@ -730,8 +731,8 @@ fun EvaluationQuizView(
                         KannadaWithSubscript(
                             kannadaText = parsedKannadaOption.first,
                             transliteration = parsedKannadaOption.second,
-                            kannadaFontSize = 17.sp,
-                            kannadaLineHeight = 22.sp,
+                            kannadaFontSize = TypeScale.T17,
+                            kannadaLineHeight = TypeScale.T22,
                             kannadaColor = PopPosterInk,
                             subscriptColor = MaterialTheme.colorScheme.primary,
                             subscriptStyle = MaterialTheme.typography.bodySmall,
@@ -836,8 +837,8 @@ private fun PopQuizResultsView(
     // Playful result by score band: mascot pose, title and Kannada line
     val (poseRes, headline, kannadaLine, translit) = when {
         percentage >= 80 -> listOf(R.drawable.benne_pose_success, "Kannada superstar!", "ಅದ್ಭುತ!", "Adbhuta!")
-        percentage >= 50 -> listOf(R.drawable.benne_pose_reward, "Nicely done!", "ಚೆನ್ನಾಗಿದೆ!", "Chennaagide!")
-        else -> listOf(R.drawable.benne_pose_thinking, "Keep going!", "ಮುಂದುವರಿಸಿ!", "Munduvarisi!")
+        percentage >= 50 -> listOf(R.drawable.benne_mascot_hello, "Nicely done!", "ಚೆನ್ನಾಗಿದೆ!", "Chennaagide!")
+        else -> listOf(R.drawable.benne_mascot_learning, "Keep going!", "ಮುಂದುವರಿಸಿ!", "Munduvarisi!")
     }.let { Quad(it[0] as Int, it[1] as String, it[2] as String, it[3] as String) }
 
     Column(
@@ -862,7 +863,7 @@ private fun PopQuizResultsView(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(28.dp),
+                    .padding(Dim.S28),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 PosterStampBadge(
@@ -874,7 +875,7 @@ private fun PopQuizResultsView(
                 Spacer(modifier = Modifier.height(Space.X16))
 
                 Surface(
-                    modifier = Modifier.size(104.dp),
+                    modifier = Modifier.size(Dim.S104),
                     shape = CircleShape,
                     color = PopPosterPaper,
                     contentColor = PopPosterInk,
@@ -888,7 +889,7 @@ private fun PopQuizResultsView(
                             painter = painterResource(poseRes),
                             contentDescription = "Benne mascot",
                             contentScale = ContentScale.Fit,
-                            modifier = Modifier.size(48.dp)
+                            modifier = Modifier.size(Dim.S48)
                         )
                         Text(
                             text = "$percentage%",
@@ -915,8 +916,8 @@ private fun PopQuizResultsView(
                 KannadaWithSubscript(
                     kannadaText = kannadaLine,
                     transliteration = translit,
-                    kannadaFontSize = 18.sp,
-                    kannadaLineHeight = 24.sp,
+                    kannadaFontSize = TypeScale.T18,
+                    kannadaLineHeight = TypeScale.T24,
                     kannadaColor = PopPosterInk,
                     subscriptColor = MaterialTheme.colorScheme.primary,
                     subscriptStyle = MaterialTheme.typography.labelMedium,
@@ -950,7 +951,7 @@ private fun PopQuizResultsView(
             icon = Icons.Default.Refresh,
             onClick = onRestart,
             modifier = Modifier
-                .widthIn(min = 220.dp)
+                .widthIn(min = Dim.S220)
                 .testTag("quiz_restart_button")
         )
     }

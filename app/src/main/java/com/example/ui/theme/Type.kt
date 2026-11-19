@@ -26,20 +26,8 @@ private fun variableFamily(resId: Int) = FontFamily(
 /** Kannada script (Noto Sans Kannada). */
 val NotoSansKannadaFamily = variableFamily(R.font.noto_sans_kannada_variable)
 
-/** Latin display and headings (Baloo 2). */
+/** The Baloo family: Latin, Devanagari (Baloo 2) and the Kannada script (Noto, until Baloo Tamma 2 is added). */
 val BalooFamily = variableFamily(R.font.baloo2_variable)
-
-/** Latin body and labels (Nunito Sans). */
-val NunitoSansFamily = variableFamily(R.font.nunito_sans_variable)
-
-/** Hindi / Devanagari phonetic script (Noto Sans Devanagari). */
-val NotoSansDevanagariFamily = FontFamily(
-    Font(R.font.noto_sans_devanagari, FontWeight.Normal),
-    Font(R.font.noto_sans_devanagari, FontWeight.Medium),
-    Font(R.font.noto_sans_devanagari, FontWeight.SemiBold),
-    Font(R.font.noto_sans_devanagari, FontWeight.Bold),
-    Font(R.font.noto_sans_devanagari, FontWeight.ExtraBold)
-)
 
 /**
  * Benne type hierarchy (sp). Every text size in the app is on one of these steps:
@@ -68,107 +56,107 @@ val BenneTypography = Typography(
     displayLarge = TextStyle(
         fontFamily = BalooFamily,
         fontWeight = FontWeight.ExtraBold,
-        fontSize = 40.sp,
-        lineHeight = 46.sp,
+        fontSize = TypeScale.T40,
+        lineHeight = TypeScale.T46,
         letterSpacing = (-0.8).sp
     ),
     displayMedium = TextStyle(
         fontFamily = BalooFamily,
         fontWeight = FontWeight.ExtraBold,
-        fontSize = 34.sp,
-        lineHeight = 38.sp,
+        fontSize = TypeScale.T34,
+        lineHeight = TypeScale.T38,
         letterSpacing = (-0.5).sp
     ),
     displaySmall = TextStyle(
         fontFamily = BalooFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 26.sp,
-        lineHeight = 32.sp,
+        fontSize = TypeScale.T26,
+        lineHeight = TypeScale.T32,
         letterSpacing = (-0.25).sp
     ),
     headlineLarge = TextStyle(
         fontFamily = BalooFamily,
         fontWeight = FontWeight.ExtraBold,
-        fontSize = 26.sp,
-        lineHeight = 30.sp,
+        fontSize = TypeScale.T26,
+        lineHeight = TypeScale.T30,
         letterSpacing = (-0.3).sp
     ),
     headlineMedium = TextStyle(
         fontFamily = BalooFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 22.sp,
-        lineHeight = 27.sp,
+        fontSize = TypeScale.T22,
+        lineHeight = TypeScale.T27,
         letterSpacing = (-0.2).sp
     ),
     headlineSmall = TextStyle(
         fontFamily = BalooFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 18.sp,
-        lineHeight = 25.sp,
+        fontSize = TypeScale.T18,
+        lineHeight = TypeScale.T25,
         letterSpacing = (-0.15).sp
     ),
     titleLarge = TextStyle(
         fontFamily = BalooFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 18.sp,
-        lineHeight = 24.sp,
+        fontSize = TypeScale.T18,
+        lineHeight = TypeScale.T24,
         letterSpacing = (-0.1).sp
     ),
     titleMedium = TextStyle(
-        fontFamily = NunitoSansFamily,
+        fontFamily = BalooFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 16.sp,
-        lineHeight = 21.sp,
-        letterSpacing = 0.sp
+        fontSize = TypeScale.T16,
+        lineHeight = TypeScale.T21,
+        letterSpacing = TypeScale.T0
     ),
     titleSmall = TextStyle(
-        fontFamily = NunitoSansFamily,
+        fontFamily = BalooFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 14.sp,
-        lineHeight = 19.sp,
-        letterSpacing = 0.1.sp
+        fontSize = TypeScale.T14,
+        lineHeight = TypeScale.T19,
+        letterSpacing = TypeScale.T0_1
     ),
     bodyLarge = TextStyle(
-        fontFamily = NunitoSansFamily,
+        fontFamily = BalooFamily,
         fontWeight = FontWeight.Medium,
-        fontSize = 16.sp,
-        lineHeight = 23.sp,
-        letterSpacing = 0.15.sp
+        fontSize = TypeScale.T16,
+        lineHeight = TypeScale.T23,
+        letterSpacing = TypeScale.T0_15
     ),
     bodyMedium = TextStyle(
-        fontFamily = NunitoSansFamily,
+        fontFamily = BalooFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
-        letterSpacing = 0.15.sp
+        fontSize = TypeScale.T14,
+        lineHeight = TypeScale.T20,
+        letterSpacing = TypeScale.T0_15
     ),
     bodySmall = TextStyle(
-        fontFamily = NunitoSansFamily,
+        fontFamily = BalooFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 12.sp,
-        lineHeight = 17.sp,
-        letterSpacing = 0.2.sp
+        fontSize = TypeScale.T12,
+        lineHeight = TypeScale.T17,
+        letterSpacing = TypeScale.T0_2
     ),
     labelLarge = TextStyle(
-        fontFamily = NunitoSansFamily,
+        fontFamily = BalooFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 14.sp,
-        lineHeight = 18.sp,
-        letterSpacing = 0.25.sp
+        fontSize = TypeScale.T14,
+        lineHeight = TypeScale.T18,
+        letterSpacing = TypeScale.T0_25
     ),
     labelMedium = TextStyle(
-        fontFamily = NunitoSansFamily,
+        fontFamily = BalooFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 12.sp,
-        lineHeight = 15.sp,
-        letterSpacing = 0.4.sp
+        fontSize = TypeScale.T12,
+        lineHeight = TypeScale.T15,
+        letterSpacing = TypeScale.T0_4
     ),
     labelSmall = TextStyle(
-        fontFamily = NunitoSansFamily,
+        fontFamily = BalooFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 12.sp,
-        lineHeight = 14.sp,
-        letterSpacing = 0.5.sp
+        fontSize = TypeScale.T12,
+        lineHeight = TypeScale.T14,
+        letterSpacing = TypeScale.T0_5
     )
 )
 

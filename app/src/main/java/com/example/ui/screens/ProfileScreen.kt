@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.Radius
 import com.example.ui.theme.Border
@@ -219,7 +220,7 @@ fun ProfileScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         ButterMascot(
-                            size = 72.dp,
+                            size = Dim.S72,
                             pose = R.drawable.benne_mascot_learning
                         )
                         Spacer(modifier = Modifier.width(Space.X14))
@@ -306,7 +307,7 @@ fun ProfileScreen(
                                 shape = RoundedCornerShape(Radius.R12),
                                 color = PopPosterPaper,
                                 border = BorderStroke(Border.W1_5, PopPosterInk),
-                                modifier = Modifier.size(40.dp)
+                                modifier = Modifier.size(Dim.S40)
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Translate,
@@ -358,7 +359,7 @@ fun ProfileScreen(
                     }
 
                     Spacer(modifier = Modifier.height(Space.X12))
-                    HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.3f))
+                    HorizontalDivider(thickness = Dim.S1_5, color = PopPosterInk.copy(alpha = 0.3f))
                     Spacer(modifier = Modifier.height(Space.X10))
 
                     Text(
@@ -448,7 +449,7 @@ fun ProfileScreen(
                         ),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(48.dp)
+                            .height(Dim.S48)
                             .testTag("profile_reset_button")
                     ) {
                         Icon(
@@ -497,7 +498,7 @@ fun ProfileScreen(
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error,
-                        contentColor = Color.White
+                        contentColor = PopPosterPaper
                     ),
                     modifier = Modifier.testTag("profile_reset_confirm_button")
                 ) {
@@ -573,7 +574,7 @@ private fun DheerghaSampleRow(
                     )
                     HindiPhoneticText(
                         kannadaText = kannada,
-                        baseFontSize = 16.sp,
+                        baseFontSize = TypeScale.T16,
                         textColor = PopPosterInk
                     )
                 }

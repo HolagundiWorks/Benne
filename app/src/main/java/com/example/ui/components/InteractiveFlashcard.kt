@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.Radius
 import com.example.ui.theme.Border
@@ -110,10 +111,10 @@ fun InteractiveVocabularyFlashcard(
             colors = CardDefaults.elevatedCardColors(
                 containerColor = surfaceColor
             ),
-            elevation = CardDefaults.elevatedCardElevation(defaultElevation = 0.dp),
+            elevation = CardDefaults.elevatedCardElevation(defaultElevation = Space.X0),
             modifier = Modifier
                 .fillMaxWidth()
-                .defaultMinSize(minHeight = 336.dp)
+                .defaultMinSize(minHeight = Dim.S336)
                 .graphicsLayer {
                     rotationY = rotation
                     cameraDistance = 14f * density
@@ -123,7 +124,7 @@ fun InteractiveVocabularyFlashcard(
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .defaultMinSize(minHeight = 336.dp),
+                    .defaultMinSize(minHeight = Dim.S336),
                 shape = shape,
                 color = surfaceColor,
                 border = BorderStroke(Border.W2, PopPosterInk)
@@ -141,7 +142,7 @@ fun InteractiveVocabularyFlashcard(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .defaultMinSize(minHeight = 336.dp)
+                            .defaultMinSize(minHeight = Dim.S336)
                             .graphicsLayer { rotationY = 180f }
                     ) {
                         FlashcardBackFace(
@@ -168,7 +169,7 @@ private fun FlashcardFrontFace(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = 336.dp)
+            .defaultMinSize(minHeight = Dim.S336)
             .padding(Space.X20),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -185,7 +186,7 @@ private fun FlashcardFrontFace(
                 border = BorderStroke(Border.W1_5, PopPosterInk)
             ) {
                 Row(
-                    modifier = Modifier.padding(horizontal = Space.X10, vertical = 5.dp),
+                    modifier = Modifier.padding(horizontal = Space.X10, vertical = Space.X5),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
@@ -193,7 +194,7 @@ private fun FlashcardFrontFace(
                         contentDescription = null,
                         modifier = Modifier.size(Space.X14)
                     )
-                    Spacer(modifier = Modifier.width(5.dp))
+                    Spacer(modifier = Modifier.width(Space.X5))
                     Text(
                         text = if (isMastered) "MASTERED" else "LEARNING",
                         style = MaterialTheme.typography.labelSmall,
@@ -284,7 +285,7 @@ private fun FlashcardFrontFace(
 
         // Bottom Flip Prompt
         Column(modifier = Modifier.fillMaxWidth()) {
-            HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk)
+            HorizontalDivider(thickness = Dim.S1_5, color = PopPosterInk)
             Spacer(modifier = Modifier.height(Space.X10))
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -317,7 +318,7 @@ private fun FlashcardBackFace(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = 336.dp)
+            .defaultMinSize(minHeight = Dim.S336)
             .padding(Space.X20),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
@@ -348,7 +349,7 @@ private fun FlashcardBackFace(
                 text = flashcard.englishMeaning,
                 fontFamily = BalooFamily,
                 fontSize = TypeScale.T26,
-                lineHeight = 33.sp,
+                lineHeight = TypeScale.T33,
                 fontWeight = FontWeight.ExtraBold,
                 color = PopPosterInk,
                 textAlign = TextAlign.Center
@@ -380,8 +381,8 @@ private fun FlashcardBackFace(
                         KannadaWithSubscript(
                             kannadaText = flashcard.exampleSentenceKn,
                             transliteration = flashcard.exampleSentenceTranslit,
-                            kannadaFontSize = 18.sp,
-                            kannadaLineHeight = 24.sp,
+                            kannadaFontSize = TypeScale.T18,
+                            kannadaLineHeight = TypeScale.T24,
                             kannadaColor = PopPosterInk,
                             subscriptColor = MaterialTheme.colorScheme.primary,
                             subscriptStyle = MaterialTheme.typography.bodySmall

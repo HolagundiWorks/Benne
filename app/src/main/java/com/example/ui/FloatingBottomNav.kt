@@ -1,5 +1,6 @@
 package com.example.ui
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.Radius
 import com.example.ui.theme.Border
@@ -190,7 +191,7 @@ private fun DockItem(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .width(width)
-            .height(54.dp)
+            .height(Dim.S54)
             .clip(RoundedCornerShape(Radius.R22))
             .background(if (isSelected) PopPosterButter else PopPosterPaper)
             .selectable(
@@ -206,7 +207,7 @@ private fun DockItem(
         Text(
             text = screen.titleEnglish,
             style = MaterialTheme.typography.labelSmall,
-            fontSize = 11.sp,
+            fontSize = TypeScale.T11,
             letterSpacing = (-0.2).sp,
             fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Medium,
             maxLines = 1,
@@ -227,7 +228,7 @@ private fun DockArrow(
     Box(
         modifier = Modifier
             .width(width)
-            .height(54.dp)
+            .height(Dim.S54)
             .clickable(enabled = enabled, onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
@@ -235,7 +236,7 @@ private fun DockArrow(
             imageVector = icon,
             contentDescription = description,
             tint = if (enabled) PopPosterInk else PopPosterInk.copy(alpha = 0.2f),
-            modifier = Modifier.size(22.dp)
+            modifier = Modifier.size(Space.X22)
         )
     }
 }

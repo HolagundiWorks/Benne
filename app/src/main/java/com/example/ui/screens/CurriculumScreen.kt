@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.Radius
 import com.example.ui.theme.Border
@@ -105,7 +106,7 @@ import com.example.ui.theme.PopPosterMint
 import com.example.ui.theme.PopPosterPaper
 import com.example.ui.theme.PopPosterPeach
 import com.example.ui.theme.PopPosterPink
-import com.example.ui.theme.NunitoSansFamily
+import com.example.ui.theme.BalooFamily
 import com.example.ui.LocalFloatingNavInset
 import com.example.ui.LocalFloatingHeaderInset
 import androidx.compose.foundation.horizontalScroll
@@ -191,7 +192,7 @@ fun CurriculumScreen(
                             color = PopPosterInk
                         )
                     }
-                    ButterMascot(size = 72.dp, pose = com.example.R.drawable.benne_mascot_learning)
+                    ButterMascot(size = Dim.S72, pose = com.example.R.drawable.benne_mascot_learning)
                 }
             }
         }
@@ -334,7 +335,7 @@ private fun PopQuickModuleCard(
                 painter = painterResource(iconRes),
                 contentDescription = title,
                 contentScale = ContentScale.Fit,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(Dim.S40)
             )
             Spacer(modifier = Modifier.height(Space.X10))
             Text(
@@ -384,13 +385,13 @@ private fun PopMilestoneCard(
             Box(modifier = Modifier.padding(end = Space.X2, bottom = Space.X2)) {
                 Box(
                     modifier = Modifier
-                        .size(46.dp)
+                        .size(Dim.S46)
                         .offset(x = Space.X2, y = Space.X2)
                         .clip(CircleShape)
                         .background(PopPosterInk)
                 )
                 Surface(
-                    modifier = Modifier.size(46.dp),
+                    modifier = Modifier.size(Dim.S46),
                     shape = CircleShape,
                     color = if (isCompleted) PopPosterInk else PopPosterPaper,
                     contentColor = if (isCompleted) PopPosterMint else PopPosterInk,
@@ -401,7 +402,7 @@ private fun PopMilestoneCard(
                             Icon(
                                 imageVector = Icons.Default.Check,
                                 contentDescription = "Completed",
-                                modifier = Modifier.size(22.dp)
+                                modifier = Modifier.size(Space.X22)
                             )
                         } else {
                             Text(
@@ -436,12 +437,12 @@ private fun PopMilestoneCard(
                     fontWeight = FontWeight.ExtraBold,
                     color = PopPosterInk
                 )
-                Spacer(modifier = Modifier.height(3.dp))
+                Spacer(modifier = Modifier.height(Space.X3))
                 KannadaWithSubscript(
                     kannadaText = milestone.titleKannada,
                     transliteration = milestone.titleTransliteration,
-                    kannadaFontSize = 15.sp,
-                    kannadaLineHeight = 20.sp,
+                    kannadaFontSize = TypeScale.T15,
+                    kannadaLineHeight = TypeScale.T20,
                     kannadaColor = PopPosterInk,
                     subscriptColor = MaterialTheme.colorScheme.primary,
                     subscriptStyle = MaterialTheme.typography.labelSmall
@@ -454,7 +455,7 @@ private fun PopMilestoneCard(
                 shape = CircleShape,
                 color = PopPosterInk,
                 contentColor = PopPosterButter,
-                modifier = Modifier.size(42.dp)
+                modifier = Modifier.size(Dim.S42)
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Icon(
@@ -509,8 +510,8 @@ internal fun PopLessonStudyContent(
                 KannadaWithSubscript(
                     kannadaText = milestone.titleKannada,
                     transliteration = milestone.titleTransliteration,
-                    kannadaFontSize = 15.sp,
-                    kannadaLineHeight = 20.sp,
+                    kannadaFontSize = TypeScale.T15,
+                    kannadaLineHeight = TypeScale.T20,
                     kannadaColor = PopPosterInk,
                     subscriptColor = MaterialTheme.colorScheme.primary,
                     subscriptStyle = MaterialTheme.typography.labelSmall
@@ -556,7 +557,7 @@ internal fun PopLessonStudyContent(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(22.dp),
+                    .padding(Space.X22),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 PosterStampBadge(
@@ -583,7 +584,7 @@ internal fun PopLessonStudyContent(
                     showDevanagari = true
                 )
                 Spacer(modifier = Modifier.height(Space.X10))
-                HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.2f))
+                HorizontalDivider(thickness = Dim.S1_5, color = PopPosterInk.copy(alpha = 0.2f))
                 Spacer(modifier = Modifier.height(Space.X18))
 
                 Row(
@@ -602,7 +603,7 @@ internal fun PopLessonStudyContent(
                     Spacer(modifier = Modifier.width(Space.X12))
                     Text(
                         text = "Listen to pronunciation",
-                        fontFamily = NunitoSansFamily,
+                        fontFamily = BalooFamily,
                         fontWeight = FontWeight.Bold,
                         fontSize = TypeScale.T14,
                         color = PopPosterInk
@@ -625,7 +626,7 @@ internal fun PopLessonStudyContent(
                                 imageVector = Icons.Default.Lightbulb,
                                 contentDescription = "Study Tip",
                                 tint = PopPosterInk,
-                                modifier = Modifier.size(17.dp)
+                                modifier = Modifier.size(Space.X17)
                             )
                             Spacer(modifier = Modifier.width(Space.X8))
                             Text(
@@ -659,7 +660,7 @@ internal fun PopLessonStudyContent(
                     Text("Previous", fontWeight = FontWeight.Bold)
                 }
             } else {
-                Spacer(modifier = Modifier.width(1.dp))
+                Spacer(modifier = Modifier.width(Space.X1))
             }
 
             PopActionButton(

@@ -69,8 +69,8 @@ const val SHARE_TEXT = "I've started my journey of learning Kannada with Benne. 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShareSheet(
-    learnerName: String,
     xp: Int,
+    streakDays: Int,
     lessonsDone: Int,
     lessonsTotal: Int,
     earnedAwards: List<Award>,
@@ -80,8 +80,8 @@ fun ShareSheet(
     val scope = rememberCoroutineScope()
     var template by remember { mutableStateOf(ShareTemplate.PROGRESS) }
     var status by remember { mutableStateOf<String?>(null) }
+    var story by remember { mutableStateOf(false) }
     val layer = rememberGraphicsLayer()
-    val level = LevelProgress.levelFor(xp)
     val featuredAward = earnedAwards.lastOrNull()
 
     ModalBottomSheet(onDismissRequest = onDismiss) {
@@ -104,6 +104,15 @@ fun ShareSheet(
                 }
             }
 
+            if (template == ShareTemplate.PROGRESS) {
+                FilterChip(
+                    selected = story,
+                    onClick = { story = !story },
+                    label = { Text("9:16 story") },
+                    modifier = Modifier.testTag("share_story_toggle")
+                )
+            }
+
             // The selected card is drawn here and recorded into the layer that is shared
             Box(
                 modifier = Modifier.drawWithLayer(layer),
@@ -111,13 +120,11 @@ fun ShareSheet(
             ) {
                 when (template) {
                     ShareTemplate.PROGRESS -> ProgressShareCard(
-                        learnerName = learnerName,
-                        learnerType = LevelProgress.learnerTypeFor(level),
-                        level = level,
-                        xp = xp,
                         lessonsDone = lessonsDone,
                         lessonsTotal = lessonsTotal,
-                        awards = earnedAwards
+                        streakDays = streakDays,
+                        awards = earnedAwards,
+                        portrait = story
                     )
                     ShareTemplate.APP -> AppShareCard()
                     ShareTemplate.AWARD -> featuredAward?.let { AwardShareCard(it) }

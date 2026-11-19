@@ -88,7 +88,7 @@ private fun PendingBadge() {
             text = "PENDING REVIEW",
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = Space.X8, vertical = 3.dp)
+            modifier = Modifier.padding(horizontal = Space.X8, vertical = Space.X3)
         )
     }
 }

@@ -9,11 +9,11 @@ import androidx.compose.ui.unit.dp
 
 // Crisp Neo-Pop Poster Shape Scale
 val BenneShapes = Shapes(
-    extraSmall = RoundedCornerShape(6.dp),
-    small = RoundedCornerShape(10.dp),
-    medium = RoundedCornerShape(16.dp),
-    large = RoundedCornerShape(20.dp),
-    extraLarge = RoundedCornerShape(28.dp)
+    extraSmall = RoundedCornerShape(Radius.R6),
+    small = RoundedCornerShape(Radius.R10),
+    medium = RoundedCornerShape(Radius.R16),
+    large = RoundedCornerShape(Radius.R20),
+    extraLarge = RoundedCornerShape(Radius.R28)
 )
 
 private val LightColorScheme = lightColorScheme(

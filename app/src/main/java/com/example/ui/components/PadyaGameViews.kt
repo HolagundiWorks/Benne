@@ -1,5 +1,6 @@
 package com.example.ui.components
 
+import com.example.ui.theme.Dim
 import com.example.ui.theme.Space
 import com.example.ui.theme.Radius
 import com.example.ui.theme.Border
@@ -130,7 +131,7 @@ fun PadyaGameArena(
                 shape = CircleShape,
                 color = PopPosterPaper,
                 border = BorderStroke(Border.W1_8, PopPosterInk),
-                modifier = Modifier.defaultMinSize(minHeight = 48.dp)
+                modifier = Modifier.defaultMinSize(minHeight = Dim.S48)
             ) {
                 Row(
                     modifier = Modifier.padding(horizontal = Space.X14, vertical = Space.X10),
@@ -282,7 +283,7 @@ fun PadyaGameArena(
                                 imageVector = Icons.Default.CheckCircle,
                                 contentDescription = "Completed",
                                 tint = PopPosterInk,
-                                modifier = Modifier.size(26.dp)
+                                modifier = Modifier.size(Dim.S26)
                             )
                             Spacer(modifier = Modifier.width(Space.X8))
                             Text(
@@ -310,7 +311,7 @@ fun PadyaGameArena(
                                         painter = painterResource(unlockedSticker.drawableRes),
                                         contentDescription = unlockedSticker.title,
                                         contentScale = ContentScale.Fit,
-                                        modifier = Modifier.size(64.dp)
+                                        modifier = Modifier.size(Dim.S64)
                                     )
                                     Spacer(modifier = Modifier.width(Space.X12))
                                     Column(modifier = Modifier.weight(1f)) {
@@ -433,8 +434,8 @@ private fun MissingWordGameBody(
                     KannadaWithSubscript(
                         kannadaText = if (isSolved) challenge.fullLineKannada else challenge.promptLineKannada,
                         transliteration = if (showTransliteration) challenge.promptTranslitMasked else "",
-                        kannadaFontSize = 23.sp,
-                        kannadaLineHeight = 30.sp,
+                        kannadaFontSize = TypeScale.T23,
+                        kannadaLineHeight = TypeScale.T30,
                         kannadaColor = PopPosterInk,
                         subscriptColor = MaterialTheme.colorScheme.primary
                     )
@@ -480,10 +481,10 @@ private fun MissingWordGameBody(
                         },
                         shape = RoundedCornerShape(Radius.R16),
                         color = bg,
-                        border = BorderStroke(if (isSelected) 2.2.dp else 1.5.dp, PopPosterInk),
+                        border = BorderStroke(if (isSelected) Dim.S2_2 else Dim.S1_5, PopPosterInk),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .defaultMinSize(minHeight = 60.dp)
+                            .defaultMinSize(minHeight = Dim.S60)
                             .testTag("missing_word_opt_$idx")
                     ) {
                         Row(
@@ -497,8 +498,8 @@ private fun MissingWordGameBody(
                                 KannadaWithSubscript(
                                     kannadaText = opt.kannada,
                                     transliteration = if (showTransliteration) opt.transliteration else "",
-                                    kannadaFontSize = 20.sp,
-                                    kannadaLineHeight = 26.sp,
+                                    kannadaFontSize = TypeScale.T20,
+                                    kannadaLineHeight = TypeScale.T26,
                                     kannadaColor = PopPosterInk,
                                     subscriptColor = MaterialTheme.colorScheme.primary
                                 )
@@ -581,8 +582,8 @@ private fun RhymeMatchGameBody(
                         KannadaWithSubscript(
                             kannadaText = rhyme.targetWord.kannada,
                             transliteration = if (showTransliteration) rhyme.targetWord.transliteration else "",
-                            kannadaFontSize = 26.sp,
-                            kannadaLineHeight = 34.sp,
+                            kannadaFontSize = TypeScale.T26,
+                            kannadaLineHeight = TypeScale.T34,
                             kannadaColor = PopPosterInk,
                             subscriptColor = MaterialTheme.colorScheme.primary
                         )
@@ -625,10 +626,10 @@ private fun RhymeMatchGameBody(
                         },
                         shape = RoundedCornerShape(Radius.R16),
                         color = cardColor,
-                        border = BorderStroke(if (isSelected) 2.2.dp else 1.5.dp, PopPosterInk),
+                        border = BorderStroke(if (isSelected) Dim.S2_2 else Dim.S1_5, PopPosterInk),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .defaultMinSize(minHeight = 62.dp)
+                            .defaultMinSize(minHeight = Dim.S62)
                             .testTag("rhyme_opt_$idx")
                     ) {
                         Row(
@@ -642,8 +643,8 @@ private fun RhymeMatchGameBody(
                                 KannadaWithSubscript(
                                     kannadaText = opt.kannada,
                                     transliteration = if (showTransliteration) opt.transliteration else "",
-                                    kannadaFontSize = 20.sp,
-                                    kannadaLineHeight = 26.sp,
+                                    kannadaFontSize = TypeScale.T20,
+                                    kannadaLineHeight = TypeScale.T26,
                                     kannadaColor = PopPosterInk,
                                     subscriptColor = MaterialTheme.colorScheme.primary
                                 )
@@ -759,7 +760,7 @@ private fun WordHuntGameBody(
             }
 
             Spacer(modifier = Modifier.height(Space.X14))
-            HorizontalDivider(thickness = 1.5.dp, color = PopPosterInk.copy(alpha = 0.25f))
+            HorizontalDivider(thickness = Dim.S1_5, color = PopPosterInk.copy(alpha = 0.25f))
             Spacer(modifier = Modifier.height(Space.X12))
 
             Column(verticalArrangement = Arrangement.spacedBy(Space.X12)) {
@@ -794,7 +795,7 @@ private fun WordHuntGameBody(
                                     color = if (alreadyFound) PopPosterMint else MaterialTheme.colorScheme.background,
                                     border = BorderStroke(Border.W1_5, PopPosterInk),
                                     modifier = Modifier
-                                        .defaultMinSize(minHeight = 44.dp)
+                                        .defaultMinSize(minHeight = Dim.S44)
                                         .testTag("word_hunt_token_$cleanWord")
                                 ) {
                                     Text(
@@ -925,7 +926,7 @@ private fun RhythmTapGameBody(
                 shape = CircleShape,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp)
+                    .height(Dim.S48)
             ) {
                 Icon(
                     imageVector = Icons.Default.MusicNote,
@@ -978,9 +979,9 @@ private fun RhythmTapGameBody(
                         },
                         shape = RoundedCornerShape(Radius.R16),
                         color = padColor,
-                        border = BorderStroke(if (isGuideActive || isNext) 2.2.dp else 1.5.dp, PopPosterInk),
+                        border = BorderStroke(if (isGuideActive || isNext) Dim.S2_2 else Dim.S1_5, PopPosterInk),
                         modifier = Modifier
-                            .defaultMinSize(minWidth = 84.dp, minHeight = 68.dp)
+                            .defaultMinSize(minWidth = Dim.S84, minHeight = Dim.S68)
                             .testTag("rhythm_beat_$idx")
                     ) {
                         Column(
@@ -1130,7 +1131,7 @@ private fun PictureToPoemGameBody(
                         },
                         shape = RoundedCornerShape(Radius.R16),
                         color = cardBg,
-                        border = BorderStroke(if (isSelected) 2.2.dp else 1.5.dp, PopPosterInk),
+                        border = BorderStroke(if (isSelected) Dim.S2_2 else Dim.S1_5, PopPosterInk),
                         modifier = Modifier
                             .fillMaxWidth()
                             .testTag("picture_poem_opt_$idx")
@@ -1146,8 +1147,8 @@ private fun PictureToPoemGameBody(
                                 KannadaWithSubscript(
                                     kannadaText = lineOpt.kannada,
                                     transliteration = if (showTransliteration) lineOpt.transliteration else "",
-                                    kannadaFontSize = 17.sp,
-                                    kannadaLineHeight = 23.sp,
+                                    kannadaFontSize = TypeScale.T17,
+                                    kannadaLineHeight = TypeScale.T23,
                                     kannadaColor = PopPosterInk,
                                     subscriptColor = MaterialTheme.colorScheme.primary
                                 )
@@ -1310,8 +1311,8 @@ private fun PoemPuzzleGameBody(
                                 KannadaWithSubscript(
                                     kannadaText = line.kannada,
                                     transliteration = if (showTransliteration) line.transliteration else "",
-                                    kannadaFontSize = 16.sp,
-                                    kannadaLineHeight = 22.sp,
+                                    kannadaFontSize = TypeScale.T16,
+                                    kannadaLineHeight = TypeScale.T22,
                                     kannadaColor = PopPosterInk,
                                     subscriptColor = MaterialTheme.colorScheme.primary
                                 )
@@ -1420,8 +1421,8 @@ private fun EchoPoemGameBody(
                     KannadaWithSubscript(
                         kannadaText = line.kannada,
                         transliteration = if (showTransliteration) line.transliteration else "",
-                        kannadaFontSize = 22.sp,
-                        kannadaLineHeight = 30.sp,
+                        kannadaFontSize = TypeScale.T22,
+                        kannadaLineHeight = TypeScale.T30,
                         kannadaColor = PopPosterInk,
                         subscriptColor = MaterialTheme.colorScheme.primary
                     )
@@ -1449,7 +1450,7 @@ private fun EchoPoemGameBody(
                             border = BorderStroke(Border.W1_5, PopPosterInk),
                             modifier = Modifier
                                 .weight(1f)
-                                .height(48.dp)
+                                .height(Dim.S48)
                         ) {
                             Icon(Icons.Default.GraphicEq, contentDescription = null, modifier = Modifier.size(Space.X18))
                             Spacer(modifier = Modifier.width(Space.X6))
@@ -1468,7 +1469,7 @@ private fun EchoPoemGameBody(
                             ),
                             modifier = Modifier
                                 .weight(1f)
-                                .height(48.dp)
+                                .height(Dim.S48)
                         ) {
                             Text("Slow 0.7x", fontWeight = FontWeight.Bold)
                         }
@@ -1594,8 +1595,8 @@ private fun PoetryRemixGameBody(
                         KannadaWithSubscript(
                             kannadaText = remixedKannada,
                             transliteration = if (showTransliteration) remixedTranslit else "",
-                            kannadaFontSize = 20.sp,
-                            kannadaLineHeight = 28.sp,
+                            kannadaFontSize = TypeScale.T20,
+                            kannadaLineHeight = TypeScale.T28,
                             kannadaColor = PopPosterInk,
                             subscriptColor = MaterialTheme.colorScheme.primary
                         )
@@ -1643,9 +1644,9 @@ private fun PoetryRemixGameBody(
                             },
                             shape = RoundedCornerShape(Radius.R14),
                             color = if (isChosen) PopPosterMint else MaterialTheme.colorScheme.background,
-                            border = BorderStroke(if (isChosen) Space.X2 else 1.5.dp, PopPosterInk),
+                            border = BorderStroke(if (isChosen) Space.X2 else Dim.S1_5, PopPosterInk),
                             modifier = Modifier
-                                .defaultMinSize(minHeight = 48.dp)
+                                .defaultMinSize(minHeight = Dim.S48)
                                 .testTag("remix_slot_${slotIdx}_choice_$choiceIdx")
                         ) {
                             Column(modifier = Modifier.padding(horizontal = Space.X12, vertical = Space.X8)) {
